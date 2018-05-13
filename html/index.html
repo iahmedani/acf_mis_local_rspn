@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="../fa5/css/fontawesome-all.min.css">
+  <title>ACF MIS FOR PINS</title>
+  <script>
+    const electron = require('electron');
+    const ipc = electron.ipcRenderer;
+    document.addEventListener('DOMContentLoaded', function (){
+      ipc.send('mainWindowLoaded')
+      ipc.on('msg', function(evt, msg){
+          let msgEl = document.getElementById('message');
+          msgEl.innerHTML+='<h3>'+msg+'</h3>';
+      });
+    });
+  </script>
+</head>
+<body>
+  <header>
+      <nav class="navbar navbar-light bg-light">
+        <a href="#" class="navbar-brand">
+          <img src="../img/logo-acf.png" width="30" height="30" class="d-inline-block align-top">
+        </a>
+      </nav>
+  </header>
+  <main>
+      <div id="message">
+        </div>
+  </main>
+ <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script>window.$ = window.jQuery = require('jquery');</script>
+  <script src="../bower_components/bootstrap/dist/js/bootstrap.bundle.js"></script>
+</body>
+</html>

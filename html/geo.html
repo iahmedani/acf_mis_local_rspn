@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="../fa5/css/fontawesome-all.min.css">
+  <title>Geo Refference</title>
+</head>
+
+
+<body>
+  <div class="container" id="geo_ref">
+    <div class="row" id="province">
+        <label for="ddProvince">Province</label>
+        <select name="ddProvince" id="ddProvince" class="form-control" required>
+          <option value="none" selected>Select One</option>
+          <option value="1">Sindh</option>
+          <option value="2">Punjab</option>
+          <option value="3">Khyber Pakhtunkhwa</option>
+          <option value="4">Balochistan</option>
+          <option value="5">Islamabad</option>
+          <option value="6">Azad Kashmir</option>
+          <option value="7">Gilgit Baltistan</option>
+          <option value="8">FATA</option>
+        </select>
+    </div>
+    <div class="row" id="district" hidden>
+        <label for="ddDistrict">District</label>
+        <select name="ddDistrict" id="ddDistrict" class="form-control" required>
+          <option value="none" selected>Select One</option>
+          <option value="add">Add One</option>
+          <option value="1">Sindh</option>
+          <option value="2">Punjab</option>
+          <option value="3">Khyber Pakhtunkhwa</option>
+          <option value="4">Balochistan</option>
+          <option value="5">Islamabad</option>
+          <option value="6">Azad Kashmir</option>
+          <option value="7">Gilgit Baltistan</option>
+          <option value="8">FATA</option>
+        </select>
+    </div>
+    <div class="row" id="tehsil" hidden>
+        <label for="ddTehsil">Tehsil</label>
+        <select name="ddTehsil" id="ddTehsil" class="form-control" required>
+          <option value="none" selected>Select One</option>
+          <option value="add">Add One</option>
+          <option value="1">Sindh</option>
+          <option value="2">Punjab</option>
+          <option value="3">Khyber Pakhtunkhwa</option>
+          <option value="4">Balochistan</option>
+          <option value="5">Islamabad</option>
+          <option value="6">Azad Kashmir</option>
+          <option value="7">Gilgit Baltistan</option>
+          <option value="8">FATA</option>
+        </select>
+    </div>
+    <div class="row" id="uc" hidden>
+        <label for="ddUC">Union Council</label>
+        <select name="ddUC" id="ddUC" class="form-control" required>
+          <option value="none" selected>Select One</option>
+          <option value="add">Add One</option>
+          <option value="1">Sindh</option>
+          <option value="2">Punjab</option>
+          <option value="3">Khyber Pakhtunkhwa</option>
+          <option value="4">Balochistan</option>
+          <option value="5">Islamabad</option>
+          <option value="6">Azad Kashmir</option>
+          <option value="7">Gilgit Baltistan</option>
+          <option value="8">FATA</option>
+        </select>
+    </div>
+    <div class="row" id="hh" hidden>
+      <br>
+      <br>
+      <h3>Health House in UC</h3>
+      <table class="table table-responsive table-bordered col-sm-12">
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Actions</th>
+        </tr>
+        <tr>
+          <td>Example One</td>
+          <td>SFP, TSF</td>
+          <td><span id="editHH"><a href="/edit/:id"><i class="fas fa-edit"></i></a></span>
+            <span id="deletHH"><a href="/delete/:id"></a></span>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script>
+    window.$ = window.jQuery = require('jquery');
+    require('jquery-validation');
+    </script>
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.bundle.js"></script>
+</body>
+
+<script>
+  function createInputForm (elId, formId, url, name){
+    var html = `<form action="${url}" method="POST" id="${formId}">
+  <label for="${name}">${name.replace('_',' ')}</label>
+  <input type="text" name="${name}" id="${name}" class="form-control" required>
+  <button type="submit" class="btn btn-primary">Save</button>
+</form>`
+$('#'+elId).append(html);
+  }
+  $(function(){
+    //Show district
+      $('#ddProvince').on('change', function(){
+        console.log($(this).val());
+        if($(this).val() === 'none'){
+          $("#district").attr('hidden', true);
+        } else {
+          $("#district").attr('hidden', false);     
+        }
+      })
+    //Show Tehsil
+      $('#ddDistrict').on('change', function(){
+        console.log($(this).val());
+        if($(this).val() === 'none'){
+          $("#tehsil").attr('hidden', true);
+        } if($(this).val() === 'add'){
+          $("#tehsil").attr('hidden', true);
+          createInputForm('district','addDistrict','/addDistrict', 'District_Name');      
+        }else {
+          $("#tehsil").attr('hidden', false);
+          $('#addDistrict').remove();  
+                    
+        }
+      })
+    //Show UC
+      $('#ddTehsil').on('change', function(){
+        console.log($(this).val());
+        if($(this).val() === 'none'){
+          $("#uc").attr('hidden', true);
+        } else if ($(this).val() === 'add'){
+          $("#uc").attr('hidden', true);
+          createInputForm('tehsil','addTehsil','/addTehsil', 'Tehsil_Name');
+        }else {
+          $("#uc").attr('hidden', false);
+          $('#addTehsil').remove('form');       
+                   
+        }
+      })
+    //Show HH
+      $('#ddUC').on('change', function(){
+        console.log($(this).val());
+        if($(this).val() === 'none'){
+          $("#hh").attr('hidden', true);
+        } else  if($(this).val() === 'add'){
+          $("#hh").attr('hidden', true);
+          createInputForm('uc','addUC','/addUC', 'UC_Name');
+        }else {
+          $("#hh").attr('hidden', false);
+          $('#addUC').remove('form');       
+        }
+      });
+      
+  })
+</script>
+
+</html>

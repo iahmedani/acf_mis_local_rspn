@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="../fa5/css/fontawesome-all.min.css">
+</head>
+<style>
+    tbody>tr>td {
+        padding: 0 !important;
+        font-size: 12px !important;
+    }
+
+    thead {
+        font-size: 12px !important;
+        font-weight: bold !important;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <form action="#" id="myForm">
+            <div class="form-group row">
+                <label for="ddProvince" class="col-sm-1 col-form-label">Province:</label>
+                <div class="col-sm-2">
+                  <select id="ddProvince" class="form-control form-control-sm" >
+                    <option value="">Select One</option>
+                  </select>
+                </div>
+                <label for="ddDistrict" class="col-sm-1 col-form-label">District:</label>
+                <div class="col-sm-2">
+                  <select id="ddDistrict" class="form-control form-control-sm" >
+                    <option value="">Select One</option>
+                  </select>
+                </div>
+                <label for="ddTehsil" class="col-sm-1 col-form-label">Tehsil:</label>
+                <div class="col-sm-2">
+                  <select id="ddTehsil" class="form-control form-control-sm" >
+                    <option value="">Select One</option>
+                  </select>
+                </div>
+                <label for="ddUC" class="col-sm-1 col-form-label">UC:</label>
+                <div class="col-sm-2">
+                  <select id="ddUC" class="form-control form-control-sm" >
+                    <option value="">Select One</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="ddHealthHouse" class="col-sm-1 col-form-label">H House:</label>
+                <div class="col-sm-2">
+                  <select name="ddHealthHouse" id="ddHealthHouse" class="form-control form-control-sm" >
+                    <option value="">Select One</option>
+                  </select>
+                </div>
+                <label for="txtSiteType" class="col-sm-1 col-form-label">Site Type:</label>
+                <div class="col-sm-2">
+                  <input type="text" readonly id="txtSiteType" class="form-control form-control-sm" >
+                </div>
+                <label for="txtVillage" class="col-sm-1 col-form-label">Village:</label>
+                <div class="col-sm-2">
+                    <input type="text" name="txtVillage" class="form-control form-control-sm" required>
+                </div>
+                <label for="txtStaffName" class="col-sm-1 col-form-label">Staff Name:</label>
+                <div class="col-sm-2">
+                    <input type="text" name="txtStaffName" class="form-control form-control-sm" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="scrPlwScrType" class="col-sm-1 col-form-label">Screening Type</label>
+                <div class="col-sm-5">
+                    <select name="scrPlwScrType" id="scrPlwScrType" class="form-control form-control-sm" required>
+                        <option value="">Select One</option>
+                        <option value="1">Active</option>
+                        <option value="0">Passive</option>
+                    </select>
+                </div>
+                <label for="txtScrPlwDate" class="col-sm-1 col-form-label">Screening Date:</label>
+                <div class="col-sm-5">
+                    <input type="date" name="txtScrPlwDate" id="txtScrPlwDate" class="form-control form-control-sm" required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <table class="table table-bordered table-sm table-responsive-sm" id="tb">
+                    <!-- <thead> -->
+                    <tr>
+                        <td>Name</td>
+                        <td>H'Name</td>
+                        <td>Address</td>
+                        <td>Age
+                            <small>(Years)</small>
+                        </td>
+                        <td>Status (P/L) </td>
+                        <td>MUAC</td>
+                        <td># of MM Tablets</td>
+                        <td>Status </td>
+                        <td>
+                            <a href="javascript:void(0);" style="font-size:18px;" id="addMore" title="Add More Person">
+                                <i class="fas fa-plus-square "></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <!-- </thead> -->
+                    <!-- <tbody id="tb"> -->
+                    <!-- <div class="input-group input-group-sm mb-3"> -->
+                    <tr>
+                        <td>
+                            <input type="text" name="txtScrPlwName" class="form-control  form-control-sm" required>
+                        </td>
+                        <td>
+                            <input type="text" name="txtScrPlwHusband" class="form-control  form-control-sm" required>
+                        </td>
+                        <td>
+                            <input type="text" name="txtScrPlwAddr" class="form-control form-control-sm" required>
+                        </td>
+                        <td>
+                            <input type="number" min="0" name="numScrPlwAge" class="form-control form-control-sm" required>
+                        </td>
+                        <td>
+                            <select name="ddPlwStatus" class="form-control form-control-sm" required>
+                                <option value="">Select</option>
+                                <option value="1">P</option>
+                                <option value="2">L</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" min="0" class="form-control form-control-sm" name="numMUAC" required>
+                        </td>
+
+                        <td>
+                            <input type="number" min="0" name="numMMTablets" class="form-control form-control-sm" required>
+                        </td>
+                        <td>
+                            <select name="ddScrPlwStatus" class="form-control form-control-sm" required>
+                                <option value="">Select</option>
+                                <option value="1">Normal</option>
+                                <option value="2">MAM</option>
+                                <option value="3">SAM</option>
+                            </select>
+
+                        </td>
+                        <td>
+                            <a href='javascript:void(0);' class='remove'>
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <!-- </div> -->
+                    <!-- </tbody> -->
+
+                </table>
+            </div>
+            <div class="form-group row">
+                <div class="offset-sm-10 col-sm-2">
+                    <button type="submit" class="btn btn-primary" id="formSub">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script>
+        window.$ = window.jQuery = require('jquery');
+        require('jquery-validation');
+    </script>
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script>
+        (function ($) {
+            $.fn.serializeFormJSON = function () {
+
+                var o = {};
+                var a = this.serializeArray();
+                $.each(a, function () {
+                    if (o[this.name]) {
+                        if (!o[this.name].push) {
+                            o[this.name] = [o[this.name]];
+                        }
+                        o[this.name].push(this.value || '');
+                    } else {
+                        o[this.name] = this.value || '';
+                    }
+                });
+                return o;
+            };
+        })(jQuery);
+        const ipc = require('electron').ipcRenderer;
+        $('#myForm').validate();
+        $('#myForm').on('submit', function (e) {
+            if ($(this).valid()) {
+                var formData = $(this).serializeFormJSON();
+                e.preventDefault();
+                ipc.send('submitFormPlw', formData);
+            }
+        })
+
+        $(function () {
+            //Adding Row
+            $('#addMore').on('click', function () {
+                var data = $("#tb tr:eq(1)").clone(true).appendTo("#tb");
+                data.find("input").val('');
+            });
+            $(document).on('click', '.remove', function () {
+                var trIndex = $(this).closest("tr").index();
+                if (trIndex > 1) {
+                    $(this).closest("tr").remove();
+                } else {
+                    alert("Sorry!! Can't remove first row!");
+                }
+            });
+            var datePickerId = document.getElementById('txtScrPlwDate');
+            datePickerId.max = new Date().toISOString().split("T")[0];
+        });
+        $(function(){
+      ipc.send('getProvince');
+      ipc.on('province', function(evt, province){
+        province.province.forEach(el=>{
+          $('#ddProvince').append(`<option value="${el.id}">${el.provinceName}</option>`);
+        })
+        })
+        $('#ddProvince').on('change', function(){
+          var prov = $(this).val();
+          ipc.send('getDistrict', prov )
+          ipc.on('district', function(evt, district){
+            $('#ddDistrict').children('option:not(:first)').remove();
+            district.district.forEach(el=>{
+          $('#ddDistrict').append(`<option value="${el.id}">${el.districtName}</option>`);              
+            })
+          })
+        })
+        $('#ddDistrict').on('change', function(){
+          var dist = $(this).val();
+          ipc.send('getTehsil', dist )
+          ipc.on('tehsil', function(evt, tehsil){
+            $('#ddTehsil').children('option:not(:first)').remove();
+            tehsil.tehsil.forEach(el=>{
+          $('#ddTehsil').append(`<option value="${el.id}">${el.tehsilName}</option>`);              
+            })
+          })
+        })
+        $('#ddTehsil').on('change', function(){
+          var tehs = $(this).val();
+          ipc.send('getUC', tehs )
+          ipc.on('uc', function(evt, uc){
+            $('#ddUC').children('option:not(:first)').remove();
+            uc.uc.forEach(el=>{
+          $('#ddUC').append(`<option value="${el.id}">${el.ucName}</option>`);              
+            })
+          })
+        })
+        $('#ddUC').on('change', function(){
+          var ucs = $(this).val();
+          ipc.send('getHealthHouse', ucs )
+          ipc.on('hh', function(evt, hh){
+            $('#ddHealthHouse').children('option:not(:first)').remove();
+            console.log(hh.hh);
+            hh.hh.forEach(el=>{
+          $('#ddHealthHouse').append(`<option value="${el.id}">${el.siteName}</option>`);              
+            })
+          })
+        })
+          $('#ddHealthHouse').on('change', function(){
+          // var ucs = $('#ddUC').val();
+          var h_id = $(this).val();
+          ipc.send('getHealthHouseType', h_id )
+          ipc.on('hhType', function(evt, hh){
+            // var result = hh.hh.filter(el => el.id == $(this).val());
+            if(h_id === ""){
+              $('#txtSiteType').val().empty();  
+            } else{
+
+              $('#txtSiteType').val(function(){
+                var site = [];
+                if(hh.hh[0].OTP === 1){
+                  site.push('OTP')
+                }
+                if(hh.hh[0].SFP === 1){
+                  site.push('SFP')                
+                }
+                if(hh.hh[0].SC === 1){
+                  site.push('SC')                
+                }
+                return site;
+              })  
+            }
+            
+          })
+        })
+      })
+      ipc.on('resultSent', function(evt, result){
+      $('body').append(`<div class="alert alert-primary" role="alert">
+ ${result.msg}
+</div>`)});
+    </script>
+</body>
+
+</html>
