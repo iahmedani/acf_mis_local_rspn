@@ -109,7 +109,8 @@ const knex = require('knex')({
   knex.schema.hasTable('Screening').then(function(exists){
     if (!exists){
       return knex.schema.createTable('Screening', function(table){
-        table.increments('screening_id');
+        table.increments('screening_id').primary();
+        table.unique('client_scr_id', 'client_scr_id');
         table.integer('client_scr_id');
         table.integer('client_id');
         table.integer('screening_type');

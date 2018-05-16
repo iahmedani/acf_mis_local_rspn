@@ -37,6 +37,15 @@ app.on('ready', () => {
     mainWindow.webContents.send('msg', 'Message from main app');
   });
   
+  ipcMain.on('nav', function(e, arg){
+    if(arg === 'child'){
+      scrAddChild();
+    } else if(arg === 'plw'){
+      scrAddPlw();
+    } else {
+      console.log('error');
+    }
+  })
   // Build main menu from template
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
   // Insert menu
@@ -542,7 +551,7 @@ function createSyncWindow(){
       console.log(err);
     })
     knex('Screening')
-      .where({upload_status:0})
+      .where({upload_status:1})
       .then(results=>{
         if(results){
           results.forEach(el=>{
@@ -594,42 +603,43 @@ const mainMenuTemplate = [
       }
     }]
   },
-  {
-    label: 'Screening',
-    submenu: [{
-        label: 'Add Child',
-        click() {
-          scrAddChild();
-        }
-      },
-      {
-        label: 'Add PLW',
-        click() {
-          scrAddPlw();
-        }
-      },
-      {
-        label: 'Reports',
-        click() {
-          scrReports();
-        }
-      },
-      {
-        label: 'Demo',
-        click() {
-          runDemo();
-        }
-      }
-    ]
-  },
+  // {
+  //   label: 'Screening',
+  //   submenu: [{
+  //       label: 'Add Child',
+  //       click() {
+  //         scrAddChild();
+  //       }
+  //     },
+  //     {
+  //       label: 'Add PLW',
+  //       click() {
+  //         scrAddPlw();
+  //       }
+  //     },
+  //     {
+  //       label: 'Reports',
+  //       click() {
+  //         scrReports();
+  //       }
+  //     },
+  //     {
+  //       label: 'Demo',
+  //       click() {
+  //         runDemo();
+  //       }
+  //     }
+  //   ]
+  // },
   {
     label: 'Admin',
-    submenu: [{
-        label: 'Geo Refference',
-        click() {
-          createGeoWindow();
-        }
-      },
+    submenu: [
+      // {
+      //   label: 'Geo Refference',
+      //   click() {
+      //     createGeoWindow();
+      //   }
+      // },
       {
         label: 'Sync',
         click() {

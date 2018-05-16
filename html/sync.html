@@ -20,19 +20,22 @@
     font-size: 12px !important;
     font-weight: bold !important;
   }
+  #syncTabs{
+    padding-top: 30px;
+  }
 </style>
 
 <body>
-  <nav class="navbar navbar-dark bg-primary">
-    <!-- Navbar content -->
-    <a class="navbar-brand" href="#">Sync</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText"
-      aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-  </nav>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
+          <img src="../img/logo-acf.png" style="height: 50px;" alt="">
+        </a>
+        <ul class="navbar-nav px-3">
+           
+          </ul>
+      </nav>
   <div class="container">
-    <div class="row">
+    <div class="row" id="syncTabs">
       <div class="card col-lg-6 col-md-6 col-sm-6">
         <div class="card-body">
           <h4 class="card-title">Update Database</h4>
@@ -75,10 +78,14 @@
         ipc.send('updateServer');
     })
     ipc.on('resultSent', function(evt, result){
-      $('body').append(`<div class="alert alert-primary" role="alert">
+      $('body').append(`<div class="alert alert-primary alert-dismissible fade show" role="alert">
  ${result.msg}
 </div>`)
 
+    $('.alert').alert()
+    $(".alert").fadeTo(2000, 500).slideUp(500, function(){
+    $(".alert").alert('close');
+})
     })
   </script>
 
