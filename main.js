@@ -6,6 +6,9 @@ const {
 } = require('electron');
 const url = require('url');
 const path = require('path');
+var fs = require('fs');
+var imran = JSON.parse(fs.readFileSync('settings.json', 'utf8'))
+console.log(imran);
 
 var knex = require("knex")({
   client: "sqlite3",
@@ -459,6 +462,7 @@ function runDemo(){
 
 // Creating Admin : sync Refference
 function createSyncWindow(){
+  var surl = imran.server;
   syncData = new BrowserWindow({
     width:800,
     height:800,
@@ -470,7 +474,7 @@ function createSyncWindow(){
     slashes: true
   }));
   ipcMain.on('updateDB', function(){
-    request('http://localhost:8888/getProvince',function(err, response, body){
+    request(surl+'/getProvince',function(err, response, body){
       if(err){
         console.log(err)
       } else {
@@ -480,7 +484,7 @@ function createSyncWindow(){
         })
       }
     })
-    request('http://localhost:8888/getDistrict',function(err, response, body){
+    request(surl+'/getDistrict',function(err, response, body){
       if(err){
         console.log(err)
       } else {
@@ -490,7 +494,7 @@ function createSyncWindow(){
         })
       }
     })
-    request('http://localhost:8888/getTehsil',function(err, response, body){
+    request(surl+'/getTehsil',function(err, response, body){
       if(err){
         console.log(err)
       } else {
@@ -500,7 +504,7 @@ function createSyncWindow(){
         })
       }
     })
-    request('http://localhost:8888/getUC',function(err, response, body){
+    request(surl+'/getUC',function(err, response, body){
       if(err){
         console.log(err)
       } else {
@@ -510,7 +514,7 @@ function createSyncWindow(){
         })
       }
     })
-    request('http://localhost:8888/getSite',function(err, response, body){
+    request(surl+'/getSite',function(err, response, body){
       if(err){
         console.log(err)
       } else {
@@ -523,33 +527,7 @@ function createSyncWindow(){
     syncData.webContents.send("resultSent", {'msg':'sync complete'});
   });
   ipcMain.on('updateServer', function(){
-    knex.select().from('tblDemo').then((result)=>{
-      if(result){
-
-        result.forEach((el)=>{
-          var options = {
-            method:'POST',
-            uri: 'http://localhost:8888/addDemo',
-            body: {
-              name: el.yourName,
-              client: el.client_id
-            },
-            json: true          
-          }
-          request(options,function(err, response, body){
-            if(err){
-              console.log(err)
-            } else {
-              console.log(body);
-            }
-          })
-        })
-    // syncData.webContents.send("resultSent", {'msg':'sync complete'});
-    syncData.webContents.send('resultSent', ({'msg':"server synced"}));
-      }
-    }).catch((err)=>{
-      console.log(err);
-    })
+  
     knex('Screening')
       .where({upload_status:1})
       .then(results=>{
@@ -557,7 +535,7 @@ function createSyncWindow(){
           results.forEach(el=>{
             var options = {
               method:'POST',
-              uri: 'http://localhost:8888/screening',
+              uri: surl+'/screening',
               body: el,
               json: true          
             }
