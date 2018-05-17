@@ -9,7 +9,8 @@ const knex = require('knex')({
 knex.schema.hasTable('tblGeoProvince').then(function (exists) {
   if (!exists) {
     return knex.schema.createTable('tblGeoProvince', function (table) {
-      table.increments();
+      table.increments('id').primary();
+      table.unique('id');
       table.string('provinceName');
       table.timestamps();
     });
@@ -24,7 +25,8 @@ knex.schema.hasTable('tblGeoProvince').then(function (exists) {
 knex.schema.hasTable('tblGeoDistrict').then(function (exists) {
   if (!exists) {
     return knex.schema.createTable('tblGeoDistrict', function (table) {
-      table.increments();
+      table.increments('id').primary();
+      table.unique('id');
       table.string('districtName');
       table.integer('province_id');
       table.timestamps();
@@ -40,7 +42,8 @@ knex.schema.hasTable('tblGeoDistrict').then(function (exists) {
 knex.schema.hasTable('tblGeoTehsil').then(function (exists) {
   if (!exists) {
     return knex.schema.createTable('tblGeoTehsil', function (table) {
-      table.increments();
+      table.increments('id').primary();
+      table.unique('id');
       table.string('tehsilName');
       table.integer('district_id');
       table.timestamps();
@@ -56,7 +59,8 @@ knex.schema.hasTable('tblGeoTehsil').then(function (exists) {
 knex.schema.hasTable('tblGeoUC').then(function (exists) {
   if (!exists) {
     return knex.schema.createTable('tblGeoUC', function (table) {
-      table.increments();
+      table.increments('id').primary();
+      table.unique('id');
       table.string('ucName');
       table.integer('tehsil_id');
       table.timestamps();
@@ -72,7 +76,8 @@ knex.schema.hasTable('tblGeoUC').then(function (exists) {
 knex.schema.hasTable('tblGeoNutSite').then(function (exists) {
   if (!exists) {
     return knex.schema.createTable('tblGeoNutSite', function (table) {
-      table.increments();
+      table.increments('id').primary();
+      table.unique('id');
       table.string('siteName');
       table.integer('province_id');
       table.integer('district_id');
@@ -109,7 +114,8 @@ knex.schema.hasTable('tblDemo').then(function (exists) {
 knex.schema.hasTable('Screening').then(function(exists){
   if (!exists){
     return knex.schema.createTable('Screening', function(table){
-      table.increments('screening_id');
+      table.increments('screening_id').primary();
+      table.unique('screening_id');
       table.integer('client_scr_id');
       table.integer('client_id');
       table.integer('screening_type');

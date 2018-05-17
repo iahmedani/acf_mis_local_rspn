@@ -27,9 +27,10 @@
 </style>
 
 <body>
-        <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+    <nav class="navbar navbar-light sticky-top flex-md-nowrap p-0" style="background-color: #e3f2fd;">
+        <!-- <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0"> -->
                 <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
-                  <img src="../img/logo-acf.png" style="height: 50px;" alt="">
+                    <img src="../img/acf-logo.svg" style="height: 50px;" alt="">
                 </a>
                 <ul class="navbar-nav px-3">
                   
@@ -231,6 +232,7 @@
         $(function(){
       ipc.send('getProvince');
       ipc.on('province', function(evt, province){
+        $('#ddProvince').children('option:not(:first)').remove();         
         province.province.forEach(el=>{
           $('#ddProvince').append(`<option value="${el.id}">${el.provinceName}</option>`);
         })
