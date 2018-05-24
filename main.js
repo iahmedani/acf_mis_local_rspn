@@ -9,13 +9,14 @@ const path = require('path');
 var fs = require('fs');
 var imran = JSON.parse(fs.readFileSync('settings.json', 'utf8'))
 console.log(imran);
-
+var async = require('async');
 var knex = require("knex")({
   client: "sqlite3",
   connection: {
     filename: "./acf_mis_local.sqlite3"
   }
 });
+var db= require('./dbTest');
 const request = require('request');
 
 // const bParser = require('body-parser');
@@ -45,6 +46,8 @@ app.on('ready', () => {
       scrAddChild();
     } else if (arg === 'plw') {
       scrAddPlw();
+    } else if(arg === 'report'){
+      scrReports();
     } else {
       console.log('error');
     }
@@ -450,6 +453,88 @@ function scrReports() {
     protocol: 'file:',
     slashes: true
   }));
+  ipcMain.on('getProvince', function (event) {
+    knex('tblGeoProvince')
+      .then(result => {
+        scrReport.webContents.send('province', ({
+          province: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getDistrict', function (event, prov) {
+    console.log(prov)
+    knex('tblGeoDistrict')
+      .where({
+        province_id: prov
+      })
+      .then(result => {
+        scrReport.webContents.send('district', ({
+          district: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getTehsil', function (event, dist) {
+    console.log(dist)
+    knex('tblGeoTehsil')
+      .where({
+        district_id: dist
+      })
+      .then(result => {
+        scrReport.webContents.send('tehsil', ({
+          tehsil: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getUC', function (event, tehs) {
+    console.log(tehs)
+    knex('tblGeoUC')
+      .where({
+        tehsil_id: tehs
+      })
+      .then(result => {
+        scrReport.webContents.send('uc', ({
+          uc: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+
+  ipcMain.on('data', function(e, arg){
+    async.parallel({
+      summary: function(callback){
+        db.scrSummary(arg, (err, result)=>{
+          callback(err, result)
+        })
+      },
+      plw: function(callback){
+        db.scrPlw(arg, (err, result)=>{
+        callback(err, result)
+        })
+      }
+      ,
+      child: function(callback){
+        db.scrChild(arg, (err, result)=>{
+          callback(err, result)
+        })
+      }
+    }, (err, results)=>{
+      if(err) return console.log(err);
+      scrReport.webContents.send('data',({
+      data:results
+      }))
+    })
+  })
   scrReport.on('close', function () {
     scrReport = null;
   })
@@ -702,9 +787,7 @@ function createSyncWindow() {
   ipcMain.on('updateServer', function () {
 
     knex('Screening')
-      .where({
-        upload_status: 1
-      })
+      
       .then(results => {
         if (results) {
           results.forEach(el => {
@@ -722,9 +805,6 @@ function createSyncWindow() {
                 knex('Screening')
                   .where({
                     screening_id: el.screening_id
-                  })
-                  .update({
-                    upload_status: 1
                   })
                   .then(result => {
                     console.log(result);
