@@ -112,7 +112,7 @@
           </select>
         </div>
         <div class="form-group col-sm-2 align-self-end">
-          <button class="btn btn-primary btn-sm btn-block form-control shadow-sm" type="submit" id="addFilter"><i class="fas fa-filter"></i> Filter</button>
+          <button class="btn btn-primary btn-sm btn-block form-control shadow-sm" id="addFilter"><i class="fas fa-filter"></i> Filter</button>
         </div>
         <div class="form-group col-sm-2 align-self-end">
           <button class="btn btn-success btn-sm btn-block form-control shadow-sm" onclick="doit()"><i class="far fa-file-excel"></i> Export</button>
@@ -194,6 +194,23 @@
 
     <script>
       const ipc = require('electron').ipcRenderer;
+      function doit() {
+          /* create new workbook */
+        var workbook = XLSX.utils.book_new();
+        var filename = 'Screening_'+Date.now()+'.xlsx';
+
+        /* convert table 'table1' to worksheet named "Sheet1" */
+        var ws1 = XLSX.utils.table_to_sheet(document.getElementById('customers'));
+        XLSX.utils.book_append_sheet(workbook, ws1, "Summary");
+
+        /* convert table 'table2' to worksheet named "Sheet2" */
+        var ws2 = XLSX.utils.table_to_sheet(document.getElementById('tblChild'));
+        XLSX.utils.book_append_sheet(workbook, ws2, "Child");
+        var ws3 = XLSX.utils.table_to_sheet(document.getElementById('tblPlw'));
+        XLSX.utils.book_append_sheet(workbook, ws3, "PLW");
+        XLSX.writeFile(workbook, filename);
+      }
+
     $(function(){
       ipc.send('getProvince');
       ipc.on('province', function(evt, province){
@@ -247,16 +264,20 @@
           })
         })
       })
+    ipc.send('data', 0);
+      ipc.on('data',(e,data)=>{
+        pushData(data.data);
+      })
+      $('#addFilter').on('click', function(e){
+        ipc.send('data', prepareQry());
+        ipc.on('data',(e,data)=>{
+        pushData(data.data);
+      })
+    })
+
     </script>
   <script>
-    function pushData(data, url) {
-      console.log(url);
-      $.ajax({
-        url:url,
-        method:'POST',
-        data: data,
-        type:'json',
-        success: (x) => {
+    function pushData(x) {
           var data = x.summary;
           $('#tChildScrActive_M').empty()
           $('#tChildScrActive_M').append(data[0].tChildScrActive_M);
@@ -300,11 +321,7 @@
           $('#PlwScrPassive_L21').append(data[0].PlwScrPassive_L21);
           createTblCh(x.child, 'tblChild');
           createTblPlw(x.plw, 'tblPlw');
-        },
-        error: (err)=>{
-          console.log(err)
-        }
-      })
+        
     }
     function daysInMonth (month, year) {
     return new Date(year, month, 0).getDate();
@@ -349,39 +366,7 @@
       console.log(qry);
       return qry;
     }
-    $(function () {
-      $('#ddInterval').on('change', function () {
-        var value = $(this).val();
-        console.log(value);
-        if (value === 'quarterly') {
-          
-          $('#year').attr("disabled", false)
-          $('#quarter').attr("disabled", false)
-          $('#month').attr("disabled", true)
-        } else if (value === 'monthly') {
-      // prepareQry();
-          
-          $('#year').attr("disabled", false)
-          $('#quarter').attr("disabled", true)
-          $('#month').attr("disabled", false)
-        } else if (value === 'yearly') {
-          $('#year').attr("disabled", false);
-          $('#quarter').attr("disabled", true)
-          $('#month').attr("disabled", true)
-
-        } else {
-          $('#year').attr("disabled", true);
-          $('#quarter').attr("disabled", true)
-          $('#month').attr("disabled", true)
-        }
-      })
-    })
-    var url = 'http://10.11.70.200:8800'
-    ipc.send('data', null);
-    $('#addFilter').on('click', function(e){
-     pushData(prepareQry(),'/export/data')
-      e.preventDefault();
-    })
+    
 
     function createTblPlw(data, table){
       var headPLW = ["id",'Province','District','Tehsil','UC','Nutrition Site','Screening Type','Screening Date','Entry Date','Village','Staff Name','Name','H Name','Type','Age(years)','Address','MUAC','# of MM Tabs','status' ]
@@ -504,29 +489,6 @@
       $('#'+table).empty();
       $('#'+table).append(html);
   }
-$(()=>{
-  function doit() {
-	/* create new workbook */
-var workbook = XLSX.utils.book_new();
-var filename = 'Screening_'+Date.now()+'.xlsx';
-
-/* convert table 'table1' to worksheet named "Sheet1" */
-var ws1 = XLSX.utils.table_to_sheet(document.getElementById('customers'));
-XLSX.utils.book_append_sheet(workbook, ws1, "Summary");
-
-/* convert table 'table2' to worksheet named "Sheet2" */
-var ws2 = XLSX.utils.table_to_sheet(document.getElementById('tblChild'));
-XLSX.utils.book_append_sheet(workbook, ws2, "Child");
-var ws3 = XLSX.utils.table_to_sheet(document.getElementById('tblPlw'));
-XLSX.utils.book_append_sheet(workbook, ws3, "PLW");
-XLSX.writeFile(workbook, filename);
-}
-
-
-$('#addFilter').click(function(){
-  doit();
-})
-})
 
 
   </script>

@@ -511,29 +511,53 @@ function scrReports() {
   });
 
   ipcMain.on('data', function(e, arg){
+    var x = arg;
+    if(arg === 0){
+      x = null;
+    }
     async.parallel({
-      summary: function(callback){
-        db.scrSummary(arg, (err, result)=>{
-          callback(err, result)
-        })
+      summary: (cb)=>{
+        db.scrSummary(x, (err, res)=>cb(err,res));
       },
-      plw: function(callback){
-        db.scrPlw(arg, (err, result)=>{
-        callback(err, result)
-        })
-      }
-      ,
-      child: function(callback){
-        db.scrChild(arg, (err, result)=>{
-          callback(err, result)
-        })
+      plw:(cb)=>{
+        db.scrPlw(x,(err,res)=>cb(err,res))
+      },
+      child:(cb)=>{
+        db.scrChild(x,(err,res)=>cb(err,res))
       }
     }, (err, results)=>{
-      if(err) return console.log(err);
+      console.log(err, results);
       scrReport.webContents.send('data',({
-      data:results
-      }))
+          data:results
+          }))
     })
+    // db.test(1, (err, res)=>{
+    //   console.log(err, res);
+    // })
+    // async.parallel({
+    //   summary: function(callback){
+    //     db.scrSummary(x, (err, result)=>{
+    //       callback(err, result)
+    //     })
+    //   },
+    //   plw: function(callback){
+    //     db.scrPlw(x, (err, result)=>{
+    //     callback(err, result)
+    //     })
+    //   }
+    //   ,
+    //   child: function(callback){
+    //     db.scrChild(x, (err, result)=>{
+    //       callback(err, result)
+    //     })
+    //   }
+    // }, (err, results)=>{
+    //   if(err) return console.log(err);
+    //   scrReport.webContents.send('data',({
+    //   data:results
+    //   }))
+    // })
+    console.log('test scr report'+ arg)
   })
   scrReport.on('close', function () {
     scrReport = null;

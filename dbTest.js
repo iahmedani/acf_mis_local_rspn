@@ -5,9 +5,22 @@ var knex = require('knex')({
   }
 });
 
-module.exports.scrSummary= function (cond, callback) {
-  if (!cond) {
+module.exports.test = function(cond, cb){
+  knex('scr_report_final')
+  .where({province_id: cond})
+  .then(result=>{
+    cb(null, result);
+  })
+  .catch(err=>{
+    cb(err);
+    console.log(err);
+  })
+}
 
+module.exports.scrSummary= function (cond, callback) {
+  console.log(cond)
+  
+  if (!cond) {
     knex('scr_report_final')
       .sum({
         tChildScrActive_M: 'tChildScrActive_M'
@@ -149,7 +162,7 @@ module.exports.scrSummary= function (cond, callback) {
           date = newCond.date;
           delete newCond.date;
         } 
-        if(date && !isEmpty()){
+        if(date && !isEmpty(newCond)){
           builder.whereBetween(date);
         } else {
           console.log(date);
@@ -170,6 +183,7 @@ module.exports.scrSummary= function (cond, callback) {
 }
 
 module.exports.scrPlw= function (cond, callback){
+  console.log(cond)
   if(!cond){
     knex('v_screening')
       .where({is_plw: true})
@@ -192,7 +206,7 @@ module.exports.scrPlw= function (cond, callback){
             date = newCond.date;
             delete newCond.date;
           } 
-          if(date && !isEmpty()){
+          if(date && !isEmpty(newCond)){
             builder.whereBetween(date);
           } else {
             console.log(date);
@@ -232,7 +246,7 @@ module.exports.scrChild= function (cond, callback){
           date = newCond.date;
           delete newCond.date;
         } 
-        if(date && !isEmpty()){
+        if(date && !isEmpty(newCond)){
           builder.whereBetween(date);
         } else {
           console.log(date);
