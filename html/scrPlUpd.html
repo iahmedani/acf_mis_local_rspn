@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+   
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+ 
+
+  </head>
+  <body>
+      <header>
+          <nav class="navbar navbar-light sticky-top flex-md-nowrap p-0 " style="background-color: #e3f2fd;">
+            <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
+              <img src="../img/acf-logo.svg" style="height: 50px;" alt="">
+                </a>
+                <ul class="navbar-nav px-3">
+                
+                </ul>
+              </nav>
+        </header>
+    <div class="container-fluid">
+        <div id="filter"  class="rounded">
+            <form action="#!" id="frmFilter">
+            <div class="row">
+              <div class="form-group col-sm-3 ">
+                <label for="province">Province</label>
+                <select name="province" id="ddProvince" class="form-control form-control-sm">
+                  <option selected disabled>Choose</option>
+                  
+                </select>
+              </div>
+              <div class="form-group col-sm-3 ">
+      
+                <label for="district">District</label>
+                <select name="district" id="ddDistrict" class="form-control form-control-sm">
+                  <option selected disabled>Choose</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-3 ">
+      
+                <label for="Tehsil">Tehsil</label>
+                <select name="Tehsil" id="ddTehsil" class="form-control form-control-sm">
+                  <option selected disabled>Choose</option>
+      
+                </select>
+              </div>
+              <div class="form-group col-sm-3 ">
+                <label for="uc">UC</label>
+                <select name="uc" id="ddUC" class="form-control form-control-sm">
+                  <option selected disabled>Choose</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+                  <div class="form-group col-sm-2">
+                    <label for="interval">Inverval</label>
+                    <select name="internval" id="ddInterval" class="form-control form-control-sm">
+                      <option selected disabled>Choose</option>
+                      
+                      <option value="monthly">Monthly</option>
+                      <option value="quarterly">Quarterly</option>
+                      <option value="yearly">Yearly</option>
+                      <option value="none">None</option>
+                    </select>
+                  </div>
+      
+              <div class="form-group col-sm-2" id="picYear">
+                <label for="year">Year</label>
+                <select name="year" id="year" required class="form-control form-control-sm" disabled>
+                  <option selected disabled>Choose</option>
+                  <option value="2018">2018</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-2" id="picQuarter">
+                <label for="quarter">Quarter</label>
+                <select name="quarter" id="quarter" class="form-control form-control-sm"  required disabled>
+                  <option selected disabled>Choose</option>
+                  <option value="0">Q1</option>
+                  <option value="1">Q2</option>
+                  <option value="2">Q3</option>
+                  <option value="3">Q4</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-2" id="picMonth">
+                <label for="month">Month</label>
+                <select name="month" id="month" class="form-control form-control-sm" required disabled>
+                  <option value=""  >Choose</option>
+                  <option value="1">JAN</option>
+                  <option value="2">FEB</option>
+                  <option value="3">MAR</option>
+                  <option value="4">APR</option>
+                  <option value="5">MAY</option>
+                  <option value="6">JUN</option>
+                  <option value="7">JUL</option>
+                  <option value="8">AUG</option>
+                  <option value="9">SEP</option>
+                  <option value="10">OCT</option>
+                  <option value="11">NOV</option>
+                  <option value="12">DEC</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-2 align-self-end">
+                <button class="btn btn-primary btn-sm btn-block form-control shadow-sm" id="addFilter"><i class="fas fa-filter"></i> Filter</button>
+              </div>
+              <div class="form-group col-sm-2 align-self-end">
+                <button class="btn btn-success btn-sm btn-block form-control shadow-sm" onclick="doit()"><i class="far fa-file-excel"></i> Export</button>
+              </div>
+            </div>
+          </form>
+          </div>
+      <div id="jsGrid"></div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script>
+      window.$ = window.jQuery = require('jquery');
+      require('jquery-validation');
+    </script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+    <script>
+        function daysInMonth (month, year) {
+    return new Date(year, month, 0).getDate();
+}
+      $(function(){
+      ipc.send('getProvince');
+      ipc.on('province', function(evt, province){
+        $('#ddProvince').children('option:not(:first)').remove();
+        
+        // $('#ddProvince').find('option:gt(0)').remove();
+        province.province.forEach(el=>{
+          $('#ddProvince').append(`<option value="${el.id}">${el.provinceName}</option>`);
+        })
+        })
+        $('#ddProvince').on('change', function(){
+          var prov = $(this).val();
+          ipc.send('getDistrict', prov )
+          ipc.on('district', function(evt, district){
+            $('#ddDistrict').children('option:not(:first)').remove();
+            district.district.forEach(el=>{
+          $('#ddDistrict').append(`<option value="${el.id}">${el.districtName}</option>`);              
+            })
+          })
+        })
+        $('#ddDistrict').on('change', function(){
+          var dist = $(this).val();
+          ipc.send('getTehsil', dist )
+          ipc.on('tehsil', function(evt, tehsil){
+            $('#ddTehsil').children('option:not(:first)').remove();
+            tehsil.tehsil.forEach(el=>{
+          $('#ddTehsil').append(`<option value="${el.id}">${el.tehsilName}</option>`);              
+            })
+          })
+        })
+        $('#ddTehsil').on('change', function(){
+          var tehs = $(this).val();
+          ipc.send('getUC', tehs )
+          ipc.on('uc', function(evt, uc){
+            $('#ddUC').children('option:not(:first)').remove();
+            uc.uc.forEach(el=>{
+          $('#ddUC').append(`<option value="${el.id}">${el.ucName}</option>`);              
+            })
+          })
+        })
+        var ucForHH;
+        $('#ddUC').on('change', function(){
+          var ucs = $(this).val();
+          ucForHH = ucs
+          ipc.send('getHealthHouse', ucs )
+          ipc.on('hh', function(evt, hh){
+            $('#ddHealthHouse').children('option:not(:first)').remove();
+            hh.hh.forEach(el=>{
+          $('#ddHealthHouse').append(`<option value="${el.id}">${el.siteName}</option>`);              
+            })
+          })
+        })
+      })
+      
+    function prepareQry(){
+      var qry = {};
+    ($('#ddProvince').val()) ? qry.province_id = $('#ddProvince').val() : '';
+    ($('#ddDistrict').val()) ? qry.district_id = $('#ddDistrict').val() : '';
+    ($('#ddTehsil').val()) ? qry.tehsil_id = $('#ddTehsil').val() : '';
+    ($('#ddUC').val()) ? qry.uc_id = $('#ddUC').val() : '';
+    if($('#ddInterval').val() === 'monthly'){
+      var yr = $('#year').val();
+      var mth = $('#month').val();
+      if(mth <10){
+        mth = '0'+mth;
+      }
+      var lastDay = daysInMonth(mth, yr);
+      qry.date = {
+        x:'screening_date',
+        y: [
+          `${yr}-${mth}-01`,`${yr}-${mth}-${lastDay}`
+        ]
+      };
+    } else if($('#ddInterval').val() === 'quarterly'){
+      var yr = $('#year').val();
+      var qtr = $('#quarter').val();
+      var range = [
+        [`${yr}-01-01`, `${yr}-03-31`],
+        [`${yr}-04-01`, `${yr}-06-30`],
+        [`${yr}-07-01`, `${yr}-09-30`],
+        [`${yr}-10-01`, `${yr}-12-31`],
+      ];
+      qry.date = {
+        x: 'screening_date',
+        y: range[qtr]
+      };
+    }else if($('#ddInterval').val() === 'yearly'){
+      var yr = $('#year').val();
+      qry.date = {
+        x: 'screening_date',
+        y: [`${yr}-01-01`, `${yr}-12-31`]
+      } ;
+    }
+
+      console.log(qry);
+      return qry;
+    }
+
+    const electron = require('electron');
+    const ipc = electron.ipcRenderer;
+  //   let myFirstPromise = new Promise((resolve, reject) => { 
+  //   ipc.send('get');
+  //   ipc.on('get',(e, result)=>{
+  //     console.log(result)
+  //     var s = {
+  //       data: result.result,
+  //       itemsCount: result.result.length
+  //     }
+  //     if(result.err){
+  //       reject(result.err)
+  //     } else {
+  //       resolve(s)
+  //     }
+  //   })
+  // })
+  let getDataFilters = (filters)=>{
+    return new Promise((resolve, reject) => { 
+    ipc.send('get', filters);
+    ipc.on('get',(e, result)=>{
+      console.log(result)
+      var s = {
+        data: result.result,
+        itemsCount: result.result.length
+      }
+      if(result.err){
+        reject(result.err)
+      } else {
+        resolve(s)
+      }
+    })
+  })
+}
+      const myUpdate = (data)=>{
+        return new Promise((resolve, reject)=>{
+          ipc.send('update', data);
+          ipc.on('update', (e, result)=>{
+            
+      if(result.err){
+        reject(result.err)
+      } else {
+        resolve(result.result[0])
+      }
+          })
+        })
+      }
+    $(function() {
+      var plwType = [{
+        Name:'',
+        id:0,
+      },{Name:'Pregnant',id:1},
+      {Name:'Lactacting', id:2}];
+      var plStatus = [{
+        Name:'',
+        id:0,
+      },{
+        Name:'Normal',
+        id:1
+      },{
+        Name:'MAM',
+        id:2
+
+      },{Name:'SAM', id:3}]
+$('#addFilter').on('click', (e)=>{
+e.preventDefault();
+  $("#jsGrid").jsGrid({
+    height: "500px",
+    width: "100%",
+    // filtering: true,
+    // inserting: true,
+    editing: true,
+    sorting: true,
+    paging: true,
+    autoload: true,
+    pageLoading:true, // this is the clue
+    pageSize: 10,
+    pageButtonCount: 5,
+    deleteConfirm: "Do you really want to delete client?",
+    controller: {
+      loadData: function(filter) {
+        console.log('loaddata')
+        return getDataFilters(prepareQry());
+      },
+      insertItem: function(item) {
+        return $.ajax({
+          type: "POST",
+          url: "/clients",
+          data: item
+        });
+      },
+      updateItem: function(item) {
+        console.log('update')
+        return myUpdate(item);
+      }
+      // ,
+      // deleteItem: function(item) {
+      //   return $.ajax({
+      //     type: "DELETE",
+      //     url: "/clients",
+      //     data: item
+      //   });
+      // }
+    },
+    fields: [{
+        name: "screening_id",
+        title:"ID",
+        type: "number",
+        width: 30,
+        editing :false
+      },{
+        name: "name",
+        title:"Name",
+        type: "text",
+        width: 100
+      },{
+        name: "f_or_h_name",
+        title:"Husband Name",
+        type: "text",
+        width: 100
+      },
+      {
+        name: "address",
+        title:"Address",
+        type: "text",
+        width: 150
+      },
+      {
+        name: "plw_type",
+        title:"PL Type",
+        type: "select",
+        items:plwType,
+        valueField:'id',
+        textField:'Name',
+        width: 80
+      },{
+        name: "muac",
+        title:"MUAC",
+        type: "number",
+        width: 50
+      },{
+        name: "no_mm_tabs",
+        title:"MM Tabs",
+        type: "number",
+        width: 80
+      },{
+        name: "age",
+        title:"Age",
+        type: "number",
+        width: 50
+      },{
+        name: "status",
+        title:"Status",
+        type: "select",
+        items:plStatus,
+        valueField:'id',
+        textField:'Name',
+        width: 80
+      },
+      {
+        type: "control",
+        deleteButton: false,
+      }
+    ],
+    onDataLoaded: function(data) {
+      console.log(data);
+    },
+    onItemUpdating: function(args) {
+      console.log('on Updating', args)
+    },   // before controller.updateItem
+      onItemUpdated: function(args) {
+      console.log('on Updated', args)
+        
+      },    // on done of controller.updateItem
+  });
+})
+
+
+});
+$(function () {
+      $('#ddInterval').on('change', function () {
+        var value = $(this).val();
+        console.log(value);
+        if (value === 'quarterly') {
+          
+          $('#year').attr("disabled", false)
+          $('#quarter').attr("disabled", false)
+          $('#month').attr("disabled", true)
+        } else if (value === 'monthly') {
+      // prepareQry();
+          
+          $('#year').attr("disabled", false)
+          $('#quarter').attr("disabled", true)
+          $('#month').attr("disabled", false)
+        } else if (value === 'yearly') {
+          $('#year').attr("disabled", false);
+          $('#quarter').attr("disabled", true)
+          $('#month').attr("disabled", true)
+
+        } else {
+          $('#year').attr("disabled", true);
+          $('#quarter').attr("disabled", true)
+          $('#month').attr("disabled", true)
+        }
+      })
+    })
+
+
+    
+    </script>
+  </body>
+</html>

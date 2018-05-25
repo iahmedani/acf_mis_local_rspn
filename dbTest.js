@@ -162,8 +162,8 @@ module.exports.scrSummary= function (cond, callback) {
           date = newCond.date;
           delete newCond.date;
         } 
-        if(date && !isEmpty(newCond)){
-          builder.whereBetween(date);
+        if(date && isEmpty(newCond)){
+          builder.whereBetween(date.x, date.y);
         } else {
           console.log(date);
           builder.where(newCond).whereBetween(date.x, date.y);
@@ -206,8 +206,8 @@ module.exports.scrPlw= function (cond, callback){
             date = newCond.date;
             delete newCond.date;
           } 
-          if(date && !isEmpty(newCond)){
-            builder.whereBetween(date);
+          if(date && isEmpty(newCond)){
+            builder.whereBetween(date.x, date.y);
           } else {
             console.log(date);
             builder.where(newCond).whereBetween(date.x, date.y);
@@ -246,8 +246,8 @@ module.exports.scrChild= function (cond, callback){
           date = newCond.date;
           delete newCond.date;
         } 
-        if(date && !isEmpty(newCond)){
-          builder.whereBetween(date);
+        if(date && isEmpty(newCond)){
+          builder.whereBetween(date.x, date.y);
         } else {
           console.log(date);
           builder.where(newCond).whereBetween(date.x, date.y);
@@ -271,3 +271,20 @@ module.exports.scrChild= function (cond, callback){
   return true;
 }
 
+module.exports.updScr = function(data, cb){
+  knex('Screening')
+  .where({screening_id:data.screening_id})
+  .update(data)
+  .then(res=>{
+    if(res ===1){
+     return knex('v_screening')
+        .where({screening_id:data.screening_id})
+    }
+  })
+  .then(result=>{
+    cb(null, result)
+  })
+  .catch(err=>{
+    cb(err);
+  })
+}

@@ -335,6 +335,9 @@
     if($('#ddInterval').val() === 'monthly'){
       var yr = $('#year').val();
       var mth = $('#month').val();
+      if(mth <10){
+        mth = '0'+mth;
+      }
       var lastDay = daysInMonth(mth, yr);
       qry.date = {
         x:'screening_date',
@@ -489,7 +492,34 @@
       $('#'+table).empty();
       $('#'+table).append(html);
   }
+  $(function () {
+      $('#ddInterval').on('change', function () {
+        var value = $(this).val();
+        console.log(value);
+        if (value === 'quarterly') {
+          
+          $('#year').attr("disabled", false)
+          $('#quarter').attr("disabled", false)
+          $('#month').attr("disabled", true)
+        } else if (value === 'monthly') {
+      // prepareQry();
+          
+          $('#year').attr("disabled", false)
+          $('#quarter').attr("disabled", true)
+          $('#month').attr("disabled", false)
+        } else if (value === 'yearly') {
+          $('#year').attr("disabled", false);
+          $('#quarter').attr("disabled", true)
+          $('#month').attr("disabled", true)
 
+        } else {
+          $('#year').attr("disabled", true);
+          $('#quarter').attr("disabled", true)
+          $('#month').attr("disabled", true)
+        }
+      })
+    })
+   
 
   </script>
 </body>

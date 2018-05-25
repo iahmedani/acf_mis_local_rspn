@@ -48,7 +48,13 @@ app.on('ready', () => {
       scrAddPlw();
     } else if(arg === 'report'){
       scrReports();
-    } else {
+    } else if(arg === 'scrUpdate'){
+      myUpdate();
+    }else if(arg === 'scrChUpd'){
+      scrChUpd();
+    }else if(arg === 'scrPlUpd'){
+      scrPlUpd();
+    }else{
       console.log('error');
     }
   })
@@ -441,6 +447,315 @@ function scrAddPlw() {
   })
 }
 
+function myUpdate(){
+  upd = new BrowserWindow({
+    width: 800,
+    height: 800,
+    title: 'Update'
+  })
+  upd.loadURL(url.format({
+    pathname: path.join(__dirname, '/html/myUpdate.html'),
+    protocol: 'file:',
+    slashes: true
+  }));
+  
+  ipcMain.on('getProvince', function (event) {
+    knex('tblGeoProvince')
+      .then(result => {
+        upd.webContents.send('province', ({
+          province: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getDistrict', function (event, prov) {
+    console.log(prov)
+    knex('tblGeoDistrict')
+      .where({
+        province_id: prov
+      })
+      .then(result => {
+        upd.webContents.send('district', ({
+          district: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getTehsil', function (event, dist) {
+    console.log(dist)
+    knex('tblGeoTehsil')
+      .where({
+        district_id: dist
+      })
+      .then(result => {
+        upd.webContents.send('tehsil', ({
+          tehsil: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getUC', function (event, tehs) {
+    console.log(tehs)
+    knex('tblGeoUC')
+      .where({
+        tehsil_id: tehs
+      })
+      .then(result => {
+        upd.webContents.send('uc', ({
+          uc: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('get', function(e,qry){
+    db.scrPlw(qry, (err, result)=>{
+      upd.webContents.send('get',({
+        err: err,
+        result:result,
+          
+      }) 
+      
+    )
+    console.log(result);
+    })
+  })
+  ipcMain.on('update',function(e, data){
+    var plwUpd = {
+      screening_id:data.screening_id,
+      name: data.name,
+      f_or_h_name: data.f_or_h_name,
+      muac: data.muac,
+      plw_type: data.plw_type,
+      status: data.status
+    }
+    db.updScr(plwUpd,function(err, result){
+      console.log(result);
+      upd.webContents.send('update',({
+        result,
+        err:null
+      }))
+    })
+  })
+  upd.on('close', function () {
+    upd = null;
+  })
+}
+function scrPlUpd(){
+  scrPlUpdate = new BrowserWindow({
+    width: 800,
+    height: 800,
+    title: 'Update'
+  })
+  scrPlUpdate.loadURL(url.format({
+    pathname: path.join(__dirname, '/html/scrPlUpd.html'),
+    protocol: 'file:',
+    slashes: true
+  }));
+  
+  ipcMain.on('getProvince', function (event) {
+    knex('tblGeoProvince')
+      .then(result => {
+        scrPlUpdate.webContents.send('province', ({
+          province: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getDistrict', function (event, prov) {
+    console.log(prov)
+    knex('tblGeoDistrict')
+      .where({
+        province_id: prov
+      })
+      .then(result => {
+        scrPlUpdate.webContents.send('district', ({
+          district: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getTehsil', function (event, dist) {
+    console.log(dist)
+    knex('tblGeoTehsil')
+      .where({
+        district_id: dist
+      })
+      .then(result => {
+        scrPlUpdate.webContents.send('tehsil', ({
+          tehsil: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getUC', function (event, tehs) {
+    console.log(tehs)
+    knex('tblGeoUC')
+      .where({
+        tehsil_id: tehs
+      })
+      .then(result => {
+        scrPlUpdate.webContents.send('uc', ({
+          uc: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('get', function(e,qry){
+    db.scrPlw(qry, (err, result)=>{
+      scrPlUpdate.webContents.send('get',({
+        err: err,
+        result:result,
+          
+      }) 
+      
+    )
+    console.log(result);
+    })
+  })
+  ipcMain.on('update',function(e, data){
+    var plwUpd = {
+      screening_id:data.screening_id,
+      name: data.name,
+      f_or_h_name: data.f_or_h_name,
+      muac: data.muac,
+      address:data.address,
+      age: data.age,
+      plw_type: data.plw_type,
+      status: data.status
+    }
+    db.updScr(plwUpd,function(err, result){
+      console.log(result);
+      scrPlUpdate.webContents.send('update',({
+        result,
+        err:null
+      }))
+    })
+  })
+  scrPlUpdate.on('close', function () {
+    scrPlUpdate = null;
+  })
+}
+function scrChUpd(){
+  scrChUpdate = new BrowserWindow({
+    width: 800,
+    height: 800,
+    title: 'Update'
+  })
+  scrChUpdate.loadURL(url.format({
+    pathname: path.join(__dirname, '/html/scrChUpd.html'),
+    protocol: 'file:',
+    slashes: true
+  }));
+  
+  ipcMain.on('getProvince', function (event) {
+    knex('tblGeoProvince')
+      .then(result => {
+        scrChUpdate.webContents.send('province', ({
+          province: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getDistrict', function (event, prov) {
+    console.log(prov)
+    knex('tblGeoDistrict')
+      .where({
+        province_id: prov
+      })
+      .then(result => {
+        scrChUpdate.webContents.send('district', ({
+          district: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getTehsil', function (event, dist) {
+    console.log(dist)
+    knex('tblGeoTehsil')
+      .where({
+        district_id: dist
+      })
+      .then(result => {
+        scrChUpdate.webContents.send('tehsil', ({
+          tehsil: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getUC', function (event, tehs) {
+    console.log(tehs)
+    knex('tblGeoUC')
+      .where({
+        tehsil_id: tehs
+      })
+      .then(result => {
+        scrChUpdate.webContents.send('uc', ({
+          uc: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('get', function(e,qry){
+    db.scrChild(qry, (err, result)=>{
+      scrChUpdate.webContents.send('get',({
+        err: err,
+        result:result,
+          
+      }) 
+      
+    )
+    console.log(result);
+    })
+  })
+  ipcMain.on('update',function(e, data){
+    var chUpd = {
+      screening_id:data.screening_id,
+      name: data.name,
+      f_or_h_name: data.f_or_h_name,
+      muac: data.muac,
+      gender:data.gender,
+      age:data.age,
+      oedema: data.oedema,
+      no_mm_sch:data.no_mm_sch,
+      deworming: data.deworming,
+      status: data.status
+    }
+    db.updScr(chUpd,function(err, result){
+      console.log('childupdate',result);
+      scrChUpdate.webContents.send('update',({
+        result,
+        err:null
+      }))
+    })
+  })
+  scrChUpdate.on('close', function () {
+    scrPlUpdate = null;
+  })
+}
 // Creating Screening : Reports
 function scrReports() {
   scrReport = new BrowserWindow({
