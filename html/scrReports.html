@@ -115,7 +115,7 @@
           <button class="btn btn-primary btn-sm btn-block form-control shadow-sm" id="addFilter"><i class="fas fa-filter"></i> Filter</button>
         </div>
         <div class="form-group col-sm-2 align-self-end">
-          <button class="btn btn-success btn-sm btn-block form-control shadow-sm" onclick="doit()"><i class="far fa-file-excel"></i> Export</button>
+          <button class="btn btn-success btn-sm btn-block form-control shadow-sm" onclick="export_xlsx();"><i class="far fa-file-excel"></i> Export</button>
         </div>
       </div>
     </form>
@@ -191,25 +191,11 @@
       require('jquery-validation');
     </script>
     <script src="../bower_components/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="../js/scrExport.js"></script>
 
     <script>
       const ipc = require('electron').ipcRenderer;
-      function doit() {
-          /* create new workbook */
-        var workbook = XLSX.utils.book_new();
-        var filename = 'Screening_'+Date.now()+'.xlsx';
-
-        /* convert table 'table1' to worksheet named "Sheet1" */
-        var ws1 = XLSX.utils.table_to_sheet(document.getElementById('customers'));
-        XLSX.utils.book_append_sheet(workbook, ws1, "Summary");
-
-        /* convert table 'table2' to worksheet named "Sheet2" */
-        var ws2 = XLSX.utils.table_to_sheet(document.getElementById('tblChild'));
-        XLSX.utils.book_append_sheet(workbook, ws2, "Child");
-        var ws3 = XLSX.utils.table_to_sheet(document.getElementById('tblPlw'));
-        XLSX.utils.book_append_sheet(workbook, ws3, "PLW");
-        XLSX.writeFile(workbook, filename);
-      }
+      
 
     $(function(){
       ipc.send('getProvince');
