@@ -209,6 +209,8 @@
                 var formData = $(this).serializeFormJSON();
                 e.preventDefault();
                 ipc.send('submitFormPlw', formData);
+                location.reload();
+                
             }
         })
 

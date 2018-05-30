@@ -217,6 +217,7 @@
         var formData = $(this).serializeFormJSON();
         e.preventDefault();
         ipc.send('submitFormChild', formData);
+                location.reload();
       }
     })
 

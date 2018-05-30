@@ -199,7 +199,7 @@ function scrAddChild() {
           no_mm_sch: scrForm.numMMSche[i],
           deworming: scrForm.ddYesNoDeworming[i],
           status: scrForm.ddScrChildStatus[i],
-          upload_status: '0'
+          upload_status: 0
         });
       });
     } else {
@@ -221,7 +221,7 @@ function scrAddChild() {
         single.no_mm_sch = scrForm.numMMSche,
         single.deworming = scrForm.ddYesNoDeworming;
       single.status = scrForm.ddScrChildStatus;
-      single.upload_status = '0';
+      single.upload_status = 0;
     }
     if (data.length < 1) {
       knex('Screening')
@@ -384,7 +384,7 @@ function scrAddPlw() {
           muac: scrForm.numMUAC[i],
           no_mm_tabs: scrForm.numMMTablets[i],
           status: scrForm.ddScrPlwStatus[i],
-          upload_status: '0'
+          upload_status: 0
         });
       });
     } else {
@@ -407,7 +407,7 @@ function scrAddPlw() {
         single.no_mm_tabs = scrForm.numMMTablets,
         single.deworming = scrForm.ddYesNoDeworming;
       single.status = scrForm.ddScrPlwStatus;
-      single.upload_status = '0';
+      single.upload_status = 0;
     }
     if (data.length < 1) {
       knex('Screening')
@@ -634,6 +634,7 @@ function scrPlUpd(){
       name: data.name,
       f_or_h_name: data.f_or_h_name,
       muac: data.muac,
+      upload_status: 2,
       address:data.address,
       age: data.age,
       plw_type: data.plw_type,
@@ -735,6 +736,7 @@ function scrChUpd(){
     var chUpd = {
       screening_id:data.screening_id,
       name: data.name,
+      upload_status: 2,
       f_or_h_name: data.f_or_h_name,
       muac: data.muac,
       gender:data.gender,
@@ -1124,9 +1126,8 @@ function createSyncWindow() {
     });
   });
   ipcMain.on('updateServer', function () {
-
     knex('Screening')
-      
+      .where({upload_status: 0})      
       .then(results => {
         if (results) {
           results.forEach(el => {
@@ -1145,6 +1146,7 @@ function createSyncWindow() {
                   .where({
                     screening_id: el.screening_id
                   })
+                  .update({upload_status: 1})
                   .then(result => {
                     console.log(result);
                   })
@@ -1157,7 +1159,42 @@ function createSyncWindow() {
 
         }
       })
-  })
+      knex('Screening')
+      .where({upload_status: 2})      
+      .then(results => {
+        if (results) {
+          results.forEach(el => {
+            var options = {
+              method: 'POST',
+              uri: surl + '/update_screening',
+              body: el,
+              json: true
+            }
+            request(options, function (err, response, body) {
+              if (err) {
+                console.log(err)
+              } else {
+                console.log(body);
+                knex('Screening')
+                  .where({
+                    screening_id: el.screening_id
+                  })
+                  .update({upload_status: 1})
+                  .then(result => {
+                    console.log(result);
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  })
+              }
+            })
+          })
+
+        }
+      })
+  
+  
+    })
   syncData.on('close', function () {
     syncData = null;
   })
