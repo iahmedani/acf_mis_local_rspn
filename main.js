@@ -73,6 +73,8 @@ function localDate() {
 // console.log(localDate());
 // Creating Screening : Add Child Window
 function scrAddChild() {
+  var client = imran.client;
+  
   addScrChild = new BrowserWindow({
     width: 800,
     height: 800,
@@ -181,7 +183,7 @@ function scrAddChild() {
     if (Array.isArray(scrForm.txtScrChildName)) {
       scrForm.txtScrChildName.forEach((el, i) => {
         data.push({
-          client_id: '999999',
+          client_id: client,
           screening_type: screening_type,
           screening_date: screening_date,
           data_entry_date: data_entry_date,
@@ -203,7 +205,7 @@ function scrAddChild() {
         });
       });
     } else {
-      single.client_id = '999999';
+      single.client_id = client;
       single.screening_type = screening_type;
       single.screening_date = screening_date;
       single.data_entry_date = data_entry_date
@@ -260,6 +262,8 @@ function scrAddChild() {
 
 // Creating Screening : Add PLW Window
 function scrAddPlw() {
+  var client = imran.client;
+  
   addScrPlw = new BrowserWindow({
     width: 800,
     height: 800,
@@ -367,7 +371,7 @@ function scrAddPlw() {
     if (Array.isArray(scrForm.txtScrPlwName)) {
       scrForm.txtScrPlwName.forEach((el, i) => {
         data.push({
-          client_id: '999999',
+          client_id: client,
           screening_type: screening_type,
           screening_date: screening_date,
           data_entry_date: data_entry_date,
@@ -388,7 +392,7 @@ function scrAddPlw() {
         });
       });
     } else {
-      single.client_id = '999999';
+      single.client_id = client;
       single.screening_type = screening_type;
       single.screening_date = screening_date;
       single.data_entry_date = data_entry_date;
