@@ -7,15 +7,19 @@ const {
 const url = require('url');
 const path = require('path');
 var fs = require('fs');
-var imran = JSON.parse(fs.readFileSync('settings.json', 'utf8'))
+var imran = JSON.parse(fs.readFileSync('./settings.json', 'utf8'))
 console.log(imran);
 var async = require('async');
 var knex = require("knex")({
   client: "sqlite3",
   connection: {
-    filename: "./acf_mis_local.sqlite3"
+    filename: 'acf_mis_local.sqlite3'
+    
+    
+    // filename: './acf_mis_local.sqlite3'
   }
 });
+ console.log()
 var db= require('./dbTest');
 const request = require('request');
 
@@ -407,21 +411,23 @@ function scrAddPlw() {
         single.gender = 2,
         single.plw_type = scrForm.ddPlwStatus;
       single.muac = scrForm.numMUAC,
-        single.oedema = scrForm.ddYesNoOedema,
         single.no_mm_tabs = scrForm.numMMTablets,
-        single.deworming = scrForm.ddYesNoDeworming;
       single.status = scrForm.ddScrPlwStatus;
       single.upload_status = 0;
     }
     if (data.length < 1) {
+      console.log('single plw add')
+      console.log(single);
       knex('Screening')
         .insert(single)
         .then(result => {
+          console.log('plw single',result);
           addScrPlw.webContents.send("resultSent", {
             'msg': 'record added'
           });
         })
         .catch(err => {
+          console.log(err);
           addScrPlw.webContents.send("resultSent", {
             'msg': 'eror occured, plz try again'
           });
@@ -940,6 +946,7 @@ function runDemo() {
 // Creating Admin : sync Refference
 function createSyncWindow() {
   var surl = imran.server;
+  console.log(surl);
   syncData = new BrowserWindow({
     width: 800,
     height: 800,
@@ -1130,9 +1137,15 @@ function createSyncWindow() {
     });
   });
   ipcMain.on('updateServer', function () {
+    console.log('sync clicked')
     knex('Screening')
       .where({upload_status: 0})      
       .then(results => {
+        if(results.length < 1){
+          syncData.webContents.send("resultSent", {
+            'msg': 'Server already updated'
+          });
+        }
         if (results) {
           results.forEach(el => {
             var options = {
@@ -1144,7 +1157,9 @@ function createSyncWindow() {
             request(options, function (err, response, body) {
               if (err) {
                 console.log(err)
-              } else {
+                body = JSON.parse(body);
+                
+              } else if(body.msg === 'Child record added' || body.msg === 'PLW record added'){
                 console.log(body);
                 knex('Screening')
                   .where({
@@ -1153,6 +1168,10 @@ function createSyncWindow() {
                   .update({upload_status: 1})
                   .then(result => {
                     console.log(result);
+                    syncData.webContents.send("resultSent", {
+                      'msg': body.msg
+                    });
+
                   })
                   .catch(err => {
                     console.log(err);
@@ -1166,6 +1185,11 @@ function createSyncWindow() {
       knex('Screening')
       .where({upload_status: 2})      
       .then(results => {
+        if(results.length < 1){
+          syncData.webContents.send("resultSent", {
+            'msg': 'Server already updated'
+          });
+        }
         if (results) {
           results.forEach(el => {
             var options = {
@@ -1177,7 +1201,8 @@ function createSyncWindow() {
             request(options, function (err, response, body) {
               if (err) {
                 console.log(err)
-              } else {
+                body = JSON.parse(body);
+              } else if(body.msg === 'Child record updated' || body.msg === 'PLW record updated'){
                 console.log(body);
                 knex('Screening')
                   .where({
@@ -1185,6 +1210,9 @@ function createSyncWindow() {
                   })
                   .update({upload_status: 1})
                   .then(result => {
+                    syncData.webContents.send("resultSent", {
+                      'msg': body.msg
+                    });
                     console.log(result);
                   })
                   .catch(err => {
