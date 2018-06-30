@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Screening: Children</title>
+  <title>OTP Addmision</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <!-- Bootstrap CSS -->
@@ -76,29 +76,39 @@
       <div class="row">
         <div class="form-group col-sm-3">
 
-          <label for="ddHealthHouse" class="form-label">Site Name:</label>
+          <label for="site_id" class="form-label">Site Name:</label>
 
-          <select name="ddHealthHouse" id="ddHealthHouse" class="form-control form-control-sm">
+          <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm">
             <option value="">Select One</option>
           </select>
         </div>
         <div class="form-group col-sm-3">
 
-          <label for="txtSiteType" class="form-label">Site Type:</label>
+          <label for="prog_type" class="form-label">Program Type:</label>
 
-          <input type="text" readonly id="txtSiteType" class="form-control form-control-sm">
+          <select name="prog_type" id="ddProgramType" class="form-control form-control-sm" required>
+            <option value="">Select One</option>
+            <option value="sfp">SFP</option>
+            <option value="otp">OTP</option>
+            <option value="sc">SC</option>
+          </select>
 
         </div>
         <div class="form-group col-sm-3">
 
-          <label for="txtVillage" class="form-label">Village:</label>
+          <label for="site_village" class="form-label">Village:</label>
 
-          <input type="text" name="txtVillage" class="form-control form-control-sm">
+          <input type="text" name="site_village" class="form-control form-control-sm">
         </div>
         <div class="form-group col-sm-3">
 
-          <label for="addDate" class="form-label">Addmision Date:</label>
-          <input type="date" name="addDate" id="addDate" class="form-control form-control-sm">
+          <label for="reg_date" class="form-label">Addmision Date:</label>
+          <input type="date" name="reg_date" id="reg_date" class="form-control form-control-sm">
+        </div>
+        <div class="form-group col-sm-3">
+
+          <label for="reg_id" class="form-label">Registration ID:</label>
+          <input type="text" name="reg_id" id="reg_id" class="form-control form-control-sm" maxlength="7">
         </div>
       </div>
       <div class="row">
@@ -124,11 +134,11 @@
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="address" class="form-label">Address</label>
-                    <input type="number" name="address" id="address" minlength="13" maxlength="13" class="form-control form-control-sm">
+                    <input type="text" name="address" id="address" class="form-control form-control-sm">
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="cnt_number" class="form-label">Contact Number</label>
-                    <input type="number" name="cnt_number" id="cnt_number" minlength="13" maxlength="13" class="form-control form-control-sm">
+                    <input type="text" name="cnt_number" id="cnt_number" minlength="11" maxlength="11" class="form-control form-control-sm">
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="age" class="form-label">Age</label>
@@ -136,7 +146,7 @@
                       <option value="below_6"> &lt; 6 Months</option>
                       <option value="range6to23">6 to 23 Month</option>
                       <option value="range24-59">24 to 59 Months</option>
-                      <option value="above59"> &gt; 59 </option>
+                      <option value="above59"> &gt; 59 Months</option>
                     </select>
                   </div>
                 </div>
@@ -150,8 +160,8 @@
                     </select>
                   </div>
                   <div class="form-group col-sm-2">
-                    <label for="pl_type" class="form-label">PLW Type</label>
-                    <select name="pl_type " id="pl_type" class="form-control form-control-sm">
+                    <label for="plw_type" class="form-label">PLW Type</label>
+                    <select name="plw_type " id="plw_type" class="form-control form-control-sm">
                       <option value="">Choose</option>
                       <option value="p">Pragnent</option>
                       <option value="l">Lactating</option>
@@ -186,28 +196,31 @@
                 </div>
               </div>
               <div id="anthro" class="border border-secondary rounded-top">
-                  <p class="list-group-item bg-secondary sm">Addmision Anthropometry</p>   
-                  <div class="row">
-                      <div class="form-group col-sm-2">
-                          <label for="oedema" class="form-label">Oedema</label>
-                          <select name="oedema " id="oedema" class="form-control form-control-sm">
-                            <option value="">Choose</option>
-                            <option value="absent">absent</option>
-                            <option value="plus_1">&plus;(1)</option>
-                            <option value="plus_2">&plus;&plus;(2)</option>
-                            <option value="plus_3">&plus;&plus;&plus;(3)</option>
-                          </select>
-                        </div>
-                      <div class="form-group col-sm-2">
-                        <label for="muac">MUAC <small>cm</small></label>
-                        <select name="muac" id="muac" class="form-control form-control-sm">
-                          <option value="">Choose</option>
-                          <option value="below_115">&lt;11.5</option>
-                          <option value="range115to124">11.5 to 12.4</option>
-                          <option value="below_21">&le; 21</option>
-                        </select>
-                      </div>
-                  </div>             
+                <p class="list-group-item bg-secondary sm">Addmision Anthropometry</p>
+                <div class="row">
+                  <div class="form-group col-sm-2">
+                    <label for="weight" class="form-label">Weight
+                      <small>(KG)</small>
+                    </label>
+                    <input type="number" name="weight" id="weight" class="form-control form-control-sm" min="0">
+                  </div>
+                  <div class="form-group col-sm-2">
+                    <label for="oedema" class="form-label">Oedema</label>
+                    <select name="oedema " id="oedema" class="form-control form-control-sm">
+                      <option value="">Choose</option>
+                      <option value="absent">absent</option>
+                      <option value="plus_1">&plus;(1)</option>
+                      <option value="plus_2">&plus;&plus;(2)</option>
+                      <option value="plus_3">&plus;&plus;&plus;(3)</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-sm-2">
+                    <label for="muac">MUAC
+                      <small>cm</small>
+                    </label>
+                    <input type="number" name="muac" id="muac" class="form-control form-control-sm">
+                  </div>
+                </div>
               </div>
               <div id="history" class="border border-secondary rounded-top">
                 <p class="list-group-item bg-secondary">History</p>
@@ -221,7 +234,7 @@
                     </select>
                   </div>
                   <div class="form-group col-sm-1">
-                  
+
                     <label for="vomiting">Vomiting</label>
                     <select name="vomiting" id="vomiting" class="form-control form-control-sm">
                       <option value="">Choose</option>
@@ -230,7 +243,7 @@
                     </select>
                   </div>
                   <div class="form-group col-sm-1">
-                  
+
                     <label for="cough">Cough</label>
                     <select name="cough" id="cough" class="form-control form-control-sm">
                       <option value="">Choose</option>
@@ -239,7 +252,7 @@
                     </select>
                   </div>
                   <div class="form-group col-sm-1">
-                  
+
                     <label for="appetite">Appetite</label>
                     <select name="appetite" id="appetite" class="form-control form-control-sm">
                       <option value="">Choose</option>
@@ -249,41 +262,120 @@
                     </select>
                   </div>
                   <div class="form-group col-sm-1">
-                  
+
                     <label for="daily_stool">Stools&#047;Day</label>
                     <select name="daily_stool" id="daily_stool" class="form-control form-control-sm">
                       <option value="">Choose</option>
-                      <option value="good">Good</option>
-                      <option value="poor">Poor</option>
-                      <option value="none">None</option>
+                      <option value="bet1_3">1 to 3</option>
+                      <option value="bet4_5">4 to 5</option>
+                      <option value="gt5">&gt; 5</option>
                     </select>
                   </div>
                   <div class="form-group col-sm-2">
-                  
-                      <label for="urine">Passing Urine</label>
-                      <select name="urine" id="urine" class="form-control form-control-sm">
-                        <option value="">Choose</option>
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
-                      </select>
-                    </div>
-                    <div class="form-group col-sm-2">
-                  
-                        <label for="brest_feeding">Brest Feeding</label>
-                        <select name="urine" id="brest_feeding" class="form-control form-control-sm">
-                          <option value="">Choose</option>
-                          <option value="1">Yes</option>
-                          <option value="0">No</option>
-                        </select>
-                      </div>
+
+                    <label for="pass_urine">Passing Urine</label>
+                    <select name="pass_urine" id="pass_urine" class="form-control form-control-sm">
+                      <option value="">Choose</option>
+                      <option value="1">Yes</option>
+                      <option value="0">No</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-sm-2">
+
+                    <label for="b_feeding">Breast Feeding</label>
+                    <select name="b_feeding" id="b_feeding" class="form-control form-control-sm">
+                      <option value="">Choose</option>
+                      <option value="1">Yes</option>
+                      <option value="0">No</option>
+                    </select>
+                  </div>
                   <div class="form-group col-sm-3">
-                  
-                      <label for="od_swol_time">If Oedema, how long swollen?</label>
-                      <input type="text" class="form-control form-control-sm" name="od_swol_time" id="od_swol_time">
-                    </div>
-                    
+
+                    <label for="od_swol_time">If Oedema, how long swollen?</label>
+                    <select name="od_swol_time" id="od_swol_time" class="form-control form-control-sm">
+                      <option value="">Choose</option>
+                      <option value="absent">absent</option>
+                      <option value="plus_1">&plus;(1)</option>
+                      <option value="plus_2">&plus;&plus;(2)</option>
+                      <option value="plus_3">&plus;&plus;&plus;(3)</option>
+                    </select>
+                  </div>
+
                 </div>
               </div>
+              <div id="anthro" class="border border-secondary rounded-top">
+                <p class="list-group-item bg-secondary sm">Ration Supplies</p>
+                <div class="row">
+                  <div class="form-group col-sm-2">
+                    <label for="ration1">Ration 1:</label>
+                    <select name="ration1" class="form-control form-control-sm" id="ration1">
+                      <option value="RUTF Sachets">RUTF Sachets</option>
+                      <option value="Amoxicillin">Amoxicillin</option>
+                      <option value="Folic Acid">Folic Acid</option>
+                      <option value="MM Sachets">MM Sachets</option>
+                      <option value="MM Tablets">MM Tablets</option>
+                      <option value="Mebendazole">Mebendazole</option>
+                      <option value="Meteronidazole">Meteronidazole</option>
+                      <option value="Paracetamol">Paracetamol</option>
+                      <option value="Chloroquine">Chloroquine</option>
+                      <option value="Zink">Zink</option>
+                      <option value="Tertacycline">Tertacycline</option>
+                      <option value="Benzyl Benzoate">Benzyl Benzoate</option>
+                      <option value="IYCF_Cups_and_Spoons">IYCF Cups &and; Spoons </option>
+                    </select>
+                  </div>
+                  <div class="form-group col-sm-1">
+                    <label for="quantity1">Quantity:</label>
+                    <input type="number" name="quantity1" id="quantity1" class="form-control form-control-sm" min="0">
+                  </div>
+                  <div class="form-group col-sm-2">
+                    <label for="ration2">Ration 2:</label>
+                    <select name="ration2" class="form-control form-control-sm" id="ration2">
+                      <option value="RUTF Sachets">RUTF Sachets</option>
+                      <option value="Amoxicillin">Amoxicillin</option>
+                      <option value="Folic Acid">Folic Acid</option>
+                      <option value="MM Sachets">MM Sachets</option>
+                      <option value="MM Tablets">MM Tablets</option>
+                      <option value="Mebendazole">Mebendazole</option>
+                      <option value="Meteronidazole">Meteronidazole</option>
+                      <option value="Paracetamol">Paracetamol</option>
+                      <option value="Chloroquine">Chloroquine</option>
+                      <option value="Zink">Zink</option>
+                      <option value="Tertacycline">Tertacycline</option>
+                      <option value="Benzyl Benzoate">Benzyl Benzoate</option>
+                      <option value="IYCF_Cups_and_Spoons">IYCF Cups &and; Spoons </option>
+                    </select>
+                  </div>
+                  <div class="form-group col-sm-1">
+                    <label for="quantity2">Quantity:</label>
+                    <input type="number" name="quantity2" id="quantity2" class="form-control form-control-sm" min="0">
+                  </div>
+                  <div class="form-group col-sm-2">
+                    <label for="ration3">Ration 3:</label>
+                    <select name="ration3" class="form-control form-control-sm" id="ration3">
+                      <option value="RUTF Sachets">RUTF Sachets</option>
+                      <option value="Amoxicillin">Amoxicillin</option>
+                      <option value="Folic Acid">Folic Acid</option>
+                      <option value="MM Sachets">MM Sachets</option>
+                      <option value="MM Tablets">MM Tablets</option>
+                      <option value="Mebendazole">Mebendazole</option>
+                      <option value="Meteronidazole">Meteronidazole</option>
+                      <option value="Paracetamol">Paracetamol</option>
+                      <option value="Chloroquine">Chloroquine</option>
+                      <option value="Zink">Zink</option>
+                      <option value="Tertacycline">Tertacycline</option>
+                      <option value="Benzyl Benzoate">Benzyl Benzoate</option>
+                      <option value="IYCF_Cups_and_Spoons">IYCF Cups &and; Spoons </option>
+                    </select>
+                  </div>
+                  <div class="form-group col-sm-1">
+                    <label for="quantity3">Quantity:</label>
+                    <input type="number" name="quantity3" id="quantity3" class="form-control form-control-sm" min="0">
+                  </div>
+                  
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary btn-sm float-right" id="formSub">Save</button>
             </div>
           </div>
         </div>
@@ -331,7 +423,8 @@
       if ($(this).valid()) {
         var formData = $(this).serializeFormJSON();
         e.preventDefault();
-        ipc.send('submitFormChild', formData);
+        ipc.send('submitOtpAdd', formData);
+      
       }
     })
 
@@ -436,6 +529,7 @@
       $('body').append(`<div class="alert alert-primary" role="alert">
  ${result.msg}
 </div>`)
+  setTimeout(location.reload(), 2000);
     });
   </script>
 

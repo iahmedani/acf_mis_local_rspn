@@ -145,3 +145,123 @@ knex.schema.hasTable('Screening').then(function(exists){
 }).catch((err) => {
   console.log(err);
 });
+
+// create tblOtpAdd
+knex.schema.hasTable('tblOtpAdd').then(function (exists) {
+  if (!exists) {
+    return knex.schema.createTable('tblOtpAdd', function (table) {
+      table.increments('otp_id').primary().unique();
+      table.integer('client_id');
+      table.integer('site_id');
+      table.string('site_village');
+      table.date('reg_date');
+      table.string('reg_id');
+      table.string('p_name');
+      table.string('f_or_h_name');
+      table.integer('cnic');
+      table.string('address');
+      table.string('cnt_number');
+      table.string('age');
+      table.string('gender');
+      table.string('plw_type');
+      table.string('ent_reason');
+      table.string('ref_type');
+      table.string('oedema');
+      table.integer('muac');
+      table.integer('diarrhoea');
+      table.integer('vomiting');
+      table.integer('cough');
+      table.string('appetite');
+      table.string('daily_stool');
+      table.integer('pass_urine');
+      table.integer('b_Feeding');
+      table.string('od_swol_time');
+      table.integer('weight');
+      table.string('ration1');
+      table.integer('quantity1');
+      table.string('ration2');
+      table.integer('quantity2');
+      table.string('ration3');
+      table.integer('quantity3');
+      table.string('prog_type')
+      table.timestamps();
+    });
+  }
+}).then((result) => {
+  console.log(result);
+}).catch((err) => {
+  console.log(err);
+});
+
+// create tblVillage
+knex.schema.hasTable('tblVillage').then(function (exists) {
+  if (!exists) {
+    return knex.schema.createTable('tblVillage', function (table) {
+      table.increments('vill_id').primary();
+      table.unique('vill_id');
+      table.integer('site_id');
+      table.string('village')
+      table.timestamps();
+    });
+  }
+}).then((result) => {
+  console.log(result);
+}).catch((err) => {
+  console.log(err);
+});
+
+// create tblInterimOtp (iterim table for OTP follow up)
+knex.schema.hasTable('tblInterimOtp').then(function (exists) {
+  if (!exists) {
+    return knex.schema.createTable('tblInterimOtp', function (table) {
+      table.increments('interim_id').primary().unique();
+      table.integer('otp_id');
+      table.integer('client_id');
+      table.integer('muac');
+      table.integer('weight');
+      table.string('ration1');
+      table.integer('quantity1');
+      table.string('ration2');
+      table.integer('quantity2');
+      table.string('ration3');
+      table.integer('quantity3');
+      table.string('prog_type')
+      table.date('curr_date');
+      table.string('status');
+      table.date('next_followup');
+      table.timestamps();
+    });
+  }
+}).then((result) => {
+  console.log(result);
+}).catch((err) => {
+  console.log(err);
+});
+
+// create tblOtpFollowup (iterim table for OTP follow up)
+knex.schema.hasTable('tblOtpFollowup').then(function (exists) {
+  if (!exists) {
+    return knex.schema.createTable('tblOtpFollowup', function (table) {
+      table.increments('followup_id').primary().unique();
+      table.integer('otp_id');
+      table.integer('client_id');
+      table.integer('muac');
+      table.integer('weight');
+      table.string('ration1');
+      table.integer('quantity1');
+      table.string('ration2');
+      table.integer('quantity2');
+      table.string('ration3');
+      table.integer('quantity3');
+      table.string('prog_type')
+      table.date('curr_date');
+      table.string('status');
+      table.date('next_followup');
+      table.timestamps();
+    });
+  }
+}).then((result) => {
+  console.log(result);
+}).catch((err) => {
+  console.log(err);
+});

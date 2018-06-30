@@ -160,6 +160,31 @@
                   PLW Screening
                 </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#!" id="otpAdd">
+                  <span data-feather="file-text"></span>
+                  OTP Addmision
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#!" id="addVill">
+                  <span data-feather="file-text"></span>
+                  Add Village
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#!" id="addFollowupOtp">
+                  <span data-feather="file-text"></span>
+                  Follow-Ups
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#!" id="otpAddUpdate">
+                  <span data-feather="file-text"></span>
+                  OTP Addmision Update
+                </a>
+              </li>
+              
 
             </ul>
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
@@ -242,6 +267,18 @@
     })
     $('#myUpdate').on('click', function () {
       ipc.send('nav', 'scrUpdate');
+    })
+    $('#otpAdd').on('click', function () {
+      ipc.send('nav', 'otpAdd');
+    })
+    $('#addVill').on('click', function () {
+      ipc.send('nav', 'addVill');
+    })
+    $('#addFollowupOtp').on('click', function () {
+      ipc.send('nav', 'addFollowupOtp');
+    })
+    $('#otpAddUpdate').on('click', function () {
+      ipc.send('nav', 'otpAddUpdate');
     })
   </script>
 </body>

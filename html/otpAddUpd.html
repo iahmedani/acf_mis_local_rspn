@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>OTP Addmision Update</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+    crossorigin="anonymous">
+  <!-- <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous"> -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+    crossorigin="anonymous">
+  <!-- <link rel="stylesheet" href="../fa5/css/fontawesome-all.min.css"> -->
+  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+  <link rel="stylesheet" href="../css/jsgrid-theme-followup.css">
+
+</head>
+<style>
+  tbody>tr>td {
+    padding: 0 !important;
+    font-size: 12px !important;
+  }
+
+  thead {
+    font-size: 12px !important;
+    font-weight: bold !important;
+  }
+
+  #myForm {
+    padding-top: 30px;
+  }
+</style>
+
+<body>
+  <header>
+    <nav class="navbar navbar-light sticky-top flex-md-nowrap p-0" style="background-color: #e3f2fd;">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
+        <img src="../img/acf-logo.svg" style="height: 50px;" alt="">
+      </a>
+      <ul class="navbar-nav px-3">
+
+      </ul>
+    </nav>
+  </header>
+  <div class="container-fluid">
+    <!-- <form action="#" id="myForm"> -->
+    <div class="row">
+      <div class="form-group col-sm-2 ">
+        <label for="province">Province</label>
+        <select name="province" id="ddProvince" class="form-control form-control-sm">
+          <option selected disabled>Choose</option>
+
+        </select>
+      </div>
+      <div class="form-group col-sm-2 ">
+
+        <label for="district">District</label>
+        <select name="district" id="ddDistrict" class="form-control form-control-sm">
+          <option selected disabled>Choose</option>
+        </select>
+      </div>
+      <div class="form-group col-sm-2 ">
+
+        <label for="Tehsil">Tehsil</label>
+        <select name="Tehsil" id="ddTehsil" class="form-control form-control-sm">
+          <option selected disabled>Choose</option>
+
+        </select>
+      </div>
+      <div class="form-group col-sm-2 ">
+        <label for="uc">UC</label>
+        <select name="uc" id="ddUC" class="form-control form-control-sm">
+          <option selected disabled>Choose</option>
+        </select>
+      </div>
+      <div class="form-group col-sm-4">
+
+        <label for="site_id" class="form-label">Site Name:</label>
+
+        <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm">
+          <option value="">Select One</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div id="jsGrid" class="table-responsive"></div>
+    </div>
+    <!-- </form> -->
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+    crossorigin="anonymous"></script> -->
+  <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+    crossorigin="anonymous"></script> -->
+  <script>
+    window.$ = window.jQuery = require('jquery');
+    require('jquery-validation');
+  </script>
+  <script src="../bower_components/bootstrap/dist/js/bootstrap.bundle.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+
+  <script>
+    (function ($) {
+      $.fn.serializeFormJSON = function () {
+
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function () {
+          if (o[this.name]) {
+            if (!o[this.name].push) {
+              o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+          } else {
+            o[this.name] = this.value || '';
+          }
+        });
+        return o;
+      };
+    })(jQuery);
+    const ipc = require('electron').ipcRenderer;
+    // $('#myForm').validate();
+    // $('#myForm').on('submit', function (e) {
+    //   if ($(this).valid()) {
+    //     var formData = $(this).serializeFormJSON();
+    //     e.preventDefault();
+    //     ipc.send('submitOtpAdd', formData);
+    //   }
+    // })
+
+    // $(function () {
+    //   //Adding Row
+    //   $('#addMore').on('click', function () {
+    //     var data = $("#tb tr:eq(1)").clone(true).appendTo("#tb");
+    //     data.find("input").val('');
+    //   });
+    //   $(document).on('click', '.remove', function () {
+    //     var trIndex = $(this).closest("tr").index();
+    //     if (trIndex > 1) {
+    //       $(this).closest("tr").remove();
+    //     } else {
+    //       alert("Sorry!! Can't remove first row!");
+    //     }
+    //   });
+    //   var datePickerId = document.getElementById('txtScrChildDate');
+    //   datePickerId.max = new Date().toISOString().split("T")[0];
+    // });
+    $(function () {
+      ipc.send('getProvince');
+      ipc.on('province', function (evt, province) {
+        $('#ddProvince').children('option:not(:first)').remove();
+
+        // $('#ddProvince').find('option:gt(0)').remove();
+        province.province.forEach(el => {
+          $('#ddProvince').append(`<option value="${el.id}">${el.provinceName}</option>`);
+        })
+      })
+      $('#ddProvince').on('change', function () {
+        var prov = $(this).val();
+        ipc.send('getDistrict', prov)
+        ipc.on('district', function (evt, district) {
+          $('#ddDistrict').children('option:not(:first)').remove();
+          district.district.forEach(el => {
+            $('#ddDistrict').append(`<option value="${el.id}">${el.districtName}</option>`);
+          })
+        })
+      })
+      $('#ddDistrict').on('change', function () {
+        var dist = $(this).val();
+        ipc.send('getTehsil', dist)
+        ipc.on('tehsil', function (evt, tehsil) {
+          $('#ddTehsil').children('option:not(:first)').remove();
+          tehsil.tehsil.forEach(el => {
+            $('#ddTehsil').append(`<option value="${el.id}">${el.tehsilName}</option>`);
+          })
+        })
+      })
+      $('#ddTehsil').on('change', function () {
+        var tehs = $(this).val();
+        ipc.send('getUC', tehs)
+        ipc.on('uc', function (evt, uc) {
+          $('#ddUC').children('option:not(:first)').remove();
+          uc.uc.forEach(el => {
+            $('#ddUC').append(`<option value="${el.id}">${el.ucName}</option>`);
+          })
+        })
+      })
+      var ucForHH;
+      $('#ddUC').on('change', function () {
+        var ucs = $(this).val();
+        ucForHH = ucs
+        ipc.send('getHealthHouse', ucs)
+        ipc.on('hh', function (evt, hh) {
+          $('#ddHealthHouse').children('option:not(:first)').remove();
+          hh.hh.forEach(el => {
+            $('#ddHealthHouse').append(`<option value="${el.id}">${el.siteName}</option>`);
+          })
+        })
+      })
+      $('#ddHealthHouse').on('change', function () {
+        let getOtp = (site_id) => {
+          return new Promise((resolve, reject) => {
+            ipc.send('allOtp', site_id);
+            ipc.on('allOtp', (e, result) => {
+              var s = {
+                data: result.result,
+                itemsCount: result.result.length
+              }
+              if (result.err) {
+                reject(result.err)
+              } else {
+                resolve(s)
+              }
+            })
+          })
+        }
+          let updateOtp = (item)=>{
+            return new Promise((resolve, reject) => {
+          ipc.send('updateOtp', item);
+          ipc.on('updateOtp', (e, result) => {
+            if (result.err) {
+              reject(result.err)
+            } else {
+              resolve(result.result[0])
+            }
+          })
+        })
+        }
+        var site_id = $(this).val();
+        var age = [{
+            Name: '',
+            value: ''
+          },
+          {
+            Name: '<6 Months',
+            value: 'below_6'
+          },
+          {
+            Name: '6 to 23 Months',
+            value: 'range6to23'
+          },
+          {
+            Name: '24 to 59 Months',
+            value: 'range24-59'
+          },
+          {
+            Name: '> 59 Months',
+            value: 'above59'
+          }
+        ]
+        var oedema = [{
+            Name: '',
+            value: ''
+          }, {
+            Name: 'Absent',
+            value: 'absent'
+          }, {
+            Name: '+(1)',
+            value: 'plus_1'
+          },
+          {
+            Name: '++(2)',
+            value: 'plus_2'
+          }, {
+            Name: '+++(2)',
+            value: 'plus_3'
+          }
+        ]
+        var yNo = [{
+          Name: '',
+          value: ''
+        }, {
+          Name: 'Yes',
+          value: 1
+        }, {
+          Name: 'No',
+          value: 0
+        }]
+        var appetite = [{
+            Name: 'Good',
+            value: 'good'
+          },
+          {
+            Name: 'Poor',
+            value: 'poor'
+          },
+          {
+            Name: 'None',
+            value: 'none'
+          }
+        ]
+        var stool = [{
+          Name: '',
+          value: ''
+        }, {
+          Name: '1 to 3',
+          value: 'bet1_3'
+        }, {
+          Name: '4 to 5',
+          value: 'bet4_5'
+        }, {
+          Name: '>5',
+          value: 'gt5'
+        }]
+        var gender = [{
+          Name: '',
+          value: ''
+        }, {
+          Name: 'Male',
+          value: 'male'
+        }, {
+          Name: 'Female',
+          value: 'female'
+        }]
+        var plwType = [{
+          Name: '',
+          value: ''
+        }, {
+          Name: 'Pragnant',
+          value: 'p'
+        }, {
+          Name: 'Lactacting',
+          value: 'l'
+        }]
+        var commodity = [{
+          Name: '',
+          value: ''
+        }, {
+          Name: 'RUTF Sachets',
+          value: 'RUTF Sachets'
+        }, {
+          Name: 'Amoxicillin',
+          value: 'Amoxicillin'
+        }, {
+          Name: 'Folic Acid',
+          value: 'Folic Acid'
+        }, {
+          Name: 'MM Sachets',
+          value: 'MM Sachets'
+        }, {
+          Name: 'MM Tablets',
+          value: 'MM Tablets'
+        }, {
+          Name: 'Mebendazole',
+          value: 'Mebendazole'
+        }, {
+          Name: 'Meteronidazole',
+          value: 'Meteronidazole'
+        }, {
+          Name: 'Paracetamol',
+          value: 'Paracetamol'
+        }, {
+          Name: 'Chloroquine',
+          value: 'Chloroquine'
+        }, {
+          Name: 'Zinc',
+          value: 'Zinc'
+        }, {
+          Name: 'Tertacycline',
+          value: 'Tertacycline'
+        }, {
+          Name: 'Benzyl Benzoate',
+          value: 'Benzyl Benzoate'
+        }, {
+          Name: 'IYCF Cups & Spoons',
+          value: 'IYCF_Cups_and_Spoons'
+        }]
+        var entReason = [{
+            Name: '',
+            value: ''
+          },
+          {
+            Name: 'No Prv Prog',
+            value: 'no_prv_pro'
+          },
+          {
+            Name: 'Replapse',
+            value: 'relapse'
+          },
+          {
+            Name: 'Def SFP',
+            value: 'def_sfp'
+          },
+          {
+            Name: 'Def OTP',
+            value: 'def_otp'
+          },
+          {
+            Name: 'Abbondon INP',
+            value: 'abb_inp'
+          },
+          {
+            Name: 'Moved In',
+            value: 'moved_in'
+          },
+          {
+            Name: 'Other',
+            value: 'other'
+          }
+        ]
+        var refType = [{
+            Name: 'Self',
+            value: 'self'
+          },
+          {
+            Name: 'CHW',
+            value: 'chw'
+          },
+          {
+            Name: 'Parent',
+            value: 'parent'
+          },
+          {
+            Name: 'Community Org',
+            value: 'com_org'
+          },
+          {
+            Name: 'By SC Care',
+            value: 'by_sc_care'
+          },
+          {
+            Name: 'By OTP',
+            value: 'by_otp'
+          },
+          {
+            Name: 'By SFP',
+            value: 'by_sfp'
+          }
+        ]
+        $("#jsGrid").jsGrid({
+          height: "500px",
+          width: "100%",
+          // filtering: true,
+          // inserting: true,
+          editing: true,
+          // sorting: true,
+          paging: true,
+          autoload: true,
+          pageLoading: true, // this is the clue
+          pageSize: 10,
+          pageButtonCount: 5,
+          deleteConfirm: "Do you really want to delete client?",
+          controller: {
+            loadData: function (filter) {
+              console.log('loaddata', site_id)
+              return getOtp(site_id);
+            },
+            updateItem: function (item) {
+              console.log('update')
+              console.log(item);
+              return updateOtp(item);
+            }
+          },
+          fields: [{
+              name: 'otp_id',
+              title: 'ID',
+              editing: false,
+              type: 'number'
+            }, {
+              name: 'reg_id',
+              title: 'Registration#',
+              type: 'text'
+            }, {
+              name: 'p_name',
+              title: 'Patient Name',
+              type: 'text'
+            }, {
+              name: 'f_or_h_name',
+              title: 'F/H Name',
+              type: 'text'
+            }, {
+              name: 'cnic',
+              title: 'CNIC #',
+              type: 'text'
+            },
+            {
+              name: "site_village",
+              title: "Village",
+              type: "text"
+            }, {
+              name: 'address',
+              title: 'Address',
+              type: 'text'
+            }, {
+              name: 'cnt_number',
+              title: 'Contact Number',
+              type: 'text'
+            }, {
+              name: 'age',
+              title: 'Age',
+              type: 'select',
+              items: age,
+              valueField: 'value',
+              textField: 'Name'
+            }, {
+              name: 'gender',
+              title: 'Gender',
+              type: 'select',
+              items: gender,
+              valueField: 'value',
+              textField: 'Name',
+            }, {
+              name: 'plw_type',
+              title: 'PLW Type',
+              type: 'select',
+              items: plwType,
+              valueField: 'value',
+              textField: 'Name',
+            }, {
+              name: 'ent_reason',
+              title: 'Entry Reason',
+              type: 'select',
+              items: entReason,
+              valueField: 'value',
+              textField: 'Name',
+            }, {
+              name: 'ref_type',
+              title: 'Refferal Type',
+              type: 'select',
+              items: refType,
+              valueField: 'value',
+              textField: 'Name',
+            },
+            {
+              name: "weight",
+              title: "Weight",
+              type: "number",
+            }, {
+              name: 'oedema',
+              title: 'Oedema',
+              type: 'select',
+              items: oedema,
+              valueField: 'value',
+              textField: 'Name',
+            },
+            {
+              name: "muac",
+              title: "MUAC",
+              type: "number"
+            }, {
+              name: 'diarrhoea',
+              title: 'Diarrhoea',
+              type: 'select',
+              items: yNo,
+              valueField: 'value',
+              textField: 'Name'
+            },
+            {
+              name: 'vomiting',
+              title: 'Vomiting',
+              type: 'select',
+              items: yNo,
+              valueField: 'value',
+              textField: 'Name'
+            }, {
+              name: 'cough',
+              title: 'Cough',
+              type: 'select',
+              items: yNo,
+              valueField: 'value',
+              textField: 'Name'
+            }, {
+              name: 'appetite',
+              title: 'Appetite',
+              type: 'select',
+              items: appetite,
+              valueField: 'value',
+              textField: 'Name'
+
+            }, {
+              name: 'daily_stool',
+              title: 'Daily Stool',
+              type: 'select',
+              items: stool,
+              valueField: 'value',
+              textField: 'Name'
+
+            }, {
+              name: 'pass_urine',
+              title: 'Passing Urine',
+              type: 'select',
+              items: yNo,
+              valueField: 'value',
+              textField: 'Name'
+
+            }, {
+              name: 'b_Feeding',
+              title: 'Breast Feeding',
+              type: 'select',
+              items: yNo,
+              valueField: 'value',
+              textField: 'Name'
+
+            },
+            {
+              name: 'od_swol_time',
+              title: 'If Oedema, how long swollen?',
+              type: 'select',
+              items: oedema,
+              valueField: 'value',
+              textField: 'Name'
+
+            }, {
+              name: 'ration1',
+              title: 'Ration-1',
+              type: 'select',
+              items: commodity,
+              valueField: 'value',
+              textField: 'Name'
+            }, {
+              name: 'quantity1',
+              title: 'Qty-1',
+              type: 'number',
+            }, {
+              name: 'ration2',
+              title: 'Ration-2',
+              type: 'select',
+              items: commodity,
+              valueField: 'value',
+              textField: 'Name'
+            }, {
+              name: 'quantity2',
+              title: 'Qty-2',
+              type: 'number'
+            }, {
+              name: 'ration3',
+              title: 'Ration-3',
+              type: 'select',
+              items: commodity,
+              valueField: 'value',
+              textField: 'Name'
+            }, {
+              name: 'quantity3',
+              title: 'Qty-3',
+              type: 'number'
+            },
+            {
+              type: "control",
+              deleteButton: false,
+            }
+          ]
+        })
+      })
+    })
+    ipc.on('resultSent', function (evt, result) {
+      $('body').append(`<div class="alert alert-primary" role="alert">
+ ${result.msg}
+</div>`)
+    });
+  </script>
+
+</body>
+
+</html>
