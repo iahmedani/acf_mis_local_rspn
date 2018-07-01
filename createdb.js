@@ -133,6 +133,7 @@ knex.schema.hasTable('Screening').then(function(exists){
       table.integer('oedema');
       table.integer('no_mm_sch');
       table.integer('deworming');
+      // upload status
       table.integer('status');
       table.integer('is_plw');
       table.integer('plw_type');
@@ -183,7 +184,8 @@ knex.schema.hasTable('tblOtpAdd').then(function (exists) {
       table.integer('quantity2');
       table.string('ration3');
       table.integer('quantity3');
-      table.string('prog_type')
+      table.string('prog_type');
+      table.integer('upload_status');
       table.timestamps();
     });
   }
@@ -256,6 +258,7 @@ knex.schema.hasTable('tblOtpFollowup').then(function (exists) {
       table.string('prog_type')
       table.date('curr_date');
       table.string('status');
+      table.integer('upload_status');
       table.date('next_followup');
       table.timestamps();
     });
@@ -265,3 +268,55 @@ knex.schema.hasTable('tblOtpFollowup').then(function (exists) {
 }).catch((err) => {
   console.log(err);
 });
+
+// create tblOtpExit (iterim table for OTP follow up)
+knex.schema.hasTable('tblOtpExit').then(function (exists) {
+  if (!exists) {
+    return knex.schema.createTable('tblOtpExit', function (table) {
+      table.increments('exit_id').primary().unique();
+      table.integer('otp_id');
+      table.integer('client_id');
+      table.integer('exit_muac');
+      table.integer('exit_weight');
+      table.string('exit_ration1');
+      table.integer('exit_quantity1');
+      table.string('exit_ration2');
+      table.integer('exit_quantity2');
+      table.string('exit_ration3');
+      table.integer('exit_quantity3');
+      table.string('exit_prog_type')
+      table.date('exit_date');
+      table.string('exit_reason');
+      table.integer('upload_status');
+      table.timestamps();
+    });
+  }
+}).then((result) => {
+  console.log(result);
+}).catch((err) => {
+  console.log(err);
+});
+
+
+
+// create tblSessions (iterim table for OTP follow up)
+knex.schema.hasTable('tblSessions').then(function (exists) {
+  if (!exists) {
+    return knex.schema.createTable('tblSessions', function (table) {
+      table.increments('session_id').primary().unique();
+      table.integer('site_id');
+      table.string('client_id');
+      table.date('session_date');
+      table.string('session_type');
+      table.string('participants');
+      table.string('session_location');
+      table.integer('upload_status');
+      table.timestamps();
+    });
+  }
+}).then((result) => {
+  console.log(result);
+}).catch((err) => {
+  console.log(err);
+});
+

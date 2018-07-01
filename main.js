@@ -63,9 +63,17 @@ app.on('ready', () => {
     } else if (arg === 'addVill') {
       addVill();
     } else if (arg === 'addFollowupOtp') {
+      // otpExit();
       addFollowupOtp();
+    } else if (arg === 'otpExit') {
+      otpExit();
+      // addFollowupOtp();
     } else if (arg === 'otpAddUpdate') {
       otpAddUpdate();
+    } else if (arg === 'otpExitEdit') {
+      otpExitEdit();
+    } else if (arg === 'sessions') {
+      sessions();
     } else {
       console.log('error');
     }
@@ -76,6 +84,162 @@ app.on('ready', () => {
   Menu.setApplicationMenu(mainMenu);
 
 });
+
+function sessions(){
+  var client_id = imran.client;
+  session = new BrowserWindow({
+    height: 800,
+    width: 800,
+    title:'Sessions'
+  });
+  session.loadURL(url.format({
+    pathname: path.join(__dirname, '/html/sessions.html'),
+    protocol: 'file:',
+    slashes: true
+  }));
+  ipcMain.on('getProvince', function (event) {
+    knex('tblGeoProvince')
+      .then(result => {
+        session.webContents.send('province', ({
+          province: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getDistrict', function (event, prov) {
+    console.log(prov)
+    knex('tblGeoDistrict')
+      .where({
+        province_id: prov
+      })
+      .then(result => {
+        session.webContents.send('district', ({
+          district: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getTehsil', function (event, dist) {
+    console.log(dist)
+    knex('tblGeoTehsil')
+      .where({
+        district_id: dist
+      })
+      .then(result => {
+        session.webContents.send('tehsil', ({
+          tehsil: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getUC', function (event, tehs) {
+    console.log(tehs)
+    knex('tblGeoUC')
+      .where({
+        tehsil_id: tehs
+      })
+      .then(result => {
+        session.webContents.send('uc', ({
+          uc: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getHealthHouse', function (event, ucs) {
+    console.log(ucs)
+    knex('tblGeoNutSite')
+      .where({
+        uc_id: ucs
+      })
+      .then(result => {
+        session.webContents.send('hh', ({
+          hh: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('get',(e, data)=>{
+    console.log(data);
+    knex('tblSessions')
+      .where('site_id', data)
+      .then(result=>{
+        session.webContents.send('get', ({
+          result: result
+        }))
+      })
+      .catch(e=>{
+        session.webContents.send('get', ({
+          err: e
+        }))
+      })
+  });
+  ipcMain.on('insert',(e, item)=>{
+    item.upload_status = 0;
+    item.client_id = client_id;
+    item.created_at = localDate();
+    console.log({
+      msg:'insert Sessions',
+      data: item
+    })
+    knex('tblSessions')
+      .insert(item)
+      .then(result=>{
+        console.log({
+          msg:'insert record',
+          ret: result
+        })
+        return knex('tblSessions')
+                  .where('session_id',result[0])
+        
+      })
+      .then(result=>{
+        console.log({
+          msg:'insert return item',
+          result: result
+        })
+        session.webContents.send('insert', ({
+          result: result
+        }))
+      })
+      .catch(e=>{
+        session.webContents.send('insert', ({
+          err: e
+        }))
+      })
+  });
+  ipcMain.on('update',(e, item)=>{
+    item.upload_status = 0;
+    item.updated_at = localDate();
+    knex('tblSessions')
+    .update(item)
+    .where('session_id', item.session_id)
+    .then(result=>{
+     return knex('tblSessions')
+              .where('session_id', item.session_id)
+    })
+    .then(result=>{
+      session.webContents.send('update', ({
+        result: result
+      }))
+    })
+    .catch(e=>{
+      session.webContents.send('update', ({
+        err: e
+      }))
+    })
+  });
+
+}
 
 function otpAddUpdate() {
   var client = imran.client;
@@ -198,6 +362,273 @@ function otpAddUpdate() {
         }))
       })
   })
+}
+function otpExit(){
+  var client_id = imran.client,
+  exitOtp = new BrowserWindow({
+    height: 800,
+    width:800,
+    title:'OTP Exit'
+  })
+  exitOtp.loadURL(url.format({
+    pathname: path.join(__dirname, '/html/otpExit.html'),
+    protocol: 'file:',
+    slashes: true
+  }))
+  ipcMain.on('getProvince', function (event) {
+    knex('tblGeoProvince')
+      .then(result => {
+        exitOtp.webContents.send('province', ({
+          province: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getDistrict', function (event, prov) {
+    console.log(prov)
+    knex('tblGeoDistrict')
+      .where({
+        province_id: prov
+      })
+      .then(result => {
+        exitOtp.webContents.send('district', ({
+          district: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getTehsil', function (event, dist) {
+    console.log(dist)
+    knex('tblGeoTehsil')
+      .where({
+        district_id: dist
+      })
+      .then(result => {
+        exitOtp.webContents.send('tehsil', ({
+          tehsil: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getUC', function (event, tehs) {
+    console.log(tehs)
+    knex('tblGeoUC')
+      .where({
+        tehsil_id: tehs
+      })
+      .then(result => {
+        exitOtp.webContents.send('uc', ({
+          uc: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getHealthHouse', function (event, ucs) {
+    console.log(ucs)
+    knex('tblGeoNutSite')
+      .where({
+        uc_id: ucs
+      })
+      .then(result => {
+        exitOtp.webContents.send('hh', ({
+          hh: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+
+  ipcMain.on('get', (e, site_id)=>{
+
+    knex.from('tblOtpAdd')
+    .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
+    .where({
+      site_id: site_id,
+      status: 'open'
+    })
+      .then(result=>{
+        exitOtp.webContents.send('have', ({
+          result: result
+        }))
+      })
+      .catch(e=>{
+        exitOtp.webContents.send('have', ({
+          err: e
+        }))
+      })
+  });
+  ipcMain.on('otpExit',(e, data)=>{
+    data.client_id = imran.client;
+    knex('tblOtpExit')
+      .insert(data)
+      .then(result=>{
+        console.log(result);
+        
+        exitOtp.webContents.send('resultSent', ({
+          msg : 'Record saved successfully'
+        }))
+        return knex('tblInterimOtp')
+                  .where('otp_id',data.otp_id)
+                  .update({status: data.exit_reason})
+      })
+      .then(result=>{
+        console.log({
+          msg:'interm table updated',
+          data: result
+        })
+      })
+      .catch(e=>{
+        console.log(e);
+        exitOtp.webContents.send('resultSent', ({
+          msg : 'Record not saved, error in db'
+        }))
+      })
+
+  })
+
+}
+
+function otpExitEdit(){
+  var client_id = imran.client,
+  exitOtpEdit = new BrowserWindow({
+    height: 800,
+    width:800,
+    title:'OTP Exit'
+  })
+  exitOtpEdit.loadURL(url.format({
+    pathname: path.join(__dirname, '/html/otpExitEdit.html'),
+    protocol: 'file:',
+    slashes: true
+  }))
+  ipcMain.on('getProvince', function (event) {
+    knex('tblGeoProvince')
+      .then(result => {
+        exitOtpEdit.webContents.send('province', ({
+          province: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getDistrict', function (event, prov) {
+    console.log(prov)
+    knex('tblGeoDistrict')
+      .where({
+        province_id: prov
+      })
+      .then(result => {
+        exitOtpEdit.webContents.send('district', ({
+          district: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getTehsil', function (event, dist) {
+    console.log(dist)
+    knex('tblGeoTehsil')
+      .where({
+        district_id: dist
+      })
+      .then(result => {
+        exitOtpEdit.webContents.send('tehsil', ({
+          tehsil: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getUC', function (event, tehs) {
+    console.log(tehs)
+    knex('tblGeoUC')
+      .where({
+        tehsil_id: tehs
+      })
+      .then(result => {
+        exitOtpEdit.webContents.send('uc', ({
+          uc: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getHealthHouse', function (event, ucs) {
+    console.log(ucs)
+    knex('tblGeoNutSite')
+      .where({
+        uc_id: ucs
+      })
+      .then(result => {
+        exitOtpEdit.webContents.send('hh', ({
+          hh: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+
+  ipcMain.on('get', (e, site_id)=>{
+
+    knex.from('tblOtpAdd')
+    .innerJoin('tblOtpExit', 'tblOtpExit.otp_id', 'tblOtpAdd.otp_id')
+    .where({
+      site_id: site_id,
+    })
+      .then(result=>{
+        exitOtpEdit.webContents.send('have', ({
+          result: result
+        }))
+      })
+      .catch(e=>{
+        exitOtpEdit.webContents.send('have', ({
+          err: e
+        }))
+      })
+  });
+  ipcMain.on('otpExit',(e, data)=>{
+    data.client_id = imran.client;
+    knex('tblOtpExit')
+      .where('otp_id', data.otp_id)
+      .update(data)
+      .then(result=>{
+        console.log(result);
+        
+        exitOtpEdit.webContents.send('resultSent', ({
+          msg : 'Record updated successfully'
+        }))
+        return knex('tblInterimOtp')
+                  .where('otp_id',data.otp_id)
+                  .update({status: data.exit_reason})
+      })
+      .then(result=>{
+        console.log({
+          msg:'interm table updated',
+          data: result
+        })
+      })
+      .catch(e=>{
+        console.log(e);
+        exitOtpEdit.webContents.send('resultSent', ({
+          msg : 'Record not updated, error in db'
+        }))
+      })
+
+  })
+
 }
 
 function addFollowupOtp() {
