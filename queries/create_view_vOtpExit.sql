@@ -1,0 +1,1 @@
+﻿create view v_OtpExit as select tblOtpExit.*,tblOtpAdd.* from tblOtpExit inner join tblOtpAdd on tblOtpExit.otp_id = tblOtpAdd.otp_id;

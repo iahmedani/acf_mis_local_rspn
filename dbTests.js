@@ -17,3 +17,13 @@ knex.from('tblOtpAdd')
   .catch(e=>{
     console.log(e);
   })
+
+
+
+    knex('tblOtpAdd')
+      .then(result=>{
+        console.log(result)
+      })
+      .catch(e=>{
+        console.log(e)
+      })

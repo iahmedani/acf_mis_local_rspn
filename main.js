@@ -85,12 +85,12 @@ app.on('ready', () => {
 
 });
 
-function sessions(){
+function sessions() {
   var client_id = imran.client;
   session = new BrowserWindow({
     height: 800,
     width: 800,
-    title:'Sessions'
+    title: 'Sessions'
   });
   session.loadURL(url.format({
     pathname: path.join(__dirname, '/html/sessions.html'),
@@ -168,75 +168,75 @@ function sessions(){
         console.log(err);
       })
   });
-  ipcMain.on('get',(e, data)=>{
+  ipcMain.on('get', (e, data) => {
     console.log(data);
     knex('tblSessions')
       .where('site_id', data)
-      .then(result=>{
+      .then(result => {
         session.webContents.send('get', ({
           result: result
         }))
       })
-      .catch(e=>{
+      .catch(e => {
         session.webContents.send('get', ({
           err: e
         }))
       })
   });
-  ipcMain.on('insert',(e, item)=>{
+  ipcMain.on('insert', (e, item) => {
     item.upload_status = 0;
     item.client_id = client_id;
     item.created_at = localDate();
     console.log({
-      msg:'insert Sessions',
+      msg: 'insert Sessions',
       data: item
     })
     knex('tblSessions')
       .insert(item)
-      .then(result=>{
+      .then(result => {
         console.log({
-          msg:'insert record',
+          msg: 'insert record',
           ret: result
         })
         return knex('tblSessions')
-                  .where('session_id',result[0])
-        
+          .where('session_id', result[0])
+
       })
-      .then(result=>{
+      .then(result => {
         console.log({
-          msg:'insert return item',
+          msg: 'insert return item',
           result: result
         })
         session.webContents.send('insert', ({
           result: result
         }))
       })
-      .catch(e=>{
+      .catch(e => {
         session.webContents.send('insert', ({
           err: e
         }))
       })
   });
-  ipcMain.on('update',(e, item)=>{
-    item.upload_status = 0;
+  ipcMain.on('update', (e, item) => {
+    item.upload_status = 2;
     item.updated_at = localDate();
     knex('tblSessions')
-    .update(item)
-    .where('session_id', item.session_id)
-    .then(result=>{
-     return knex('tblSessions')
-              .where('session_id', item.session_id)
-    })
-    .then(result=>{
-      session.webContents.send('update', ({
-        result: result
-      }))
-    })
-    .catch(e=>{
-      session.webContents.send('update', ({
-        err: e
-      }))
-    })
+      .update(item)
+      .where('session_id', item.session_id)
+      .then(result => {
+        return knex('tblSessions')
+          .where('session_id', item.session_id)
+      })
+      .then(result => {
+        session.webContents.send('update', ({
+          result: result
+        }))
+      })
+      .catch(e => {
+        session.webContents.send('update', ({
+          err: e
+        }))
+      })
   });
 
 }
@@ -325,51 +325,54 @@ function otpAddUpdate() {
         console.log(err);
       })
   });
-  ipcMain.on('allOtp',(e, site_id)=>{
+  ipcMain.on('allOtp', (e, site_id) => {
     knex('tblOtpAdd')
-      .where({site_id:site_id})
-      .then(result=>{
+      .where({
+        site_id: site_id
+      })
+      .then(result => {
         otpUpdate.webContents.send('allOtp', ({
-          result:result
+          result: result
         }))
       })
-      .catch(e=>{
+      .catch(e => {
         otpUpdate.webContents.send('allOtp', ({
-          err:e
+          err: e
         }))
       })
   })
-  ipcMain.on('updateOtp',(e, item)=>{
+  ipcMain.on('updateOtp', (e, item) => {
     console.log(item);
-
+    item.upload_status = 2;
     knex('tblOtpAdd')
       .update(item)
-      .where('otp_id',item.otp_id)
-      .then(result=>{
+      .where('otp_id', item.otp_id)
+      .then(result => {
         console.log(result)
         return knex('tblOtpAdd')
-          .where('otp_id',item.otp_id)
+          .where('otp_id', item.otp_id)
       })
-      .then(result=>{
+      .then(result => {
         otpUpdate.webContents.send('updateOtp', ({
-          result:result
+          result: result
         }))
       })
-      .catch(e=>{
+      .catch(e => {
         console.log(e)
         otpUpdate.webContents.send('updateOtp', ({
-          err:e
+          err: e
         }))
       })
   })
 }
-function otpExit(){
+
+function otpExit() {
   var client_id = imran.client,
-  exitOtp = new BrowserWindow({
-    height: 800,
-    width:800,
-    title:'OTP Exit'
-  })
+    exitOtp = new BrowserWindow({
+      height: 800,
+      width: 800,
+      title: 'OTP Exit'
+    })
   exitOtp.loadURL(url.format({
     pathname: path.join(__dirname, '/html/otpExit.html'),
     protocol: 'file:',
@@ -447,49 +450,52 @@ function otpExit(){
       })
   });
 
-  ipcMain.on('get', (e, site_id)=>{
+  ipcMain.on('get', (e, site_id) => {
 
     knex.from('tblOtpAdd')
-    .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
-    .where({
-      site_id: site_id,
-      status: 'open'
-    })
-      .then(result=>{
+      .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
+      .where({
+        site_id: site_id,
+        status: 'open'
+      })
+      .then(result => {
         exitOtp.webContents.send('have', ({
           result: result
         }))
       })
-      .catch(e=>{
+      .catch(e => {
         exitOtp.webContents.send('have', ({
           err: e
         }))
       })
   });
-  ipcMain.on('otpExit',(e, data)=>{
+  ipcMain.on('otpExit', (e, data) => {
     data.client_id = imran.client;
+    data.upload_status = 0;
     knex('tblOtpExit')
       .insert(data)
-      .then(result=>{
+      .then(result => {
         console.log(result);
-        
+
         exitOtp.webContents.send('resultSent', ({
-          msg : 'Record saved successfully'
+          msg: 'Record saved successfully'
         }))
         return knex('tblInterimOtp')
-                  .where('otp_id',data.otp_id)
-                  .update({status: data.exit_reason})
+          .where('otp_id', data.otp_id)
+          .update({
+            status: data.exit_reason
+          })
       })
-      .then(result=>{
+      .then(result => {
         console.log({
-          msg:'interm table updated',
+          msg: 'interm table updated',
           data: result
         })
       })
-      .catch(e=>{
+      .catch(e => {
         console.log(e);
         exitOtp.webContents.send('resultSent', ({
-          msg : 'Record not saved, error in db'
+          msg: 'Record not saved, error in db'
         }))
       })
 
@@ -497,13 +503,13 @@ function otpExit(){
 
 }
 
-function otpExitEdit(){
+function otpExitEdit() {
   var client_id = imran.client,
-  exitOtpEdit = new BrowserWindow({
-    height: 800,
-    width:800,
-    title:'OTP Exit'
-  })
+    exitOtpEdit = new BrowserWindow({
+      height: 800,
+      width: 800,
+      title: 'OTP Exit'
+    })
   exitOtpEdit.loadURL(url.format({
     pathname: path.join(__dirname, '/html/otpExitEdit.html'),
     protocol: 'file:',
@@ -581,49 +587,52 @@ function otpExitEdit(){
       })
   });
 
-  ipcMain.on('get', (e, site_id)=>{
+  ipcMain.on('get', (e, site_id) => {
 
     knex.from('tblOtpAdd')
-    .innerJoin('tblOtpExit', 'tblOtpExit.otp_id', 'tblOtpAdd.otp_id')
-    .where({
-      site_id: site_id,
-    })
-      .then(result=>{
+      .innerJoin('tblOtpExit', 'tblOtpExit.otp_id', 'tblOtpAdd.otp_id')
+      .where({
+        site_id: site_id,
+      })
+      .then(result => {
         exitOtpEdit.webContents.send('have', ({
           result: result
         }))
       })
-      .catch(e=>{
+      .catch(e => {
         exitOtpEdit.webContents.send('have', ({
           err: e
         }))
       })
   });
-  ipcMain.on('otpExit',(e, data)=>{
+  ipcMain.on('otpExit', (e, data) => {
     data.client_id = imran.client;
+    data.upload_status = 2;
     knex('tblOtpExit')
       .where('otp_id', data.otp_id)
       .update(data)
-      .then(result=>{
+      .then(result => {
         console.log(result);
-        
+
         exitOtpEdit.webContents.send('resultSent', ({
-          msg : 'Record updated successfully'
+          msg: 'Record updated successfully'
         }))
         return knex('tblInterimOtp')
-                  .where('otp_id',data.otp_id)
-                  .update({status: data.exit_reason})
+          .where('otp_id', data.otp_id)
+          .update({
+            status: data.exit_reason
+          })
       })
-      .then(result=>{
+      .then(result => {
         console.log({
-          msg:'interm table updated',
+          msg: 'interm table updated',
           data: result
         })
       })
-      .catch(e=>{
+      .catch(e => {
         console.log(e);
         exitOtpEdit.webContents.send('resultSent', ({
-          msg : 'Record not updated, error in db'
+          msg: 'Record not updated, error in db'
         }))
       })
 
@@ -759,6 +768,7 @@ function addFollowupOtp() {
       }()
     }
     var followupData = {
+      upload_status: 0,
       otp_id: item.otp_id,
       client_id: imran.client,
       muac: item.muac,
@@ -781,51 +791,53 @@ function addFollowupOtp() {
     console.log('_______________followup data______')
     console.log(followupData)
     knex.from('tblInterimOtp')
-        .where({otp_id: item.otp_id})
-        .update(interimUpd)
-        .then(result=>{
-          console.log(result)
-        })
-        .catch(e=>{
-          console.log(e)
-        })
-        knex.from('tblOtpAdd')
-        .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
-        .where({
-          'tblInterimOtp.otp_id': item.otp_id,
-          status: 'open'
-        })
-        .then(result => {
-          
-          // result.location = 'Follow up interim call'
-          console.log(result)
-          otpFollowup.webContents.send('addFollowup', ({
-            result: result
-          }))
-        })
-        .catch(e => {
-          // e.location = 'Follow up interim call'
-          console.log(e);
-          otpFollowup.webContents.send('addFollowup', ({
-            err: e
-          }))
-        })
-        knex('tblOtpFollowup')
-          .insert(followupData)
-          .then(result=>{
-            console.log({
-              msg:'Follow up added',
-              result: result
-            })
-          })
-          .catch(e=>{
-            console.log({
-              msg:'Error during followup record add',
-              err: e
-            })
-          })
+      .where({
+        otp_id: item.otp_id
+      })
+      .update(interimUpd)
+      .then(result => {
+        console.log(result)
+      })
+      .catch(e => {
+        console.log(e)
+      })
+    knex.from('tblOtpAdd')
+      .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
+      .where({
+        'tblInterimOtp.otp_id': item.otp_id,
+        status: 'open'
+      })
+      .then(result => {
 
-    
+        // result.location = 'Follow up interim call'
+        console.log(result)
+        otpFollowup.webContents.send('addFollowup', ({
+          result: result
+        }))
+      })
+      .catch(e => {
+        // e.location = 'Follow up interim call'
+        console.log(e);
+        otpFollowup.webContents.send('addFollowup', ({
+          err: e
+        }))
+      })
+    knex('tblOtpFollowup')
+      .insert(followupData)
+      .then(result => {
+        console.log({
+          msg: 'Follow up added',
+          result: result
+        })
+      })
+      .catch(e => {
+        console.log({
+          msg: 'Error during followup record add',
+          err: e
+        })
+      })
+
+
   })
 }
 
@@ -2266,8 +2278,330 @@ function createSyncWindow() {
 
         }
       })
+    //Update server with new OTP addmision
+    knex('tblOtpAdd')
+      .where({
+        upload_status: 0
+      })
+      .orWhereNull('upload_status')
+      .then(result => {
+        if (result.length < 1) {
+          syncData.webContents.send("resultSent", {
+            'msg': 'Server already updated with OTP Addmision'
+          });
+        } else {
+          result.forEach(el => {
+            var options = {
+              method: 'POST',
+              uri: surl + '/otpAdd',
+              body: el,
+              json: true
+            }
+            request(options, function (err, response, body) {
+              console.log(body);
+              if (err) {
+                console.log(err)
+              } else if (body.msg === 'OTP Admission Added') {
+                knex('tblOtpAdd')
+                  .where({
+                    otp_id: el.otp_id
+                  })
+                  .update({
+                    upload_status: 1
+                  })
+                  .then(result => {
+                    syncData.webContents.send("resultSent", {
+                      'msg': body.msg
+                    });
+                    console.log(result);
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  })
+              }
+            })
+          })
+        }
+
+      })
+
+    //Update server with update OTP addmision
+    knex('tblOtpAdd')
+      .where({
+        upload_status: 2
+      })
+      .then(result => {
+        if (result.length < 1) {
+          syncData.webContents.send("resultSent", {
+            'msg': 'Server already updated with OTP Addmision'
+          });
+        } else {
+          result.forEach(el => {
+            var options = {
+              method: 'PUT',
+              uri: surl + '/otpAdd',
+              body: el,
+              json: true
+            }
+            request(options, function (err, response, body) {
+              if (err) {
+                console.log(err)
+                // body = JSON.parse(body);
+              } else if (body.msg === 'OTP Admission Updated') {
+                console.log(body);
+                knex('tblOtpAdd')
+                  .where({
+                    otp_id: el.otp_id
+                  })
+                  .update({
+                    upload_status: 1
+                  })
+                  .then(result => {
+                    syncData.webContents.send("resultSent", {
+                      'msg': body.msg
+                    });
+                    console.log(result);
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  })
+              }
+            })
+          })
+        }
+
+      })
+
+    //Update server with OTP Exit;
+    knex('tblOtpExit')
+    .where({
+      upload_status: 0
+    })
+    .orWhereNull('upload_status')
+    .then(result => {
+      if (result.length < 1) {
+        syncData.webContents.send("resultSent", {
+          'msg': 'Server already updated with OTP Exits'
+        });
+      } else {
+        result.forEach(el => {
+          var options = {
+            method: 'POST',
+            uri: surl + '/otpExit',
+            body: el,
+            json: true
+          }
+          request(options, function (err, response, body) {
+            console.log(response);
+            // console.log(body);
+            if (err) console.log(err)
+            if (body) {
+              console.log(body);
+              knex('tblOtpExit')
+                .where({
+                  otp_id: el.otp_id
+                })
+                .update({
+                  upload_status: 1
+                })
+                .then(result => {
+                  syncData.webContents.send("resultSent", {
+                    'msg': body.msg
+                  });
+                  console.log(result);
+                })
+                .catch(err => {
+                  console.log(err);
+                })
+            }
+          })
+        })
+      }
+
+    })
+
+  // Update server with update OTP addmision
+  knex('tblOtpExit')
+    .where({
+      upload_status: 2
+    })
+    .then(result => {
+      if (result.length < 1) {
+        syncData.webContents.send("resultSent", {
+          'msg': 'Server already updated with OTP Addmision'
+        });
+      } else {
+        result.forEach(el => {
+          var options = {
+            method: 'PUT',
+            uri: surl + '/otpExit',
+            body: el,
+            json: true
+          }
+          request(options, function (err, response, body) {
+            if (err) {
+              console.log(err)
+              // body = JSON.parse(body);
+            } else if (body) {
+              // .msg === 'OTP Admission Updated')
+              // console.log(body);
+              knex('tblOtpExit')
+                .where({
+                  otp_id: el.otp_id
+                })
+                .update({
+                  upload_status: 1
+                })
+                .then(result => {
+                  syncData.webContents.send("resultSent", {
+                    'msg': body.msg
+                  });
+                  console.log(result);
+                })
+                .catch(err => {
+                  console.log(err);
+                })
+            }
+          })
+        })
+      }
+
+    })
+  
+  knex('tblSessions')
+      .where({upload_status:0})
+      .orWhereNull('upload_status')
+      .then(result=>{
+        if( result.length < 1){
+          syncData.webContents.send("resultSent", {
+            'msg': 'Server already updated with Sessions'
+          });
+        } else {
+          result.forEach(el => {
+            var options = {
+              method: 'POST',
+              uri: surl + '/sessions',
+              body: el,
+              json: true
+            }
+            request(options, function (err, response, body) {
+              if (err) {
+                console.log(err)
+                // body = JSON.parse(body);
+              } else if (body){
+              // .msg === 'Session Added') {
+                console.log(body);
+                knex('tblSessions')
+                  .where({
+                    session_id: el.session_id
+                  })
+                  .update({
+                    upload_status: 1
+                  })
+                  .then(result => {
+                    syncData.webContents.send("resultSent", {
+                      'msg': body.msg
+                    });
+                    console.log(result);
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  })
+              }
+            })
+          })
+        }
+      })
 
 
+  knex('tblSessions')
+      .where({upload_status:2})
+      .then(result=>{
+        if( result.length < 1){
+          syncData.webContents.send("resultSent", {
+            'msg': 'Server already updated with Sessions'
+          });
+        } else {
+          result.forEach(el => {
+            var options = {
+              method: 'PUT',
+              uri: surl + '/sessions',
+              body: el,
+              json: true
+            }
+            request(options, function (err, response, body) {
+              if (err) {
+                console.log(err)
+                // body = JSON.parse(body);
+              } else if (body){
+              // .msg === 'Session Updated') {
+                console.log(body);
+                knex('tblSessions')
+                  .where({
+                    session_id: el.session_id
+                  })
+                  .update({
+                    upload_status: 1
+                  })
+                  .then(result => {
+                    syncData.webContents.send("resultSent", {
+                      'msg': body.msg
+                    });
+                    console.log(result);
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  })
+              }
+            })
+          })
+        }
+      })
+
+      knex('otpFollowup')
+      .where({upload_status:0})
+      .orWhereNull('upload_status')
+      .then(result=>{
+        if( result.length < 1){
+          syncData.webContents.send("resultSent", {
+            'msg': 'Server already updated with followups'
+          });
+        } else {
+          result.forEach(el => {
+            var options = {
+              method: 'POST',
+              uri: surl + '/sessions',
+              body: el,
+              json: true
+            }
+            request(options, function (err, response, body) {
+              if (err) {
+                console.log(err)
+                // body = JSON.parse(body);
+              } else if (body){
+              // .msg === 'Followup Added') {
+                console.log(body);
+                knex('otpFollowup')
+                  .where({
+                    followup_id: el.followup_id
+                  })
+                  .update({
+                    upload_status: 1
+                  })
+                  .then(result => {
+                    syncData.webContents.send("resultSent", {
+                      'msg': body.msg
+                    });
+                    console.log(result);
+                  })
+                  .catch(err => {
+                    console.log(err);
+                  })
+              }
+            })
+          })
+        }
+      })
   })
   syncData.on('close', function () {
     syncData = null;

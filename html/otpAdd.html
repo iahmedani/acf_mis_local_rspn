@@ -82,12 +82,12 @@
             <option value="">Select One</option>
           </select>
         </div>
-        <div class="form-group col-sm-3">
+        <div class="form-group col-sm-2">
 
           <label for="prog_type" class="form-label">Program Type:</label>
 
           <select name="prog_type" id="ddProgramType" class="form-control form-control-sm" required>
-            <option value="">Select One</option>
+            <option  selected disabled>Select One</option>
             <option value="sfp">SFP</option>
             <option value="otp">OTP</option>
             <option value="sc">SC</option>
@@ -100,12 +100,12 @@
 
           <input type="text" name="site_village" class="form-control form-control-sm">
         </div>
-        <div class="form-group col-sm-3">
+        <div class="form-group col-sm-2">
 
           <label for="reg_date" class="form-label">Addmision Date:</label>
           <input type="date" name="reg_date" id="reg_date" class="form-control form-control-sm">
         </div>
-        <div class="form-group col-sm-3">
+        <div class="form-group col-sm-2">
 
           <label for="reg_id" class="form-label">Registration ID:</label>
           <input type="text" name="reg_id" id="reg_id" class="form-control form-control-sm" maxlength="7">
@@ -142,7 +142,7 @@
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="age" class="form-label">Age</label>
-                    <select name="age" id="ager" class="form-control form-control-sm">
+                    <select name="age" id="age" class="form-control form-control-sm">
                       <option value="below_6"> &lt; 6 Months</option>
                       <option value="range6to23">6 to 23 Month</option>
                       <option value="range24-59">24 to 59 Months</option>
@@ -176,7 +176,9 @@
                       <option value="def_sfp">Def SFP</option>
                       <option value="def_otp">Def OTP</option>
                       <option value="abb_inp">Abbondon INP</option>
-                      <option value="moved_in">Moved In</option>
+                      <option value="promotion_in_from_sc">Promotion in from SC</option>
+                      <option value="tranfer_in_other_otp">Transfer in <small>From other OTP</small></option>
+                      <option value="tranfer_in_from_sfp">Transfer in <small>From SFP</small></option>
                       <option value="other">Other</option>
                     </select>
                   </div>
@@ -293,7 +295,7 @@
 
                     <label for="od_swol_time">If Oedema, how long swollen?</label>
                     <select name="od_swol_time" id="od_swol_time" class="form-control form-control-sm">
-                      <option value="">Choose</option>
+                      <option selected disabled>Choose</option>
                       <option value="absent">absent</option>
                       <option value="plus_1">&plus;(1)</option>
                       <option value="plus_2">&plus;&plus;(2)</option>
@@ -398,6 +400,54 @@
     require('jquery-validation');
   </script>
   <script src="../bower_components/bootstrap/dist/js/bootstrap.bundle.js"></script>
+  <script>
+  
+  $(function(){
+    $('#ddProgramType').on('change', ()=>{
+       var prog = $('#ddProgramType').val();
+       console.log(prog)
+       if(prog === 'otp'){
+         $('#age option[value="above59"]').attr('disabled', true)
+        $('#age option[value="below_6"]').attr('disabled', false)
+
+         $('#plw_type').attr('disabled', true);
+         $('#muac').attr('max','11.4');
+         $('#muac').attr('min','0');
+         $('#oedema').empty();
+        $('#oedema').append(`<option selected disabled>Choose</option>
+                      <option value="absent">absent</option>
+                      <option value="plus_1">&plus;(1)</option>
+                      <option value="plus_2">&plus;&plus;(2)</option>
+                      <option value="plus_3">&plus;&plus;&plus;(3)</option>`)
+
+       } else if(prog === 'sfp'){
+        $('#age option[value="above59"]').attr('disabled', true)
+        $('#age option[value="below_6"]').attr('disabled', true)
+         $('#plw_type').attr('disabled', true);
+         $('#muac').attr('max','12.5');
+         $('#muac').attr('min','11.5');
+         $('#oedema').children('option:not(:eq(1))').remove();
+        
+        //  $('#oedema option:not(:second)').remove();
+       } else {
+        var age = $('#age').val();
+        $('#age option[value="above59"]').attr('disabled', true)
+         $('#plw_type').attr('disabled', false);
+         $('#muac').attr('max','30');
+         $('#muac').attr('min','0');
+         $('#age option[value="above59"]').attr('disabled', false)
+        $('#age option[value="below_6"]').attr('disabled', false)
+        $('#oedema').empty();
+        $('#oedema').append(`<option selected disabled>Choose</option>
+                      <option value="absent">absent</option>
+                      <option value="plus_1">&plus;(1)</option>
+                      <option value="plus_2">&plus;&plus;(2)</option>
+                      <option value="plus_3">&plus;&plus;&plus;(3)</option>`)
+
+       }
+    })
+  })
+  </script>
   <script>
     (function ($) {
       $.fn.serializeFormJSON = function () {

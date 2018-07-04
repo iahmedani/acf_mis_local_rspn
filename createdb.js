@@ -320,3 +320,40 @@ knex.schema.hasTable('tblSessions').then(function (exists) {
   console.log(err);
 });
 
+// create tblSessions (iterim table for OTP follow up)
+knex.schema.hasTable('tblSessions').then(function (exists) {
+  if (!exists) {
+    return knex.schema.createTable('tblSessions', function (table) {
+      table.increments('session_id').primary().unique();
+      table.integer('site_id');
+      table.string('client_id');
+      table.date('session_date');
+      table.string('session_type');
+      table.string('participants');
+      table.string('session_location');
+      table.integer('upload_status');
+      table.timestamps();
+    });
+  }
+}).then((result) => {
+  console.log(result);
+}).catch((err) => {
+  console.log(err);
+});
+
+// create v_otpExit_knex (iterim table for OTP follow up)
+knex.schema.hasTable('v_otpExit_knex').then(function (exists) {
+  if (!exists) {
+    return knex.raw(`create view v_otpExit_knex as
+    SELECT 
+           [v_geo].*, 
+           [v_OtpExit].*
+    FROM   [main].[v_geo]
+           INNER JOIN [main].[v_OtpExit] ON [main].[v_OtpExit].[site_id] = [main].[v_geo].[site_id]`)
+  }
+}).then((result) => {
+  console.log(result);
+}).catch((err) => {
+  console.log(err);
+});
+
