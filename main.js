@@ -224,6 +224,7 @@ function sessions() {
           err: e
         }))
       })
+      item = null;
   });
   ipcMain.on('update', (e, item) => {
     item.upload_status = 2;
@@ -245,7 +246,12 @@ function sessions() {
           err: e
         }))
       })
+  
+      item = null;
   });
+  session.on('close', function () {
+    session = null;
+  })
 
 }
 
@@ -350,6 +356,7 @@ function otpAddUpdate() {
           err: e
         }))
       })
+      item = '';
   })
   ipcMain.on('updateOtp', (e, item) => {
     console.log(item);
@@ -373,7 +380,12 @@ function otpAddUpdate() {
           err: e
         }))
       })
+      item = null;
   })
+  otpUpdate.on('close', function () {
+    otpUpdate = null;
+  })
+
 }
 
 function otpExit() {
@@ -510,7 +522,10 @@ function otpExit() {
           msg: 'Record not saved, error in db'
         }))
       })
-
+      data = null;
+  })
+  exitOtp.on('close', function () {
+    exitOtp = null;
   })
 
 }
@@ -618,6 +633,7 @@ function otpExitEdit() {
           err: e
         }))
       })
+      site_id = null;
   });
   ipcMain.on('otpExit', (e, data) => {
     data.client_id = imran.client;
@@ -649,7 +665,10 @@ function otpExitEdit() {
           msg: 'Record not updated, error in db'
         }))
       })
-
+    data = null;  
+  })
+  exitOtpEdit.on('close', function () {
+    exitOtpEdit = null;
   })
 
 }
@@ -755,6 +774,7 @@ function addFollowupOtp() {
         otpFollowup.webContents.send('getInterim', ({
           result: result
         }))
+        result = null;
       })
       .catch(e => {
         // e.location = 'Follow up interim call'
@@ -852,8 +872,12 @@ function addFollowupOtp() {
         })
       })
 
-
+      item = null;
   })
+  otpFollowup.on('close', function () {
+    otpFollowup = null;
+  })
+
 }
 
 function addVill() {
@@ -988,6 +1012,11 @@ function addVill() {
 
   })
 
+  villAdd.on('close', function () {
+    villAdd = null;
+  })
+
+
 }
 
 
@@ -1098,7 +1127,7 @@ function scrAddChild() {
       })
   });
 
-  ipcMain.on('submitFormChild', function (evenet, scrForm) {
+  ipcMain.on('submitFormChild', function (event, scrForm) {
     var village = scrForm.txtVillage;
     var site_id = scrForm.ddHealthHouse;
     var screening_type = scrForm.scrChildScrType;
@@ -1181,6 +1210,7 @@ function scrAddChild() {
     }
 
     console.log(scrForm);
+    scrForm = null;
   });
   addScrChild.on('close', function () {
     addScrChild = null;
@@ -1370,8 +1400,9 @@ function scrAddPlw() {
           });
         })
     }
-
-    console.log(scrForm);
+    
+    console.log(scrForm)
+    scrForm = null;
   });
 
 
@@ -1466,7 +1497,7 @@ function otpAdd() {
       })
   });
 
-  ipcMain.on('submitOtpAdd', function (evenet, addFormOtp) {
+  ipcMain.on('submitOtpAdd', function (event, addFormOtp) {
     //console.log(addFormOtp);
     delete addFormOtp.province;
     delete addFormOtp.Tehsil;
@@ -1515,6 +1546,10 @@ function otpAdd() {
           'msg': 'records not added, plz try again'
         });
       })
+      addFormOtp = null;
+  })
+  addOtp.on('close', function () {
+    addOtp = null;
   })
 
 }
@@ -1721,6 +1756,7 @@ function scrPlUpd() {
         err: null
       }))
     })
+    data = null;
   })
   scrPlUpdate.on('close', function () {
     scrPlUpdate = null;
@@ -1829,6 +1865,7 @@ function scrChUpd() {
         err: null
       }))
     })
+    data = null;
   })
   scrChUpdate.on('close', function () {
     scrPlUpdate = null;
@@ -1924,6 +1961,7 @@ function scrReports() {
       scrReport.webContents.send('data', ({
         data: results
       }))
+      results = null;
     })
     // db.test(1, (err, res)=>{
     //   console.log(err, res);
@@ -2086,6 +2124,7 @@ function otpReports() {
       reportOtp.webContents.send('data', ({
         data: results
       }))
+      results = null;
     })
     // db.test(1, (err, res)=>{
     //   console.log(err, res);
@@ -3430,5 +3469,6 @@ const mainMenuTemplate = [
 
 
 app.on("window-all-closed", () => {
+  mainWindow = null;
   app.quit()
 })
