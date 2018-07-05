@@ -218,6 +218,12 @@
                          Screening
                       </a>
                     </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="#!" id="otpReport">
+                        <span data-feather="file-text"></span>
+                         OTP Report
+                      </a>
+                    </li>
               </ul>
               <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                 <span>Update</span>
@@ -306,6 +312,9 @@
     })
     $('#sessions').on('click', function () {
       ipc.send('nav', 'sessions');
+    })
+    $('#otpReport').on('click', function () {
+      ipc.send('nav', 'otpReport');
     })
   </script>
 </body>

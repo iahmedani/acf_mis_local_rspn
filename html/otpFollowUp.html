@@ -2,18 +2,18 @@
 <html lang="en">
 
 <head>
-  <title>OTP Addmision</title>
+  <title>Follow Up Entry Form</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
-    crossorigin="anonymous">
-  <!-- <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous"> -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
-    crossorigin="anonymous">
-  <!-- <link rel="stylesheet" href="../fa5/css/fontawesome-all.min.css"> -->
-  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
-  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" -->
+    <!-- crossorigin="anonymous"> -->
+  <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
+  <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" -->
+    <!-- crossorigin="anonymous"> -->
+  <link rel="stylesheet" href="../fa5/css/fontawesome-all.min.css">
+  <link type="text/css" rel="stylesheet" href="../css/jsgrid.min.css" />
+  <link type="text/css" rel="stylesheet" href="../css/jsgrid-theme.min.css" />
   <link rel="stylesheet" href="../css/jsgrid-theme-followup.css">
 </head>
 <style>
@@ -74,13 +74,20 @@
           <option selected disabled>Choose</option>
         </select>
       </div>
-      <div class="form-group col-sm-4">
+      <div class="form-group col-sm-2">
 
         <label for="site_id" class="form-label">Site Name:</label>
 
         <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm">
           <option value="">Select One</option>
         </select>
+      </div>
+      <div class="form-group col-sm-2">
+
+        <label for="followup_date" class="form-label">Follow Up Date:</label>
+
+        <input type="date" name="followup_date" id="followup_date" class="form-control form-control-sm" required>
+          
       </div>
     </div>
     <!-- <div class="card">
@@ -109,7 +116,7 @@
     require('jquery-validation');
   </script>
   <script src="../bower_components/bootstrap/dist/js/bootstrap.bundle.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+  <script type="text/javascript" src="../js/jsgrid.min.js"></script>
 
   <script>
     (function ($) {
@@ -284,6 +291,7 @@
           Name: 'IYCF Cups & Spoons',
           value: 'IYCF_Cups_and_Spoons'
         }]
+        
 
         $("#jsGrid").jsGrid({
           height: "500px",
@@ -305,17 +313,20 @@
             },
             updateItem: function (item) {
               console.log('update')
+              item.followup_date = $('#followup_date').val();
               console.log(item);
               return addFollowup(item);
             }
           },
-          fields: [{
-              name: "otp_id",
-              title: "ID",
-              type: "number",
-              width: 30,
-              editing: false
-            }, {
+          fields: [
+            // {
+            //   name: "otp_id",
+            //   title: "ID",
+            //   type: "number",
+            //   width: 30,
+            //   editing: false
+            // },
+             {
               name: "reg_id",
               title: "Reg #",
               type: "text",

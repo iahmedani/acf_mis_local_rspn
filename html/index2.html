@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="../fa5/css/fontawesome-all.min.css">
+  <title>ACF MIS FOR PINS</title>
+  <script>
+    const electron = require('electron');
+    const ipc = electron.ipcRenderer;
+    document.addEventListener('DOMContentLoaded', function () {
+      ipc.send('mainWindowLoaded')
+      ipc.on('msg', function (evt, msg) {
+        let msgEl = document.getElementById('message');
+        msgEl.innerHTML += '<h3>' + msg + '</h3>';
+      });
+    });
+  </script>
+</head>
+<style>
+  body {
+    font-size: .875rem;
+  }
+
+  .feather {
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+  }
+
+  /*
+ * Sidebar
+ */
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    /* Behind the navbar */
+    padding: 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+  }
+
+  .sidebar-sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 48px;
+    /* Height of navbar */
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* Scrollable contents if viewport is shorter than content. */
+  }
+
+  .sidebar .nav-link {
+    font-weight: 500;
+    color: #333;
+  }
+
+  .sidebar .nav-link .feather {
+    margin-right: 4px;
+    color: #999;
+  }
+
+  .sidebar .nav-link.active {
+    color: #007bff;
+  }
+
+  .sidebar .nav-link:hover .feather,
+  .sidebar .nav-link.active .feather {
+    color: inherit;
+  }
+
+  .sidebar-heading {
+    font-size: .75rem;
+    text-transform: uppercase;
+  }
+
+  /*
+ * Navbar
+ */
+
+  /* .navbar-brand {
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  font-size: 1rem;
+  background-color: rgba(0, 0, 0, .25);
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+  
+} */
+
+  .navbar .form-control {
+    padding: .75rem 1rem;
+    border-width: 0;
+    border-radius: 0;
+  }
+
+  .form-control-dark {
+    color: #fff;
+    background-color: rgba(255, 255, 255, .1);
+    border-color: rgba(255, 255, 255, .1);
+  }
+
+  .form-control-dark:focus {
+    border-color: transparent;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+  }
+
+  /*
+ * Utilities
+ */
+
+  .border-top {
+    border-top: 1px solid #e5e5e5;
+  }
+
+  .border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+  }
+</style>
+
+<body>
+  <header>
+    <nav class="navbar navbar-light sticky-top flex-md-nowrap p-0" style="background-color:#e3f2fd;">
+
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
+        <img src="../img/acf-logo.svg" style="height: 50px;" alt="">
+      </a>
+      <ul class="navbar-nav px-3">
+
+      </ul>
+    </nav>
+  </header>
+  <div class="container-fluid">
+    <div class="row">
+      
+      <nav class="col-md-2 d-non d-md-block bg-loght sidebar">
+        <div class="sidebar-sticky">
+            <div id="accordion">
+                <div class="card">
+                  <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Data Entry
+                      </button>
+                    </h5>
+                  </div>
+              
+                  <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <ul class="nav flex-colum">
+                            <li class="nav-item">
+                             <a class="nav-link" href="#!" id="childScr">
+                               <span data-feather="file-text"></span>
+                               Child Screening
+                             </a>
+                           </li>
+                           <li class="nav-item">
+                             <a class="nav-link" href="#!" id="plwScr">
+                               <span data-feather="file-text"></span>
+                               PLW Screening
+                             </a>
+                           </li>
+                           <li class="nav-item">
+                             <a class="nav-link" href="#!" id="otpAdd">
+                               <span data-feather="file-text"></span>
+                               Addmision Entry
+                             </a>
+                           </li>
+                           
+                           <!-- <li class="nav-item">
+                             <a class="nav-link" href="#!" id="addVill">
+                               <span data-feather="file-text"></span>
+                               Add Village
+                             </a>
+                           </li> -->
+                           <li class="nav-item">
+                             <a class="nav-link" href="#!" id="addFollowupOtp">
+                               Follow Up Entry
+                             </a>
+                           </li>
+                           
+                           <li class="nav-item">
+                               <a class="nav-link" href="#!" id="otpExit">
+                                 <span data-feather="file-text"></span>
+                                 Exit Entry
+                               </a>
+                             </li>
+                           
+                           <li class="nav-item">
+                               <a class="nav-link" href="#!" id="sessions">
+                                 <span data-feather="file-text"></span>
+                                 Sessions Entry
+                               </a>
+                             </li>
+                           
+             
+                         </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                       CMAM Reports
+                      </button>
+                    </h5>
+                  </div>
+                  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body">
+                        <ul class="nav flex-colum">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#!" id="scrReport">                                  
+                                  Screening Report
+                                </a>
+                              </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#!" id="otpReport">
+                                  <span data-feather="file-text"></span>
+                                   OTP Report
+                                </a>
+                              </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#!" id="defReport">
+                                  <span data-feather="file-text"></span>
+                                   Defaulter List
+                                </a>
+                              </li>
+                        </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header" id="headingThree">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Update Data
+                      </button>
+                    </h5>
+                  </div>
+                  <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                    <div class="card-body">
+                        <ul class="nav flex-colum">
+               
+                            <li class="nav-item">
+                                <a class="nav-link" href="#!" id="scrChUpd">
+                                  <span data-feather="file-text"></span>
+                                   Scr Child Update
+                                </a>
+                              </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#!" id="scrPlUpd">
+                                  <span data-feather="file-text"></span>
+                                   Scr PLW Update
+                                </a>
+                              </li>
+                              <li class="nav-item">
+                                  <a class="nav-link" href="#!" id="otpAddUpdate">
+                                    <span data-feather="file-text"></span>
+                                    OTP Addmision Update
+                                  </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#!" id="otpExitEdit">
+                                      <span data-feather="file-text"></span>
+                                      OTP Exit Update
+                                    </a>
+                                  </li>
+                          </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+        </nav>
+        
+
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 ">
+          <div class="card bg-light mb-6">
+            <div class="card-header">Help End Deadly Hunger: Make a Life-Saving Donation Today </div>
+            <div class="card-body">
+              <h5 class="card-title">Action Against Hunger </h5>
+              <p class="card-text">ACF International is an international humanitarian organization committed to saving the lives of malnourished
+                children while providing communities with sustainable access to safe water and long-term solutions to hunger.</p>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+    </div>
+  </div>
+  <!-- Optional JavaScript -->
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script>
+    window.$ = window.jQuery = require('jquery');
+  </script>
+  <script src="../bower_components/bootstrap/dist/js/bootstrap.bundle.js"></script>
+  <script>
+    $('#childScr').on('click', function () {
+      ipc.send('nav', 'child');
+    })
+    $('#plwScr').on('click', function () {
+      ipc.send('nav', 'plw');
+    })
+    $('#scrReport').on('click', function () {
+      ipc.send('nav', 'report');
+    })
+    $('#scrChUpd').on('click', function () {
+      ipc.send('nav', 'scrChUpd');
+    })
+    $('#scrPlUpd').on('click', function () {
+      ipc.send('nav', 'scrPlUpd');
+    })
+    $('#myUpdate').on('click', function () {
+      ipc.send('nav', 'scrUpdate');
+    })
+    $('#otpAdd').on('click', function () {
+      ipc.send('nav', 'otpAdd');
+    })
+    $('#addVill').on('click', function () {
+      ipc.send('nav', 'addVill');
+    })
+    $('#addFollowupOtp').on('click', function () {
+      ipc.send('nav', 'addFollowupOtp');
+    })
+    $('#otpAddUpdate').on('click', function () {
+      ipc.send('nav', 'otpAddUpdate');
+    })
+    $('#otpExit').on('click', function () {
+      ipc.send('nav', 'otpExit');
+    })
+    $('#otpExitEdit').on('click', function () {
+      ipc.send('nav', 'otpExitEdit');
+    })
+    $('#sessions').on('click', function () {
+      ipc.send('nav', 'sessions');
+    })
+    $('#otpReport').on('click', function () {
+      ipc.send('nav', 'otpReport');
+    })
+    $('#defReport').on('click', function () {
+      ipc.send('nav', 'defReport');
+    })
+  </script>
+</body>
+
+</html>

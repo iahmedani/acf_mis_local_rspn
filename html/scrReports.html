@@ -258,7 +258,9 @@
         ipc.send('data', prepareQry());
         ipc.on('data',(e,data)=>{
         pushData(data.data);
+        
       })
+      e.preventDefault();
     })
 
     </script>

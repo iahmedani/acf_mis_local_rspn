@@ -6,7 +6,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron . ",
-    "rebuild": "electron-rebuild -f -w sqlite3 async"
+    "rebuild": "electron-rebuild -f -w sqlite3 async",
+    "winbuild":"electron-packager . acf-local-app --overwrite --asar=true --prune=true --out=release-builds --version-string.CompanyName=ACF --version-string.FileDescription=ACF --version-string.ProductName='ACF Local App' --version-string.FileDescription='Build v1.04'"
   },
   "keywords": [],
   "author": "",

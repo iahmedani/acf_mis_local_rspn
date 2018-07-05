@@ -1,9 +1,10 @@
+const electron = require('electron');
 const {
   app,
   BrowserWindow,
   ipcMain,
   Menu
-} = require('electron');
+} = electron;
 const url = require('url');
 const path = require('path');
 var fs = require('fs');
@@ -29,11 +30,13 @@ const request = require('request');
 
 //Creating main window
 app.on('ready', () => {
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
   let mainWindow = new BrowserWindow({
-    setFullScreen: true
+    width, height
   });
+  // mainWindow.fullscreen = true;
   mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, '/html/index.html'),
+    pathname: path.join(__dirname, '/html/index2.html'),
     protocol: 'file:',
     slashes: true
   }));
@@ -74,6 +77,10 @@ app.on('ready', () => {
       otpExitEdit();
     } else if (arg === 'sessions') {
       sessions();
+    } else if (arg === 'otpReport') {
+      otpReports();
+    } else if (arg === 'defReport') {
+      defReports();
     } else {
       console.log('error');
     }
@@ -86,10 +93,11 @@ app.on('ready', () => {
 });
 
 function sessions() {
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+
   var client_id = imran.client;
   session = new BrowserWindow({
-    height: 800,
-    width: 800,
+    width, height,
     title: 'Sessions'
   });
   session.loadURL(url.format({
@@ -242,10 +250,12 @@ function sessions() {
 }
 
 function otpAddUpdate() {
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+
   var client = imran.client;
   otpUpdate = new BrowserWindow({
-    width: 800,
-    height: 800,
+    width,
+    height,
     title: 'Follow-Ups'
   })
   otpUpdate.loadURL(url.format({
@@ -367,10 +377,12 @@ function otpAddUpdate() {
 }
 
 function otpExit() {
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+
   var client_id = imran.client,
     exitOtp = new BrowserWindow({
-      height: 800,
-      width: 800,
+      height,
+      width,
       title: 'OTP Exit'
     })
   exitOtp.loadURL(url.format({
@@ -472,7 +484,7 @@ function otpExit() {
   ipcMain.on('otpExit', (e, data) => {
     data.client_id = imran.client;
     data.upload_status = 0;
-    knex('tblOtpExit')
+    knex('tblSessions')
       .insert(data)
       .then(result => {
         console.log(result);
@@ -504,10 +516,12 @@ function otpExit() {
 }
 
 function otpExitEdit() {
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+
   var client_id = imran.client,
     exitOtpEdit = new BrowserWindow({
-      height: 800,
-      width: 800,
+      height,
+      width,
       title: 'OTP Exit'
     })
   exitOtpEdit.loadURL(url.format({
@@ -641,10 +655,11 @@ function otpExitEdit() {
 }
 
 function addFollowupOtp() {
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+
   var client = imran.client;
   otpFollowup = new BrowserWindow({
-    width: 800,
-    height: 800,
+    width,height,
     title: 'Follow-Ups'
   })
   otpFollowup.loadURL(url.format({
@@ -760,7 +775,7 @@ function addFollowupOtp() {
       quantity2: item.quantity2,
       ration3: item.ration3,
       quantity3: item.quantity3,
-      curr_date: localDate(),
+      curr_date: item.followup_date,
       next_followup: function () {
         var myDate = new Date();
         myDate.setDate(myDate.getDate() + 15)
@@ -984,11 +999,12 @@ function localDate() {
 // console.log(localDate());
 // Creating Screening : Add Child Window
 function scrAddChild() {
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+
   var client = imran.client;
 
   addScrChild = new BrowserWindow({
-    width: 800,
-    height: 800,
+    width,height,
     title: 'Screening: Add Child'
   });
   addScrChild.loadURL(url.format({
@@ -1174,10 +1190,11 @@ function scrAddChild() {
 // Creating Screening : Add PLW Window
 function scrAddPlw() {
   var client = imran.client;
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
 
   addScrPlw = new BrowserWindow({
-    width: 800,
-    height: 800,
+    width,
+    height,
     title: 'Screening: Add PLW'
   });
   addScrPlw.loadURL(url.format({
@@ -1365,10 +1382,11 @@ function scrAddPlw() {
 }
 // Creating OTP : Add OTP Window
 function otpAdd() {
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+
   var client = imran.client;
   addOtp = new BrowserWindow({
-    width: 800,
-    height: 800,
+    width,height,
     title: 'Screening: Add PLW'
   });
   addOtp.loadURL(url.format({
@@ -1604,9 +1622,10 @@ function myUpdate() {
 }
 
 function scrPlUpd() {
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+
   scrPlUpdate = new BrowserWindow({
-    width: 800,
-    height: 800,
+    width,height,
     title: 'Update'
   })
   scrPlUpdate.loadURL(url.format({
@@ -1709,9 +1728,10 @@ function scrPlUpd() {
 }
 
 function scrChUpd() {
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+
   scrChUpdate = new BrowserWindow({
-    width: 800,
-    height: 800,
+    width,height,
     title: 'Update'
   })
   scrChUpdate.loadURL(url.format({
@@ -1816,9 +1836,10 @@ function scrChUpd() {
 }
 // Creating Screening : Reports
 function scrReports() {
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+
   scrReport = new BrowserWindow({
-    width: 800,
-    height: 800,
+    width,height,
     title: 'Screening: Reports'
   });
   scrReport.loadURL(url.format({
@@ -1937,6 +1958,167 @@ function scrReports() {
   })
 }
 
+// Creating Screening : Reports
+function defReports() {
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+
+  reportDef = new BrowserWindow({
+    width:250,height:250,
+    title: 'Defauler: Reports'
+  });
+  reportDef.loadURL(url.format({
+    pathname: path.join(__dirname, '/html/defaulter.html'),
+    protocol: 'file:',
+    slashes: true
+  }));
+
+
+  ipcMain.on('data', function (e, arg) {
+    console.log('defaulter report' + arg)
+    knex('v_defaulter')
+      .then(result=>{
+        console.log(result);
+        reportDef.webContents.send('data',{result: result})
+      })
+      .catch(e=>{
+        console.log(e);
+      })
+
+    })
+    
+ 
+    reportDef.on('close', function () {
+      reportDef = null;
+  })
+}
+
+
+// Creating Screening : Reports
+function otpReports() {
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+
+  reportOtp = new BrowserWindow({
+    width,height,
+    title: 'OTP: Reports'
+  });
+  reportOtp.loadURL(url.format({
+    pathname: path.join(__dirname, '/html/otpReportv1.html'),
+    protocol: 'file:',
+    slashes: true
+  }));
+  ipcMain.on('getProvince', function (event) {
+    knex('tblGeoProvince')
+      .then(result => {
+        reportOtp.webContents.send('province', ({
+          province: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getDistrict', function (event, prov) {
+    console.log(prov)
+    knex('tblGeoDistrict')
+      .where({
+        province_id: prov
+      })
+      .then(result => {
+        reportOtp.webContents.send('district', ({
+          district: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getTehsil', function (event, dist) {
+    console.log(dist)
+    knex('tblGeoTehsil')
+      .where({
+        district_id: dist
+      })
+      .then(result => {
+        reportOtp.webContents.send('tehsil', ({
+          tehsil: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+  ipcMain.on('getUC', function (event, tehs) {
+    console.log(tehs)
+    knex('tblGeoUC')
+      .where({
+        tehsil_id: tehs
+      })
+      .then(result => {
+        reportOtp.webContents.send('uc', ({
+          uc: result
+        }));
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  });
+
+  ipcMain.on('data', function (e, arg) {
+    var x = arg;
+    if (arg === 0) {
+      x = null;
+    }
+    async.parallel({
+      add: (cb) => {
+        db.otpAdd(x, (err, res) => cb(err, res));
+      },
+      exit: (cb) => {
+        db.otpExit(x, (err, res) => cb(err, res))
+      },
+      AddTable: (cb) => {
+        db.otpAddTable(x, (err, res) => cb(err, res))
+      },
+      ExitTable: (cb) => {
+        db.otpExitTable(x, (err, res) => cb(err, res))
+      }
+    }, (err, results) => {
+      console.log(err, results);
+      reportOtp.webContents.send('data', ({
+        data: results
+      }))
+    })
+    // db.test(1, (err, res)=>{
+    //   console.log(err, res);
+    // })
+    // async.parallel({
+    //   summary: function(callback){
+    //     db.scrSummary(x, (err, result)=>{
+    //       callback(err, result)
+    //     })
+    //   },
+    //   plw: function(callback){
+    //     db.scrPlw(x, (err, result)=>{
+    //     callback(err, result)
+    //     })
+    //   }
+    //   ,
+    //   child: function(callback){
+    //     db.scrChild(x, (err, result)=>{
+    //       callback(err, result)
+    //     })
+    //   }
+    // }, (err, results)=>{
+    //   if(err) return console.log(err);
+    //   scrReport.webContents.send('data',({
+    //   data:results
+    //   }))
+    // })
+    console.log('test otp report' + arg)
+  })
+  reportOtp.on('close', function () {
+    reportOtp = null;
+  })
+}
 // Creating Admin : Geo Refference
 function createGeoWindow() {
   addScrPlw = new BrowserWindow({
@@ -2608,6 +2790,549 @@ function createSyncWindow() {
   })
 }
 
+// Creating Admin : sync Refference
+function newSync() {
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+
+  var surl = imran.server;
+  console.log(surl);
+  syncNew = new BrowserWindow({
+    width, height,
+    title: 'System: Sync'
+  });
+  syncNew.loadURL(url.format({
+    pathname: path.join(__dirname, '/html/newSync.html'),
+    protocol: 'file:',
+    slashes: true
+  }));
+  ipcMain.on('updateDB', function () {
+    async.series({
+      province: (cb)=>{
+        request(surl + '/getProvince', function (err, response, body) {
+          console.log(body)
+          if (!err) {
+            var data = JSON.parse(body);
+            if (data.length > 0) {
+              data.forEach(el => {
+                knex('tblGeoProvince')
+                  .where({
+                    id: el.id
+                  })
+                  .then(result=>{
+                    if(result.length > 0){
+                      console.log('Province Not added as already available')
+                    } else {
+                    knex('tblGeoProvince')
+                    .insert(el)
+                    .then(ret => {
+                      console.log(ret);
+                  })
+
+                    }
+                  })
+                  
+                  .catch(e=>{
+                   console.log(e)
+                  })    
+                })
+                cb(null, body)
+            }    
+          } else{
+            cb(err)
+          }
+        })
+      },
+      district: (cb)=>{
+        request(surl + '/getDistrict', function (err, response, body) {
+          if (!err)  {
+            // var data = JSON.parse(body);
+            var data = JSON.parse(body);
+            if (data.length > 0) {
+              data.forEach(el => {
+                knex('tblGeoDistrict')
+                  .where({
+                    id: el.id
+                  })
+                  .then(result=>{
+                    if(result.length >0){
+
+                      console.log('District Not added as already available')
+                    }else{
+                      knex('tblGeoDistrict')
+                        .insert(el)
+                        .then(ret=>{
+                         console.log(ret)
+                        })
+                    }
+                  })
+                  
+                  .catch(e=>{
+                    cb(e)
+                  })    
+              })
+              cb(null, body);
+            } 
+          } else {
+            cb(err)
+          }
+        })
+      },
+      tehsil: (cb)=>{
+        request(surl + '/getTehsil', function (err, response, body) {
+          if (!err)  {
+            var data = JSON.parse(body);
+            if (data.length > 0) {
+              data.forEach(el => {
+                knex('tblGeoTehsil')
+                  .where({
+                    id: el.id
+                  })
+                  .then(result=>{
+                    if(result.length >0){
+                    console.log('Tehsil Not added as already available')
+                    } else{
+                knex('tblGeoTehsil')
+                .insert(el)
+                .then(ret=>{
+                  console.log(ret)
+                })
+                    }
+                  })
+                  
+                  .catch(e=>{
+                    cb(e)
+                  })    
+              })
+              cb(null, body);
+            } 
+          } else {
+            cb(err)
+
+          }
+        })
+      },
+      uc:(cb)=>{
+        request(surl + '/getUC', function (err, response, body) {
+          if (!err) {
+            var data = JSON.parse(body);
+            if (data.length > 0) {
+              data.forEach(el => {
+                knex('tblGeoUC')
+                  .where({
+                    id: el.id
+                  })
+                  .then(result => {
+                    if (result.length > 0) {
+                      console.log('UC Allready exists')
+                    } else {
+                      knex.insert(el)
+                        .into('tblGeoUC')
+                        .then(ret => {
+                          console.log(ret);
+    
+                        })
+    
+                    }
+                  })
+                  .catch(e=>{
+                    console.log(e)
+                  })
+    
+              })
+              cb(null, body)
+            }
+          } else {
+            cb(err)
+          }
+        })
+      },
+      site: (cb)=>{
+        request(surl + '/getSite', function (err, response, body) {
+          if (!err)  {
+            var data = JSON.parse(body);
+            if (data.length > 0) {
+              data.forEach(el => {
+                knex('tblGeoNutSite')
+                  .where({
+                    id: el.id
+                  })
+                  .then(result=>{
+                    if(result.length >0){
+                      console.log('Site already avaialble')
+                    } else {
+                knex('tblGeoNutSite')
+                      .insert(el)
+                      .then(ret=>{
+                        console.log(ret)
+                      })
+                    }
+                  })                  
+                  .catch(e=>{
+                    console.log(e)
+                  })
+    
+              })
+              cb(null, body);
+            }     
+          } else {
+            cb(err)
+          }
+        })
+      }
+    }, function(err, results){
+      if(err){
+        console.log(err)
+        syncNew.webContents.send('error', {error:'DB not updated'})
+        syncNew.webContents.send('updateDB', 'a')
+      } else {
+        console.log(results)
+        syncNew.webContents.send('success', {msg: 'DB updated successfully'})
+        syncNew.webContents.send('updateDB', 'a')
+      }
+    })
+  });
+
+  ipcMain.on('updateServer', function () {
+    async.series({
+      uploadScr: (cb)=>{
+        knex('Screening')
+          .where({upload_status:0})
+          .then(result=>{
+            var options = {
+              method: 'POST',
+              uri: surl + '/scrv1',
+              body: result,
+              json: true
+            }
+            // console.log(result)
+            request(options, (err, response, body)=>{
+              if(err){
+                cb(err)
+              } else {
+                console.log(typeof body);
+                // body = JSON.parse(body);
+                if(body.success === 'SCR Added'){
+                  result.forEach(el=>{
+                    console.log(el);
+                     knex('Screening')
+                      .where({screening_id: el.screening_id})
+                      .update('upload_status', 1)
+                      .then(result=>{
+                        console.log(result)
+                      })
+                  })
+                }
+                cb(null, body)
+              }
+            })
+          })
+          
+          .catch(e=>{
+            cb(e)
+          })
+      },
+      updateScr: (cb)=>{
+        knex('Screening')
+          .where({upload_status:2})
+          .then(result=>{
+            var options = {
+              method: 'PUT',
+              uri: surl + '/scrv1',
+              body: result,
+              json: true
+            }
+            // console.log(result)
+            request(options, (err, response, body)=>{
+              if(err){
+                cb(err)
+              } else {
+                console.log(typeof body);
+                // body = JSON.parse(body);
+                if(body.success === 'SCR Updated'){
+                  result.forEach(el=>{
+                    console.log(el);
+                     knex('Screening')
+                      .where({screening_id: el.screening_id})
+                      .update('upload_status', 1)
+                      .then(result=>{
+                        console.log(result)
+                      })
+                  })
+                }
+                cb(null, body)
+              }
+            })
+          })
+          
+          .catch(e=>{
+            cb(e)
+          })
+      },
+      uploadOtp: (cb)=>{
+        knex('tblOtpAdd')
+          .where({upload_status: 0})
+          .orWhereNull('upload_status')
+          .then(result=>{
+            var options = {
+              method: 'POST',
+              uri: surl + '/otpv1',
+              body: result,
+              json: true
+            }
+            request(options, (err, response, body)=>{
+              if(err){
+                cb(err)
+              } else {
+                if(body.success === 'OTP Added'){
+                  cb(null, body);
+                  result.forEach(el=>{
+                    knex('tblOtpAdd')
+                        .where({opt_id: el.otp_id})
+                        .update('upload_status',1)
+                        .then(x=>{
+                          console.log(x)
+                        })
+                  })
+                } else {
+                  cb(body);
+                }
+              }
+            })
+          })
+          .catch(e=>{
+            cb(e)
+          })
+      },
+      updateOtp: (cb)=>{
+        knex('tblOtpAdd')
+          .where({upload_status: 2})
+          .orWhereNull('upload_status')
+          .then(result=>{
+            var options = {
+              method: 'PUT',
+              uri: surl + '/otpv1',
+              body: result,
+              json: true
+            }
+            request(options, (err, response, body)=>{
+              if(err){
+                cb(err)
+              } else {
+                if(body.success === 'OTP Updated'){
+                  cb(null, body);
+                  result.forEach(el=>{
+                    knex('tblOtpAdd')
+                        .where({opt_id: el.otp_id})
+                        .update('upload_status',1)
+                        .then(x=>{
+                          console.log(x)
+                        })
+                  })
+                } else {
+                  cb(body);
+                }
+              }
+            })
+          })
+          .catch(e=>{
+            cb(e)
+          })
+      },
+      uploadOtpExit: (cb)=>{
+        knex('tblOtpExit')
+          .where({upload_status: 0})
+          .orWhereNull('upload_status')
+          .then(result=>{
+            var options = {
+              method: 'POST',
+              uri: surl + '/otpExitv1',
+              body: result,
+              json: true
+            }
+            request(options, (err, response, body)=>{
+              if(err){
+                cb(err)
+              } else {
+                if(body.success === 'OTP Exit Added'){
+                  cb(null, body);
+                  result.forEach(el=>{
+                    knex('tblOtpExit')
+                        .where({opt_id: el.otp_id})
+                        .update('upload_status',1)
+                        .then(x=>{
+                          console.log(x)
+                        })
+                  })
+                } else {
+                  cb(body);
+                }
+              }
+            })
+          })
+          .catch(e=>{
+            cb(e)
+          })
+      },
+      updateOtpExit: (cb)=>{
+        knex('tblOtpExit')
+          .where({upload_status: 2})
+          .orWhereNull('upload_status')
+          .then(result=>{
+            var options = {
+              method: 'PUT',
+              uri: surl + '/otpExitv1',
+              body: result,
+              json: true
+            }
+            request(options, (err, response, body)=>{
+              if(err){
+                cb(err)
+              } else {
+                if(body.success === 'OTP exit updated'){
+                  cb(null, body);
+                  result.forEach(el=>{
+                    knex('tblOtpExit')
+                        .where({opt_id: el.otp_id})
+                        .update('upload_status',1)
+                        .then(x=>{
+                          console.log(x)
+                        })
+                  })
+                } else {
+                  cb(body);
+                }
+              }
+            })
+          })
+          .catch(e=>{
+            cb(e)
+          })
+      },
+      uploadSession: (cb)=>{
+        knex('tblSessions')
+          .where({upload_status: 0})
+          .orWhereNull('upload_status')
+          .then(result=>{
+            var options = {
+              method: 'POST',
+              uri: surl + '/sessionsv1',
+              body: result,
+              json: true
+            }
+            request(options, (err, response, body)=>{
+              if(err){
+                cb(err)
+              } else {
+                if(body.success === 'Sessions uploaded'){
+                  cb(null, body);
+                  result.forEach(el=>{
+                    knex('tblSessions')
+                        .where({session_id: el.session_id})
+                        .update('upload_status',1)
+                        .then(x=>{
+                          console.log(x)
+                        })
+                  })
+                } else {
+                  cb(body);
+                }
+              }
+            })
+          })
+          .catch(e=>{
+            cb(e)
+          })
+      },
+      updateSession: (cb)=>{
+        knex('tblSessions')
+          .where({upload_status: 2})
+          .orWhereNull('upload_status')
+          .then(result=>{
+            var options = {
+              method: 'PUT',
+              uri: surl + '/sessionsv1',
+              body: result,
+              json: true
+            }
+            request(options, (err, response, body)=>{
+              if(err){
+                cb(err)
+              } else {
+                if(body.success === 'Sessions Updated'){
+                  cb(null, body);
+                  result.forEach(el=>{
+                    knex('tblSessions')
+                        .where({session_id: el.session_id})
+                        .update('upload_status',1)
+                        .then(x=>{
+                          console.log(x)
+                        })
+                  })
+                } else {
+                  cb(body);
+                }
+              }
+            })
+          })
+          .catch(e=>{
+            cb(e)
+          })
+      },
+      uploadFollowup: (cb)=>{
+        knex('tblOtpFollowup')
+          .where({upload_status:0})
+          .then(result=>{
+            var options = {
+              method: 'POST',
+              uri: surl + '/followupv1',
+              body: result,
+              json: true
+            }
+            // console.log(result)
+            request(options, (err, response, body)=>{
+              if(err){
+                cb(err)
+              } else {
+                console.log(typeof body);
+                // body = JSON.parse(body);
+                if(body.success === 'Followups Added'){
+                  cb(null, body)
+                  result.forEach(el=>{
+                    console.log(el);
+                     knex('Screening')
+                      .where({followup_id: el.followup_id})
+                      .update('upload_status', 1)
+                      .then(result=>{
+                        console.log(result)
+                      })
+                  })
+                } else {
+                  cb(body)
+                }
+              }
+            })
+          })          
+          .catch(e=>{
+            cb(e)
+          })
+      },
+    }, function(err, results){
+      if(err){
+        syncNew.webContents.send('error', {error:'Server not updated'})
+        syncNew.webContents.send('updateServer','a')
+        console.log(err)
+      } else{
+        console.log(results)
+        syncNew.webContents.send('success', {msg: 'DB updated successfully'})
+        syncNew.webContents.send('updateServer','a')
+
+      }
+    })
+  })
+  syncNew.on('close', function () {
+    syncNew = null;
+  })
+}
 
 
 
@@ -2664,7 +3389,8 @@ const mainMenuTemplate = [
       {
         label: 'Sync',
         click() {
-          createSyncWindow();
+          newSync();
+          // createSyncWindow();
         }
       }
     ]
