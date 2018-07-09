@@ -2,7 +2,7 @@ const ipc = require('electron').ipcRenderer;
   
 
 $(function(){
-  ipc.send('getProvince');
+  ipc.send('otpRpt_getProvince');
   ipc.on('province', function(evt, province){
     $('#ddProvince').children('option:not(:first)').remove();
     
@@ -13,7 +13,7 @@ $(function(){
     })
     $('#ddProvince').on('change', function(){
       var prov = $(this).val();
-      ipc.send('getDistrict', prov )
+      ipc.send('otpRpt_getDistrict', prov )
       ipc.on('district', function(evt, district){
         $('#ddDistrict').children('option:not(:first)').remove();
         district.district.forEach(el=>{
@@ -23,7 +23,7 @@ $(function(){
     })
     $('#ddDistrict').on('change', function(){
       var dist = $(this).val();
-      ipc.send('getTehsil', dist )
+      ipc.send('otpRpt_getTehsil', dist )
       ipc.on('tehsil', function(evt, tehsil){
         $('#ddTehsil').children('option:not(:first)').remove();
         tehsil.tehsil.forEach(el=>{
@@ -33,7 +33,7 @@ $(function(){
     })
     $('#ddTehsil').on('change', function(){
       var tehs = $(this).val();
-      ipc.send('getUC', tehs )
+      ipc.send('otpRpt_getUC', tehs )
       ipc.on('uc', function(evt, uc){
         $('#ddUC').children('option:not(:first)').remove();
         uc.uc.forEach(el=>{
@@ -45,7 +45,7 @@ $(function(){
     $('#ddUC').on('change', function(){
       var ucs = $(this).val();
       ucForHH = ucs
-      ipc.send('getHealthHouse', ucs )
+      ipc.send('otpRpt_getHealthHouse', ucs )
       ipc.on('hh', function(evt, hh){
         $('#ddHealthHouse').children('option:not(:first)').remove();
         hh.hh.forEach(el=>{

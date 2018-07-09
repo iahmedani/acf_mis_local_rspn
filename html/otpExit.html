@@ -275,7 +275,7 @@
         delete formData.gender;
         delete formData.village;
         e.preventDefault();
-        ipc.send('otpExit', formData);
+        ipc.send('otpExitAdd', formData);
         $("#grid").jsGrid("refresh");
         
       }
@@ -299,7 +299,7 @@
       datePickerId.max = new Date().toISOString().split("T")[0];
     });
     $(function () {
-      ipc.send('getProvince');
+      ipc.send('otpExit_getProvince');
       ipc.on('province', function (evt, province) {
         $('#ddProvince').children('option:not(:first)').remove();
 
@@ -310,7 +310,7 @@
       })
       $('#ddProvince').on('change', function () {
         var prov = $(this).val();
-        ipc.send('getDistrict', prov)
+        ipc.send('otpExit_getDistrict', prov)
         ipc.on('district', function (evt, district) {
           $('#ddDistrict').children('option:not(:first)').remove();
           district.district.forEach(el => {
@@ -320,7 +320,7 @@
       })
       $('#ddDistrict').on('change', function () {
         var dist = $(this).val();
-        ipc.send('getTehsil', dist)
+        ipc.send('otpExit_getTehsil', dist)
         ipc.on('tehsil', function (evt, tehsil) {
           $('#ddTehsil').children('option:not(:first)').remove();
           tehsil.tehsil.forEach(el => {
@@ -330,7 +330,7 @@
       })
       $('#ddTehsil').on('change', function () {
         var tehs = $(this).val();
-        ipc.send('getUC', tehs)
+        ipc.send('otpExit_getUC', tehs)
         ipc.on('uc', function (evt, uc) {
           $('#ddUC').children('option:not(:first)').remove();
           uc.uc.forEach(el => {
@@ -342,7 +342,7 @@
       $('#ddUC').on('change', function () {
         var ucs = $(this).val();
         ucForHH = ucs
-        ipc.send('getHealthHouse', ucs)
+        ipc.send('otpExit_getHealthHouse', ucs)
         ipc.on('hh', function (evt, hh) {
           $('#ddHealthHouse').children('option:not(:first)').remove();
           hh.hh.forEach(el => {
@@ -353,8 +353,8 @@
 
       let xx = (site_id)=>{
         return new Promise((resolve, reject)=>{
-          ipc.send('get', site_id);
-          ipc.on('have', (e, result)=>{
+          ipc.send('getOtpAll', site_id);
+          ipc.on('getOtpAll', (e, result)=>{
             var s = {
               data: result.result,
               itemsCount: result.result.length
@@ -394,9 +394,6 @@
               console.log('update')
               console.log(item);
               return addFollowup(item);
-            },
-            rowByItem: function(item){
-              console.log(item);
             }
           },
           fields: [{
@@ -448,7 +445,7 @@
         });
       })
     })
-    ipc.on('resultSent', function (evt, result) {
+    ipc.on('resultSentOtpExitAdd', function (evt, result) {
       $('body').append(`<div class="alert alert-primary" role="alert">
  ${result.msg}
 </div>`)

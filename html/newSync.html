@@ -185,8 +185,8 @@
       error = '';
     })
       })
-      ipc.on('err', (e, x)=>{
-        $('body').append(`<div class="alert alert-success alert-dismissible fade show" role="alert">${x.success}</div>`)  
+      ipc.on('success', (e, x)=>{
+        $('body').append(`<div class="alert alert-success alert-dismissible fade show" role="alert">${x.msg}</div>`)  
     $('.alert').alert()
     $(".alert").fadeTo(3000, 1000).slideUp(500, function(){
     $(".alert").alert('close');

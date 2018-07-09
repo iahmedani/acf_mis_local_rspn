@@ -496,7 +496,7 @@
       datePickerId.max = new Date().toISOString().split("T")[0];
     });
     $(function () {
-      ipc.send('getProvince');
+      ipc.send('addOtp_getProvince');
       ipc.on('province', function (evt, province) {
         $('#ddProvince').children('option:not(:first)').remove();
 
@@ -507,7 +507,7 @@
       })
       $('#ddProvince').on('change', function () {
         var prov = $(this).val();
-        ipc.send('getDistrict', prov)
+        ipc.send('addOtp_getDistrict', prov)
         ipc.on('district', function (evt, district) {
           $('#ddDistrict').children('option:not(:first)').remove();
           district.district.forEach(el => {
@@ -517,7 +517,7 @@
       })
       $('#ddDistrict').on('change', function () {
         var dist = $(this).val();
-        ipc.send('getTehsil', dist)
+        ipc.send('addOtp_getTehsil', dist)
         ipc.on('tehsil', function (evt, tehsil) {
           $('#ddTehsil').children('option:not(:first)').remove();
           tehsil.tehsil.forEach(el => {
@@ -527,7 +527,7 @@
       })
       $('#ddTehsil').on('change', function () {
         var tehs = $(this).val();
-        ipc.send('getUC', tehs)
+        ipc.send('addOtp_getUC', tehs)
         ipc.on('uc', function (evt, uc) {
           $('#ddUC').children('option:not(:first)').remove();
           uc.uc.forEach(el => {
@@ -539,7 +539,7 @@
       $('#ddUC').on('change', function () {
         var ucs = $(this).val();
         ucForHH = ucs
-        ipc.send('getHealthHouse', ucs)
+        ipc.send('addOtp_getHealthHouse', ucs)
         ipc.on('hh', function (evt, hh) {
           $('#ddHealthHouse').children('option:not(:first)').remove();
           hh.hh.forEach(el => {
@@ -550,7 +550,7 @@
       $('#ddHealthHouse').on('change', function () {
         // var ucs = $('#ddUC').val();
         var h_id = $(this).val();
-        ipc.send('getHealthHouseType', h_id)
+        ipc.send('addOtp_getHealthHouseType', h_id)
         ipc.on('hhType', function (evt, hh) {
           // var result = hh.hh.filter(el => el.id == $(this).val());
           if (h_id === "") {
@@ -575,7 +575,7 @@
         })
       })
     })
-    ipc.on('resultSent', function (evt, result) {
+    ipc.on('resultSentOtpAdd', function (evt, result) {
       $('body').append(`<div class="alert alert-primary" role="alert">
  ${result.msg}
 </div>`)

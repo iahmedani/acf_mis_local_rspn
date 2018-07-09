@@ -133,7 +133,7 @@
     return new Date(year, month, 0).getDate();
 }
       $(function(){
-      ipc.send('getProvince');
+      ipc.send('scrPlwUpd_getProvince');
       ipc.on('province', function(evt, province){
         $('#ddProvince').children('option:not(:first)').remove();
         
@@ -144,7 +144,7 @@
         })
         $('#ddProvince').on('change', function(){
           var prov = $(this).val();
-          ipc.send('getDistrict', prov )
+          ipc.send('scrPlwUpd_getDistrict', prov )
           ipc.on('district', function(evt, district){
             $('#ddDistrict').children('option:not(:first)').remove();
             district.district.forEach(el=>{
@@ -154,7 +154,7 @@
         })
         $('#ddDistrict').on('change', function(){
           var dist = $(this).val();
-          ipc.send('getTehsil', dist )
+          ipc.send('scrPlwUpd_getTehsil', dist )
           ipc.on('tehsil', function(evt, tehsil){
             $('#ddTehsil').children('option:not(:first)').remove();
             tehsil.tehsil.forEach(el=>{
@@ -164,7 +164,7 @@
         })
         $('#ddTehsil').on('change', function(){
           var tehs = $(this).val();
-          ipc.send('getUC', tehs )
+          ipc.send('scrPlwUpd_getUC', tehs )
           ipc.on('uc', function(evt, uc){
             $('#ddUC').children('option:not(:first)').remove();
             uc.uc.forEach(el=>{
@@ -176,7 +176,7 @@
         $('#ddUC').on('change', function(){
           var ucs = $(this).val();
           ucForHH = ucs
-          ipc.send('getHealthHouse', ucs )
+          ipc.send('scrPlwUpd_getHealthHouse', ucs )
           ipc.on('hh', function(evt, hh){
             $('#ddHealthHouse').children('option:not(:first)').remove();
             hh.hh.forEach(el=>{
@@ -249,8 +249,8 @@
   // })
   let getDataFilters = (filters)=>{
     return new Promise((resolve, reject) => { 
-    ipc.send('get', filters);
-    ipc.on('get',(e, result)=>{
+    ipc.send('getScrPlwAll', filters);
+    ipc.on('getScrPlwAll',(e, result)=>{
       console.log(result)
       var s = {
         data: result.result,
@@ -266,8 +266,8 @@
 }
       const myUpdate = (data)=>{
         return new Promise((resolve, reject)=>{
-          ipc.send('update', data);
-          ipc.on('update', (e, result)=>{
+          ipc.send('updScrPlwSingle', data);
+          ipc.on('updScrPlwSingle', (e, result)=>{
             
       if(result.err){
         reject(result.err)

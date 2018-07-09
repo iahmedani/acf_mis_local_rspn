@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>OTP Addmision</title>
+  <title>Exit Entry Update</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <!-- Bootstrap CSS -->
@@ -276,8 +276,9 @@
         delete formData.gender;
         delete formData.village;
         e.preventDefault();
-        ipc.send('otpExit', formData);
+        ipc.send('otpExitUpdate', formData);
         // $("#grid").jsGrid("refresh");
+        location.reload();
         
       }
     })
@@ -300,7 +301,7 @@
       datePickerId.max = new Date().toISOString().split("T")[0];
     });
     $(function () {
-      ipc.send('getProvince');
+      ipc.send('otpExitUpd_getProvince');
       ipc.on('province', function (evt, province) {
         $('#ddProvince').children('option:not(:first)').remove();
 
@@ -311,7 +312,7 @@
       })
       $('#ddProvince').on('change', function () {
         var prov = $(this).val();
-        ipc.send('getDistrict', prov)
+        ipc.send('otpExitUpd_getDistrict', prov)
         ipc.on('district', function (evt, district) {
           $('#ddDistrict').children('option:not(:first)').remove();
           district.district.forEach(el => {
@@ -321,7 +322,7 @@
       })
       $('#ddDistrict').on('change', function () {
         var dist = $(this).val();
-        ipc.send('getTehsil', dist)
+        ipc.send('otpExitUpd_getTehsil', dist)
         ipc.on('tehsil', function (evt, tehsil) {
           $('#ddTehsil').children('option:not(:first)').remove();
           tehsil.tehsil.forEach(el => {
@@ -331,7 +332,7 @@
       })
       $('#ddTehsil').on('change', function () {
         var tehs = $(this).val();
-        ipc.send('getUC', tehs)
+        ipc.send('otpExitUpd_getUC', tehs)
         ipc.on('uc', function (evt, uc) {
           $('#ddUC').children('option:not(:first)').remove();
           uc.uc.forEach(el => {
@@ -343,7 +344,7 @@
       $('#ddUC').on('change', function () {
         var ucs = $(this).val();
         ucForHH = ucs
-        ipc.send('getHealthHouse', ucs)
+        ipc.send('otpExitUpd_getHealthHouse', ucs)
         ipc.on('hh', function (evt, hh) {
           $('#ddHealthHouse').children('option:not(:first)').remove();
           hh.hh.forEach(el => {
@@ -439,9 +440,10 @@
             $('#exit_ration1').val(data.exit_ration1);
             $('#exit_ration2').val(data.exit_ration2);
             $('#exit_ration3').val(data.exit_ration3);
-            $('#exit_quantity1').val(data.quantity1);
-            $('#exit_quantity2').val(data.quantity2);
-            $('#exit_quantity3').val(data.quantity3);
+            $('#exit_quantity1').val(data.exit_quantity1);
+            $('#exit_quantity2').val(data.exit_quantity2);
+            $('#exit_quantity3').val(data.exit_quantity3);
+            $('#exit_reason').val(data.exit_reason);
 
             console.log(args.item);
           }
@@ -459,7 +461,7 @@
         });
       })
     })
-    ipc.on('resultSent', function (evt, result) {
+    ipc.on('resultSentOtpExitUpd', function (evt, result) {
       $('body').append(`<div class="alert alert-primary" role="alert">
  ${result.msg}
 </div>`)

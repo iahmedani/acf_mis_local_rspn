@@ -8,6 +8,7 @@ const {
 const url = require('url');
 const path = require('path');
 var fs = require('fs');
+var geo = require('./geoData');
 var imran = JSON.parse(fs.readFileSync('./settings.json', 'utf8'))
 console.log(imran);
 var async = require('async');
@@ -105,93 +106,43 @@ function sessions() {
     protocol: 'file:',
     slashes: true
   }));
-  ipcMain.on('getProvince', function (event) {
-    knex('tblGeoProvince')
-      .then(result => {
-        session.webContents.send('province', ({
-          province: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+  ipcMain.on('ses_getProvince', function (event) {
+    geo.provincev2(event);
   });
-  ipcMain.on('getDistrict', function (event, prov) {
+  ipcMain.on('ses_getDistrict', function (event, prov) {
     console.log(prov)
-    knex('tblGeoDistrict')
-      .where({
-        province_id: prov
-      })
-      .then(result => {
-        session.webContents.send('district', ({
-          district: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.district(prov, session);
   });
-  ipcMain.on('getTehsil', function (event, dist) {
+  ipcMain.on('ses_getTehsil', function (event, dist) {
+    geo.tehsil(dist, session);
     console.log(dist)
-    knex('tblGeoTehsil')
-      .where({
-        district_id: dist
-      })
-      .then(result => {
-        session.webContents.send('tehsil', ({
-          tehsil: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
   });
-  ipcMain.on('getUC', function (event, tehs) {
+  ipcMain.on('ses_getUC', function (event, tehs) {
     console.log(tehs)
-    knex('tblGeoUC')
-      .where({
-        tehsil_id: tehs
-      })
-      .then(result => {
-        session.webContents.send('uc', ({
-          uc: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.uc(tehs,session);
+
   });
-  ipcMain.on('getHealthHouse', function (event, ucs) {
+  ipcMain.on('ses_getHealthHouse', function (event, ucs) {
     console.log(ucs)
-    knex('tblGeoNutSite')
-      .where({
-        uc_id: ucs
-      })
-      .then(result => {
-        session.webContents.send('hh', ({
-          hh: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.healthHouse(ucs, session);
+
   });
-  ipcMain.on('get', (e, data) => {
+  ipcMain.on('getSessionsAll', (e, data) => {
     console.log(data);
     knex('tblSessions')
       .where('site_id', data)
       .then(result => {
-        session.webContents.send('get', ({
+        session.webContents.send('getSessionsAll', ({
           result: result
         }))
       })
       .catch(e => {
-        session.webContents.send('get', ({
+        session.webContents.send('getSessionsAll', ({
           err: e
         }))
       })
   });
-  ipcMain.on('insert', (e, item) => {
+  ipcMain.on('insertSessionsSingle', (e, item) => {
     item.upload_status = 0;
     item.client_id = client_id;
     item.created_at = localDate();
@@ -215,18 +166,18 @@ function sessions() {
           msg: 'insert return item',
           result: result
         })
-        session.webContents.send('insert', ({
+        session.webContents.send('insertSessionsSingle', ({
           result: result
         }))
       })
       .catch(e => {
-        session.webContents.send('insert', ({
+        session.webContents.send('insertSessionsSingle', ({
           err: e
         }))
       })
       item = null;
   });
-  ipcMain.on('update', (e, item) => {
+  ipcMain.on('updateSessionsSingle', (e, item) => {
     item.upload_status = 2;
     item.updated_at = localDate();
     knex('tblSessions')
@@ -237,12 +188,12 @@ function sessions() {
           .where('session_id', item.session_id)
       })
       .then(result => {
-        session.webContents.send('update', ({
+        session.webContents.send('updateSessionsSingle', ({
           result: result
         }))
       })
       .catch(e => {
-        session.webContents.send('update', ({
+        session.webContents.send('updateSessionsSingle', ({
           err: e
         }))
       })
@@ -270,76 +221,26 @@ function otpAddUpdate() {
     slashes: true
   }))
 
-  ipcMain.on('getProvince', function (event) {
-    knex('tblGeoProvince')
-      .then(result => {
-        otpUpdate.webContents.send('province', ({
-          province: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+  ipcMain.on('otpUpd_getProvince', function (event) {
+    geo.province(otpUpdate);
   });
-  ipcMain.on('getDistrict', function (event, prov) {
+  ipcMain.on('otpUpd_getDistrict', function (event, prov) {
     console.log(prov)
-    knex('tblGeoDistrict')
-      .where({
-        province_id: prov
-      })
-      .then(result => {
-        otpUpdate.webContents.send('district', ({
-          district: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.district(prov, otpUpdate);
   });
-  ipcMain.on('getTehsil', function (event, dist) {
+  ipcMain.on('otpUpd_getTehsil', function (event, dist) {
+    geo.tehsil(dist, otpUpdate);
     console.log(dist)
-    knex('tblGeoTehsil')
-      .where({
-        district_id: dist
-      })
-      .then(result => {
-        otpUpdate.webContents.send('tehsil', ({
-          tehsil: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
   });
-  ipcMain.on('getUC', function (event, tehs) {
+  ipcMain.on('otpUpd_getUC', function (event, tehs) {
     console.log(tehs)
-    knex('tblGeoUC')
-      .where({
-        tehsil_id: tehs
-      })
-      .then(result => {
-        otpUpdate.webContents.send('uc', ({
-          uc: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.uc(tehs,otpUpdate);
+
   });
-  ipcMain.on('getHealthHouse', function (event, ucs) {
+  ipcMain.on('otpUpd_getHealthHouse', function (event, ucs) {
     console.log(ucs)
-    knex('tblGeoNutSite')
-      .where({
-        uc_id: ucs
-      })
-      .then(result => {
-        otpUpdate.webContents.send('hh', ({
-          hh: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.healthHouse(ucs, otpUpdate);
+
   });
   ipcMain.on('allOtp', (e, site_id) => {
     knex('tblOtpAdd')
@@ -361,13 +262,15 @@ function otpAddUpdate() {
   ipcMain.on('updateOtp', (e, item) => {
     console.log(item);
     item.upload_status = 2;
+    const otp_id_us = item.otp_id;
     knex('tblOtpAdd')
       .update(item)
       .where('otp_id', item.otp_id)
       .then(result => {
         console.log(result)
+        console.log('from return result ',item)
         return knex('tblOtpAdd')
-          .where('otp_id', item.otp_id)
+          .where('otp_id',otp_id_us)
       })
       .then(result => {
         otpUpdate.webContents.send('updateOtp', ({
@@ -402,79 +305,29 @@ function otpExit() {
     protocol: 'file:',
     slashes: true
   }))
-  ipcMain.on('getProvince', function (event) {
-    knex('tblGeoProvince')
-      .then(result => {
-        exitOtp.webContents.send('province', ({
-          province: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+  ipcMain.on('otpExit_getProvince', function (event) {
+    geo.province(exitOtp);
   });
-  ipcMain.on('getDistrict', function (event, prov) {
+  ipcMain.on('otpExit_getDistrict', function (event, prov) {
     console.log(prov)
-    knex('tblGeoDistrict')
-      .where({
-        province_id: prov
-      })
-      .then(result => {
-        exitOtp.webContents.send('district', ({
-          district: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.district(prov, exitOtp);
   });
-  ipcMain.on('getTehsil', function (event, dist) {
+  ipcMain.on('otpExit_getTehsil', function (event, dist) {
+    geo.tehsil(dist, exitOtp);
     console.log(dist)
-    knex('tblGeoTehsil')
-      .where({
-        district_id: dist
-      })
-      .then(result => {
-        exitOtp.webContents.send('tehsil', ({
-          tehsil: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
   });
-  ipcMain.on('getUC', function (event, tehs) {
+  ipcMain.on('otpExit_getUC', function (event, tehs) {
     console.log(tehs)
-    knex('tblGeoUC')
-      .where({
-        tehsil_id: tehs
-      })
-      .then(result => {
-        exitOtp.webContents.send('uc', ({
-          uc: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.uc(tehs,exitOtp);
+
   });
-  ipcMain.on('getHealthHouse', function (event, ucs) {
+  ipcMain.on('otpExit_getHealthHouse', function (event, ucs) {
     console.log(ucs)
-    knex('tblGeoNutSite')
-      .where({
-        uc_id: ucs
-      })
-      .then(result => {
-        exitOtp.webContents.send('hh', ({
-          hh: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.healthHouse(ucs, exitOtp);
+
   });
 
-  ipcMain.on('get', (e, site_id) => {
+  ipcMain.on('getOtpAll', (e, site_id) => {
 
     knex.from('tblOtpAdd')
       .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
@@ -483,31 +336,31 @@ function otpExit() {
         status: 'open'
       })
       .then(result => {
-        exitOtp.webContents.send('have', ({
+        exitOtp.webContents.send('getOtpAll', ({
           result: result
         }))
       })
       .catch(e => {
-        exitOtp.webContents.send('have', ({
+        exitOtp.webContents.send('getOtpAll', ({
           err: e
         }))
       })
   });
-  ipcMain.on('otpExit', (e, data) => {
+  ipcMain.on('otpExitAdd', (e, data) => {
     data.client_id = imran.client;
     data.upload_status = 0;
-    knex('tblSessions')
+    const otpExitAddData= data;
+    knex('tblOtpExit')
       .insert(data)
       .then(result => {
         console.log(result);
-
-        exitOtp.webContents.send('resultSent', ({
+        exitOtp.webContents.send('resultSentOtpExitAdd', ({
           msg: 'Record saved successfully'
         }))
         return knex('tblInterimOtp')
-          .where('otp_id', data.otp_id)
+          .where('otp_id', otpExitAddData.otp_id)
           .update({
-            status: data.exit_reason
+            status: otpExitAddData.exit_reason
           })
       })
       .then(result => {
@@ -518,7 +371,7 @@ function otpExit() {
       })
       .catch(e => {
         console.log(e);
-        exitOtp.webContents.send('resultSent', ({
+        exitOtp.webContents.send('resultSentOtpExitAdd', ({
           msg: 'Record not saved, error in db'
         }))
       })
@@ -544,86 +397,37 @@ function otpExitEdit() {
     protocol: 'file:',
     slashes: true
   }))
-  ipcMain.on('getProvince', function (event) {
-    knex('tblGeoProvince')
-      .then(result => {
-        exitOtpEdit.webContents.send('province', ({
-          province: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+  ipcMain.on('otpExitUpd_getProvince', function (event) {
+    geo.province(exitOtpEdit);
   });
-  ipcMain.on('getDistrict', function (event, prov) {
+  ipcMain.on('otpExitUpd_getDistrict', function (event, prov) {
     console.log(prov)
-    knex('tblGeoDistrict')
-      .where({
-        province_id: prov
-      })
-      .then(result => {
-        exitOtpEdit.webContents.send('district', ({
-          district: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.district(prov, exitOtpEdit);
   });
-  ipcMain.on('getTehsil', function (event, dist) {
+  ipcMain.on('otpExitUpd_getTehsil', function (event, dist) {
+    geo.tehsil(dist, exitOtpEdit);
     console.log(dist)
-    knex('tblGeoTehsil')
-      .where({
-        district_id: dist
-      })
-      .then(result => {
-        exitOtpEdit.webContents.send('tehsil', ({
-          tehsil: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
   });
-  ipcMain.on('getUC', function (event, tehs) {
+  ipcMain.on('otpExitUpd_getUC', function (event, tehs) {
     console.log(tehs)
-    knex('tblGeoUC')
-      .where({
-        tehsil_id: tehs
-      })
-      .then(result => {
-        exitOtpEdit.webContents.send('uc', ({
-          uc: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.uc(tehs,exitOtpEdit);
+
   });
-  ipcMain.on('getHealthHouse', function (event, ucs) {
+  ipcMain.on('otpExitUpd_getHealthHouse', function (event, ucs) {
     console.log(ucs)
-    knex('tblGeoNutSite')
-      .where({
-        uc_id: ucs
-      })
-      .then(result => {
-        exitOtpEdit.webContents.send('hh', ({
-          hh: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.healthHouse(ucs, exitOtpEdit);
+
   });
 
   ipcMain.on('get', (e, site_id) => {
 
-    knex.from('tblOtpAdd')
-      .innerJoin('tblOtpExit', 'tblOtpExit.otp_id', 'tblOtpAdd.otp_id')
+    knex.from('tblOtpExit')
+      .innerJoin('tblOtpAdd', 'tblOtpAdd.otp_id', 'tblOtpExit.otp_id')
       .where({
         site_id: site_id,
       })
       .then(result => {
+        console.log(result)
         exitOtpEdit.webContents.send('have', ({
           result: result
         }))
@@ -635,22 +439,25 @@ function otpExitEdit() {
       })
       site_id = null;
   });
-  ipcMain.on('otpExit', (e, data) => {
+  ipcMain.on('otpExitUpdate', (e, data) => {
     data.client_id = imran.client;
     data.upload_status = 2;
+    const otpExitAddData = data;
+    console.log(otpExitAddData);
+
     knex('tblOtpExit')
-      .where('otp_id', data.otp_id)
-      .update(data)
+      .where('otp_id', otpExitAddData.otp_id)
+      .update(otpExitAddData)
       .then(result => {
         console.log(result);
 
-        exitOtpEdit.webContents.send('resultSent', ({
-          msg: 'Record updated successfully'
-        }))
+        // exitOtpEdit.webContents.send('resultSentOtpExitUpd', ({
+        //   msg: 'Record updated successfully'
+        // }))
         return knex('tblInterimOtp')
-          .where('otp_id', data.otp_id)
+          .where('otp_id', otpExitAddData.otp_id)
           .update({
-            status: data.exit_reason
+            status: otpExitAddData.exit_reason
           })
       })
       .then(result => {
@@ -661,7 +468,7 @@ function otpExitEdit() {
       })
       .catch(e => {
         console.log(e);
-        exitOtpEdit.webContents.send('resultSent', ({
+        exitOtpEdit.webContents.send('resultSentOtpExitUpd', ({
           msg: 'Record not updated, error in db'
         }))
       })
@@ -687,76 +494,26 @@ function addFollowupOtp() {
     slashes: true
   }))
 
-  ipcMain.on('getProvince', function (event) {
-    knex('tblGeoProvince')
-      .then(result => {
-        otpFollowup.webContents.send('province', ({
-          province: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+  ipcMain.on('followUp_getProvince', function (event) {
+    geo.province(otpFollowup);
   });
-  ipcMain.on('getDistrict', function (event, prov) {
+  ipcMain.on('followUp_getDistrict', function (event, prov) {
     console.log(prov)
-    knex('tblGeoDistrict')
-      .where({
-        province_id: prov
-      })
-      .then(result => {
-        otpFollowup.webContents.send('district', ({
-          district: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.district(prov, otpFollowup);
   });
-  ipcMain.on('getTehsil', function (event, dist) {
+  ipcMain.on('followUp_getTehsil', function (event, dist) {
+    geo.tehsil(dist, otpFollowup);
     console.log(dist)
-    knex('tblGeoTehsil')
-      .where({
-        district_id: dist
-      })
-      .then(result => {
-        otpFollowup.webContents.send('tehsil', ({
-          tehsil: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
   });
-  ipcMain.on('getUC', function (event, tehs) {
+  ipcMain.on('followUp_getUC', function (event, tehs) {
     console.log(tehs)
-    knex('tblGeoUC')
-      .where({
-        tehsil_id: tehs
-      })
-      .then(result => {
-        otpFollowup.webContents.send('uc', ({
-          uc: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.uc(tehs,otpFollowup);
+
   });
-  ipcMain.on('getHealthHouse', function (event, ucs) {
+  ipcMain.on('followUp_getHealthHouse', function (event, ucs) {
     console.log(ucs)
-    knex('tblGeoNutSite')
-      .where({
-        uc_id: ucs
-      })
-      .then(result => {
-        otpFollowup.webContents.send('hh', ({
-          hh: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.healthHouse(ucs, otpFollowup);
+
   });
 
   // sending data from interm table
@@ -1041,93 +798,33 @@ function scrAddChild() {
     protocol: 'file:',
     slashes: true
   }));
-  ipcMain.on('getProvince', function (event) {
-    knex('tblGeoProvince')
-      .then(result => {
-        addScrChild.webContents.send('province', ({
-          province: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+  ipcMain.on('scrCh_getProvince', function (event) {
+    geo.province(addScrChild);
   });
-  ipcMain.on('getDistrict', function (event, prov) {
+  ipcMain.on('scrCh_getDistrict', function (event, prov) {
     console.log(prov)
-    knex('tblGeoDistrict')
-      .where({
-        province_id: prov
-      })
-      .then(result => {
-        addScrChild.webContents.send('district', ({
-          district: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.district(prov, addScrChild);
   });
-  ipcMain.on('getTehsil', function (event, dist) {
+  ipcMain.on('scrCh_getTehsil', function (event, dist) {
+    geo.tehsil(dist, addScrChild);
     console.log(dist)
-    knex('tblGeoTehsil')
-      .where({
-        district_id: dist
-      })
-      .then(result => {
-        addScrChild.webContents.send('tehsil', ({
-          tehsil: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
   });
-  ipcMain.on('getUC', function (event, tehs) {
+  ipcMain.on('scrCh_getUC', function (event, tehs) {
     console.log(tehs)
-    knex('tblGeoUC')
-      .where({
-        tehsil_id: tehs
-      })
-      .then(result => {
-        addScrChild.webContents.send('uc', ({
-          uc: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.uc(tehs,addScrChild);
+
   });
-  ipcMain.on('getHealthHouse', function (event, ucs) {
+  ipcMain.on('scrCh_getHealthHouse', function (event, ucs) {
     console.log(ucs)
-    knex('tblGeoNutSite')
-      .where({
-        uc_id: ucs
-      })
-      .then(result => {
-        addScrChild.webContents.send('hh', ({
-          hh: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.healthHouse(ucs, addScrChild);
+
   });
-  ipcMain.on('getHealthHouseType', function (event, h_id) {
-    knex('tblGeoNutSite')
-      .where({
-        id: h_id
-      })
-      .then(result => {
-        addScrChild.webContents.send('hhType', ({
-          hh: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+  ipcMain.on('scrCh_getHealthHouseType', function (event, h_id) {
+    geo.healthHouseType(h_id, addScrChild);
   });
 
-  ipcMain.on('submitFormChild', function (event, scrForm) {
+  ipcMain.on('scrAddChild', function (event, scrForm) {
+    console.log(scrForm)
     var village = scrForm.txtVillage;
     var site_id = scrForm.ddHealthHouse;
     var screening_type = scrForm.scrChildScrType;
@@ -1181,16 +878,17 @@ function scrAddChild() {
       single.status = scrForm.ddScrChildStatus;
       single.upload_status = 0;
     }
+    console.log(data)
     if (data.length < 1) {
       knex('Screening')
         .insert(single)
         .then(result => {
-          addScrChild.webContents.send("resultSent", {
+          addScrChild.webContents.send("scrChAddResp", {
             'msg': 'record added'
           });
         })
         .catch(err => {
-          addScrChild.webContents.send("resultSent", {
+          addScrChild.webContents.send("scrChAddResp", {
             'msg': 'eror occured, plz try again'
           });
         })
@@ -1198,12 +896,12 @@ function scrAddChild() {
       knex('Screening')
         .insert(data)
         .then(result => {
-          addScrChild.webContents.send("resultSent", {
+          addScrChild.webContents.send("scrChAddResp", {
             'msg': 'records added'
           });
         })
         .catch(err => {
-          addScrChild.webContents.send("resultSent", {
+          addScrChild.webContents.send("scrChAddResp", {
             'msg': 'eror occured, plz try again'
           });
         })
@@ -1232,92 +930,31 @@ function scrAddPlw() {
     protocol: 'file:',
     slashes: true
   }));
-  ipcMain.on('getProvince', function (event) {
-    knex('tblGeoProvince')
-      .then(result => {
-        addScrPlw.webContents.send('province', ({
-          province: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+  ipcMain.on('scrPlw_getProvince', function (event) {
+    geo.province(addScrPlw);
   });
-  ipcMain.on('getDistrict', function (event, prov) {
+  ipcMain.on('scrPlw_getDistrict', function (event, prov) {
     console.log(prov)
-    knex('tblGeoDistrict')
-      .where({
-        province_id: prov
-      })
-      .then(result => {
-        addScrPlw.webContents.send('district', ({
-          district: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.district(prov, addScrPlw);
   });
-  ipcMain.on('getTehsil', function (event, dist) {
+  ipcMain.on('scrPlw_getTehsil', function (event, dist) {
+    geo.tehsil(dist, addScrPlw);
     console.log(dist)
-    knex('tblGeoTehsil')
-      .where({
-        district_id: dist
-      })
-      .then(result => {
-        addScrPlw.webContents.send('tehsil', ({
-          tehsil: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
   });
-  ipcMain.on('getUC', function (event, tehs) {
+  ipcMain.on('scrPlw_getUC', function (event, tehs) {
     console.log(tehs)
-    knex('tblGeoUC')
-      .where({
-        tehsil_id: tehs
-      })
-      .then(result => {
-        addScrPlw.webContents.send('uc', ({
-          uc: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.uc(tehs,addScrPlw);
+
   });
-  ipcMain.on('getHealthHouse', function (event, ucs) {
+  ipcMain.on('scrPlw_getHealthHouse', function (event, ucs) {
     console.log(ucs)
-    knex('tblGeoNutSite')
-      .where({
-        uc_id: ucs
-      })
-      .then(result => {
-        addScrPlw.webContents.send('hh', ({
-          hh: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.healthHouse(ucs, addScrPlw);
+
   });
-  ipcMain.on('getHealthHouseType', function (event, h_id) {
-    knex('tblGeoNutSite')
-      .where({
-        id: h_id
-      })
-      .then(result => {
-        addScrPlw.webContents.send('hhType', ({
-          hh: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+  ipcMain.on('scrPlw_getHealthHouseType', function (event, h_id) {
+    geo.healthHouseType(h_id, addScrPlw);
   });
-  ipcMain.on('submitFormPlw', function (evenet, scrForm) {
+  ipcMain.on('scrPlwAdd', function (evenet, scrForm) {
     var village = scrForm.txtVillage;
     var site_id = scrForm.ddHealthHouse;
     var screening_type = scrForm.scrPlwScrType;
@@ -1376,13 +1013,13 @@ function scrAddPlw() {
         .insert(single)
         .then(result => {
           console.log('plw single', result);
-          addScrPlw.webContents.send("resultSent", {
+          addScrPlw.webContents.send("scrPlwResp", {
             'msg': 'record added'
           });
         })
         .catch(err => {
           console.log(err);
-          addScrPlw.webContents.send("resultSent", {
+          addScrPlw.webContents.send("scrPlwResp", {
             'msg': 'eror occured, plz try again'
           });
         })
@@ -1390,12 +1027,12 @@ function scrAddPlw() {
       knex('Screening')
         .insert(data)
         .then(result => {
-          addScrPlw.webContents.send("resultSent", {
+          addScrPlw.webContents.send("scrPlwResp", {
             'msg': 'records added'
           });
         })
         .catch(err => {
-          addScrPlw.webContents.send("resultSent", {
+          addScrPlw.webContents.send("scrPlwResp", {
             'msg': 'eror occured, plz try again'
           });
         })
@@ -1418,100 +1055,56 @@ function otpAdd() {
   var client = imran.client;
   addOtp = new BrowserWindow({
     width,height,
-    title: 'Screening: Add PLW'
+    title: 'OTP: Addmision'
   });
   addOtp.loadURL(url.format({
     pathname: path.join(__dirname, '/html/otpAdd.html'),
     protocol: 'file:',
     slashes: true
   }));
-  ipcMain.on('getProvince', function (event) {
-    knex('tblGeoProvince')
-      .then(result => {
-        addOtp.webContents.send('province', ({
-          province: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+  ipcMain.on('addOtp_getProvince', function (event) {
+    geo.province(addOtp);
   });
-  ipcMain.on('getDistrict', function (event, prov) {
+  ipcMain.on('addOtp_getDistrict', function (event, prov) {
     console.log(prov)
-    knex('tblGeoDistrict')
-      .where({
-        province_id: prov
-      })
-      .then(result => {
-        addOtp.webContents.send('district', ({
-          district: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.district(prov, addOtp);
   });
-  ipcMain.on('getTehsil', function (event, dist) {
+  ipcMain.on('addOtp_getTehsil', function (event, dist) {
+    geo.tehsil(dist, addOtp);
     console.log(dist)
-    knex('tblGeoTehsil')
-      .where({
-        district_id: dist
-      })
-      .then(result => {
-        addOtp.webContents.send('tehsil', ({
-          tehsil: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
   });
-  ipcMain.on('getUC', function (event, tehs) {
+  ipcMain.on('addOtp_getUC', function (event, tehs) {
     console.log(tehs)
-    knex('tblGeoUC')
-      .where({
-        tehsil_id: tehs
-      })
-      .then(result => {
-        addOtp.webContents.send('uc', ({
-          uc: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.uc(tehs,addOtp);
+
   });
-  ipcMain.on('getHealthHouse', function (event, ucs) {
+  ipcMain.on('addOtp_getHealthHouse', function (event, ucs) {
     console.log(ucs)
-    knex('tblGeoNutSite')
-      .where({
-        uc_id: ucs
-      })
-      .then(result => {
-        addOtp.webContents.send('hh', ({
-          hh: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.healthHouse(ucs, addOtp);
+
   });
 
-  ipcMain.on('submitOtpAdd', function (event, addFormOtp) {
+  ipcMain.on('addOtp_getHealthHouseType', function (event, h_id) {
+    geo.healthHouseType(h_id, addOtp);
+  });
+
+
+  ipcMain.on('submitOtpAdd', function (event, addOtpData) {
     //console.log(addFormOtp);
-    delete addFormOtp.province;
-    delete addFormOtp.Tehsil;
-    delete addFormOtp.district;
-    delete addFormOtp.province;
-    delete addFormOtp.ddHealthHouseOTP;
-    delete addFormOtp.uc;
-    addFormOtp.client_id = imran.client;
+    delete addOtpData.province;
+    delete addOtpData.Tehsil;
+    delete addOtpData.district;
+    delete addOtpData.province;
+    delete addOtpData.ddHealthHouseOTP;
+    delete addOtpData.uc;
+    addOtpData.client_id = imran.client;
+    const addFormOtp = addOtpData;
     console.log(addFormOtp);
     knex('tblOtpAdd')
       .insert(addFormOtp)
       .then(result => {
         console.log(result + 'OTP addmision added')
-        addOtp.webContents.send("resultSent", {
+        addOtp.webContents.send("resultSentOtpAdd", {
           'msg': 'records added'
         });
         var interimData = {
@@ -1542,11 +1135,11 @@ function otpAdd() {
       })
       .catch(e => {
         console.log(e + 'OTP add error');
-        addOtp.webContents.send("resultSent", {
+        addOtp.webContents.send("resultSentOtpAdd", {
           'msg': 'records not added, plz try again'
         });
       })
-      addFormOtp = null;
+      // addFormOtp = null;
   })
   addOtp.on('close', function () {
     addOtp = null;
@@ -1669,65 +1262,30 @@ function scrPlUpd() {
     slashes: true
   }));
 
-  ipcMain.on('getProvince', function (event) {
-    knex('tblGeoProvince')
-      .then(result => {
-        scrPlUpdate.webContents.send('province', ({
-          province: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+  ipcMain.on('scrPlwUpd_getProvince', function (event) {
+    geo.province(scrPlUpd);
   });
-  ipcMain.on('getDistrict', function (event, prov) {
+  ipcMain.on('scrPlwUpd_getDistrict', function (event, prov) {
     console.log(prov)
-    knex('tblGeoDistrict')
-      .where({
-        province_id: prov
-      })
-      .then(result => {
-        scrPlUpdate.webContents.send('district', ({
-          district: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.district(prov, scrPlUpd);
   });
-  ipcMain.on('getTehsil', function (event, dist) {
+  ipcMain.on('scrPlwUpd_getTehsil', function (event, dist) {
+    geo.tehsil(dist, scrPlUpd);
     console.log(dist)
-    knex('tblGeoTehsil')
-      .where({
-        district_id: dist
-      })
-      .then(result => {
-        scrPlUpdate.webContents.send('tehsil', ({
-          tehsil: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
   });
-  ipcMain.on('getUC', function (event, tehs) {
+  ipcMain.on('scrPlwUpd_getUC', function (event, tehs) {
     console.log(tehs)
-    knex('tblGeoUC')
-      .where({
-        tehsil_id: tehs
-      })
-      .then(result => {
-        scrPlUpdate.webContents.send('uc', ({
-          uc: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.uc(tehs,scrPlUpd);
+
   });
-  ipcMain.on('get', function (e, qry) {
+  ipcMain.on('scrPlwUpd_getHealthHouse', function (event, ucs) {
+    console.log(ucs)
+    geo.healthHouse(ucs, addOtp);
+
+  });
+  ipcMain.on('getScrPlwAll', function (e, qry) {
     db.scrPlw(qry, (err, result) => {
-      scrPlUpdate.webContents.send('get', ({
+      scrPlUpdate.webContents.send('getScrPlwAll', ({
           err: err,
           result: result,
 
@@ -1737,7 +1295,7 @@ function scrPlUpd() {
       console.log(result);
     })
   })
-  ipcMain.on('update', function (e, data) {
+  ipcMain.on('updScrPlwSingle', function (e, data) {
     var plwUpd = {
       screening_id: data.screening_id,
       name: data.name,
@@ -1751,7 +1309,7 @@ function scrPlUpd() {
     }
     db.updScr(plwUpd, function (err, result) {
       console.log(result);
-      scrPlUpdate.webContents.send('update', ({
+      scrPlUpdate.webContents.send('updScrPlwSingle', ({
         result,
         err: null
       }))
@@ -1776,65 +1334,30 @@ function scrChUpd() {
     slashes: true
   }));
 
-  ipcMain.on('getProvince', function (event) {
-    knex('tblGeoProvince')
-      .then(result => {
-        scrChUpdate.webContents.send('province', ({
-          province: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+  ipcMain.on('scrChUpd_getProvince', function (event) {
+    geo.province(scrChUpdate);
   });
-  ipcMain.on('getDistrict', function (event, prov) {
+  ipcMain.on('scrChUpd_getDistrict', function (event, prov) {
     console.log(prov)
-    knex('tblGeoDistrict')
-      .where({
-        province_id: prov
-      })
-      .then(result => {
-        scrChUpdate.webContents.send('district', ({
-          district: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.district(prov, scrChUpdate);
   });
-  ipcMain.on('getTehsil', function (event, dist) {
+  ipcMain.on('scrChUpd_getTehsil', function (event, dist) {
+    geo.tehsil(dist, scrChUpdate);
     console.log(dist)
-    knex('tblGeoTehsil')
-      .where({
-        district_id: dist
-      })
-      .then(result => {
-        scrChUpdate.webContents.send('tehsil', ({
-          tehsil: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
   });
-  ipcMain.on('getUC', function (event, tehs) {
+  ipcMain.on('scrChUpd_getUC', function (event, tehs) {
     console.log(tehs)
-    knex('tblGeoUC')
-      .where({
-        tehsil_id: tehs
-      })
-      .then(result => {
-        scrChUpdate.webContents.send('uc', ({
-          uc: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.uc(tehs,scrChUpdate);
+
   });
-  ipcMain.on('get', function (e, qry) {
+  ipcMain.on('scrChUpd_getHealthHouse', function (event, ucs) {
+    console.log(ucs)
+    geo.healthHouse(ucs, scrChUpdate);
+
+  });
+  ipcMain.on('getScrChAll', function (e, qry) {
     db.scrChild(qry, (err, result) => {
-      scrChUpdate.webContents.send('get', ({
+      scrChUpdate.webContents.send('getScrChAll', ({
           err: err,
           result: result,
 
@@ -1844,7 +1367,7 @@ function scrChUpd() {
       console.log(result);
     })
   })
-  ipcMain.on('update', function (e, data) {
+  ipcMain.on('updScrChSingle', function (e, data) {
     var chUpd = {
       screening_id: data.screening_id,
       name: data.name,
@@ -1860,7 +1383,7 @@ function scrChUpd() {
     }
     db.updScr(chUpd, function (err, result) {
       console.log('childupdate', result);
-      scrChUpdate.webContents.send('update', ({
+      scrChUpdate.webContents.send('updScrChSingle', ({
         result,
         err: null
       }))
@@ -1884,61 +1407,26 @@ function scrReports() {
     protocol: 'file:',
     slashes: true
   }));
-  ipcMain.on('getProvince', function (event) {
-    knex('tblGeoProvince')
-      .then(result => {
-        scrReport.webContents.send('province', ({
-          province: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+  ipcMain.on('scrRpt_getProvince', function (event) {
+    geo.province(scrReport);
   });
-  ipcMain.on('getDistrict', function (event, prov) {
+  ipcMain.on('scrRpt_getDistrict', function (event, prov) {
     console.log(prov)
-    knex('tblGeoDistrict')
-      .where({
-        province_id: prov
-      })
-      .then(result => {
-        scrReport.webContents.send('district', ({
-          district: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.district(prov, scrReport);
   });
-  ipcMain.on('getTehsil', function (event, dist) {
+  ipcMain.on('scrRpt_getTehsil', function (event, dist) {
+    geo.tehsil(dist, scrReport);
     console.log(dist)
-    knex('tblGeoTehsil')
-      .where({
-        district_id: dist
-      })
-      .then(result => {
-        scrReport.webContents.send('tehsil', ({
-          tehsil: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
   });
-  ipcMain.on('getUC', function (event, tehs) {
+  ipcMain.on('scrRpt_getUC', function (event, tehs) {
     console.log(tehs)
-    knex('tblGeoUC')
-      .where({
-        tehsil_id: tehs
-      })
-      .then(result => {
-        scrReport.webContents.send('uc', ({
-          uc: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.uc(tehs,scrReport);
+
+  });
+  ipcMain.on('scrRpt_getHealthHouse', function (event, ucs) {
+    console.log(ucs)
+    geo.healthHouse(ucs, scrReport);
+
   });
 
   ipcMain.on('data', function (e, arg) {
@@ -2044,61 +1532,26 @@ function otpReports() {
     protocol: 'file:',
     slashes: true
   }));
-  ipcMain.on('getProvince', function (event) {
-    knex('tblGeoProvince')
-      .then(result => {
-        reportOtp.webContents.send('province', ({
-          province: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+  ipcMain.on('otpRpt_getProvince', function (event) {
+    geo.province(reportOtp);
   });
-  ipcMain.on('getDistrict', function (event, prov) {
+  ipcMain.on('otpRpt_getDistrict', function (event, prov) {
     console.log(prov)
-    knex('tblGeoDistrict')
-      .where({
-        province_id: prov
-      })
-      .then(result => {
-        reportOtp.webContents.send('district', ({
-          district: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.district(prov, reportOtp);
   });
-  ipcMain.on('getTehsil', function (event, dist) {
+  ipcMain.on('otpRpt_getTehsil', function (event, dist) {
+    geo.tehsil(dist, reportOtp);
     console.log(dist)
-    knex('tblGeoTehsil')
-      .where({
-        district_id: dist
-      })
-      .then(result => {
-        reportOtp.webContents.send('tehsil', ({
-          tehsil: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
   });
-  ipcMain.on('getUC', function (event, tehs) {
+  ipcMain.on('otpRpt_getUC', function (event, tehs) {
     console.log(tehs)
-    knex('tblGeoUC')
-      .where({
-        tehsil_id: tehs
-      })
-      .then(result => {
-        reportOtp.webContents.send('uc', ({
-          uc: result
-        }));
-      })
-      .catch(err => {
-        console.log(err);
-      })
+    geo.uc(tehs,reportOtp);
+
+  });
+  ipcMain.on('otpRpt_getHealthHouse', function (event, ucs) {
+    console.log(ucs)
+    geo.healthHouse(ucs, reportOtp);
+
   });
 
   ipcMain.on('data', function (e, arg) {
@@ -2211,623 +1664,623 @@ function runDemo() {
 }
 
 // Creating Admin : sync Refference
-function createSyncWindow() {
-  var surl = imran.server;
-  console.log(surl);
-  syncData = new BrowserWindow({
-    width: 800,
-    height: 800,
-    title: 'System: Sync'
-  });
-  syncData.loadURL(url.format({
-    pathname: path.join(__dirname, '/html/sync.html'),
-    protocol: 'file:',
-    slashes: true
-  }));
-  ipcMain.on('updateDB', function () {
-    request(surl + '/getProvince', function (err, response, body) {
-      if (err) {
-        console.log(err)
-      } else {
-        var data = JSON.parse(body);
-        if (data.length > 0) {
-          data.forEach(el => {
-            knex('tblGeoProvince')
-              .where({
-                id: el.id
-              })
-              .then(result => {
-                if (result.length > 0) {
-                  console.log('Province Allready exists')
-                } else {
-                  knex.insert(el)
-                    .into('tblGeoProvince')
-                    .then(ret => {
-                      console.log(ret);
+// function createSyncWindow() {
+//   var surl = imran.server;
+//   console.log(surl);
+//   syncData = new BrowserWindow({
+//     width: 800,
+//     height: 800,
+//     title: 'System: Sync'
+//   });
+//   syncData.loadURL(url.format({
+//     pathname: path.join(__dirname, '/html/sync.html'),
+//     protocol: 'file:',
+//     slashes: true
+//   }));
+//   ipcMain.on('updateDB', function () {
+//     request(surl + '/getProvince', function (err, response, body) {
+//       if (err) {
+//         console.log(err)
+//       } else {
+//         var data = JSON.parse(body);
+//         if (data.length > 0) {
+//           data.forEach(el => {
+//             knex('tblGeoProvince')
+//               .where({
+//                 id: el.id
+//               })
+//               .then(result => {
+//                 if (result.length > 0) {
+//                   console.log('Province Allready exists')
+//                 } else {
+//                   knex.insert(el)
+//                     .into('tblGeoProvince')
+//                     .then(ret => {
+//                       console.log(ret);
 
-                    })
+//                     })
 
-                }
-              })
+//                 }
+//               })
 
-          })
-        } else {
-          syncData.webContents.send("resultSent", {
-            'msg': 'No province to be added'
-          });
+//           })
+//         } else {
+//           syncData.webContents.send("resultSent", {
+//             'msg': 'No province to be added'
+//           });
 
-        }
+//         }
 
 
-      }
-    })
-    request(surl + '/getDistrict', function (err, response, body) {
-      if (err) {
-        console.log(err)
-      } else {
-        // var data = JSON.parse(body);
-        var data = JSON.parse(body);
-        if (data.length > 0) {
-          data.forEach(el => {
-            knex('tblGeoDistrict')
-              .where({
-                id: el.id
-              })
-              .then(result => {
-                if (result.length > 0) {
-                  console.log('District Allready exists')
-                } else {
-                  knex.insert(el)
-                    .into('tblGeoDistrict')
-                    .then(ret => {
-                      console.log(ret);
+//       }
+//     })
+//     request(surl + '/getDistrict', function (err, response, body) {
+//       if (err) {
+//         console.log(err)
+//       } else {
+//         // var data = JSON.parse(body);
+//         var data = JSON.parse(body);
+//         if (data.length > 0) {
+//           data.forEach(el => {
+//             knex('tblGeoDistrict')
+//               .where({
+//                 id: el.id
+//               })
+//               .then(result => {
+//                 if (result.length > 0) {
+//                   console.log('District Allready exists')
+//                 } else {
+//                   knex.insert(el)
+//                     .into('tblGeoDistrict')
+//                     .then(ret => {
+//                       console.log(ret);
 
-                    })
+//                     })
 
-                }
-              })
+//                 }
+//               })
 
-          })
-        } else {
-          syncData.webContents.send("resultSent", {
-            'msg': 'No District to be added'
-          });
+//           })
+//         } else {
+//           syncData.webContents.send("resultSent", {
+//             'msg': 'No District to be added'
+//           });
 
-        }
-      }
-    })
-    request(surl + '/getTehsil', function (err, response, body) {
-      if (err) {
-        console.log(err)
-      } else {
-        var data = JSON.parse(body);
-        if (data.length > 0) {
-          data.forEach(el => {
-            knex('tblGeoTehsil')
-              .where({
-                id: el.id
-              })
-              .then(result => {
-                if (result.length > 0) {
-                  console.log('Tehsil Allready exists')
-                } else {
-                  knex.insert(el)
-                    .into('tblGeoTehsil')
-                    .then(ret => {
-                      console.log(ret);
+//         }
+//       }
+//     })
+//     request(surl + '/getTehsil', function (err, response, body) {
+//       if (err) {
+//         console.log(err)
+//       } else {
+//         var data = JSON.parse(body);
+//         if (data.length > 0) {
+//           data.forEach(el => {
+//             knex('tblGeoTehsil')
+//               .where({
+//                 id: el.id
+//               })
+//               .then(result => {
+//                 if (result.length > 0) {
+//                   console.log('Tehsil Allready exists')
+//                 } else {
+//                   knex.insert(el)
+//                     .into('tblGeoTehsil')
+//                     .then(ret => {
+//                       console.log(ret);
 
-                    })
+//                     })
 
-                }
-              })
+//                 }
+//               })
 
-          })
-        } else {
-          syncData.webContents.send("resultSent", {
-            'msg': 'No Tehsil to be added'
-          });
+//           })
+//         } else {
+//           syncData.webContents.send("resultSent", {
+//             'msg': 'No Tehsil to be added'
+//           });
 
-        }
-      }
-    })
-    request(surl + '/getUC', function (err, response, body) {
-      if (err) {
-        console.log(err)
-      } else {
-        var data = JSON.parse(body);
-        if (data.length > 0) {
-          data.forEach(el => {
-            knex('tblGeoUC')
-              .where({
-                id: el.id
-              })
-              .then(result => {
-                if (result.length > 0) {
-                  console.log('UC Allready exists')
-                } else {
-                  knex.insert(el)
-                    .into('tblGeoUC')
-                    .then(ret => {
-                      console.log(ret);
+//         }
+//       }
+//     })
+//     request(surl + '/getUC', function (err, response, body) {
+//       if (err) {
+//         console.log(err)
+//       } else {
+//         var data = JSON.parse(body);
+//         if (data.length > 0) {
+//           data.forEach(el => {
+//             knex('tblGeoUC')
+//               .where({
+//                 id: el.id
+//               })
+//               .then(result => {
+//                 if (result.length > 0) {
+//                   console.log('UC Allready exists')
+//                 } else {
+//                   knex.insert(el)
+//                     .into('tblGeoUC')
+//                     .then(ret => {
+//                       console.log(ret);
 
-                    })
+//                     })
 
-                }
-              })
+//                 }
+//               })
 
-          })
-        } else {
-          syncData.webContents.send("resultSent", {
-            'msg': 'No UC to be added'
-          });
+//           })
+//         } else {
+//           syncData.webContents.send("resultSent", {
+//             'msg': 'No UC to be added'
+//           });
 
-        }
-      }
-    })
-    request(surl + '/getSite', function (err, response, body) {
-      if (err) {
-        console.log(err)
-      } else {
-        var data = JSON.parse(body);
-        if (data.length > 0) {
-          data.forEach(el => {
-            knex('tblGeoNutSite')
-              .where({
-                id: el.id
-              })
-              .then(result => {
-                if (result.length > 0) {
-                  console.log('Site Allready exists')
-                } else {
-                  knex.insert(el)
-                    .into('tblGeoNutSite')
-                    .then(ret => {
-                      console.log(ret);
+//         }
+//       }
+//     })
+//     request(surl + '/getSite', function (err, response, body) {
+//       if (err) {
+//         console.log(err)
+//       } else {
+//         var data = JSON.parse(body);
+//         if (data.length > 0) {
+//           data.forEach(el => {
+//             knex('tblGeoNutSite')
+//               .where({
+//                 id: el.id
+//               })
+//               .then(result => {
+//                 if (result.length > 0) {
+//                   console.log('Site Allready exists')
+//                 } else {
+//                   knex.insert(el)
+//                     .into('tblGeoNutSite')
+//                     .then(ret => {
+//                       console.log(ret);
 
-                    })
+//                     })
 
-                }
-              })
+//                 }
+//               })
 
-          })
-        } else {
-          syncData.webContents.send("resultSent", {
-            'msg': 'No site to be added'
-          });
+//           })
+//         } else {
+//           syncData.webContents.send("resultSent", {
+//             'msg': 'No site to be added'
+//           });
 
-        }
+//         }
 
-      }
-    })
-    syncData.webContents.send("resultSent", {
-      'msg': 'sync complete'
-    });
-  });
-  ipcMain.on('updateServer', function () {
-    console.log('sync clicked')
-    knex('Screening')
-      .where({
-        upload_status: 0
-      })
-      .then(results => {
-        if (results.length < 1) {
-          syncData.webContents.send("resultSent", {
-            'msg': 'Server already updated'
-          });
-        }
-        if (results) {
-          results.forEach(el => {
-            var options = {
-              method: 'POST',
-              uri: surl + '/screening',
-              body: el,
-              json: true
-            }
-            request(options, function (err, response, body) {
-              if (err) {
-                console.log(err)
-                body = JSON.parse(body);
+//       }
+//     })
+//     syncData.webContents.send("resultSent", {
+//       'msg': 'sync complete'
+//     });
+//   });
+//   ipcMain.on('updateServer', function () {
+//     console.log('sync clicked')
+//     knex('Screening')
+//       .where({
+//         upload_status: 0
+//       })
+//       .then(results => {
+//         if (results.length < 1) {
+//           syncData.webContents.send("resultSent", {
+//             'msg': 'Server already updated'
+//           });
+//         }
+//         if (results) {
+//           results.forEach(el => {
+//             var options = {
+//               method: 'POST',
+//               uri: surl + '/screening',
+//               body: el,
+//               json: true
+//             }
+//             request(options, function (err, response, body) {
+//               if (err) {
+//                 console.log(err)
+//                 body = JSON.parse(body);
 
-              } else if (body.msg === 'Child record added' || body.msg === 'PLW record added') {
-                console.log(body);
-                knex('Screening')
-                  .where({
-                    screening_id: el.screening_id
-                  })
-                  .update({
-                    upload_status: 1
-                  })
-                  .then(result => {
-                    console.log(result);
-                    syncData.webContents.send("resultSent", {
-                      'msg': body.msg
-                    });
+//               } else if (body.msg === 'Child record added' || body.msg === 'PLW record added') {
+//                 console.log(body);
+//                 knex('Screening')
+//                   .where({
+//                     screening_id: el.screening_id
+//                   })
+//                   .update({
+//                     upload_status: 1
+//                   })
+//                   .then(result => {
+//                     console.log(result);
+//                     syncData.webContents.send("resultSent", {
+//                       'msg': body.msg
+//                     });
 
-                  })
-                  .catch(err => {
-                    console.log(err);
-                  })
-              }
-            })
-          })
+//                   })
+//                   .catch(err => {
+//                     console.log(err);
+//                   })
+//               }
+//             })
+//           })
 
-        }
-      })
-    knex('Screening')
-      .where({
-        upload_status: 2
-      })
-      .then(results => {
-        if (results.length < 1) {
-          syncData.webContents.send("resultSent", {
-            'msg': 'Server already updated'
-          });
-        }
-        if (results) {
-          results.forEach(el => {
-            var options = {
-              method: 'POST',
-              uri: surl + '/update_screening',
-              body: el,
-              json: true
-            }
-            request(options, function (err, response, body) {
-              if (err) {
-                console.log(err)
-                body = JSON.parse(body);
-              } else if (body.msg === 'Child record updated' || body.msg === 'PLW record updated') {
-                console.log(body);
-                knex('Screening')
-                  .where({
-                    screening_id: el.screening_id
-                  })
-                  .update({
-                    upload_status: 1
-                  })
-                  .then(result => {
-                    syncData.webContents.send("resultSent", {
-                      'msg': body.msg
-                    });
-                    console.log(result);
-                  })
-                  .catch(err => {
-                    console.log(err);
-                  })
-              }
-            })
-          })
+//         }
+//       })
+//     knex('Screening')
+//       .where({
+//         upload_status: 2
+//       })
+//       .then(results => {
+//         if (results.length < 1) {
+//           syncData.webContents.send("resultSent", {
+//             'msg': 'Server already updated'
+//           });
+//         }
+//         if (results) {
+//           results.forEach(el => {
+//             var options = {
+//               method: 'POST',
+//               uri: surl + '/update_screening',
+//               body: el,
+//               json: true
+//             }
+//             request(options, function (err, response, body) {
+//               if (err) {
+//                 console.log(err)
+//                 body = JSON.parse(body);
+//               } else if (body.msg === 'Child record updated' || body.msg === 'PLW record updated') {
+//                 console.log(body);
+//                 knex('Screening')
+//                   .where({
+//                     screening_id: el.screening_id
+//                   })
+//                   .update({
+//                     upload_status: 1
+//                   })
+//                   .then(result => {
+//                     syncData.webContents.send("resultSent", {
+//                       'msg': body.msg
+//                     });
+//                     console.log(result);
+//                   })
+//                   .catch(err => {
+//                     console.log(err);
+//                   })
+//               }
+//             })
+//           })
 
-        }
-      })
-    //Update server with new OTP addmision
-    knex('tblOtpAdd')
-      .where({
-        upload_status: 0
-      })
-      .orWhereNull('upload_status')
-      .then(result => {
-        if (result.length < 1) {
-          syncData.webContents.send("resultSent", {
-            'msg': 'Server already updated with OTP Addmision'
-          });
-        } else {
-          result.forEach(el => {
-            var options = {
-              method: 'POST',
-              uri: surl + '/otpAdd',
-              body: el,
-              json: true
-            }
-            request(options, function (err, response, body) {
-              console.log(body);
-              if (err) {
-                console.log(err)
-              } else if (body.msg === 'OTP Admission Added') {
-                knex('tblOtpAdd')
-                  .where({
-                    otp_id: el.otp_id
-                  })
-                  .update({
-                    upload_status: 1
-                  })
-                  .then(result => {
-                    syncData.webContents.send("resultSent", {
-                      'msg': body.msg
-                    });
-                    console.log(result);
-                  })
-                  .catch(err => {
-                    console.log(err);
-                  })
-              }
-            })
-          })
-        }
+//         }
+//       })
+//     //Update server with new OTP addmision
+//     knex('tblOtpAdd')
+//       .where({
+//         upload_status: 0
+//       })
+//       .orWhereNull('upload_status')
+//       .then(result => {
+//         if (result.length < 1) {
+//           syncData.webContents.send("resultSent", {
+//             'msg': 'Server already updated with OTP Addmision'
+//           });
+//         } else {
+//           result.forEach(el => {
+//             var options = {
+//               method: 'POST',
+//               uri: surl + '/otpAdd',
+//               body: el,
+//               json: true
+//             }
+//             request(options, function (err, response, body) {
+//               console.log(body);
+//               if (err) {
+//                 console.log(err)
+//               } else if (body.msg === 'OTP Admission Added') {
+//                 knex('tblOtpAdd')
+//                   .where({
+//                     otp_id: el.otp_id
+//                   })
+//                   .update({
+//                     upload_status: 1
+//                   })
+//                   .then(result => {
+//                     syncData.webContents.send("resultSent", {
+//                       'msg': body.msg
+//                     });
+//                     console.log(result);
+//                   })
+//                   .catch(err => {
+//                     console.log(err);
+//                   })
+//               }
+//             })
+//           })
+//         }
 
-      })
+//       })
 
-    //Update server with update OTP addmision
-    knex('tblOtpAdd')
-      .where({
-        upload_status: 2
-      })
-      .then(result => {
-        if (result.length < 1) {
-          syncData.webContents.send("resultSent", {
-            'msg': 'Server already updated with OTP Addmision'
-          });
-        } else {
-          result.forEach(el => {
-            var options = {
-              method: 'PUT',
-              uri: surl + '/otpAdd',
-              body: el,
-              json: true
-            }
-            request(options, function (err, response, body) {
-              if (err) {
-                console.log(err)
-                // body = JSON.parse(body);
-              } else if (body.msg === 'OTP Admission Updated') {
-                console.log(body);
-                knex('tblOtpAdd')
-                  .where({
-                    otp_id: el.otp_id
-                  })
-                  .update({
-                    upload_status: 1
-                  })
-                  .then(result => {
-                    syncData.webContents.send("resultSent", {
-                      'msg': body.msg
-                    });
-                    console.log(result);
-                  })
-                  .catch(err => {
-                    console.log(err);
-                  })
-              }
-            })
-          })
-        }
+//     //Update server with update OTP addmision
+//     knex('tblOtpAdd')
+//       .where({
+//         upload_status: 2
+//       })
+//       .then(result => {
+//         if (result.length < 1) {
+//           syncData.webContents.send("resultSent", {
+//             'msg': 'Server already updated with OTP Addmision'
+//           });
+//         } else {
+//           result.forEach(el => {
+//             var options = {
+//               method: 'PUT',
+//               uri: surl + '/otpAdd',
+//               body: el,
+//               json: true
+//             }
+//             request(options, function (err, response, body) {
+//               if (err) {
+//                 console.log(err)
+//                 // body = JSON.parse(body);
+//               } else if (body.msg === 'OTP Admission Updated') {
+//                 console.log(body);
+//                 knex('tblOtpAdd')
+//                   .where({
+//                     otp_id: el.otp_id
+//                   })
+//                   .update({
+//                     upload_status: 1
+//                   })
+//                   .then(result => {
+//                     syncData.webContents.send("resultSent", {
+//                       'msg': body.msg
+//                     });
+//                     console.log(result);
+//                   })
+//                   .catch(err => {
+//                     console.log(err);
+//                   })
+//               }
+//             })
+//           })
+//         }
 
-      })
+//       })
 
-    //Update server with OTP Exit;
-    knex('tblOtpExit')
-    .where({
-      upload_status: 0
-    })
-    .orWhereNull('upload_status')
-    .then(result => {
-      if (result.length < 1) {
-        syncData.webContents.send("resultSent", {
-          'msg': 'Server already updated with OTP Exits'
-        });
-      } else {
-        result.forEach(el => {
-          var options = {
-            method: 'POST',
-            uri: surl + '/otpExit',
-            body: el,
-            json: true
-          }
-          request(options, function (err, response, body) {
-            console.log(response);
-            // console.log(body);
-            if (err) console.log(err)
-            if (body) {
-              console.log(body);
-              knex('tblOtpExit')
-                .where({
-                  otp_id: el.otp_id
-                })
-                .update({
-                  upload_status: 1
-                })
-                .then(result => {
-                  syncData.webContents.send("resultSent", {
-                    'msg': body.msg
-                  });
-                  console.log(result);
-                })
-                .catch(err => {
-                  console.log(err);
-                })
-            }
-          })
-        })
-      }
+//     //Update server with OTP Exit;
+//     knex('tblOtpExit')
+//     .where({
+//       upload_status: 0
+//     })
+//     .orWhereNull('upload_status')
+//     .then(result => {
+//       if (result.length < 1) {
+//         syncData.webContents.send("resultSent", {
+//           'msg': 'Server already updated with OTP Exits'
+//         });
+//       } else {
+//         result.forEach(el => {
+//           var options = {
+//             method: 'POST',
+//             uri: surl + '/otpExit',
+//             body: el,
+//             json: true
+//           }
+//           request(options, function (err, response, body) {
+//             console.log(response);
+//             // console.log(body);
+//             if (err) console.log(err)
+//             if (body) {
+//               console.log(body);
+//               knex('tblOtpExit')
+//                 .where({
+//                   otp_id: el.otp_id
+//                 })
+//                 .update({
+//                   upload_status: 1
+//                 })
+//                 .then(result => {
+//                   syncData.webContents.send("resultSent", {
+//                     'msg': body.msg
+//                   });
+//                   console.log(result);
+//                 })
+//                 .catch(err => {
+//                   console.log(err);
+//                 })
+//             }
+//           })
+//         })
+//       }
 
-    })
+//     })
 
-  // Update server with update OTP addmision
-  knex('tblOtpExit')
-    .where({
-      upload_status: 2
-    })
-    .then(result => {
-      if (result.length < 1) {
-        syncData.webContents.send("resultSent", {
-          'msg': 'Server already updated with OTP Addmision'
-        });
-      } else {
-        result.forEach(el => {
-          var options = {
-            method: 'PUT',
-            uri: surl + '/otpExit',
-            body: el,
-            json: true
-          }
-          request(options, function (err, response, body) {
-            if (err) {
-              console.log(err)
-              // body = JSON.parse(body);
-            } else if (body) {
-              // .msg === 'OTP Admission Updated')
-              // console.log(body);
-              knex('tblOtpExit')
-                .where({
-                  otp_id: el.otp_id
-                })
-                .update({
-                  upload_status: 1
-                })
-                .then(result => {
-                  syncData.webContents.send("resultSent", {
-                    'msg': body.msg
-                  });
-                  console.log(result);
-                })
-                .catch(err => {
-                  console.log(err);
-                })
-            }
-          })
-        })
-      }
+//   // Update server with update OTP addmision
+//   knex('tblOtpExit')
+//     .where({
+//       upload_status: 2
+//     })
+//     .then(result => {
+//       if (result.length < 1) {
+//         syncData.webContents.send("resultSent", {
+//           'msg': 'Server already updated with OTP Addmision'
+//         });
+//       } else {
+//         result.forEach(el => {
+//           var options = {
+//             method: 'PUT',
+//             uri: surl + '/otpExit',
+//             body: el,
+//             json: true
+//           }
+//           request(options, function (err, response, body) {
+//             if (err) {
+//               console.log(err)
+//               // body = JSON.parse(body);
+//             } else if (body) {
+//               // .msg === 'OTP Admission Updated')
+//               // console.log(body);
+//               knex('tblOtpExit')
+//                 .where({
+//                   otp_id: el.otp_id
+//                 })
+//                 .update({
+//                   upload_status: 1
+//                 })
+//                 .then(result => {
+//                   syncData.webContents.send("resultSent", {
+//                     'msg': body.msg
+//                   });
+//                   console.log(result);
+//                 })
+//                 .catch(err => {
+//                   console.log(err);
+//                 })
+//             }
+//           })
+//         })
+//       }
 
-    })
+//     })
   
-  knex('tblSessions')
-      .where({upload_status:0})
-      .orWhereNull('upload_status')
-      .then(result=>{
-        if( result.length < 1){
-          syncData.webContents.send("resultSent", {
-            'msg': 'Server already updated with Sessions'
-          });
-        } else {
-          result.forEach(el => {
-            var options = {
-              method: 'POST',
-              uri: surl + '/sessions',
-              body: el,
-              json: true
-            }
-            request(options, function (err, response, body) {
-              if (err) {
-                console.log(err)
-                // body = JSON.parse(body);
-              } else if (body){
-              // .msg === 'Session Added') {
-                console.log(body);
-                knex('tblSessions')
-                  .where({
-                    session_id: el.session_id
-                  })
-                  .update({
-                    upload_status: 1
-                  })
-                  .then(result => {
-                    syncData.webContents.send("resultSent", {
-                      'msg': body.msg
-                    });
-                    console.log(result);
-                  })
-                  .catch(err => {
-                    console.log(err);
-                  })
-              }
-            })
-          })
-        }
-      })
+//   knex('tblSessions')
+//       .where({upload_status:0})
+//       .orWhereNull('upload_status')
+//       .then(result=>{
+//         if( result.length < 1){
+//           syncData.webContents.send("resultSent", {
+//             'msg': 'Server already updated with Sessions'
+//           });
+//         } else {
+//           result.forEach(el => {
+//             var options = {
+//               method: 'POST',
+//               uri: surl + '/sessions',
+//               body: el,
+//               json: true
+//             }
+//             request(options, function (err, response, body) {
+//               if (err) {
+//                 console.log(err)
+//                 // body = JSON.parse(body);
+//               } else if (body){
+//               // .msg === 'Session Added') {
+//                 console.log(body);
+//                 knex('tblSessions')
+//                   .where({
+//                     session_id: el.session_id
+//                   })
+//                   .update({
+//                     upload_status: 1
+//                   })
+//                   .then(result => {
+//                     syncData.webContents.send("resultSent", {
+//                       'msg': body.msg
+//                     });
+//                     console.log(result);
+//                   })
+//                   .catch(err => {
+//                     console.log(err);
+//                   })
+//               }
+//             })
+//           })
+//         }
+//       })
 
 
-  knex('tblSessions')
-      .where({upload_status:2})
-      .then(result=>{
-        if( result.length < 1){
-          syncData.webContents.send("resultSent", {
-            'msg': 'Server already updated with Sessions'
-          });
-        } else {
-          result.forEach(el => {
-            var options = {
-              method: 'PUT',
-              uri: surl + '/sessions',
-              body: el,
-              json: true
-            }
-            request(options, function (err, response, body) {
-              if (err) {
-                console.log(err)
-                // body = JSON.parse(body);
-              } else if (body){
-              // .msg === 'Session Updated') {
-                console.log(body);
-                knex('tblSessions')
-                  .where({
-                    session_id: el.session_id
-                  })
-                  .update({
-                    upload_status: 1
-                  })
-                  .then(result => {
-                    syncData.webContents.send("resultSent", {
-                      'msg': body.msg
-                    });
-                    console.log(result);
-                  })
-                  .catch(err => {
-                    console.log(err);
-                  })
-              }
-            })
-          })
-        }
-      })
+//   knex('tblSessions')
+//       .where({upload_status:2})
+//       .then(result=>{
+//         if( result.length < 1){
+//           syncData.webContents.send("resultSent", {
+//             'msg': 'Server already updated with Sessions'
+//           });
+//         } else {
+//           result.forEach(el => {
+//             var options = {
+//               method: 'PUT',
+//               uri: surl + '/sessions',
+//               body: el,
+//               json: true
+//             }
+//             request(options, function (err, response, body) {
+//               if (err) {
+//                 console.log(err)
+//                 // body = JSON.parse(body);
+//               } else if (body){
+//               // .msg === 'Session Updated') {
+//                 console.log(body);
+//                 knex('tblSessions')
+//                   .where({
+//                     session_id: el.session_id
+//                   })
+//                   .update({
+//                     upload_status: 1
+//                   })
+//                   .then(result => {
+//                     syncData.webContents.send("resultSent", {
+//                       'msg': body.msg
+//                     });
+//                     console.log(result);
+//                   })
+//                   .catch(err => {
+//                     console.log(err);
+//                   })
+//               }
+//             })
+//           })
+//         }
+//       })
 
-      knex('otpFollowup')
-      .where({upload_status:0})
-      .orWhereNull('upload_status')
-      .then(result=>{
-        if( result.length < 1){
-          syncData.webContents.send("resultSent", {
-            'msg': 'Server already updated with followups'
-          });
-        } else {
-          result.forEach(el => {
-            var options = {
-              method: 'POST',
-              uri: surl + '/sessions',
-              body: el,
-              json: true
-            }
-            request(options, function (err, response, body) {
-              if (err) {
-                console.log(err)
-                // body = JSON.parse(body);
-              } else if (body){
-              // .msg === 'Followup Added') {
-                console.log(body);
-                knex('otpFollowup')
-                  .where({
-                    followup_id: el.followup_id
-                  })
-                  .update({
-                    upload_status: 1
-                  })
-                  .then(result => {
-                    syncData.webContents.send("resultSent", {
-                      'msg': body.msg
-                    });
-                    console.log(result);
-                  })
-                  .catch(err => {
-                    console.log(err);
-                  })
-              }
-            })
-          })
-        }
-      })
-  })
-  syncData.on('close', function () {
-    syncData = null;
-  })
-}
+//       knex('otpFollowup')
+//       .where({upload_status:0})
+//       .orWhereNull('upload_status')
+//       .then(result=>{
+//         if( result.length < 1){
+//           syncData.webContents.send("resultSent", {
+//             'msg': 'Server already updated with followups'
+//           });
+//         } else {
+//           result.forEach(el => {
+//             var options = {
+//               method: 'POST',
+//               uri: surl + '/sessions',
+//               body: el,
+//               json: true
+//             }
+//             request(options, function (err, response, body) {
+//               if (err) {
+//                 console.log(err)
+//                 // body = JSON.parse(body);
+//               } else if (body){
+//               // .msg === 'Followup Added') {
+//                 console.log(body);
+//                 knex('otpFollowup')
+//                   .where({
+//                     followup_id: el.followup_id
+//                   })
+//                   .update({
+//                     upload_status: 1
+//                   })
+//                   .then(result => {
+//                     syncData.webContents.send("resultSent", {
+//                       'msg': body.msg
+//                     });
+//                     console.log(result);
+//                   })
+//                   .catch(err => {
+//                     console.log(err);
+//                   })
+//               }
+//             })
+//           })
+//         }
+//       })
+//   })
+//   syncData.on('close', function () {
+//     syncData = null;
+//   })
+// }
 
 // Creating Admin : sync Refference
 function newSync() {
@@ -2847,10 +2300,16 @@ function newSync() {
   ipcMain.on('updateDB', function () {
     async.series({
       province: (cb)=>{
-        request(surl + '/getProvince', function (err, response, body) {
+        var options = {
+          method: 'GET',
+          uri: surl + '/getProvince',
+          // body: result,
+          json: true
+        }
+        request(options, function (err, response, body) {
           console.log(body)
           if (!err) {
-            var data = JSON.parse(body);
+            var data = body;
             if (data.length > 0) {
               data.forEach(el => {
                 knex('tblGeoProvince')
@@ -2882,10 +2341,16 @@ function newSync() {
         })
       },
       district: (cb)=>{
-        request(surl + '/getDistrict', function (err, response, body) {
+        var options = {
+          method: 'GET',
+          uri: surl + '/getDistrict',
+          // body: result,
+          json: true
+        }
+        request(options, function (err, response, body) {
           if (!err)  {
             // var data = JSON.parse(body);
-            var data = JSON.parse(body);
+            var data = body;
             if (data.length > 0) {
               data.forEach(el => {
                 knex('tblGeoDistrict')
@@ -2917,9 +2382,17 @@ function newSync() {
         })
       },
       tehsil: (cb)=>{
-        request(surl + '/getTehsil', function (err, response, body) {
+        var options = {
+          method: 'GET',
+          uri: surl + '/getTehsil',
+          // body: result,
+          json: true
+        }
+        request(options, function (err, response, body) {
           if (!err)  {
-            var data = JSON.parse(body);
+            var data = body;
+
+            // var data = JSON.parse(body);
             if (data.length > 0) {
               data.forEach(el => {
                 knex('tblGeoTehsil')
@@ -2951,9 +2424,17 @@ function newSync() {
         })
       },
       uc:(cb)=>{
-        request(surl + '/getUC', function (err, response, body) {
+        var options = {
+          method: 'GET',
+          uri: surl + '/getUC',
+          // body: result,
+          json: true
+        }
+        request(options, function (err, response, body) {
           if (!err) {
-            var data = JSON.parse(body);
+            var data = body;
+
+            // var data = JSON.parse(body);
             if (data.length > 0) {
               data.forEach(el => {
                 knex('tblGeoUC')
@@ -2986,9 +2467,17 @@ function newSync() {
         })
       },
       site: (cb)=>{
-        request(surl + '/getSite', function (err, response, body) {
+        var options = {
+          method: 'GET',
+          uri: surl + '/getSite',
+          // body: result,
+          json: true
+        }
+        request(options, function (err, response, body) {
           if (!err)  {
-            var data = JSON.parse(body);
+            var data = body;
+
+            // var data = JSON.parse(body);
             if (data.length > 0) {
               data.forEach(el => {
                 knex('tblGeoNutSite')
@@ -3025,6 +2514,7 @@ function newSync() {
         syncNew.webContents.send('updateDB', 'a')
       } else {
         console.log(results)
+        
         syncNew.webContents.send('success', {msg: 'DB updated successfully'})
         syncNew.webContents.send('updateDB', 'a')
       }
@@ -3037,35 +2527,39 @@ function newSync() {
         knex('Screening')
           .where({upload_status:0})
           .then(result=>{
-            var options = {
-              method: 'POST',
-              uri: surl + '/scrv1',
-              body: result,
-              json: true
-            }
-            // console.log(result)
-            request(options, (err, response, body)=>{
-              if(err){
-                cb(err)
-              } else {
-                console.log(typeof body);
-                // body = JSON.parse(body);
-                if(body.success === 'SCR Added'){
-                  result.forEach(el=>{
-                    console.log(el);
-                     knex('Screening')
-                      .where({screening_id: el.screening_id})
-                      .update('upload_status', 1)
-                      .then(result=>{
-                        console.log(result)
-                      })
-                  })
-                }
-                cb(null, body)
+            if(result.length > 0){
+
+              var options = {
+                method: 'POST',
+                uri: surl + '/scrv1',
+                body: result,
+                json: true
               }
-            })
+              // console.log(result)
+              request(options, (err, response, body)=>{
+                if(err){
+                  cb(err)
+                } else {
+                  console.log(typeof body);
+                  // body = JSON.parse(body);
+                  if(body.success === 'SCR Added'){
+                    result.forEach(el=>{
+                      console.log(el);
+                       knex('Screening')
+                        .where({screening_id: el.screening_id})
+                        .update('upload_status', 1)
+                        .then(result=>{
+                          console.log(result)
+                        })
+                    })
+                  }
+                  cb(null, body)
+                }
+              })
+            } else {
+              cb(null, 'No new Scrrening record')
+            }
           })
-          
           .catch(e=>{
             cb(e)
           })
@@ -3074,33 +2568,38 @@ function newSync() {
         knex('Screening')
           .where({upload_status:2})
           .then(result=>{
-            var options = {
-              method: 'PUT',
-              uri: surl + '/scrv1',
-              body: result,
-              json: true
-            }
-            // console.log(result)
-            request(options, (err, response, body)=>{
-              if(err){
-                cb(err)
-              } else {
-                console.log(typeof body);
-                // body = JSON.parse(body);
-                if(body.success === 'SCR Updated'){
-                  result.forEach(el=>{
-                    console.log(el);
-                     knex('Screening')
-                      .where({screening_id: el.screening_id})
-                      .update('upload_status', 1)
-                      .then(result=>{
-                        console.log(result)
-                      })
-                  })
-                }
-                cb(null, body)
+            if(result.length > 0){
+              var options = {
+                method: 'PUT',
+                uri: surl + '/scrv1',
+                body: result,
+                json: true
               }
-            })
+              // console.log(result)
+              request(options, (err, response, body)=>{
+                if(err){
+                  cb(err)
+                } else {
+                  console.log(typeof body);
+                  // body = JSON.parse(body);
+                  if(body.success === 'SCR Updated'){
+                    result.forEach(el=>{
+                      console.log(el);
+                       knex('Screening')
+                        .where({screening_id: el.screening_id})
+                        .update('upload_status', 1)
+                        .then(result=>{
+                          console.log(result)
+                        })
+                    })
+                  }
+                  cb(null, body)
+                }
+              })
+            } else {
+              cb(null, 'No new record')
+            }
+           
           })
           
           .catch(e=>{
@@ -3112,31 +2611,36 @@ function newSync() {
           .where({upload_status: 0})
           .orWhereNull('upload_status')
           .then(result=>{
-            var options = {
-              method: 'POST',
-              uri: surl + '/otpv1',
-              body: result,
-              json: true
-            }
-            request(options, (err, response, body)=>{
-              if(err){
-                cb(err)
-              } else {
-                if(body.success === 'OTP Added'){
-                  cb(null, body);
-                  result.forEach(el=>{
-                    knex('tblOtpAdd')
-                        .where({opt_id: el.otp_id})
-                        .update('upload_status',1)
-                        .then(x=>{
-                          console.log(x)
-                        })
-                  })
-                } else {
-                  cb(body);
-                }
+            if(result.length > 0 ){
+              var options = {
+                method: 'POST',
+                uri: surl + '/otpv1',
+                body: result,
+                json: true
               }
-            })
+              request(options, (err, response, body)=>{
+                if(err){
+                  cb(err)
+                } else {
+                  if(body.success === 'OTP Added'){
+                    cb(null, body);
+                    result.forEach(el=>{
+                      knex('tblOtpAdd')
+                          .where({otp_id: el.otp_id})
+                          .update('upload_status',1)
+                          .then(x=>{
+                            console.log(x)
+                          })
+                    })
+                  } else {
+                    cb(body);
+                  }
+                }
+              })
+            } else {
+              cb(null, 'OTP Add: No new record')
+            }
+           
           })
           .catch(e=>{
             cb(e)
@@ -3147,31 +2651,36 @@ function newSync() {
           .where({upload_status: 2})
           .orWhereNull('upload_status')
           .then(result=>{
-            var options = {
-              method: 'PUT',
-              uri: surl + '/otpv1',
-              body: result,
-              json: true
-            }
-            request(options, (err, response, body)=>{
-              if(err){
-                cb(err)
-              } else {
-                if(body.success === 'OTP Updated'){
-                  cb(null, body);
-                  result.forEach(el=>{
-                    knex('tblOtpAdd')
-                        .where({opt_id: el.otp_id})
-                        .update('upload_status',1)
-                        .then(x=>{
-                          console.log(x)
-                        })
-                  })
-                } else {
-                  cb(body);
-                }
+            if(result.length > 0){
+              var options = {
+                method: 'PUT',
+                uri: surl + '/otpv1',
+                body: result,
+                json: true
               }
-            })
+              request(options, (err, response, body)=>{
+                if(err){
+                  cb(err)
+                } else {
+                  if(body.success === 'OTP Updated'){
+                    cb(null, body);
+                    result.forEach(el=>{
+                      knex('tblOtpAdd')
+                          .where({otp_id: el.otp_id})
+                          .update('upload_status',1)
+                          .then(x=>{
+                            console.log(x)
+                          })
+                    })
+                  } else {
+                    cb(body);
+                  }
+                }
+              })
+            } else {
+              cb(null, 'OTP Update: No new record')
+            }
+            
           })
           .catch(e=>{
             cb(e)
@@ -3182,31 +2691,36 @@ function newSync() {
           .where({upload_status: 0})
           .orWhereNull('upload_status')
           .then(result=>{
-            var options = {
-              method: 'POST',
-              uri: surl + '/otpExitv1',
-              body: result,
-              json: true
-            }
-            request(options, (err, response, body)=>{
-              if(err){
-                cb(err)
-              } else {
-                if(body.success === 'OTP Exit Added'){
-                  cb(null, body);
-                  result.forEach(el=>{
-                    knex('tblOtpExit')
-                        .where({opt_id: el.otp_id})
-                        .update('upload_status',1)
-                        .then(x=>{
-                          console.log(x)
-                        })
-                  })
-                } else {
-                  cb(body);
-                }
+            if(result.length > 0 ){
+              var options = {
+                method: 'POST',
+                uri: surl + '/otpExitv1',
+                body: result,
+                json: true
               }
-            })
+              request(options, (err, response, body)=>{
+                if(err){
+                  cb(err)
+                } else {
+                  if(body.success === 'OTP Exit Added'){
+                    cb(null, body);
+                    result.forEach(el=>{
+                      knex('tblOtpExit')
+                          .where({exit_id: el.exit_id})
+                          .update('upload_status',1)
+                          .then(x=>{
+                            console.log(x)
+                          })
+                    })
+                  } else {
+                    cb(body);
+                  }
+                }
+              })
+            }else {
+              cb(null, 'OTP Exit: No new record')
+            }
+            
           })
           .catch(e=>{
             cb(e)
@@ -3217,31 +2731,36 @@ function newSync() {
           .where({upload_status: 2})
           .orWhereNull('upload_status')
           .then(result=>{
-            var options = {
-              method: 'PUT',
-              uri: surl + '/otpExitv1',
-              body: result,
-              json: true
-            }
-            request(options, (err, response, body)=>{
-              if(err){
-                cb(err)
-              } else {
-                if(body.success === 'OTP exit updated'){
-                  cb(null, body);
-                  result.forEach(el=>{
-                    knex('tblOtpExit')
-                        .where({opt_id: el.otp_id})
-                        .update('upload_status',1)
-                        .then(x=>{
-                          console.log(x)
-                        })
-                  })
-                } else {
-                  cb(body);
-                }
+            if(result.length > 0){
+              var options = {
+                method: 'PUT',
+                uri: surl + '/otpExitv1',
+                body: result,
+                json: true
               }
-            })
+              request(options, (err, response, body)=>{
+                if(err){
+                  cb(err)
+                } else {
+                  if(body.success === 'OTP exit updated'){
+                    cb(null, body);
+                    result.forEach(el=>{
+                      knex('tblOtpExit')
+                          .where({exit_id: el.exit_id})
+                          .update('upload_status',1)
+                          .then(x=>{
+                            console.log(x)
+                          })
+                    })
+                  } else {
+                    cb(body);
+                  }
+                }
+              })
+            } else {
+              cb(null, 'OTP Exit Update: No new record')
+            }
+            
           })
           .catch(e=>{
             cb(e)
@@ -3252,31 +2771,36 @@ function newSync() {
           .where({upload_status: 0})
           .orWhereNull('upload_status')
           .then(result=>{
-            var options = {
-              method: 'POST',
-              uri: surl + '/sessionsv1',
-              body: result,
-              json: true
-            }
-            request(options, (err, response, body)=>{
-              if(err){
-                cb(err)
-              } else {
-                if(body.success === 'Sessions uploaded'){
-                  cb(null, body);
-                  result.forEach(el=>{
-                    knex('tblSessions')
-                        .where({session_id: el.session_id})
-                        .update('upload_status',1)
-                        .then(x=>{
-                          console.log(x)
-                        })
-                  })
-                } else {
-                  cb(body);
-                }
+            if(result.length > 0 ){
+              var options = {
+                method: 'POST',
+                uri: surl + '/sessionsv1',
+                body: result,
+                json: true
               }
-            })
+              request(options, (err, response, body)=>{
+                if(err){
+                  cb(err)
+                } else {
+                  if(body.success === 'Sessions uploaded'){
+                    cb(null, body);
+                    result.forEach(el=>{
+                      knex('tblSessions')
+                          .where({session_id: el.session_id})
+                          .update('upload_status',1)
+                          .then(x=>{
+                            console.log(x)
+                          })
+                    })
+                  } else {
+                    cb(body);
+                  }
+                }
+              })
+            } else {
+              cb(null, 'Session Add: No new record')
+            }
+            
           })
           .catch(e=>{
             cb(e)
@@ -3287,31 +2811,36 @@ function newSync() {
           .where({upload_status: 2})
           .orWhereNull('upload_status')
           .then(result=>{
-            var options = {
-              method: 'PUT',
-              uri: surl + '/sessionsv1',
-              body: result,
-              json: true
-            }
-            request(options, (err, response, body)=>{
-              if(err){
-                cb(err)
-              } else {
-                if(body.success === 'Sessions Updated'){
-                  cb(null, body);
-                  result.forEach(el=>{
-                    knex('tblSessions')
-                        .where({session_id: el.session_id})
-                        .update('upload_status',1)
-                        .then(x=>{
-                          console.log(x)
-                        })
-                  })
-                } else {
-                  cb(body);
-                }
+            if(result.length > 0){
+              var options = {
+                method: 'PUT',
+                uri: surl + '/sessionsv1',
+                body: result,
+                json: true
               }
-            })
+              request(options, (err, response, body)=>{
+                if(err){
+                  cb(err)
+                } else {
+                  if(body.success === 'Sessions Updated'){
+                    cb(null, body);
+                    result.forEach(el=>{
+                      knex('tblSessions')
+                          .where({session_id: el.session_id})
+                          .update('upload_status',1)
+                          .then(x=>{
+                            console.log(x)
+                          })
+                    })
+                  } else {
+                    cb(body);
+                  }
+                }
+              })
+            }else{
+              cb(null, 'Session Update: No new record')
+            }
+            
           })
           .catch(e=>{
             cb(e)
@@ -3321,35 +2850,41 @@ function newSync() {
         knex('tblOtpFollowup')
           .where({upload_status:0})
           .then(result=>{
-            var options = {
-              method: 'POST',
-              uri: surl + '/followupv1',
-              body: result,
-              json: true
-            }
-            // console.log(result)
-            request(options, (err, response, body)=>{
-              if(err){
-                cb(err)
-              } else {
-                console.log(typeof body);
-                // body = JSON.parse(body);
-                if(body.success === 'Followups Added'){
-                  cb(null, body)
-                  result.forEach(el=>{
-                    console.log(el);
-                     knex('Screening')
-                      .where({followup_id: el.followup_id})
-                      .update('upload_status', 1)
-                      .then(result=>{
-                        console.log(result)
-                      })
-                  })
-                } else {
-                  cb(body)
-                }
+            if(result.length > 0){
+              var options = {
+                method: 'POST',
+                uri: surl + '/followupv1',
+                body: result,
+                json: true
               }
-            })
+              // console.log(result)
+              request(options, (err, response, body)=>{
+                if(err){
+                  cb(err)
+                } else {
+                  console.log(typeof body);
+                  // body = JSON.parse(body);
+                  if(body.success === 'Followups Added'){
+                    cb(null, body)
+                    result.forEach(el=>{
+                      console.log(el);
+                       knex('tblOtpFollowup')
+                        .where({followup_id: el.followup_id})
+                        .update('upload_status', 1)
+                        .then(result=>{
+                          console.log(result)
+                        })
+                    })
+                  } else {
+                    cb(body)
+                  }
+                }
+              })
+            } else {
+              cb(null, 'Followup Add: No new record')
+
+            }
+           
           })          
           .catch(e=>{
             cb(e)
@@ -3357,12 +2892,12 @@ function newSync() {
       },
     }, function(err, results){
       if(err){
-        syncNew.webContents.send('error', {error:'Server not updated'})
+        syncNew.webContents.send('err', {error:'Server not updated'})
         syncNew.webContents.send('updateServer','a')
         console.log(err)
       } else{
         console.log(results)
-        syncNew.webContents.send('success', {msg: 'DB updated successfully'})
+        syncNew.webContents.send('success', {msg: 'Server updated successfully'})
         syncNew.webContents.send('updateServer','a')
 
       }
