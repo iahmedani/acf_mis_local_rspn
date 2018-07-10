@@ -372,7 +372,7 @@ function otpExit() {
       .catch(e => {
         console.log(e);
         exitOtp.webContents.send('resultSentOtpExitAdd', ({
-          msg: 'Record not saved, error in db'
+          err: 'Record not saved, error in db'
         }))
       })
       data = null;
@@ -451,9 +451,9 @@ function otpExitEdit() {
       .then(result => {
         console.log(result);
 
-        // exitOtpEdit.webContents.send('resultSentOtpExitUpd', ({
-        //   msg: 'Record updated successfully'
-        // }))
+        exitOtpEdit.webContents.send('resultSentOtpExitUpd', ({
+          'msg': 'Record updated successfully'
+        }))
         return knex('tblInterimOtp')
           .where('otp_id', otpExitAddData.otp_id)
           .update({
@@ -469,7 +469,7 @@ function otpExitEdit() {
       .catch(e => {
         console.log(e);
         exitOtpEdit.webContents.send('resultSentOtpExitUpd', ({
-          msg: 'Record not updated, error in db'
+          'err': 'Record not updated, error in db'
         }))
       })
     data = null;  
@@ -480,6 +480,7 @@ function otpExitEdit() {
 
 }
 
+// adding followup records
 function addFollowupOtp() {
   const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
 
@@ -554,10 +555,11 @@ function addFollowupOtp() {
       quantity3: item.quantity3,
       curr_date: item.followup_date,
       next_followup: function () {
-        var myDate = new Date();
+        var myDate = new Date(item.followup_date);
         myDate.setDate(myDate.getDate() + 15)
         return myDate.toLocaleDateString();
-      }()
+      }(),
+      updated_at: localDate()
     }
     var followupData = {
       upload_status: 0,
@@ -571,12 +573,13 @@ function addFollowupOtp() {
       quantity2: item.quantity2,
       ration3: item.ration3,
       quantity3: item.quantity3,
-      curr_date: localDate(),
+      curr_date: item.followup_date,
       next_followup: function () {
-        var myDate = new Date();
+        var myDate = new Date(item.followup_date);
         myDate.setDate(myDate.getDate() + 15)
         return myDate.toLocaleDateString();
-      }()
+      }(),
+      created_at: localDate()
     }
     console.log('_______________update data______')
     console.log(interimUpd)
@@ -889,7 +892,7 @@ function scrAddChild() {
         })
         .catch(err => {
           addScrChild.webContents.send("scrChAddResp", {
-            'msg': 'eror occured, plz try again'
+            'err': 'eror occured, plz try again'
           });
         })
     } else {
@@ -897,12 +900,12 @@ function scrAddChild() {
         .insert(data)
         .then(result => {
           addScrChild.webContents.send("scrChAddResp", {
-            'msg': 'records added'
+            'msg': data.length + ' records added'
           });
         })
         .catch(err => {
           addScrChild.webContents.send("scrChAddResp", {
-            'msg': 'eror occured, plz try again'
+            'err': 'eror occured, plz try again'
           });
         })
     }
@@ -1020,7 +1023,7 @@ function scrAddPlw() {
         .catch(err => {
           console.log(err);
           addScrPlw.webContents.send("scrPlwResp", {
-            'msg': 'eror occured, plz try again'
+            'err': 'eror occured, plz try again'
           });
         })
     } else {
@@ -1028,12 +1031,12 @@ function scrAddPlw() {
         .insert(data)
         .then(result => {
           addScrPlw.webContents.send("scrPlwResp", {
-            'msg': 'records added'
+            'msg': data.length +' records added'
           });
         })
         .catch(err => {
           addScrPlw.webContents.send("scrPlwResp", {
-            'msg': 'eror occured, plz try again'
+            'err': 'eror occured, plz try again'
           });
         })
     }
@@ -1119,6 +1122,7 @@ function otpAdd() {
           ration3: addFormOtp.ration3,
           quantity3: addFormOtp.quantity3,
           curr_date: localDate(),
+          created_at: localDate(),
           status: 'open',
           next_followup: function () {
             var myDate = new Date();
@@ -1136,7 +1140,7 @@ function otpAdd() {
       .catch(e => {
         console.log(e + 'OTP add error');
         addOtp.webContents.send("resultSentOtpAdd", {
-          'msg': 'records not added, plz try again'
+          'err': 'records not added, plz try again'
         });
       })
       // addFormOtp = null;

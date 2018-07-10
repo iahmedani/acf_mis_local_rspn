@@ -23,6 +23,11 @@
     }
     #myForm {
     padding-top: 30px;
+    
+  }
+  .error {
+    color: red !important;
+    font-size: 0.75rem;
   }
 </style>
 
@@ -154,7 +159,7 @@
                                 <option value="">Select</option>
                                 <option value="1">Normal</option>
                                 <option value="2">MAM</option>
-                                <option value="3">SAM</option>
+                                <!-- <option value="3">SAM</option> -->
                             </select>
 
                         </td>
@@ -309,9 +314,26 @@
         })
       })
       ipc.on('scrPlwResp', function(evt, result){
-      $('body').append(`<div class="alert alert-primary" role="alert">
- ${result.msg}
-</div>`)});
+        if(result.msg){
+          $('body').append(`<div class="alert alert-success alert-dismissible fade show" role="alert">${result.msg}</div>`)  
+    $('.alert').alert()
+    $(".alert").fadeTo(3000, 1000).slideUp(500, function(){
+    $(".alert").alert('close');
+    $().alert('dispose')
+      location.reload();
+      // error = '';
+    })
+        } else {
+          $('body').append(`<div class="alert alert-warning alert-dismissible fade show" role="alert">${result.err}</div>`)  
+    $('.alert').alert()
+    $(".alert").fadeTo(3000, 1000).slideUp(500, function(){
+    $(".alert").alert('close');
+    $().alert('dispose')
+      location.reload();
+      // error = '';
+    })
+        }
+      });
     </script>
 </body>
 

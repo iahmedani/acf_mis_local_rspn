@@ -31,6 +31,10 @@
   #myForm {
     padding-top: 30px;
   }
+  .error {
+    color: red !important;
+    font-size: .075rem;
+  }
 </style>
 
 <body>
@@ -85,7 +89,9 @@
       </div>
     </div>
     <div class="row">
-      <div id="jsGrid" class="table-responsive"></div>
+        <div class="table-responsive">
+      <div id="jsGrid" class="table"></div>
+      </div>
     </div>
     <!-- </form> -->
   </div>
@@ -376,7 +382,7 @@
             value: ''
           },
           {
-            Name: 'No Prv Prog',
+            Name: 'New Admission',
             value: 'no_prv_pro'
           },
           {
@@ -434,8 +440,8 @@
           }
         ]
         $("#jsGrid").jsGrid({
-          height: "500px",
-          width: "100%",
+          width: "auto",
+    height: "auto",
           // filtering: true,
           // inserting: true,
           editing: true,
@@ -504,40 +510,40 @@
               type: 'select',
               items: gender,
               valueField: 'value',
-              textField: 'Name',
+              textField: 'Name'
             }, {
               name: 'plw_type',
               title: 'PLW Type',
               type: 'select',
               items: plwType,
               valueField: 'value',
-              textField: 'Name',
+              textField: 'Name'
             }, {
               name: 'ent_reason',
               title: 'Entry Reason',
               type: 'select',
               items: entReason,
               valueField: 'value',
-              textField: 'Name',
+              textField: 'Name'
             }, {
               name: 'ref_type',
               title: 'Refferal Type',
               type: 'select',
               items: refType,
               valueField: 'value',
-              textField: 'Name',
+              textField: 'Name'
             },
             {
               name: "weight",
               title: "Weight",
-              type: "number",
+              type: "number"
             }, {
               name: 'oedema',
               title: 'Oedema',
               type: 'select',
               items: oedema,
               valueField: 'value',
-              textField: 'Name',
+              textField: 'Name'
             },
             {
               name: "muac",
@@ -648,11 +654,6 @@
         })
       })
     })
-    ipc.on('resultSent', function (evt, result) {
-      $('body').append(`<div class="alert alert-primary" role="alert">
- ${result.msg}
-</div>`)
-    });
   </script>
 
 </body>

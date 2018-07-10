@@ -24,6 +24,10 @@
   #myForm {
     padding-top: 30px;
   }
+  .error {
+    color: red !important;
+    font-size: 0.75rem;
+  }
 </style>
 
 <body>
@@ -136,8 +140,8 @@
             <td>
               <select name="ddGender" class="form-control form-control-sm" required required>
                 <option value="">Select</option>
-                <option value="1">M</option>
-                <option value="2">F</option>
+                <option value="1">Male</option>
+                <option value="2">Female</option>
               </select>
             </td>
             <td>
@@ -218,7 +222,7 @@
         e.preventDefault();
         ipc.send('scrAddChild', formData);
         formData = '';
-                location.reload();
+        // location.reload();
       }
     })
 
@@ -320,9 +324,28 @@
         })
       })
       ipc.on('scrChAddResp', function(evt, result){
-      $('body').append(`<div class="alert alert-primary" role="alert">
- ${result.msg}
-</div>`)});
+        if(result.msg){
+          $('body').append(`<div class="alert alert-success alert-dismissible fade show" role="alert">${result.msg}</div>`)  
+    $('.alert').alert()
+    $(".alert").fadeTo(3000, 1000).slideUp(500, function(){
+    $(".alert").alert('close');
+    $().alert('dispose')
+      location.reload();
+      // error = '';
+    })
+        } else {
+          $('body').append(`<div class="alert alert-warning alert-dismissible fade show" role="alert">${result.err}</div>`)  
+    $('.alert').alert()
+    $(".alert").fadeTo(3000, 1000).slideUp(500, function(){
+    $(".alert").alert('close');
+    $().alert('dispose')
+      location.reload();
+      // error = '';
+    })
+        }
+
+
+});
   </script>
 
 </body>

@@ -363,7 +363,8 @@ jsGrid.fields.date = MyDateField;
           fields: [ {
             name:'session_date',
             title:'Date',
-            type:'date'
+            type:'date',
+              validate: 'required'
           },{
             name: "session_type",
             title: "Session Type",
@@ -377,7 +378,8 @@ jsGrid.fields.date = MyDateField;
               {Name:'Other',value:'other'},
               ],
               valueField: "value",
-              textField: "Name"
+              textField: "Name",
+              validate: 'required'
           },{
             name:'session_location',
             title: 'Session Location',
@@ -387,11 +389,25 @@ jsGrid.fields.date = MyDateField;
               {Name:'In CMAM Site',value:'cmam_site'},
               {Name:'In Community',value:'community'}
             ],valueField: "value",
-              textField: "Name"
+              textField: "Name",
+              validate: 'required'
           }, {
-            name: "participants",
-            title: "Total Participants",
-            type: "number"
+            name: "male_participants",
+            title: "Male Participants",
+            type: "number",
+            validate:{
+              validator: 'min',
+              param: 0
+            }
+          },
+           {
+            name: "female_participants",
+            title: "Female Participants",
+            type: "number",
+            validate:{
+              validator: 'min',
+              param: 0
+            }
           },{
             name:'upload_status',
             title:'Upload Status',

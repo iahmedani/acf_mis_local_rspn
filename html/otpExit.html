@@ -26,10 +26,13 @@
     font-size: 12px !important;
     font-weight: bold !important;
   }
-
-  #myForm {
+.error {
+  color: red !important;
+  font-size: 0.75rem;
+}
+  /* #myForm {
     padding-top: 30px;
-  }
+  } */
 </style>
 
 <body>
@@ -44,7 +47,7 @@
     </nav>
   </header>
   <div class="container-fluid">
-
+    
     <div class="row">
       <div class="form-group col-sm-2 ">
         <label for="province">Province</label>
@@ -54,7 +57,7 @@
         </select>
       </div>
       <div class="form-group col-sm-2 ">
-
+        
         <label for="district">District</label>
         <select name="district" id="ddDistrict" class="form-control form-control-sm">
           <option selected disabled>Choose</option>
@@ -65,7 +68,7 @@
         <label for="Tehsil">Tehsil</label>
         <select name="Tehsil" id="ddTehsil" class="form-control form-control-sm">
           <option selected disabled>Choose</option>
-
+          
         </select>
       </div>
       <div class="form-group col-sm-2 ">
@@ -74,39 +77,35 @@
           <option selected disabled>Choose</option>
         </select>
       </div>
-      <div class="form-group col-sm-2">
-
+      <div class="form-group col-sm-4">
+        
         <label for="site_id" class="form-label">Site Name:</label>
-
+        
         <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm">
           <option value="">Select One</option>
         </select>
       </div>
-      <div class="form-group col-sm-2">
-
-        <label for="exit_date" class="form-label">Exit Date:</label>
-
-        <input type="date" name="exit_date" id="exit_date" class="form-control form-control-sm">
-      </div>
+      
     </div>
     <!-- <div class="card">
-        <div class="card-header">
-          Patient List:
+      <div class="card-header">
+        Patient List:
         </div>
         <div class="card-body"> -->
 <div class="row">
-
+  
   <div id="jsGrid" class="table-responsive col col-sm-4"></div>
   <div id="exitEntry" class="col-sm-8 border rounded">
-    <form action="#!" id="myForm">
+    <form  id="myForm">
+    <!-- <form  id="myForm"> -->
       <div class="row">
       <div class="form-group col-sm-2">
         <label for="p_name" class="form-label" >Patient Name:</label>
-        <input type="text" id="p_name" name="p_name" class="form-control form-control-sm ">
+        <input type="text" id="p_name" name="p_name" class="form-control form-control-sm " readonly>
         </div>
         <div class="form-group col-sm-2">
             <label for="gender" class="form-label">Gender:</label>
-            <select name="gender" id="gender" class="form-control form-control-sm">
+            <select name="gender" id="gender" class="form-control form-control-sm" readonly>
               <option value="" selected disabled>Select</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
@@ -115,22 +114,22 @@
       <div class="form-group col-sm-2">
 
         <label for="village" class="form-label" >Village:</label>
-        <input type="text" id="village" name="village" class="form-control form-control-sm ">
+        <input type="text" id="village" name="village" class="form-control form-control-sm " readonly>
         </div>
       <div class="form-group col-sm-2">
 
           <label for="exit_weight" class="form-label">Exit Weight:</label>
-          <input type="number" id="exit_weight" name="exit_weight" class="form-control form-control-sm ">
+          <input type="number" id="exit_weight" name="exit_weight" class="form-control form-control-sm " required>
           </div>
       <div class="form-group col col-sm-2">
 
           <label for="exit_muac" >Exit MUAC:</label>
-          <input type="text" id="exit_muac"  name="exit_muac" class="form-control form-control-sm ">
+          <input type="text" id="exit_muac"  name="exit_muac" class="form-control form-control-sm " required>
 </div>
 <div class="form-group col col-sm-2">
 
     <label for="exit_reason" >Exit Reasons:</label>
-   <select name="exit_reason" id="exit_reason" class="form-control form-control-sm">
+   <select name="exit_reason" id="exit_reason" class="form-control form-control-sm" required>
      <option value=""disabled selected >Select</option>
      <option value="cured">Cured</option>
      <option value="defaulter">Defaulter</option>
@@ -145,7 +144,8 @@
 <div class="row">
     <div class="form-group col-sm-2">
       <label for="exit_ration1">Ration 1:</label>
-      <select name="exit_ration1" class="form-control form-control-sm" id="exit_ration1">
+      <select name="exit_ration1" class="form-control form-control-sm" id="exit_ration1" required>
+        <option selected disabled>Choose</option>
         <option value="RUTF Sachets">RUTF Sachets</option>
         <option value="Amoxicillin">Amoxicillin</option>
         <option value="Folic Acid">Folic Acid</option>
@@ -163,11 +163,13 @@
     </div>
     <div class="form-group col-sm-2">
       <label for="exit_quantity1">Quantity:</label>
-      <input type="number" name="exit_quantity1" id="exit_quantity1" class="form-control form-control-sm" min="0">
+      <input type="number" name="exit_quantity1" id="exit_quantity1" class="form-control form-control-sm" min="0" required>
     </div>
     <div class="form-group col-sm-2">
       <label for="exit_ration2">Ration 2:</label>
       <select name="exit_ration2" class="form-control form-control-sm" id="exit_ration2">
+          <option selected disabled>Choose</option>
+
         <option value="RUTF Sachets">RUTF Sachets</option>
         <option value="Amoxicillin">Amoxicillin</option>
         <option value="Folic Acid">Folic Acid</option>
@@ -190,6 +192,8 @@
     <div class="form-group col-sm-2">
       <label for="exit_ration3">Ration 3:</label>
       <select name="exit_ration3" class="form-control form-control-sm" id="exit_ration3">
+          <option selected disabled>Choose</option>
+
         <option value="RUTF Sachets">RUTF Sachets</option>
         <option value="Amoxicillin">Amoxicillin</option>
         <option value="Folic Acid">Folic Acid</option>
@@ -213,9 +217,15 @@
     
   </div>
 <div class="row">
-    <div class="form-group col-sm-2 float-right">
-
-   <input type="submit" id="btnOtpExit" value="Save" class="btn btn-primary btn-block form-control form-control-sm">
+    <div class="form-group col-sm-4">
+        
+        <label for="exit_date" class="form-label">Exit Date:</label>
+        
+        <input type="date" name="exit_date" id="exit_date" class="form-control form-control-sm" required>
+      </div>
+    <div class="form-group col-sm-2 offset-sm-6">
+<label for="">  </label>
+   <input type="submit" id="btnOtpExit" value="Save" class="btn btn-primary btn-block form-control form-control-sm ">
   </div>
 
 </div>
@@ -266,8 +276,9 @@
     })(jQuery);
     const ipc = require('electron').ipcRenderer;
     $('#myForm').validate();
+    // $('#exit_date').validate();
     $('#myForm').on('submit', function (e) {
-      if ($(this).valid()) {
+      if ($(this).valid() ) {
         var formData = $(this).serializeFormJSON();
         var exit_date = $('#exit_date').val();
         formData.exit_date = exit_date;
@@ -295,7 +306,7 @@
           alert("Sorry!! Can't remove first row!");
         }
       });
-      var datePickerId = document.getElementById('txtScrChildDate');
+      var datePickerId = document.getElementById('exit_date');
       datePickerId.max = new Date().toISOString().split("T")[0];
     });
     $(function () {
@@ -446,10 +457,25 @@
       })
     })
     ipc.on('resultSentOtpExitAdd', function (evt, result) {
-      $('body').append(`<div class="alert alert-primary" role="alert">
- ${result.msg}
-</div>`)
-      setTimeout(location.reload(), 2000);
+      if(result.msg){
+          $('body').append(`<div class="alert alert-success alert-dismissible fade show" role="alert">${result.msg}</div>`)  
+    $('.alert').alert()
+    $(".alert").fadeTo(3000, 1000).slideUp(500, function(){
+    $(".alert").alert('close');
+    $().alert('dispose')
+      location.reload();
+      // error = '';
+    })
+        } else {
+          $('body').append(`<div class="alert alert-warning alert-dismissible fade show" role="alert">${result.err}</div>`)  
+    $('.alert').alert()
+    $(".alert").fadeTo(3000, 1000).slideUp(500, function(){
+    $(".alert").alert('close');
+    $().alert('dispose')
+      location.reload();
+      // error = '';
+    })
+        }
     });
   </script>
 
