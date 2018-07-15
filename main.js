@@ -16,11 +16,27 @@ var knex = require("knex")({
   client: "sqlite3",
   connection: {
     filename: 'acf_mis_local.sqlite3'
-
-
     // filename: './acf_mis_local.sqlite3'
   }
 });
+
+
+
+// var username;
+// var org_name;
+// var project_name;
+
+// fs.stat('config.json',function(err, stat){
+//   if(err === null){
+//   var config = JSON.parse(fs.readFileSync('./config.json', 'utf8'))
+//     username = config.username;
+//     org_name = config.org_name;
+//     project_name = config.project_name
+//     console.log({location: 'setting username projectt_name and org_name', config})
+//   }
+// })
+
+
 console.log()
 var db = require('./dbTest');
 const request = require('request');
@@ -28,6 +44,66 @@ const request = require('request');
 // const bParser = require('body-parser');
 
 // app.use(bParser.json());
+// first run check
+function firstRun(){
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+  var client_id = imran.client;
+  runFirst = new BrowserWindow({
+    width, height,
+    title: 'first Run'
+  });
+
+  runFirst.loadURL(url.format({
+    pathname: path.join(__dirname, '/html/firstRun.html'),
+    protocol: 'file:',
+    slashes: true
+  }));
+
+  ipcMain.on('firstRun', (e, firstRunInfo)=>{
+    console.log(firstRunInfo);
+    var usernameL = firstRunInfo.username.toLowerCase();
+    usernameL = usernameL.replace(/\s+/g, '');
+
+    var org_nameL = firstRunInfo.org_name.toLowerCase();
+    org_nameL = org_nameL.replace(/\s+/g, '');
+
+    var project_nameL = firstRunInfo.project_name.toLowerCase();
+    project_nameL = project_nameL.replace(/\s+/g, '');
+
+    var passwordL = firstRunInfo.password.toLowerCase();
+    passwordL = passwordL.replace(/\s+/g, '');
+
+
+    var configInformation = {
+      usernameL,
+      org_nameL,
+      project_nameL,
+      passwordL
+    }
+
+    var thisJson = JSON.stringify(configInformation);
+    fs.writeFile('config.json', thisJson, 'utf8', (err)=>{
+      if(err){
+        runFirst.webContents.send('firstRunResponse', ({
+          err:err
+        }))
+      } else {
+        runFirst.webContents.send('firstRunResponse', ({
+          success:1,
+          msg:'Your configuration is saved, thanks!!'
+        }))
+      }
+    });
+  })
+
+  runFirst.on('closed', function () {
+    runFirst = null;
+  })
+
+  runFirst.on('close', function () {
+    runFirst = null;
+  })
+}
 
 //Creating main window
 app.on('ready', () => {
@@ -36,15 +112,27 @@ app.on('ready', () => {
     width, height
   });
   // mainWindow.fullscreen = true;
+  fs.stat('config.json', function(err, stat) {
+    if(err == null) {
+        console.log('File exists');
+        mainWindow.once('ready-to-show', () => {
+          
+          mainWindow.show()
+        });
+    } else if(err.code == 'ENOENT') {
+        // file does not exist
+        firstRun();
+    } else {
+        console.log('Some other error: ', err.code);
+    }
+});
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, '/html/index2.html'),
     protocol: 'file:',
     slashes: true
   }));
 
-  mainWindow.once('ready-to-show', () => {
-    mainWindow.show()
-  });
+  
   ipcMain.on('mainWindowLoaded', function () {
     mainWindow.webContents.send('msg', 'Message from main app');
   });
@@ -95,7 +183,10 @@ app.on('ready', () => {
 
 function sessions() {
   const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
-
+  var config = JSON.parse(fs.readFileSync('./config.json', 'utf8'))
+    var username = config.usernameL;
+    var org_name = config.org_nameL;
+    var project_name = config.project_nameL
   var client_id = imran.client;
   session = new BrowserWindow({
     width, height,
@@ -143,9 +234,13 @@ function sessions() {
       })
   });
   ipcMain.on('insertSessionsSingle', (e, item) => {
+
     item.upload_status = 0;
     item.client_id = client_id;
     item.created_at = localDate();
+    item.username = username;
+    item.project_name = project_name;
+    item.org_name = org_name;
     console.log({
       msg: 'insert Sessions',
       data: item
@@ -791,6 +886,11 @@ function scrAddChild() {
   const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
 
   var client = imran.client;
+  var config = JSON.parse(fs.readFileSync('./config.json', 'utf8'))
+    var username = config.usernameL;
+    var org_name = config.org_nameL;
+    var project_name = config.project_nameL
+    console.log(config);
 
   addScrChild = new BrowserWindow({
     width,height,
@@ -827,6 +927,7 @@ function scrAddChild() {
   });
 
   ipcMain.on('scrAddChild', function (event, scrForm) {
+    
     console.log(scrForm)
     var village = scrForm.txtVillage;
     var site_id = scrForm.ddHealthHouse;
@@ -857,7 +958,10 @@ function scrAddChild() {
           no_mm_sch: scrForm.numMMSche[i],
           deworming: scrForm.ddYesNoDeworming[i],
           status: scrForm.ddScrChildStatus[i],
-          upload_status: 0
+          upload_status: 0,
+          username: username,
+          org_name: org_name,
+          project_name: project_name
         });
       });
     } else {
@@ -880,9 +984,13 @@ function scrAddChild() {
         single.deworming = scrForm.ddYesNoDeworming;
       single.status = scrForm.ddScrChildStatus;
       single.upload_status = 0;
+          single.username= username;
+          single.org_name= org_name;
+          single.project_name= project_name;
     }
     console.log(data)
     if (data.length < 1) {
+      console.log(single)
       knex('Screening')
         .insert(single)
         .then(result => {
@@ -896,6 +1004,8 @@ function scrAddChild() {
           });
         })
     } else {
+      console.log(data)
+
       knex('Screening')
         .insert(data)
         .then(result => {
@@ -921,6 +1031,10 @@ function scrAddChild() {
 // Creating Screening : Add PLW Window
 function scrAddPlw() {
   var client = imran.client;
+  var config = JSON.parse(fs.readFileSync('./config.json', 'utf8'))
+    var username = config.usernameL;
+    var org_name = config.org_nameL;
+    var project_name = config.project_nameL
   const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
 
   addScrPlw = new BrowserWindow({
@@ -986,7 +1100,10 @@ function scrAddPlw() {
           muac: scrForm.numMUAC[i],
           no_mm_tabs: scrForm.numMMTablets[i],
           status: scrForm.ddScrPlwStatus[i],
-          upload_status: 0
+          upload_status: 0,
+          username: username,
+          org_name: org_name,
+          project_name: project_name
         });
       });
     } else {
@@ -1008,6 +1125,9 @@ function scrAddPlw() {
         single.no_mm_tabs = scrForm.numMMTablets,
         single.status = scrForm.ddScrPlwStatus;
       single.upload_status = 0;
+          single.username= username;
+          single.org_name= org_name;
+          single.project_name= project_name;
     }
     if (data.length < 1) {
       console.log('single plw add')
@@ -1054,7 +1174,10 @@ function scrAddPlw() {
 // Creating OTP : Add OTP Window
 function otpAdd() {
   const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
-
+  var config = JSON.parse(fs.readFileSync('./config.json', 'utf8'))
+    var username = config.usernameL;
+    var org_name = config.org_nameL;
+    var project_name = config.project_nameL
   var client = imran.client;
   addOtp = new BrowserWindow({
     width,height,
@@ -1101,6 +1224,9 @@ function otpAdd() {
     delete addOtpData.ddHealthHouseOTP;
     delete addOtpData.uc;
     addOtpData.client_id = imran.client;
+    addOtpData.username = username;
+    addOtpData.org_name = org_name;
+    addOtpData.project_name = project_name;
     const addFormOtp = addOtpData;
     console.log(addFormOtp);
     knex('tblOtpAdd')
