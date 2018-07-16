@@ -15,9 +15,9 @@ XLSX.utils.book_append_sheet(workbook, ws1, "Summary");
 
 /* convert table 'table2' to worksheet named "Sheet2" */
 var ws2 = XLSX.utils.table_to_sheet(document.getElementById('tblAdd'));
-XLSX.utils.book_append_sheet(workbook, ws2, "Child");
+XLSX.utils.book_append_sheet(workbook, ws2, "OTP Admissions");
 var ws3 = XLSX.utils.table_to_sheet(document.getElementById('tblExit'));
-XLSX.utils.book_append_sheet(workbook, ws3, "PLW");
+XLSX.utils.book_append_sheet(workbook, ws3, "OTP Exits");
 		// var wb = XLSX.utils.table_to_book(HTMLOUT);
 		var o = electron.dialog.showSaveDialog({
 			title: 'Save file as',

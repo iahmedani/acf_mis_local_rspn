@@ -217,11 +217,12 @@
     const ipc = require('electron').ipcRenderer;
     $('#myForm').validate();
     $('#myForm').on('submit', function (e) {
+      $(this).validate();
       if ($(this).valid()) {
         var formData = $(this).serializeFormJSON();
         e.preventDefault();
         ipc.send('scrAddChild', formData);
-        formData = '';
+        // formData = '';
         // location.reload();
       }
     })
