@@ -7,7 +7,7 @@
   "scripts": {
     "start": "electron . ",
     "rebuild": "electron-rebuild -f -w sqlite3 async",
-    "winbuild": "electron-packager . acf-local-app --out=release-builds-v2.2 --version-string.CompanyName=ACF --version-string.FileDescription=ACF --version-string.ProductName='ACF Local App' --version-string.FileDescription='Build v1.07 15July18'"
+    "winbuild": "electron-packager . acf-local-app --out=release-builds-beta2.3 --version-string.CompanyName=ACF --version-string.FileDescription=ACF --version-string.ProductName='ACF Local App' --version-string.FileDescription='Build v1.07 15July18'"
   },
   "keywords": [],
   "author": "",

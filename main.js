@@ -296,6 +296,15 @@ function sessions() {
       item = null;
   });
   session.on('close', function () {
+    var myChan = ['updateSessionsSingle','insertSessionsSingle','getSessionsAll',
+    'ses_getHealthHouse',
+    'ses_getUC',
+    'ses_getTehsil',
+    'ses_getDistrict','ses_getProvince']
+    for (const i in myChan){
+      ipcMain.removeAllListeners(myChan[i])
+      console.log('channel removed ', myChan[i])
+    }
     session = null;
   })
 
@@ -381,6 +390,15 @@ function otpAddUpdate() {
       item = null;
   })
   otpUpdate.on('close', function () {
+    var myChan = ['updateOtp','allOtp','otpUpd_getHealthHouse',
+    'otpUpd_getUC',
+    'otpUpd_getTehsil',
+    'otpUpd_getDistrict',
+    'otpExit_getDistrict','otpUpd_getProvince']
+    for (const i in myChan){
+      ipcMain.removeAllListeners(myChan[i])
+      console.log('channel removed ', myChan[i])
+    }
     otpUpdate = null;
   })
 
@@ -473,6 +491,15 @@ function otpExit() {
       data = null;
   })
   exitOtp.on('close', function () {
+    var myChan = ['resultSentOtpExitAdd','otpExitAdd','getOtpAll',
+    'otpExit_getHealthHouse',
+    'otpExit_getTehsil',
+    'otpExit_getUC',
+    'otpExit_getDistrict','otpExit_getProvince']
+    for (const i in myChan){
+      ipcMain.removeAllListeners(myChan[i])
+      console.log('channel removed ', myChan[i])
+    }
     exitOtp = null;
   })
 
@@ -570,6 +597,15 @@ function otpExitEdit() {
     data = null;  
   })
   exitOtpEdit.on('close', function () {
+    var myChan = ['resultSentOtpExitUpd','otpExitUpdate','get',
+    'have',
+    'otpExitUpd_getHealthHouse',
+    'otpExitUpd_getUC',
+    'otpExitUpd_getTehsil','otpExitUpd_getDistrict','otpExitUpd_getProvince']
+    for (const i in myChan){
+      ipcMain.removeAllListeners(myChan[i])
+      console.log('channel removed ', myChan[i])
+    }
     exitOtpEdit = null;
   })
 
@@ -730,6 +766,15 @@ function addFollowupOtp() {
       item = null;
   })
   otpFollowup.on('close', function () {
+    var myChan = ['addFollowup','getInterim','followUp_getHealthHouse',
+    'followUp_getUC',
+    'followUp_getTehsil',
+    'followUp_getDistrict',
+    'followUp_getProvince']
+    for (const i in myChan){
+      ipcMain.removeAllListeners(myChan[i])
+      console.log('channel removed ', myChan[i])
+    }
     otpFollowup = null;
   })
 

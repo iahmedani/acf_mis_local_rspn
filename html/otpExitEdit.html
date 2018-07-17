@@ -219,13 +219,27 @@
     
   </div>
 <div class="row">
-    <div class="form-group col-sm-4">
+    <div class="form-group col-sm-2">
+        
+        <label for="weight_gain" class="form-label">Weight Gain:</label>
+        
+        <input type="number" min="0" max="500" name="weight_gain" id="weight_gain" class="form-control form-control-sm" aria-describedby="weight_gain_help" required>
+        <small id="weight_gain_help" class="form-text text-muted">g/kg/day</small>
+
+      </div>
+      <div class="form-group col-sm-3">
+        
+        <label for="days_in_program" class="form-label">Days in Program:</label>
+        
+        <input type="number" name="days_in_program" id="days_in_program" class="form-control form-control-sm" required>
+      </div>
+    <div class="form-group col-sm-3">
 
         <label for="exit_date" class="form-label">Exit Date:</label>
 
         <input type="date" name="exit_date" id="exit_date" class="form-control form-control-sm" required>
       </div>
-    <div class="form-group col-sm-2 offset-sm-6">
+    <div class="form-group col-sm-2 offset-sm-2">
         <label for="">   </label>
 
    <input type="submit" id="btnOtpExit" value="Update" class="btn btn-warning btn-block form-control form-control-sm">
@@ -456,7 +470,9 @@
             $('#exit_quantity2').val(data.exit_quantity2);
             $('#exit_quantity3').val(data.exit_quantity3);
             $('#exit_reason').val(data.exit_reason);
-
+            $('#weight_gain').val(data.weight_gain);
+            $('#days_in_program').val(data.days_in_program);
+            
             console.log(args.item);
           }
           // ,
