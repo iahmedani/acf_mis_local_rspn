@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="../fa5/css/fontawesome-all.min.css">
+  <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous"> -->
+  <!-- <link rel="stylesheet" href="../fa5/css/fontawesome-all.min.css"> -->
+  <link type="text/css" rel="stylesheet" href="../css/jsgrid.min.css" />
+  <link type="text/css" rel="stylesheet" href="../css/jsgrid-theme.min.css" />
+  <link rel="stylesheet" href="../css/jsgrid-theme-followup.css">
+  <link rel="stylesheet" href="../css/jquery-ui.css">
+  <title>ACF MIS FOR PINS</title>
+  <script>
+    const electron = require('electron');
+    const ipc = electron.ipcRenderer;
+    const remote = electron.remote;
+  </script>
+  <link rel="import" href="scrChildv2.html">
+  <link rel="import" href="scrPlwv2.html">
+  <link rel="import" href="otpAddv2.html">
+  <link rel="import" href="otpFollowUpv2.html">
+  <link rel="import" href="otpExitv2.html">
+  <link rel="import" href="sessionsv2.html">
+  <link rel="import" href="scrReportsv2.html">
+  <link rel="import" href="otpReportsv2.html">
+  <link rel="import" href="defaulterv2.html">
+  <link rel="import" href="scrChUpdv2.html">
+  <link rel="import" href="scrPlUpdv2.html">
+  <link rel="import" href="otpAddUpdv3.html">
+  <link rel="import" href="otpExitEditv2.html">
+</head>
+<style>
+
+  body {
+    user-select: none;
+  }
+  main {
+    font-size: 0.75rem;
+  }
+  .otp-upd {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+  }
+  .otp-upd-1 {
+    padding-left: 10px !important;
+    padding-right: 0px !important;
+  }
+  .upd-row {
+    margin-right: 0% !important;
+    margin-left: 0% !important;
+  }
+  .upd-body {
+    margin: 10px !important;
+  }
+  .otp-upd-2 {
+    padding-left: 5px !important;
+    padding-right: 10px !important;
+  }
+  p.list-group-item {
+    padding: 0.35rem 0.75rem !important;
+    /* font-size: 1rem; */
+    font-weight: bold;
+
+  }
+
+  .error {
+    font-size: 10px;
+    color: red;
+    font-weight: bolder;
+  }
+
+  #sidebar {
+    height: 100vh;
+    background-color: #333;
+    /* background-color: #4C9CB8; */
+    /* color: white !important; */
+  }
+
+  #sidebar .list-group-item {
+    border-radius: 0;
+    /* background-color: #4C9CB8; */
+
+    background-color: #333;
+    color: rgb(255, 255, 255);
+    border-left: 0;
+    border-right: 0;
+    border-color: #2c2c2c;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+
+  /* highlight active menu */
+
+  #sidebar .list-group-item:not(.collapsed) {
+    background-color: #222;
+  }
+
+  /* closed state */
+
+  #sidebar .list-group .list-group-item[aria-expanded="false"]::after {
+    content: " \f35a";
+    font-family: 'Font Awesome\ 5 Free';
+    display: inline;
+    text-align: right;
+    padding-left: 5px;
+  }
+
+  /* open state */
+
+  #sidebar .list-group .list-group-item[aria-expanded="true"] {
+    background-color: rgb(34, 34, 34);
+  }
+
+  #sidebar .list-group .list-group-item[aria-expanded="true"]::after {
+    content: " \f358";
+    font-family: 'Font Awesome\ 5 Free';
+    display: inline;
+    text-align: right;
+    padding-left: 5px;
+  }
+
+  /* level 1*/
+
+  #sidebar .list-group .collapse .list-group-item {
+    padding-left: 20px;
+  }
+
+  /* level 2*/
+
+  #sidebar .list-group .collapse>.collapse .list-group-item {
+    padding-left: 30px;
+  }
+
+  /* level 3*/
+
+  #sidebar .list-group .collapse>.collapse>.collapse .list-group-item {
+    padding-left: 40px;
+  }
+
+  @media (max-width:48em) {
+    /* overlay sub levels on small screens */
+    #sidebar .list-group .collapse.in,
+    #sidebar .list-group .collapsing {
+      position: absolute;
+      z-index: 1;
+      width: 190px;
+    }
+    #sidebar .list-group>.list-group-item {
+      text-align: center;
+      padding: .75rem .5rem;
+      min-width: 39px;
+    }
+    /* hide caret icons of top level when collapsed */
+    #sidebar .list-group>.list-group-item[aria-expanded="true"]::after,
+    #sidebar .list-group>.list-group-item[aria-expanded="false"]::after {
+      display: none;
+    }
+  }
+
+  /* change transition animation to width when entire sidebar is toggled */
+
+  #sidebar.collapse {
+    -webkit-transition-timing-function: ease;
+    -o-transition-timing-function: ease;
+    transition-timing-function: ease;
+    -webkit-transition-duration: .2s;
+    -o-transition-duration: .2s;
+    transition-duration: .2s;
+  }
+
+  #sidebar.collapsing {
+    opacity: 0.8;
+    width: 0;
+    -webkit-transition-timing-function: ease-in;
+    -o-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+    -webkit-transition-property: width;
+    -o-transition-property: width;
+    transition-property: width;
+
+  }
+</style>
+
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2 col-xs-1 p-l-0 p-r-0" id="sidebar">
+        <a class="navbar-brand"  href="#">
+          <img src="../img/acf-logo.svg" style="height: 50px;" alt="" >
+        </a>
+        <!-- <div class="list-group-item">Imran</div> -->
+        <div class="list-group panel">
+
+          <a href="#menu1" class="list-group-item collapsed" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
+            <i class="fas fa-tachometer-alt"></i>
+            <span class="hidden-sm-down">Data Entry</span>
+          </a>
+          <div class="collapse" id="menu1">
+            <a href="#menu1sub1" class="list-group-item" data-toggle="collapse" aria-expanded="false">Screening</a>
+            <div class="collapse" id="menu1sub1">
+              <a href="#" class="list-group-item" data-parent="#menu1sub1" id="childScr">Children</a>
+              <a href="#" class="list-group-item" data-parent="#menu1sub1" id="plwScr">PLW</a>
+            </div>
+            <a href="#" class="list-group-item" data-parent="#menu1" id="otpAdd">Admission</a>
+            <a href="#" class="list-group-item" data-parent="#menu1" id="addFollowupOtp">Follow Up</a>
+            <a href="#" class="list-group-item" data-parent="#menu1" id="otpExit">Exits</a>
+            <a href="#" class="list-group-item" data-parent="#menu1" id="sessions">Sessions</a>
+          </div>
+          <a href="#menu3" class="list-group-item collapsed" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
+            <i class="fa fa-book"></i>
+            <span class="hidden-sm-down">Edit</span>
+          </a>
+          <div class="collapse" id="menu3">
+            <a href="#menu3sub1" class="list-group-item" data-toggle="collapse" aria-expanded="false">Screening</a>
+            <div class="collapse" id="menu3sub1">
+              <a href="#" class="list-group-item" data-parent="#menu3sub1" id="scrChUpd">Children</a>
+              <a href="#" class="list-group-item" data-parent="#menu3sub1" id="scrPlUpd">PLW</a>
+            </div>
+            <a href="#" class="list-group-item" data-parent="#menu3" id="otpAddUpdate">Admissions</a>
+            <!-- <a href="#" class="list-group-item" data-parent="#menu3">FollowUp</a> -->
+            <a href="#" class="list-group-item" data-parent="#menu3" id="otpExitEdit">Exits</a>
+          </div>
+          <a href="#menu4" class="list-group-item collapsed" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
+            <i class="fa fa-book"></i>
+            <span class="hidden-sm-down">Reports</span>
+          </a>
+          <div class="collapse" id="menu4">
+            <a href="#" class="list-group-item" data-parent="#menu4" id="scrReport">Screening</a>
+            <!-- <a href="#" class="list-group-item" data-parent="#menu3">FollowUp</a> -->
+            <a href="#" class="list-group-item" data-parent="#menu4" id="otpReport">O.T.P</a>
+            <a href="#" class="list-group-item" data-parent="#menu4" id="defReport">Defaulter</a>
+          </div>
+        </div>
+      </div>
+      <main class="col-md-10 col-xs-11 p-l-2 p-t-2">
+        <div id="messages"></div>
+        <div id="jsContent" class="container-fluid">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 ">
+            <div class="card bg-light mb-6">
+              <div class="card-header">Help End Deadly Hunger: Make a Life-Saving Donation Today </div>
+              <div class="card-body">
+                <h5 class="card-title">Action Against Hunger </h5>
+                <p class="card-text">ACF International is an international humanitarian organization committed to saving the lives of malnourished
+                  children while providing communities with sustainable access to safe water and long-term solutions to hunger.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+
+  <script>
+    window.$ = window.jQuery = require('jquery');
+    require('jquery-validation');
+    // adding functionality to jquery for serializing form;
+    (function ($) {
+      $.fn.serializeFormJSON = function () {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function () {
+          if (o[this.name]) {
+            if (!o[this.name].push) {
+              o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+          } else {
+            o[this.name] = this.value || '';
+          }
+        });
+        return o;
+      };
+    })(jQuery);
+    // var async = require('async');
+    async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+      await callback(array[index], index, array)
+    }}
+    const prov = async (province)=>{
+        await asyncForEach(province.province, async(el)=>{
+          $('#ddProvince').append(`<option value="${el.id}">${el.provinceName}</option>`);
+        })
+        ipc.removeAllListeners('province')
+      }
+    const dist = async (district)=>{
+        await asyncForEach(district.district, async(el)=>{
+          $('#ddDistrict').append(`<option value="${el.id}">${el.districtName}</option>`);           
+        })
+        ipc.removeAllListeners('district')
+    }
+    const teh = async (tehsil)=> {
+        await asyncForEach(tehsil.tehsil, async(el)=>{
+          $('#ddTehsil').append(`<option value="${el.id}">${el.tehsilName}</option>`);        
+        })
+        ipc.removeAllListeners('tehsil')
+    }
+    const ucListener = async (uc)=>{
+        await asyncForEach(uc.uc, async(el)=>{
+          $('#ddUC').append(`<option value="${el.id}">${el.ucName}</option>`);              
+        })
+        ipc.removeAllListeners('uc')
+    }
+    const hhListener = async (hh)=>{
+        await asyncForEach(hh.hh, async(el)=>{
+        $('#ddHealthHouse').append(`<option value="${el.id}">${el.siteName}</option>`);              
+        })
+        ipc.removeAllListeners('hh');
+    }
+    const hhTypeListener= async(h_id,hh)=>{
+            if(h_id === ""){
+              $('#txtSiteType').val().empty();  
+            } else{
+    
+              $('#txtSiteType').val(function(){
+                var site = [];
+                if(hh.hh[0].OTP === 1){
+                  site.push('OTP')
+                }
+                if(hh.hh[0].SFP === 1){
+                  site.push('SFP')                
+                }
+                if(hh.hh[0].SC === 1){
+                  site.push('SC')                
+                }
+                return site;
+              })  
+            }
+            ipc.removeAllListeners('hhType');
+          }
+    
+  </script>
+  
+  <script src="../bower_components/bootstrap/dist/js/bootstrap.bundle.js"></script>
+  <script src="../js/jsgrid.min.js"></script>
+  <script src="../js/jquery-ui.min.js"></script>
+  <script>
+    var InitGrid = require('./scrChildv2').initGrid;
+    var InitScrPlw = require('./scrPlwv2').initScrPlw;
+    var InitScrReportsV2 = require('./scrReportsv2').initScrReportsV2;
+    var InitScrChUpdv2 = require('./scrChUpdv2').initScrChUpdv2;
+    var InitScrPlUpdv2 = require('./scrPlUpdv2').initScrPlUpdv2;
+    var InitOtpAdd = require('./otpAddv2').initOtpAdd;
+    var InitOtpFollowUp = require('./otpFollowUpv2').initOtpFollowUp;
+    var InitOtpAddUpdV2 = require('./otpAddUpdv2').initOtpAddUpdV2;
+    var InitOtpExit = require('./otpExitv2').initOtpExit;
+    var InitOtpExitEditV2 = require('./otpExitEditv2').initOtpExitEditV2;
+    var InitSessionsV2 = require('./sessionsv2').initSessionsV2;
+    var InitOtpReportsV2 = require('./otpReportsv2').initOtpReportsV2;
+    var InitDefaulterv2 = require('./def2').initDefaulterv2;
+    // var InitDefaulterv2 = require('./defaulterv2').initDefaulterv2;
+
+    function defReportTemplate() {
+      var content = document.querySelector('link[href="defaulterv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitDefaulterv2();
+    }
+
+    function otpReportTemplate() {
+      var content = document.querySelector('link[href="otpReportsv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitOtpReportsV2();
+    }
+
+    function sessionsTemplate() {
+      var content = document.querySelector('link[href="sessionsv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitSessionsV2();
+    }
+
+    function otpExitEditTemplate() {
+      var content = document.querySelector('link[href="otpExitEditv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitOtpExitEditV2();
+    }
+
+    function otpExitTemplate() {
+      var content = document.querySelector('link[href="otpExitv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitOtpExit();
+    }
+
+    function otpAddUpdateTemplate() {
+      var content = document.querySelector('link[href="otpAddUpdv3.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitOtpAddUpdV2();
+    }
+
+    function addFollowupOtpTemplate() {
+      var content = document.querySelector('link[href="otpFollowUpv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitOtpFollowUp();
+    }
+
+    function otpAddTemplate() {
+      var content = document.querySelector('link[href="otpAddv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitOtpAdd();
+    }
+
+    function scrPlUpdTemplate() {
+      var content = document.querySelector('link[href="scrPlUpdv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitScrPlUpdv2();
+    }
+
+    function scrChUpdTemplate() {
+      var content = document.querySelector('link[href="scrChUpdv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitScrChUpdv2();
+    }
+
+    function scrReportTemplate() {
+      var content = document.querySelector('link[href="scrReportsv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitScrReportsV2();
+    }
+
+    function addScrChildTemplate() {
+      var content = document.querySelector('link[href="scrChildv2.html"]')
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone);
+      InitGrid();
+    }
+
+    function addScrPlwTemplate() {
+      var content = document.querySelector('link[href="scrPlwv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitScrPlw();
+    }
+    
+    $('#childScr').on('click', function () {
+      addScrChildTemplate()
+    })
+    $('#plwScr').on('click', function () {
+      addScrPlwTemplate();
+      // ipc.send('nav', 'plw');
+    })
+    $('#scrReport').on('click', function () {
+      scrReportTemplate();
+      // ipc.send('nav', 'report');
+    })
+    $('#scrChUpd').on('click', function () {
+      scrChUpdTemplate();
+      // ipc.send('nav', 'scrChUpd');
+    })
+    $('#scrPlUpd').on('click', function () {
+      scrPlUpdTemplate();
+      // ipc.send('nav', 'scrPlUpd');
+    })
+    $('#otpAdd').on('click', function () {
+      otpAddTemplate();
+      // ipc.send('nav', 'plw');
+      // ipc.send('nav', 'otpAdd');
+    })
+    $('#addVill').on('click', function () {
+      ipc.send('nav', 'addVill');
+    })
+    $('#addFollowupOtp').on('click', function () {
+      addFollowupOtpTemplate();
+      // ipc.send('nav', 'addFollowupOtp');
+    })
+    $('#otpAddUpdate').on('click', function () {
+      otpAddUpdateTemplate();
+      // ipc.send('nav', 'otpAddUpdate');
+    })
+    $('#otpExit').on('click', function () {
+      otpExitTemplate();
+      // ipc.send('nav', 'otpExit');
+    })
+    $('#otpExitEdit').on('click', function () {
+      otpExitEditTemplate();
+
+      // ipc.send('nav', 'otpExitEdit');
+    })
+    $('#sessions').on('click', function () {
+      sessionsTemplate();
+      // ipc.send('nav', 'otpExit');
+      // ipc.send('nav', 'sessions');
+    })
+    $('#otpReport').on('click', function () {
+      otpReportTemplate();
+      // ipc.send('nav', 'otpReport');
+    })
+    $('#defReport').on('click', function () {
+      defReportTemplate();
+      // ipc.send('nav', 'defReport');
+    })
+  </script>
+  <script>
+    ipc.on('success', function (evt, result) {
+      $('#messages').append(
+        `<div class="alert alert-success alert-dismissible fade show" role="alert">${result.msg}</div>`)
+      $('.alert').alert()
+      $(".alert").fadeTo(3000, 1000).slideUp(500, function () {
+        $(".alert").alert('close');
+        $().alert('dispose')
+        $('#messages').empty()
+        ipc.removeAllListeners('success');
+      })
+    });
+    ipc.on('error', function (evt, result) {
+      $('#messages').append(
+        `<div class="alert alert-warning alert-dismissible fade show" role="alert">${result.msg}</div>`)
+      $('.alert').alert()
+      $(".alert").fadeTo(3000, 1000).slideUp(500, function () {
+        $(".alert").alert('close');
+        $().alert('dispose')
+        $('#messages').empty()
+        ipc.removeAllListeners('error');
+
+      })
+    });
+    ipc.on('updateNote', (e, index)=>{
+      if(index === 1){
+        console.log('Update Cancel')
+      } else if (index === 0){
+        ipc.send('updateSoftware')
+      }
+    })
+  </script>
+</body>
+
+</html>

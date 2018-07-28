@@ -1,0 +1,77 @@
+<template>
+    <div id="scrPlwDivv2">
+        <div class="row">
+            <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">Screening: Pragnent and Lactating Woman</p>
+            <form action="#" id="scrPlwForm">
+              <div class="form-group row">
+                <label for="ddProvince" class="col-sm-1 col-form-label">Province:</label>
+                <div class="col-sm-2">
+                  <select id="ddProvince" class="form-control form-control-sm">
+                    <option value="">Select One</option>
+                  </select>
+                </div>
+                <label for="ddDistrict" class="col-sm-1 col-form-label">District:</label>
+                <div class="col-sm-2">
+                  <select id="ddDistrict" class="form-control form-control-sm">
+                    <option value="">Select One</option>
+                  </select>
+                </div>
+                <label for="ddTehsil" class="col-sm-1 col-form-label">Tehsil:</label>
+                <div class="col-sm-2">
+                  <select id="ddTehsil" class="form-control form-control-sm">
+                    <option value="">Select One</option>
+                  </select>
+                </div>
+                <label for="ddUC" class="col-sm-1 col-form-label">UC:</label>
+                <div class="col-sm-2">
+                  <select id="ddUC" class="form-control form-control-sm">
+                    <option value="">Select One</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="ddHealthHouse" class="col-sm-1 col-form-label">Site Name:</label>
+                <div class="col-sm-2">
+                  <select name="ddHealthHouse" id="ddHealthHouse" class="form-control form-control-sm" required>
+                    <option selected disabled>Select One</option>
+                  </select>
+                </div>
+                <label for="txtSiteType" class="col-sm-1 col-form-label">Site Type:</label>
+                <div class="col-sm-2">
+                  <input type="text" readonly id="txtSiteType" class="form-control form-control-sm" required>
+                </div>
+                <label for="txtVillage" class="col-sm-1 col-form-label">Village:</label>
+                <div class="col-sm-2">
+                  <input type="text" name="txtVillage" class="form-control form-control-sm" required>
+                </div>
+                <label for="txtStaffName" class="col-sm-1 col-form-label">Staff Name:</label>
+                <div class="col-sm-2">
+                  <input type="text" name="txtStaffName" class="form-control form-control-sm" required>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="scrChildScrType" class="col-sm-1 col-form-label">Screening Type</label>
+                <div class="col-sm-5">
+                  <select name="scrChildScrType" id="scrChildScrType" class="form-control form-control-sm" required>
+                    <option selected disabled>Select One</option>
+                    <option value="1">Active</option>
+                    <option value="0">Passive</option>
+                  </select>
+                </div>
+                <label for="txtStaffName" class="col-sm-1 col-form-label">Screening Date:</label>
+                <div class="col-sm-5">
+                  <input type="date" name="txtScrChildDate" id="txtScrChildDate" class="form-control form-control-sm" required>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <div id="jsGrid"></div>
+              </div>
+              <div class="form-group row">
+                <div class="offset-sm-10 col-sm-2">
+                  <button type="submit" class="btn btn-info btn-block" id="scrPlwSubmit">Save</button>
+                </div>
+              </div>
+            </form>
+          </div>
+    </div>
+</template>

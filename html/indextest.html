@@ -1,0 +1,1956 @@
+<html lang="en"><head>
+  <meta charset="utf-8">
+
+  <link rel="stylesheet" href="assets/css/variables.css">
+  <link rel="stylesheet" href="assets/css/nativize.css">
+  <link rel="stylesheet" href="assets/css/global.css">
+  <link rel="stylesheet" href="assets/css/about.css">
+  <link rel="stylesheet" href="assets/css/nav.css">
+  <link rel="stylesheet" href="assets/css/section.css">
+  <link rel="stylesheet" href="assets/css/demo.css">
+  <link rel="stylesheet" href="assets/css/github.css">
+
+  <link rel="import" href="sections/about.html">
+  <link rel="import" href="sections/windows/windows.html">
+  <link rel="import" href="sections/windows/crash-hang.html">
+  <link rel="import" href="sections/menus/menus.html">
+  <link rel="import" href="sections/menus/shortcuts.html">
+  <link rel="import" href="sections/native-ui/ex-links-file-manager.html">
+  <link rel="import" href="sections/native-ui/dialogs.html">
+  <link rel="import" href="sections/native-ui/tray.html">
+  <link rel="import" href="sections/communication/ipc.html">
+  <link rel="import" href="sections/system/app-sys-information.html">
+  <link rel="import" href="sections/system/clipboard.html">
+  <link rel="import" href="sections/system/protocol-handler.html">
+  <link rel="import" href="sections/media/pdf.html">
+  <link rel="import" href="sections/media/desktop-capturer.html">
+</head>
+<body>
+
+  <nav class="nav js-nav is-shown">
+    <header class="nav-header">
+      <h1 class="nav-title">Electron <strong>API Demos</strong></h1>
+      <svg class="nav-header-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-electron"></use></svg>
+    </header>
+
+    <div class="nav-item u-category-windows">
+      <h5 class="nav-category">
+        <svg class="nav-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-windows"></use></svg>
+        Windows
+      </h5>
+      <button type="button" id="button-windows" data-section="windows" class="nav-button">Create and manage <em>windows</em></button>
+      <button type="button" id="button-crash-hang" data-section="crash-hang" class="nav-button">Handling window <em>crashes and hangs</em></button>
+    </div>
+
+    <div class="nav-item u-category-menu">
+      <h5 class="nav-category">
+        <svg class="nav-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-menu"></use></svg>
+        Menus
+      </h5>
+      <button type="button" id="button-menus" data-section="menus" class="nav-button">Customize <em>menus</em> </button>
+      <button type="button" id="button-shortcuts" data-section="shortcuts" class="nav-button">Register keyboard <em>shortcuts</em></button>
+    </div>
+
+    <div class="nav-item u-category-native-ui">
+      <h5 class="nav-category">
+        <svg class="nav-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
+        Native User Interface</h5>
+      <button type="button" id="button-ex-links-file-manager" data-section="ex-links-file-manager" class="nav-button">Open <em>external links</em> or system <em>file manager</em></button>
+      <button type="button" id="button-dialogs" data-section="dialogs" class="nav-button">Use system <em>dialogs</em></button>
+      <button type="button" id="button-tray" data-section="tray" class="nav-button">Put your app in the <em>tray</em></button>
+    </div>
+
+    <div class="nav-item u-category-communication">
+      <h5 class="nav-category">
+        <svg class="nav-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-communication"></use></svg>
+        Communication
+      </h5>
+      <button type="button" id="button-ipc" data-section="ipc" class="nav-button">Communicate between the <em>two processes</em></button>
+    </div>
+
+    <div class="nav-item u-category-system">
+      <h5 class="nav-category">
+        <svg class="nav-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-system"></use></svg>
+        System
+      </h5>
+      <button type="button" id="button-app-sys-information" data-section="app-sys-information" class="nav-button is-selected">Get app or user <em>system information</em></button>
+      <button type="button" id="button-clipboard" data-section="clipboard" class="nav-button">Copy and paste from the <em>clipboard</em></button>
+      <button type="button" id="button-protocol" data-section="protocol" class="nav-button">Launch app from <em>protocol handler</em></button>
+    </div>
+
+    <div class="nav-item u-category-media">
+      <h5 class="nav-category">
+        <svg class="nav-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-media"></use></svg>
+        Media
+      </h5>
+      <button type="button" id="button-pdf" data-section="pdf" class="nav-button"><em>Print</em> to PDF</button>
+      <button type="button" id="button-desktop-capturer" data-section="desktop-capturer" class="nav-button">Take a <em>screenshot</em></button>
+    </div>
+
+    <footer class="nav-footer">
+      <button type="button" id="button-about" data-modal="about" class="nav-footer-button">About</button>
+      <a class="nav-footer-logo" href="https://github.com" aria-label="Homepage">
+        <svg class="nav-footer-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-love"></use></svg>
+      </a>
+    </footer>
+  </nav>
+
+  <main class="content js-content is-shown">
+  <section id="windows-section" class="section js-section u-category-windows">
+    <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-windows"></use></svg>
+          Create and Manage Windows
+        </h1>
+        <h3>The <code>BrowserWindow</code> module in Electron allows you to create a new browser window or manage an existing one.</h3>
+
+        <p>Each browser window is a separate process, known as the renderer process. This process, like the main process that controls the life cycle of the app, has full access to the Node.js APIs.
+
+        </p><p>Open the <a href="http://electron.atom.io/docs/api/browser-window">full API documentation<span class="u-visible-to-screen-reader">(opens in new window)</span></a> in your browser.</p>
+      </div>
+    </header>
+
+    <div class="demo">
+      <div class="demo-wrapper is-open">
+        <button id="new-window-demo-toggle" class="js-container-target demo-toggle-button">Create a new window
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Main</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="new-window">View Demo</button>
+          </div>
+          <p>The <code>BrowserWindow</code> module gives you the ability to create new windows in your app. This main process module can be used from the renderer process with the <code>remote</code> module, as is shown in this demo.</p>
+
+          <p>There are a lot of options when creating a new window. A few are in this demo, but visit the <a href="http://electron.atom.io/docs/api/browser-window">documentation<span class="u-visible-to-screen-reader">(opens in new window)</span></a> for the full list.</p>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/windows/create-window.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> BrowserWindow = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).remote.BrowserWindow
+<span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>)
+
+<span class="hljs-keyword">const</span> newWindowBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'new-window'</span>)
+
+newWindowBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">const</span> modalPath = path.join(<span class="hljs-string">'file://'</span>, __dirname, <span class="hljs-string">'../../sections/windows/modal.html'</span>)
+  <span class="hljs-keyword">let</span> win = <span class="hljs-keyword">new</span> BrowserWindow({ <span class="hljs-attr">width</span>: <span class="hljs-number">400</span>, <span class="hljs-attr">height</span>: <span class="hljs-number">320</span> })
+  win.on(<span class="hljs-string">'close'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ win = <span class="hljs-literal">null</span> })
+  win.loadURL(modalPath)
+  win.show()
+})
+</code></pre>
+
+          <div class="demo-protip">
+            <h2>ProTip</h2>
+            <strong>Use an invisible browser window to run background tasks.</strong>
+            <p>You can set a new browser window to not be shown (be invisible) in order to use that additional renderer process as a kind of new thread in which to run JavaScript in the background of your app. You do this by setting the <code>show</code> property to <code>false</code> when defining the new window.</p>
+            <pre><code class="language-js hljs javascript"><span class="hljs-keyword">var</span> win = <span class="hljs-keyword">new</span> BrowserWindow({
+  <span class="hljs-attr">width</span>: <span class="hljs-number">400</span>, <span class="hljs-attr">height</span>: <span class="hljs-number">225</span>, <span class="hljs-attr">show</span>: <span class="hljs-literal">false</span>
+})</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="manage-window-demo-toggle" class="js-container-target demo-toggle-button">Manage window state
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Main</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="manage-window">View Demo</button>
+            <span class="demo-response" id="manage-window-reply"></span>
+          </div>
+           <p>In this demo we create a new window and listen for <code>move</code> and <code>resize</code> events on it. Click the demo button, change the new window and see the dimensions and position update here, above.</p>
+          <p>There are a lot of methods for controlling the state of the window such as the size, location, and focus status as well as events to listen to for window changes. Visit the <a href="http://electron.atom.io/docs/api/browser-window">documentation<span class="u-visible-to-screen-reader">(opens in new window)</span></a> for the full list.</p>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/windows/manage-window.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> BrowserWindow = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).remote.BrowserWindow
+<span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>)
+
+<span class="hljs-keyword">const</span> manageWindowBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'manage-window'</span>)
+<span class="hljs-keyword">let</span> win
+
+manageWindowBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">const</span> modalPath = path.join(<span class="hljs-string">'file://'</span>, __dirname, <span class="hljs-string">'../../sections/windows/manage-modal.html'</span>)
+  win = <span class="hljs-keyword">new</span> BrowserWindow({ <span class="hljs-attr">width</span>: <span class="hljs-number">400</span>, <span class="hljs-attr">height</span>: <span class="hljs-number">275</span> })
+  win.on(<span class="hljs-string">'resize'</span>, updateReply)
+  win.on(<span class="hljs-string">'move'</span>, updateReply)
+  win.on(<span class="hljs-string">'close'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ win = <span class="hljs-literal">null</span> })
+  win.loadURL(modalPath)
+  win.show()
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updateReply</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">const</span> manageWindowReply = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'manage-window-reply'</span>)
+    <span class="hljs-keyword">const</span> message = <span class="hljs-string">`Size: <span class="hljs-subst">${win.getSize()}</span> Position: <span class="hljs-subst">${win.getPosition()}</span>`</span>
+    manageWindowReply.innerText = message
+  }
+})
+</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-wrapper is-open">
+        <button id="using-window-events-demo-toggle" class="js-container-target demo-toggle-button">Window events: blur and focus
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Main</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="listen-to-window">View Demo</button>
+            <button class="demo-button disappear" id="focus-on-modal-window">Focus on Demo</button>
+          </div>
+          <p>In this demo, we create a new window and listen for <code>blur</code> event on it. Click the demo button to create a new modal window, and switch focus back to the parent window by clicking on it. You can click the <i>Focus on Demo</i> button to switch focus to the modal window again.</p>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/windows/using-window-events.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> BrowserWindow = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).remote.BrowserWindow
+<span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>)
+
+<span class="hljs-keyword">const</span> manageWindowBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'listen-to-window'</span>)
+<span class="hljs-keyword">const</span> focusModalBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'focus-on-modal-window'</span>)
+<span class="hljs-keyword">let</span> win
+
+manageWindowBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> modalPath = path.join(<span class="hljs-string">'file://'</span>, __dirname, <span class="hljs-string">'../../sections/windows/modal-toggle-visibility.html'</span>)
+  win = <span class="hljs-keyword">new</span> BrowserWindow({ <span class="hljs-attr">width</span>: <span class="hljs-number">600</span>, <span class="hljs-attr">height</span>: <span class="hljs-number">400</span> })
+  win.on(<span class="hljs-string">'focus'</span>, hideFocusBtn)
+  win.on(<span class="hljs-string">'blur'</span>, showFocusBtn)
+  win.on(<span class="hljs-string">'close'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    hideFocusBtn()
+    win = <span class="hljs-literal">null</span>
+  })
+  win.loadURL(modalPath)
+  win.show()
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">showFocusBtn</span> (<span class="hljs-params">btn</span>) </span>{
+    <span class="hljs-keyword">if</span> (!win) <span class="hljs-keyword">return</span>
+    focusModalBtn.classList.add(<span class="hljs-string">'smooth-appear'</span>)
+    focusModalBtn.classList.remove(<span class="hljs-string">'disappear'</span>)
+    focusModalBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ win.focus() })
+  }
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">hideFocusBtn</span> (<span class="hljs-params"></span>) </span>{
+    focusModalBtn.classList.add(<span class="hljs-string">'disappear'</span>)
+    focusModalBtn.classList.remove(<span class="hljs-string">'smooth-appear'</span>)
+  }
+})
+</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-wrapper is-open">
+        <button class="js-container-target demo-toggle-button">Create a frameless window
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Main</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="frameless-window">View Demo</button>
+          </div>
+          <p>
+            A frameless window is a window that has no <a href="https://developer.mozilla.org/en-US/docs/Glossary/Chrome">"chrome"</a>,
+            such as toolbars, title bars, status bars, borders, etc. You can make a browser window frameless by setting
+            <code>frame</code> to <code>false</code> when creating the window.
+          </p>
+
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/windows/frameless-window.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> BrowserWindow = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).remote.BrowserWindow
+<span class="hljs-keyword">const</span> newWindowBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'frameless-window'</span>)
+
+<span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>)
+
+newWindowBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">const</span> modalPath = path.join(<span class="hljs-string">'file://'</span>, __dirname, <span class="hljs-string">'../../sections/windows/modal.html'</span>)
+  <span class="hljs-keyword">let</span> win = <span class="hljs-keyword">new</span> BrowserWindow({ <span class="hljs-attr">frame</span>: <span class="hljs-literal">false</span> })
+  win.on(<span class="hljs-string">'close'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ win = <span class="hljs-literal">null</span> })
+  win.loadURL(modalPath)
+  win.show()
+})
+</code></pre>
+
+          <p>Windows can have a transparent background, too. By setting the <code>transparent</code> option to <code>true</code>, you can also make your frameless window transparent:</p>
+          <pre><code class="language-js hljs javascript"><span class="hljs-keyword">var</span> win = <span class="hljs-keyword">new</span> BrowserWindow({
+  <span class="hljs-attr">transparent</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">frame</span>: <span class="hljs-literal">false</span>
+})</code></pre>
+
+        <p>
+          For more details, see the <a href="http://electron.atom.io/docs/api/frameless-window/">Frameless Window</a> documentation.
+        </p>
+
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      require('./renderer-process/windows/create-window')
+      require('./renderer-process/windows/manage-window')
+      require('./renderer-process/windows/using-window-events')
+      require('./renderer-process/windows/frameless-window')
+    </script>
+
+  </section>
+
+  <section id="crash-hang-section" class="section js-section u-category-windows">
+    <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-windows"></use></svg>
+          Handling Window Crashes and Hangs
+        </h1>
+        <h3>The <code>BrowserWindow</code> module will emit events when the renderer process crashes or hangs. You can listen for these events and give users the chance to reload, wait or close that window.</h3>
+
+        <p>Open the <a href="http://electron.atom.io/docs/api/browser-window">full API documentation<span class="u-visible-to-screen-reader">(opens in new window)</span></a> in your browser.</p>
+      </div>
+    </header>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="new-window-crashes-demo-toggle" class="js-container-target demo-toggle-button">Relaunch window after the process crashes
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Main</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="process-crash">View Demo</button>
+          </div>
+          <p>In this demo we create a new window (via the <code>remote</code> module) and provide a link that will force a crash using <code>process.crash()</code>.</p>
+          <p>The window is listening for the crash event and when the event occurs it prompts the user with two options: reload or close.</p>
+
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/windows/process-crash.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> BrowserWindow = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).remote.BrowserWindow
+<span class="hljs-keyword">const</span> dialog = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).remote.dialog
+
+<span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>)
+
+<span class="hljs-keyword">const</span> processCrashBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'process-crash'</span>)
+
+processCrashBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">const</span> crashWinPath = path.join(<span class="hljs-string">'file://'</span>, __dirname, <span class="hljs-string">'../../sections/windows/process-crash.html'</span>)
+  <span class="hljs-keyword">let</span> win = <span class="hljs-keyword">new</span> BrowserWindow({ <span class="hljs-attr">width</span>: <span class="hljs-number">400</span>, <span class="hljs-attr">height</span>: <span class="hljs-number">320</span> })
+
+  win.webContents.on(<span class="hljs-string">'crashed'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">const</span> options = {
+      <span class="hljs-attr">type</span>: <span class="hljs-string">'info'</span>,
+      <span class="hljs-attr">title</span>: <span class="hljs-string">'Renderer Process Crashed'</span>,
+      <span class="hljs-attr">message</span>: <span class="hljs-string">'This process has crashed.'</span>,
+      <span class="hljs-attr">buttons</span>: [<span class="hljs-string">'Reload'</span>, <span class="hljs-string">'Close'</span>]
+    }
+    dialog.showMessageBox(options, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">index</span>) </span>{
+      <span class="hljs-keyword">if</span> (index === <span class="hljs-number">0</span>) win.reload()
+      <span class="hljs-keyword">else</span> win.close()
+    })
+  })
+
+  win.on(<span class="hljs-string">'close'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ win = <span class="hljs-literal">null</span> })
+  win.loadURL(crashWinPath)
+  win.show()
+})
+</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="new-window-hangs-demo-toggle" class="js-container-target demo-toggle-button">Relaunch window after the process hangs
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Main</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="process-hang">View Demo</button>
+          </div>
+          <p>In this demo we create a new window (via the <code>remote</code> module) and provide a link that will force the process to hang using <code>process.hang()</code>.</p>
+          <p>The window is listening for the process to become offcially unresponsive (this can take up to 30 seconds). When this event occurs it prompts the user with two options: reload or close.</p>
+
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/windows/process-hang.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> BrowserWindow = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).remote.BrowserWindow
+<span class="hljs-keyword">const</span> dialog = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).remote.dialog
+
+<span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>)
+
+<span class="hljs-keyword">const</span> processHangBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'process-hang'</span>)
+
+processHangBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">const</span> hangWinPath = path.join(<span class="hljs-string">'file://'</span>, __dirname, <span class="hljs-string">'../../sections/windows/process-hang.html'</span>)
+  <span class="hljs-keyword">let</span> win = <span class="hljs-keyword">new</span> BrowserWindow({ <span class="hljs-attr">width</span>: <span class="hljs-number">400</span>, <span class="hljs-attr">height</span>: <span class="hljs-number">320</span> })
+
+  win.on(<span class="hljs-string">'unresponsive'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">const</span> options = {
+      <span class="hljs-attr">type</span>: <span class="hljs-string">'info'</span>,
+      <span class="hljs-attr">title</span>: <span class="hljs-string">'Renderer Process Hanging'</span>,
+      <span class="hljs-attr">message</span>: <span class="hljs-string">'This process is hanging.'</span>,
+      <span class="hljs-attr">buttons</span>: [<span class="hljs-string">'Reload'</span>, <span class="hljs-string">'Close'</span>]
+    }
+    dialog.showMessageBox(options, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">index</span>) </span>{
+      <span class="hljs-keyword">if</span> (index === <span class="hljs-number">0</span>) win.reload()
+      <span class="hljs-keyword">else</span> win.close()
+    })
+  })
+
+  win.on(<span class="hljs-string">'close'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ win = <span class="hljs-literal">null</span> })
+  win.loadURL(hangWinPath)
+  win.show()
+})
+</code></pre>
+
+          <div class="demo-protip">
+            <h2>ProTip</h2>
+            <strong>Wait for the process to become responsive again.</strong>
+            <p>A third option in the case of a process that is hanging is to wait and see if the problem resolves, allowing the process to become responsive again. To to do this, use the <code>BrowserWindow</code> event 'responsive' as shown below.</p>
+            <pre><code class="language-js hljs javascript">win.on(<span class="hljs-string">'responsive'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-comment">// Do something when the window is responsive again</span>
+})</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <script type="text/javascript">
+      require('./renderer-process/windows/process-crash')
+      require('./renderer-process/windows/process-hang')
+    </script>
+
+  </section>
+
+  <section id="menus-section" class="section js-section u-category-menu">
+    <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-menu"></use></svg>
+          Customize Menus
+        </h1>
+        <h3>The <code>Menu</code> and <code>MenuItem</code> modules can be used to create custom native menus.</h3>
+
+        <p>There are two kinds of menus: the application (top) menu and context (right-click) menu.</p>
+
+        <p>Open the <a href="http://electron.atom.io/docs/api/menu">full API documentation<span class="u-visible-to-screen-reader">(opens in new window)</span></a> in your browser.</p>
+      </div>
+    </header>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="application-menu-demo-toggle" class="js-container-target demo-toggle-button">Create an application menu
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Main</div>
+        </button>
+        <div class="demo-box">
+          <p>The <code>Menu</code> and <code>MenuItem</code> modules allow you to customize your application menu. If you don't set any menu, Electron will generate a minimal menu for your app by default.</p>
+
+          <p>This app uses the code below to set the application menu. If you click the 'View' option in the application menu and then the 'App Menu Demo', you'll see an information box displayed.</p>
+          <h5>Main Process</h5>
+          <pre><code data-path="main-process/menus/application-menu.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> electron = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>)
+<span class="hljs-keyword">const</span> BrowserWindow = electron.BrowserWindow
+<span class="hljs-keyword">const</span> Menu = electron.Menu
+<span class="hljs-keyword">const</span> app = electron.app
+
+<span class="hljs-keyword">let</span> template = [{
+  <span class="hljs-attr">label</span>: <span class="hljs-string">'Edit'</span>,
+  <span class="hljs-attr">submenu</span>: [{
+    <span class="hljs-attr">label</span>: <span class="hljs-string">'Undo'</span>,
+    <span class="hljs-attr">accelerator</span>: <span class="hljs-string">'CmdOrCtrl+Z'</span>,
+    <span class="hljs-attr">role</span>: <span class="hljs-string">'undo'</span>
+  }, {
+    <span class="hljs-attr">label</span>: <span class="hljs-string">'Redo'</span>,
+    <span class="hljs-attr">accelerator</span>: <span class="hljs-string">'Shift+CmdOrCtrl+Z'</span>,
+    <span class="hljs-attr">role</span>: <span class="hljs-string">'redo'</span>
+  }, {
+    <span class="hljs-attr">type</span>: <span class="hljs-string">'separator'</span>
+  }, {
+    <span class="hljs-attr">label</span>: <span class="hljs-string">'Cut'</span>,
+    <span class="hljs-attr">accelerator</span>: <span class="hljs-string">'CmdOrCtrl+X'</span>,
+    <span class="hljs-attr">role</span>: <span class="hljs-string">'cut'</span>
+  }, {
+    <span class="hljs-attr">label</span>: <span class="hljs-string">'Copy'</span>,
+    <span class="hljs-attr">accelerator</span>: <span class="hljs-string">'CmdOrCtrl+C'</span>,
+    <span class="hljs-attr">role</span>: <span class="hljs-string">'copy'</span>
+  }, {
+    <span class="hljs-attr">label</span>: <span class="hljs-string">'Paste'</span>,
+    <span class="hljs-attr">accelerator</span>: <span class="hljs-string">'CmdOrCtrl+V'</span>,
+    <span class="hljs-attr">role</span>: <span class="hljs-string">'paste'</span>
+  }, {
+    <span class="hljs-attr">label</span>: <span class="hljs-string">'Select All'</span>,
+    <span class="hljs-attr">accelerator</span>: <span class="hljs-string">'CmdOrCtrl+A'</span>,
+    <span class="hljs-attr">role</span>: <span class="hljs-string">'selectall'</span>
+  }]
+}, {
+  <span class="hljs-attr">label</span>: <span class="hljs-string">'View'</span>,
+  <span class="hljs-attr">submenu</span>: [{
+    <span class="hljs-attr">label</span>: <span class="hljs-string">'Reload'</span>,
+    <span class="hljs-attr">accelerator</span>: <span class="hljs-string">'CmdOrCtrl+R'</span>,
+    <span class="hljs-attr">click</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">item, focusedWindow</span>) </span>{
+      <span class="hljs-keyword">if</span> (focusedWindow) {
+        <span class="hljs-comment">// on reload, start fresh and close any old</span>
+        <span class="hljs-comment">// open secondary windows</span>
+        <span class="hljs-keyword">if</span> (focusedWindow.id === <span class="hljs-number">1</span>) {
+          BrowserWindow.getAllWindows().forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">win</span>) </span>{
+            <span class="hljs-keyword">if</span> (win.id &gt; <span class="hljs-number">1</span>) {
+              win.close()
+            }
+          })
+        }
+        focusedWindow.reload()
+      }
+    }
+  }, {
+    <span class="hljs-attr">label</span>: <span class="hljs-string">'Toggle Full Screen'</span>,
+    <span class="hljs-attr">accelerator</span>: (<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+      <span class="hljs-keyword">if</span> (process.platform === <span class="hljs-string">'darwin'</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-string">'Ctrl+Command+F'</span>
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">return</span> <span class="hljs-string">'F11'</span>
+      }
+    })(),
+    <span class="hljs-attr">click</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">item, focusedWindow</span>) </span>{
+      <span class="hljs-keyword">if</span> (focusedWindow) {
+        focusedWindow.setFullScreen(!focusedWindow.isFullScreen())
+      }
+    }
+  }, {
+    <span class="hljs-attr">label</span>: <span class="hljs-string">'Toggle Developer Tools'</span>,
+    <span class="hljs-attr">accelerator</span>: (<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+      <span class="hljs-keyword">if</span> (process.platform === <span class="hljs-string">'darwin'</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-string">'Alt+Command+I'</span>
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">return</span> <span class="hljs-string">'Ctrl+Shift+I'</span>
+      }
+    })(),
+    <span class="hljs-attr">click</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">item, focusedWindow</span>) </span>{
+      <span class="hljs-keyword">if</span> (focusedWindow) {
+        focusedWindow.toggleDevTools()
+      }
+    }
+  }, {
+    <span class="hljs-attr">type</span>: <span class="hljs-string">'separator'</span>
+  }, {
+    <span class="hljs-attr">label</span>: <span class="hljs-string">'App Menu Demo'</span>,
+    <span class="hljs-attr">click</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">item, focusedWindow</span>) </span>{
+      <span class="hljs-keyword">if</span> (focusedWindow) {
+        <span class="hljs-keyword">const</span> options = {
+          <span class="hljs-attr">type</span>: <span class="hljs-string">'info'</span>,
+          <span class="hljs-attr">title</span>: <span class="hljs-string">'Application Menu Demo'</span>,
+          <span class="hljs-attr">buttons</span>: [<span class="hljs-string">'Ok'</span>],
+          <span class="hljs-attr">message</span>: <span class="hljs-string">'This demo is for the Menu section, showing how to create a clickable menu item in the application menu.'</span>
+        }
+        electron.dialog.showMessageBox(focusedWindow, options, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{})
+      }
+    }
+  }]
+}, {
+  <span class="hljs-attr">label</span>: <span class="hljs-string">'Window'</span>,
+  <span class="hljs-attr">role</span>: <span class="hljs-string">'window'</span>,
+  <span class="hljs-attr">submenu</span>: [{
+    <span class="hljs-attr">label</span>: <span class="hljs-string">'Minimize'</span>,
+    <span class="hljs-attr">accelerator</span>: <span class="hljs-string">'CmdOrCtrl+M'</span>,
+    <span class="hljs-attr">role</span>: <span class="hljs-string">'minimize'</span>
+  }, {
+    <span class="hljs-attr">label</span>: <span class="hljs-string">'Close'</span>,
+    <span class="hljs-attr">accelerator</span>: <span class="hljs-string">'CmdOrCtrl+W'</span>,
+    <span class="hljs-attr">role</span>: <span class="hljs-string">'close'</span>
+  }, {
+    <span class="hljs-attr">type</span>: <span class="hljs-string">'separator'</span>
+  }, {
+    <span class="hljs-attr">label</span>: <span class="hljs-string">'Reopen Window'</span>,
+    <span class="hljs-attr">accelerator</span>: <span class="hljs-string">'CmdOrCtrl+Shift+T'</span>,
+    <span class="hljs-attr">enabled</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-attr">key</span>: <span class="hljs-string">'reopenMenuItem'</span>,
+    <span class="hljs-attr">click</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+      app.emit(<span class="hljs-string">'activate'</span>)
+    }
+  }]
+}, {
+  <span class="hljs-attr">label</span>: <span class="hljs-string">'Help'</span>,
+  <span class="hljs-attr">role</span>: <span class="hljs-string">'help'</span>,
+  <span class="hljs-attr">submenu</span>: [{
+    <span class="hljs-attr">label</span>: <span class="hljs-string">'Learn More'</span>,
+    <span class="hljs-attr">click</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+      electron.shell.openExternal(<span class="hljs-string">'http://electron.atom.io'</span>)
+    }
+  }]
+}]
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addUpdateMenuItems</span> (<span class="hljs-params">items, position</span>) </span>{
+  <span class="hljs-keyword">if</span> (process.mas) <span class="hljs-keyword">return</span>
+
+  <span class="hljs-keyword">const</span> version = electron.app.getVersion()
+  <span class="hljs-keyword">let</span> updateItems = [{
+    <span class="hljs-attr">label</span>: <span class="hljs-string">`Version <span class="hljs-subst">${version}</span>`</span>,
+    <span class="hljs-attr">enabled</span>: <span class="hljs-literal">false</span>
+  }, {
+    <span class="hljs-attr">label</span>: <span class="hljs-string">'Checking for Update'</span>,
+    <span class="hljs-attr">enabled</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-attr">key</span>: <span class="hljs-string">'checkingForUpdate'</span>
+  }, {
+    <span class="hljs-attr">label</span>: <span class="hljs-string">'Check for Update'</span>,
+    <span class="hljs-attr">visible</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-attr">key</span>: <span class="hljs-string">'checkForUpdate'</span>,
+    <span class="hljs-attr">click</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+      <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).autoUpdater.checkForUpdates()
+    }
+  }, {
+    <span class="hljs-attr">label</span>: <span class="hljs-string">'Restart and Install Update'</span>,
+    <span class="hljs-attr">enabled</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">visible</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-attr">key</span>: <span class="hljs-string">'restartToUpdate'</span>,
+    <span class="hljs-attr">click</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+      <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).autoUpdater.quitAndInstall()
+    }
+  }]
+
+  items.splice.apply(items, [position, <span class="hljs-number">0</span>].concat(updateItems))
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">findReopenMenuItem</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> menu = Menu.getApplicationMenu()
+  <span class="hljs-keyword">if</span> (!menu) <span class="hljs-keyword">return</span>
+
+  <span class="hljs-keyword">let</span> reopenMenuItem
+  menu.items.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">item</span>) </span>{
+    <span class="hljs-keyword">if</span> (item.submenu) {
+      item.submenu.items.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">item</span>) </span>{
+        <span class="hljs-keyword">if</span> (item.key === <span class="hljs-string">'reopenMenuItem'</span>) {
+          reopenMenuItem = item
+        }
+      })
+    }
+  })
+  <span class="hljs-keyword">return</span> reopenMenuItem
+}
+
+<span class="hljs-keyword">if</span> (process.platform === <span class="hljs-string">'darwin'</span>) {
+  <span class="hljs-keyword">const</span> name = electron.app.getName()
+  template.unshift({
+    <span class="hljs-attr">label</span>: name,
+    <span class="hljs-attr">submenu</span>: [{
+      <span class="hljs-attr">label</span>: <span class="hljs-string">`About <span class="hljs-subst">${name}</span>`</span>,
+      <span class="hljs-attr">role</span>: <span class="hljs-string">'about'</span>
+    }, {
+      <span class="hljs-attr">type</span>: <span class="hljs-string">'separator'</span>
+    }, {
+      <span class="hljs-attr">label</span>: <span class="hljs-string">'Services'</span>,
+      <span class="hljs-attr">role</span>: <span class="hljs-string">'services'</span>,
+      <span class="hljs-attr">submenu</span>: []
+    }, {
+      <span class="hljs-attr">type</span>: <span class="hljs-string">'separator'</span>
+    }, {
+      <span class="hljs-attr">label</span>: <span class="hljs-string">`Hide <span class="hljs-subst">${name}</span>`</span>,
+      <span class="hljs-attr">accelerator</span>: <span class="hljs-string">'Command+H'</span>,
+      <span class="hljs-attr">role</span>: <span class="hljs-string">'hide'</span>
+    }, {
+      <span class="hljs-attr">label</span>: <span class="hljs-string">'Hide Others'</span>,
+      <span class="hljs-attr">accelerator</span>: <span class="hljs-string">'Command+Alt+H'</span>,
+      <span class="hljs-attr">role</span>: <span class="hljs-string">'hideothers'</span>
+    }, {
+      <span class="hljs-attr">label</span>: <span class="hljs-string">'Show All'</span>,
+      <span class="hljs-attr">role</span>: <span class="hljs-string">'unhide'</span>
+    }, {
+      <span class="hljs-attr">type</span>: <span class="hljs-string">'separator'</span>
+    }, {
+      <span class="hljs-attr">label</span>: <span class="hljs-string">'Quit'</span>,
+      <span class="hljs-attr">accelerator</span>: <span class="hljs-string">'Command+Q'</span>,
+      <span class="hljs-attr">click</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+        app.quit()
+      }
+    }]
+  })
+
+  <span class="hljs-comment">// Window menu.</span>
+  template[<span class="hljs-number">3</span>].submenu.push({
+    <span class="hljs-attr">type</span>: <span class="hljs-string">'separator'</span>
+  }, {
+    <span class="hljs-attr">label</span>: <span class="hljs-string">'Bring All to Front'</span>,
+    <span class="hljs-attr">role</span>: <span class="hljs-string">'front'</span>
+  })
+
+  addUpdateMenuItems(template[<span class="hljs-number">0</span>].submenu, <span class="hljs-number">1</span>)
+}
+
+<span class="hljs-keyword">if</span> (process.platform === <span class="hljs-string">'win32'</span>) {
+  <span class="hljs-keyword">const</span> helpMenu = template[template.length - <span class="hljs-number">1</span>].submenu
+  addUpdateMenuItems(helpMenu, <span class="hljs-number">0</span>)
+}
+
+app.on(<span class="hljs-string">'ready'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
+})
+
+app.on(<span class="hljs-string">'browser-window-created'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> reopenMenuItem = findReopenMenuItem()
+  <span class="hljs-keyword">if</span> (reopenMenuItem) reopenMenuItem.enabled = <span class="hljs-literal">false</span>
+})
+
+app.on(<span class="hljs-string">'window-all-closed'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">let</span> reopenMenuItem = findReopenMenuItem()
+  <span class="hljs-keyword">if</span> (reopenMenuItem) reopenMenuItem.enabled = <span class="hljs-literal">true</span>
+})
+</code></pre>
+
+          <div class="demo-protip">
+            <h2>ProTip</h2>
+            <strong>Know operating system menu differences.</strong>
+            <p>When designing an app for multiple operating systems it's important to be mindful of the ways application menu conventions differ on each operating system.</p>
+            <p>For instance, on Windows, accelerators are set with an <code>&amp;</code>. Naming conventions also vary, like between "Settings" or "Preferences". Below are resources for learning operating system specific standards.</p>
+            <ul>
+              <li><a href="https://developer.apple.com/library/mac/documentation/UserExperience/Conceptual/OSXHIGuidelines/MenuBarMenus.html#//apple_ref/doc/uid/20000957-CH29-SW1">macOS<span class="u-visible-to-screen-reader">(opens in new window)</span></a></li>
+              <li><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/bb226797(v=vs.85).aspx">Windows<span class="u-visible-to-screen-reader">(opens in new window)</span></a></li>
+              <li><a href="https://developer.gnome.org/hig/stable/menu-bars.html.en">Linux<span class="u-visible-to-screen-reader">(opens in new window)</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="context-menu-demo-toggle" class="js-container-target demo-toggle-button">Create a context menu
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Main</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="context-menu">View Demo</button>
+          </div>
+          <p>A context, or right-click, menu can be created with the <code>Menu</code> and <code>MenuItem</code> modules as well. You can right-click anywhere in this app or click the demo button to see an example context menu.</p>
+
+          <p>In this demo we use the <code>ipcRenderer</code> module to show the context menu when explicitly calling it from the renderer process.</p>
+          <p>See the full <a href="http://electron.atom.io/docs/api/web-contents/#event-context-menu">context-menu event documentation</a> for all the available properties.</p>
+          <h5>Main Process</h5>
+          <pre><code data-path="main-process/menus/context-menu.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> electron = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>)
+<span class="hljs-keyword">const</span> BrowserWindow = electron.BrowserWindow
+<span class="hljs-keyword">const</span> Menu = electron.Menu
+<span class="hljs-keyword">const</span> MenuItem = electron.MenuItem
+<span class="hljs-keyword">const</span> ipc = electron.ipcMain
+<span class="hljs-keyword">const</span> app = electron.app
+
+<span class="hljs-keyword">const</span> menu = <span class="hljs-keyword">new</span> Menu()
+menu.append(<span class="hljs-keyword">new</span> MenuItem({ <span class="hljs-attr">label</span>: <span class="hljs-string">'Hello'</span> }))
+menu.append(<span class="hljs-keyword">new</span> MenuItem({ <span class="hljs-attr">type</span>: <span class="hljs-string">'separator'</span> }))
+menu.append(<span class="hljs-keyword">new</span> MenuItem({ <span class="hljs-attr">label</span>: <span class="hljs-string">'Electron'</span>, <span class="hljs-attr">type</span>: <span class="hljs-string">'checkbox'</span>, <span class="hljs-attr">checked</span>: <span class="hljs-literal">true</span> }))
+
+app.on(<span class="hljs-string">'browser-window-created'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event, win</span>) </span>{
+  win.webContents.on(<span class="hljs-string">'context-menu'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">e, params</span>) </span>{
+    menu.popup(win, params.x, params.y)
+  })
+})
+
+ipc.on(<span class="hljs-string">'show-context-menu'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">const</span> win = BrowserWindow.fromWebContents(event.sender)
+  menu.popup(win)
+})
+</code></pre>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/menus/context-menu.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> ipc = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcRenderer
+
+<span class="hljs-comment">// Tell main process to show the menu when demo button is clicked</span>
+<span class="hljs-keyword">const</span> contextMenuBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'context-menu'</span>)
+contextMenuBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  ipc.send(<span class="hljs-string">'show-context-menu'</span>)
+})
+</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      require('./renderer-process/menus/context-menu')
+    </script>
+
+  </section>
+
+  <section id="shortcuts-section" class="section js-section u-category-menu">
+    <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-menu"></use></svg>
+          Keyboard Shortcuts
+        </h1>
+
+        <h3>The <code>globalShortcut</code> and <code>Menu</code> modules can be used to define keyboard shortcuts.</h3>
+
+        <p>
+          In Electron, keyboard shortcuts are called accelerators.
+          They can be assigned to actions in your application's Menu,
+          or they can be assigned globally so they'll be triggered even when
+          your app doesn't have keyboard focus.
+        </p>
+
+        <p>
+          Open the full documentation for the
+          <a class="u-exlink" href="http://electron.atom.io/docs/api/menu">Menu</a>,
+          <a class="u-exlink" href="http://electron.atom.io/docs/api/accelerator">Accelerator</a>,
+          and
+          <a class="u-exlink" href="http://electron.atom.io/docs/api/global-shortcut">globalShortcut</a>
+          APIs in your browser.
+        </p>
+
+      </div>
+    </header>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="shortcuts-demo-toggle" class="js-container-target demo-toggle-button">Register a global keyboard shortcut
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Main</div>
+        </button>
+        <div class="demo-box">
+          <p>
+            To try this demo, press <kbd class="normalize-to-platform">Control+Alt+K</kbd> on your keyboard.
+          </p>
+
+          <p>
+            Global shortcuts are detected even when the app doesn't have
+            keyboard focus, and they must be registered after the app's
+            `ready` event is emitted.
+          </p>
+
+          <h5>Main Process</h5>
+          <pre><code data-path="main-process/menus/shortcuts.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> electron = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>)
+<span class="hljs-keyword">const</span> app = electron.app
+<span class="hljs-keyword">const</span> dialog = electron.dialog
+<span class="hljs-keyword">const</span> globalShortcut = electron.globalShortcut
+
+app.on(<span class="hljs-string">'ready'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  globalShortcut.register(<span class="hljs-string">'CommandOrControl+Alt+K'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    dialog.showMessageBox({
+      <span class="hljs-attr">type</span>: <span class="hljs-string">'info'</span>,
+      <span class="hljs-attr">message</span>: <span class="hljs-string">'Success!'</span>,
+      <span class="hljs-attr">detail</span>: <span class="hljs-string">'You pressed the registered global shortcut keybinding.'</span>,
+      <span class="hljs-attr">buttons</span>: [<span class="hljs-string">'OK'</span>]
+    })
+  })
+})
+
+app.on(<span class="hljs-string">'will-quit'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  globalShortcut.unregisterAll()
+})
+</code></pre>
+
+          <div class="demo-protip">
+            <h2>ProTip</h2>
+            <strong>Avoid overriding system-wide keyboard shortcuts.</strong>
+            <p>
+              When registering global shortcuts, it's important to be aware of
+              existing defaults in the target operating system, so as not to
+              override any existing behaviors. For an overview of each
+              operating system's keyboard shortcuts, view these documents:
+            </p>
+
+            <ul>
+              <li><a class="u-exlink" href="https://developer.apple.com/library/mac/documentation/UserExperience/Conceptual/OSXHIGuidelines/Keyboard.html">macOS</a></li>
+              <li><a class="u-exlink" href="http://windows.microsoft.com/en-us/windows-10/keyboard-shortcuts">Windows</a></li>
+              <li><a class="u-exlink" href="https://developer.gnome.org/hig/stable/keyboard-input.html.en">Linux</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <section id="ex-links-file-manager-section" class="section js-section u-category-native-ui">
+    <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
+          Open external links and the file manager
+        </h1>
+        <h3>The <code>shell</code> module in Electron allows you to access certain native elements like the file manager and default web browser.</h3>
+
+        <p>This module works in both the main and renderer process.</p>
+        <p>Open the <a href="http://electron.atom.io/docs/api/shell">full API documentation<span class="u-visible-to-screen-reader">(opens in new window)</span></a> in your browser.</p>
+      </div>
+    </header>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="open-file-manager-demo-toggle" class="js-container-target demo-toggle-button">Open Path in File Manager
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Both</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="open-file-manager">View Demo</button>
+          </div>
+          <p>This demonstrates using the <code>shell</code> module to open the system file manager at a particular location.</p>
+          <p>Clicking the demo button will open your file manager at the root.</p>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/native-ui/ex-links-file-manager/file-manager.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> shell = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).shell
+
+<span class="hljs-keyword">const</span> os = <span class="hljs-built_in">require</span>(<span class="hljs-string">'os'</span>)
+
+<span class="hljs-keyword">const</span> fileManagerBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'open-file-manager'</span>)
+
+fileManagerBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  shell.showItemInFolder(os.homedir())
+})
+</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="open-ex-links-demo-toggle" class="js-container-target demo-toggle-button">Open External Links
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Both</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="open-ex-links">View Demo</button>
+          </div>
+          <p>If you do not want your app to open website links <em>within</em> the app, you can use the <code>shell</code> module to open them externally. When clicked, the links will open outside of your app and in the user's default web browser.</p>
+          <p>When the demo button is clicked, the electron website will open in your browser.</p><p>
+          </p><h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/native-ui/ex-links-file-manager/ex-links.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> shell = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).shell
+
+<span class="hljs-keyword">const</span> exLinksBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'open-ex-links'</span>)
+
+exLinksBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  shell.openExternal(<span class="hljs-string">'http://electron.atom.io'</span>)
+})
+</code></pre>
+
+          <div class="demo-protip">
+            <h2>ProTip</h2>
+            <strong>Open all outbound links externally.</strong>
+            <p>You may want to open all <code>http</code> and <code>https</code> links outside of your app. To do this, query the document and loop through each link and add a listener. This app uses the code below which is located in <code>assets/ex-links.js</code>.</p>
+            <h5>Renderer Process</h5>
+            <pre><code data-path="assets/ex-links.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> shell = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).shell
+
+<span class="hljs-keyword">const</span> links = <span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">'a[href]'</span>)
+
+<span class="hljs-built_in">Array</span>.prototype.forEach.call(links, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">link</span>) </span>{
+  <span class="hljs-keyword">const</span> url = link.getAttribute(<span class="hljs-string">'href'</span>)
+  <span class="hljs-keyword">if</span> (url.indexOf(<span class="hljs-string">'http'</span>) === <span class="hljs-number">0</span>) {
+    link.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">e</span>) </span>{
+      e.preventDefault()
+      shell.openExternal(url)
+    })
+  }
+})
+</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      require('./renderer-process/native-ui/ex-links-file-manager/file-manager')
+      require('./renderer-process/native-ui/ex-links-file-manager/ex-links')
+    </script>
+
+  </section>
+
+  <section id="dialogs-section" class="section js-section u-category-native-ui">
+    <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
+          Use system dialogs
+        </h1>
+        <h3>The <code>dialog</code> module in Electron allows you to use native system dialogs for opening files or directories, saving a file or displaying informational messages.</h3>
+
+        <p>This is a main process module because this process is more efficient with native utilities and it allows the call to happen without interupting the visible elements in your page's renderer process.</p>
+
+        <p>Open the <a href="http://electron.atom.io/docs/api/dialog/">full API documentation<span class="u-visible-to-screen-reader">(opens in new window)</span></a> in your browser.</p>
+      </div>
+    </header>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="open-file-demo-toggle" class="js-container-target demo-toggle-button">Open a File or Directory
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Main</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="select-directory">View Demo</button>
+            <span class="demo-response" id="selected-file"></span>
+          </div>
+          <p>In this demo, the <code>ipc</code> module is used to send a message from the renderer process instructing the main process to launch the open file (or directory) dialog. If a file is selected, the main process can send that information back to the renderer process.</p>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/native-ui/dialogs/open-file.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> ipc = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcRenderer
+
+<span class="hljs-keyword">const</span> selectDirBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'select-directory'</span>)
+
+selectDirBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  ipc.send(<span class="hljs-string">'open-file-dialog'</span>)
+})
+
+ipc.on(<span class="hljs-string">'selected-directory'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event, path</span>) </span>{
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'selected-file'</span>).innerHTML = <span class="hljs-string">`You selected: <span class="hljs-subst">${path}</span>`</span>
+})
+</code></pre>
+          <h5>Main Process</h5>
+          <pre><code data-path="main-process/native-ui/dialogs/open-file.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> ipc = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcMain
+<span class="hljs-keyword">const</span> dialog = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).dialog
+
+ipc.on(<span class="hljs-string">'open-file-dialog'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  dialog.showOpenDialog({
+    <span class="hljs-attr">properties</span>: [<span class="hljs-string">'openFile'</span>, <span class="hljs-string">'openDirectory'</span>]
+  }, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">files</span>) </span>{
+    <span class="hljs-keyword">if</span> (files) event.sender.send(<span class="hljs-string">'selected-directory'</span>, files)
+  })
+})
+</code></pre>
+
+          <div class="demo-protip">
+            <h2>ProTip</h2>
+            <strong>The sheet-style dialog on macOS.</strong>
+            <p>On macOS you can choose between a "sheet" dialog or a default dialog. The sheet version descends from the top of the window. To use sheet version, pass the <code>window</code> as the first argument in the dialog method.</p>
+            <pre><code class="language-js hljs javascript"><span class="hljs-keyword">const</span> ipc = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcMain
+<span class="hljs-keyword">const</span> dialog = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).dialog
+<span class="hljs-keyword">const</span> BrowserWindow = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).BrowserWindow
+
+
+ipc.on(<span class="hljs-string">'open-file-dialog-sheet'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">const</span> <span class="hljs-built_in">window</span> = BrowserWindow.fromWebContents(event.sender)
+  <span class="hljs-keyword">const</span> files = dialog.showOpenDialog(<span class="hljs-built_in">window</span>, { <span class="hljs-attr">properties</span>: [ <span class="hljs-string">'openFile'</span> ]})
+})</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="error-dialog-demo-toggle" class="js-container-target demo-toggle-button">Error Dialog
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Main</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button id="error-dialog" class="demo-button">View Demo</button>
+          </div>
+          <p>In this demo, the <code>ipc</code> module is used to send a message from the renderer process instructing the main process to launch the error dialog.</p>
+
+          <p>You can use an error dialog before the app's <code>ready</code> event, which is useful for showing errors upon startup.</p>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/native-ui/dialogs/error.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> ipc = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcRenderer
+
+<span class="hljs-keyword">const</span> errorBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'error-dialog'</span>)
+
+errorBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  ipc.send(<span class="hljs-string">'open-error-dialog'</span>)
+})
+</code></pre>
+          <h5>Main Process</h5>
+          <pre><code data-path="main-process/native-ui/dialogs/error.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> ipc = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcMain
+<span class="hljs-keyword">const</span> dialog = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).dialog
+
+ipc.on(<span class="hljs-string">'open-error-dialog'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  dialog.showErrorBox(<span class="hljs-string">'An Error Message'</span>, <span class="hljs-string">'Demonstrating an error message.'</span>)
+})
+</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="information-dialog-demo-toggle" class="js-container-target demo-toggle-button">Information Dialog
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Main</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="information-dialog">View Demo</button>
+            <span class="demo-response" id="info-selection"></span>
+          </div>
+          <p>In this demo, the <code>ipc</code> module is used to send a message from the renderer process instructing the main process to launch the information dialog. Options may be provided for responses which can then be relayed back to the renderer process.</p>
+
+          <p>Note: The <code>title</code> property is not displayed in macOS.</p>
+
+          <p>An information dialog can contain an icon, your choice of buttons, title and message.</p>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/native-ui/dialogs/information.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> ipc = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcRenderer
+
+<span class="hljs-keyword">const</span> informationBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'information-dialog'</span>)
+
+informationBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  ipc.send(<span class="hljs-string">'open-information-dialog'</span>)
+})
+
+ipc.on(<span class="hljs-string">'information-dialog-selection'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event, index</span>) </span>{
+  <span class="hljs-keyword">let</span> message = <span class="hljs-string">'You selected '</span>
+  <span class="hljs-keyword">if</span> (index === <span class="hljs-number">0</span>) message += <span class="hljs-string">'yes.'</span>
+  <span class="hljs-keyword">else</span> message += <span class="hljs-string">'no.'</span>
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'info-selection'</span>).innerHTML = message
+})
+</code></pre>
+          <h5>Main Process</h5>
+          <pre><code data-path="main-process/native-ui/dialogs/information.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> ipc = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcMain
+<span class="hljs-keyword">const</span> dialog = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).dialog
+
+ipc.on(<span class="hljs-string">'open-information-dialog'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">const</span> options = {
+    <span class="hljs-attr">type</span>: <span class="hljs-string">'info'</span>,
+    <span class="hljs-attr">title</span>: <span class="hljs-string">'Information'</span>,
+    <span class="hljs-attr">message</span>: <span class="hljs-string">"This is an information dialog. Isn't it nice?"</span>,
+    <span class="hljs-attr">buttons</span>: [<span class="hljs-string">'Yes'</span>, <span class="hljs-string">'No'</span>]
+  }
+  dialog.showMessageBox(options, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">index</span>) </span>{
+    event.sender.send(<span class="hljs-string">'information-dialog-selection'</span>, index)
+  })
+})
+</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="save-dialog-demo-toggle" class="js-container-target demo-toggle-button">Save Dialog
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Main</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="save-dialog">View Demo</button>
+            <span class="demo-response" id="file-saved"></span>
+          </div>
+          <p>In this demo, the <code>ipc</code> module is used to send a message from the renderer process instructing the main process to launch the save dialog. It returns the path selected by the user which can be relayed back to the renderer process.</p>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/native-ui/dialogs/save.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> ipc = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcRenderer
+
+<span class="hljs-keyword">const</span> saveBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'save-dialog'</span>)
+
+saveBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  ipc.send(<span class="hljs-string">'save-dialog'</span>)
+})
+
+ipc.on(<span class="hljs-string">'saved-file'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event, path</span>) </span>{
+  <span class="hljs-keyword">if</span> (!path) path = <span class="hljs-string">'No path'</span>
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'file-saved'</span>).innerHTML = <span class="hljs-string">`Path selected: <span class="hljs-subst">${path}</span>`</span>
+})
+</code></pre>
+          <h5>Main Process</h5>
+          <pre><code data-path="main-process/native-ui/dialogs/save.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> ipc = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcMain
+<span class="hljs-keyword">const</span> dialog = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).dialog
+
+ipc.on(<span class="hljs-string">'save-dialog'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">const</span> options = {
+    <span class="hljs-attr">title</span>: <span class="hljs-string">'Save an Image'</span>,
+    <span class="hljs-attr">filters</span>: [
+      { <span class="hljs-attr">name</span>: <span class="hljs-string">'Images'</span>, <span class="hljs-attr">extensions</span>: [<span class="hljs-string">'jpg'</span>, <span class="hljs-string">'png'</span>, <span class="hljs-string">'gif'</span>] }
+    ]
+  }
+  dialog.showSaveDialog(options, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">filename</span>) </span>{
+    event.sender.send(<span class="hljs-string">'saved-file'</span>, filename)
+  })
+})
+</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      require('./renderer-process/native-ui/dialogs/open-file')
+      require('./renderer-process/native-ui/dialogs/error')
+      require('./renderer-process/native-ui/dialogs/information')
+      require('./renderer-process/native-ui/dialogs/save')
+    </script>
+
+  </section>
+
+  <section id="tray-section" class="section js-section u-category-native-ui">
+    <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-native-ui"></use></svg>
+          Tray
+        </h1>
+        <h3>The <code>tray</code> module allows you to create an icon in the operating system's notification area.</h3>
+        <p>This icon can also have a context menu attached.</p>
+
+        <p>Open the <a href="http://electron.atom.io/docs/api/tray">full API documentation<span class="u-visible-to-screen-reader">(opens in new window)</span></a> in your browser.</p>
+      </div>
+    </header>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="tray-demo-toggle" class="js-container-target demo-toggle-button">Tray
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux | Process: Main</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="put-in-tray">View Demo</button>
+            <span class="demo-response" id="tray-countdown"></span>
+          </div>
+          <p>The demo button sends a message to the main process using the <code>ipc</code> module. In the main process the app is told to place an icon, with a context menu, in the tray.</p>
+
+          <p>In this example the tray icon can be removed by clicking 'Remove' in the context menu or selecting the demo button again.</p>
+          <h5>Main Process</h5>
+          <pre><code data-path="main-process/native-ui/tray/tray.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>)
+<span class="hljs-keyword">const</span> electron = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>)
+<span class="hljs-keyword">const</span> ipc = electron.ipcMain
+<span class="hljs-keyword">const</span> app = electron.app
+<span class="hljs-keyword">const</span> Menu = electron.Menu
+<span class="hljs-keyword">const</span> Tray = electron.Tray
+
+<span class="hljs-keyword">let</span> appIcon = <span class="hljs-literal">null</span>
+
+ipc.on(<span class="hljs-string">'put-in-tray'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">const</span> iconName = process.platform === <span class="hljs-string">'win32'</span> ? <span class="hljs-string">'windows-icon.png'</span> : <span class="hljs-string">'iconTemplate.png'</span>
+  <span class="hljs-keyword">const</span> iconPath = path.join(__dirname, iconName)
+  appIcon = <span class="hljs-keyword">new</span> Tray(iconPath)
+  <span class="hljs-keyword">const</span> contextMenu = Menu.buildFromTemplate([{
+    <span class="hljs-attr">label</span>: <span class="hljs-string">'Remove'</span>,
+    <span class="hljs-attr">click</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+      event.sender.send(<span class="hljs-string">'tray-removed'</span>)
+    }
+  }])
+  appIcon.setToolTip(<span class="hljs-string">'Electron Demo in the tray.'</span>)
+  appIcon.setContextMenu(contextMenu)
+})
+
+ipc.on(<span class="hljs-string">'remove-tray'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  appIcon.destroy()
+})
+
+app.on(<span class="hljs-string">'window-all-closed'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">if</span> (appIcon) appIcon.destroy()
+})
+</code></pre>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/native-ui/tray/tray.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> ipc = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcRenderer
+
+<span class="hljs-keyword">const</span> trayBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'put-in-tray'</span>)
+<span class="hljs-keyword">let</span> trayOn = <span class="hljs-literal">false</span>
+
+trayBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">if</span> (trayOn) {
+    trayOn = <span class="hljs-literal">false</span>
+    <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'tray-countdown'</span>).innerHTML = <span class="hljs-string">''</span>
+    ipc.send(<span class="hljs-string">'remove-tray'</span>)
+  } <span class="hljs-keyword">else</span> {
+    trayOn = <span class="hljs-literal">true</span>
+    <span class="hljs-keyword">const</span> message = <span class="hljs-string">'Click demo again to remove.'</span>
+    <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'tray-countdown'</span>).innerHTML = message
+    ipc.send(<span class="hljs-string">'put-in-tray'</span>)
+  }
+})
+<span class="hljs-comment">// Tray removed from context menu on icon</span>
+ipc.on(<span class="hljs-string">'tray-removed'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  ipc.send(<span class="hljs-string">'remove-tray'</span>)
+  trayOn = <span class="hljs-literal">false</span>
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'tray-countdown'</span>).innerHTML = <span class="hljs-string">''</span>
+})
+</code></pre>
+
+          <div class="demo-protip">
+            <h2>ProTip</h2>
+            <strong>Tray support in Linux.</strong>
+            <p>On Linux distributions that only have app indicator support, users will need to install <code>libappindicator1</code> to make the tray icon work. See the <a href="http://electron.atom.io/docs/api/tray">full API documentation<span class="u-visible-to-screen-reader">(opens in new window)</span></a> for more details about using Tray on Linux.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      require('./renderer-process/native-ui/tray/tray')
+    </script>
+
+  </section>
+
+  <section id="ipc-section" class="section js-section u-category-communication">
+    <header class="communication">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-communication"></use></svg>
+          Communication between processes
+        </h1>
+        <h3>The <code>ipc</code> (inter-process communication) module allows you to send and receive synchronous and asynchronous messages between the main and renderer processes.</h3>
+
+        <p>There is a version of this module available for both processes: <code>ipcMain</code> and <code>ipcRenderer</code>.</p>
+        <p>Open the full API documentation for the <a href="http://electron.atom.io/docs/api/ipc-main">main process<span class="u-visible-to-screen-reader">(opens in new window)</span></a> and the <a href="http://electron.atom.io/docs/api/ipc-renderer/">renderer process<span class="u-visible-to-screen-reader">(opens in new window)</span></a> in your browser.</p>
+      </div>
+    </header>
+
+    <div class="demo">
+      <div class="demo-wrapper is-open">
+        <button id="async-msg-demo-toggle" class="js-container-target demo-toggle-button">Asynchronous messages
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Both</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="async-msg">Ping</button>
+            <span class="demo-response" id="async-reply"></span>
+          </div>
+          <p>Using <code>ipc</code> to send messages between processes asynchronously is the preferred method since it will return when finished without blocking other operations in the same process.</p>
+
+          <p>This example sends a "ping" from this process (renderer) to the main process. The main process then replies with "pong".</p>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/communication/async-msg.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> ipc = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcRenderer
+
+<span class="hljs-keyword">const</span> asyncMsgBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'async-msg'</span>)
+
+asyncMsgBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  ipc.send(<span class="hljs-string">'asynchronous-message'</span>, <span class="hljs-string">'ping'</span>)
+})
+
+ipc.on(<span class="hljs-string">'asynchronous-reply'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event, arg</span>) </span>{
+  <span class="hljs-keyword">const</span> message = <span class="hljs-string">`Asynchronous message reply: <span class="hljs-subst">${arg}</span>`</span>
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'async-reply'</span>).innerHTML = message
+})
+</code></pre>
+          <h5>Main Process</h5>
+          <pre><code data-path="main-process/communication/async-msg.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> ipc = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcMain
+
+ipc.on(<span class="hljs-string">'asynchronous-message'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event, arg</span>) </span>{
+  event.sender.send(<span class="hljs-string">'asynchronous-reply'</span>, <span class="hljs-string">'pong'</span>)
+})
+</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="sync-msg-demo-toggle" class="js-container-target demo-toggle-button">Synchronous messages
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Both</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="sync-msg">Ping</button>
+            <span class="demo-response" id="sync-reply"></span>
+          </div>
+          <p>You can use the <code>ipc</code> module to send synchronous messages between processes as well, but note that the synchronous nature of this method means that it <b>will block</b> other operations while completing its task.</p>
+          <p>This example sends a synchronous message, "ping", from this process (renderer) to the main process. The main process then replies with "pong".</p>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/communication/sync-msg.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> ipc = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcRenderer
+
+<span class="hljs-keyword">const</span> syncMsgBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'sync-msg'</span>)
+
+syncMsgBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> reply = ipc.sendSync(<span class="hljs-string">'synchronous-message'</span>, <span class="hljs-string">'ping'</span>)
+  <span class="hljs-keyword">const</span> message = <span class="hljs-string">`Synchronous message reply: <span class="hljs-subst">${reply}</span>`</span>
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'sync-reply'</span>).innerHTML = message
+})
+</code></pre>
+          <h5>Main Process</h5>
+          <pre><code data-path="main-process/communication/sync-msg.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> ipc = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcMain
+
+ipc.on(<span class="hljs-string">'synchronous-message'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event, arg</span>) </span>{
+  event.returnValue = <span class="hljs-string">'pong'</span>
+})
+</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="invis-msg-demo-toggle" class="js-container-target demo-toggle-button">Communicate with an invisible window
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Both</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="invis-msg">Compute Factorial</button>
+            <span class="demo-response" id="invis-reply"></span>
+          </div>
+          <p>It is common practice to create a new invisible browser window (renderer process) in order to run tasks without impacting performance in the main app's window.</p>
+          <p>In this example we use the <code>remote</code> module to create a new invisible browser window from this renderer process. When the new page is loaded we send a message with <code>ipc</code> that the new window is listening for.</p>
+          <p>The new window then computes the factorial and sends the result to be recieved by this, the original, window and added to the page above.</p>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/communication/invisible-msg.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> BrowserWindow = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).remote.BrowserWindow
+<span class="hljs-keyword">const</span> ipcRenderer = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcRenderer
+<span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>)
+
+<span class="hljs-keyword">const</span> invisMsgBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'invis-msg'</span>)
+<span class="hljs-keyword">const</span> invisReply = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'invis-reply'</span>)
+
+invisMsgBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">clickEvent</span>) </span>{
+  <span class="hljs-keyword">const</span> windowID = BrowserWindow.getFocusedWindow().id
+  <span class="hljs-keyword">const</span> invisPath = <span class="hljs-string">'file://'</span> + path.join(__dirname, <span class="hljs-string">'../../sections/communication/invisible.html'</span>)
+  <span class="hljs-keyword">let</span> win = <span class="hljs-keyword">new</span> BrowserWindow({ <span class="hljs-attr">width</span>: <span class="hljs-number">400</span>, <span class="hljs-attr">height</span>: <span class="hljs-number">400</span>, <span class="hljs-attr">show</span>: <span class="hljs-literal">false</span> })
+  win.loadURL(invisPath)
+
+  win.webContents.on(<span class="hljs-string">'did-finish-load'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">const</span> input = <span class="hljs-number">100</span>
+    win.webContents.send(<span class="hljs-string">'compute-factorial'</span>, input, windowID)
+  })
+})
+
+ipcRenderer.on(<span class="hljs-string">'factorial-computed'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event, input, output</span>) </span>{
+  <span class="hljs-keyword">const</span> message = <span class="hljs-string">`The factorial of <span class="hljs-subst">${input}</span> is <span class="hljs-subst">${output}</span>`</span>
+  invisReply.textContent = message
+})
+</code></pre>
+          <h5>Invisible Window Page HTML</h5>
+          <pre><code data-path="sections/communication/invisible.html" class="language-html hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span>&gt;</span><span class="javascript">
+    <span class="hljs-keyword">const</span> ipc = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcRenderer
+    <span class="hljs-keyword">const</span> BrowserWindow = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).remote.BrowserWindow
+
+    ipc.on(<span class="hljs-string">'compute-factorial'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event, number, fromWindowId</span>) </span>{
+      <span class="hljs-keyword">const</span> result = factorial(number)
+      <span class="hljs-keyword">const</span> fromWindow = BrowserWindow.fromId(fromWindowId)
+      fromWindow.webContents.send(<span class="hljs-string">'factorial-computed'</span>, number, result)
+      <span class="hljs-built_in">window</span>.close()
+    })
+
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">factorial</span> (<span class="hljs-params">num</span>) </span>{
+      <span class="hljs-keyword">if</span> (num === <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>
+      <span class="hljs-keyword">return</span> num * factorial(num - <span class="hljs-number">1</span>)
+    }
+  </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      require('./renderer-process/communication/sync-msg')
+      require('./renderer-process/communication/async-msg')
+      require('./renderer-process/communication/invisible-msg')
+    </script>
+
+  </section>
+
+  <section id="app-sys-information-section" class="section js-section u-category-system is-shown">
+    <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-system"></use></svg>
+          Get app and system information
+        </h1>
+        <h3>With a few Node.js and Electron modules you can gather information about the user's system, app or screen.</h3>
+        <p>Links to the relevant documentation are in the demos below.</p>
+      </div>
+    </header>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="app-info-demo-toggle" class="js-container-target demo-toggle-button">Get app information
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Both</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="app-info">View Demo</button>
+            <span class="demo-response" id="got-app-info"></span>
+          </div>
+          <p>The main process <code>app</code> module can be used to get the path at which your app is located on the user's computer.</p>
+          <p>In this example, to get that information from the renderer process, we use the <code>ipc</code> module to send a message to the main process requesting the app's path.</p>
+          <p>See the <a href="http://electron.atom.io/docs/api/app">app module documentation<span class="u-visible-to-screen-reader">(opens in new window)</span></a> for more.</p>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/system/app-information.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> ipc = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcRenderer
+
+<span class="hljs-keyword">const</span> appInfoBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'app-info'</span>)
+
+appInfoBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  ipc.send(<span class="hljs-string">'get-app-path'</span>)
+})
+
+ipc.on(<span class="hljs-string">'got-app-path'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event, path</span>) </span>{
+  <span class="hljs-keyword">const</span> message = <span class="hljs-string">`This app is located at: <span class="hljs-subst">${path}</span>`</span>
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'got-app-info'</span>).innerHTML = message
+})
+</code></pre>
+          <h5>Main Process</h5>
+          <pre><code data-path="main-process/system/app-information.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> app = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).app
+<span class="hljs-keyword">const</span> ipc = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcMain
+
+ipc.on(<span class="hljs-string">'get-app-path'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  event.sender.send(<span class="hljs-string">'got-app-path'</span>, app.getAppPath())
+})
+</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="app-version-demo-toggle" class="js-container-target demo-toggle-button">Get version information
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Both</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="version-info">View Demo</button>
+            <span class="demo-response" id="got-version-info"></span>
+          </div>
+          <p>The <code>process</code> module is built into Node.js (therefore you can use this in both the main and renderer processes) and in Electron apps this object has a few more useful properties on it.</p>
+          <p>The example below gets the version of Electron in use by the app.</p>
+          <p>See the <a href="http://electron.atom.io/docs/api/process">process documentation<span class="u-visible-to-screen-reader">(opens in new window)</span></a> for more.</p>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/system/version-information.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> versionInfoBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'version-info'</span>)
+
+<span class="hljs-keyword">const</span> electronVersion = process.versions.electron
+
+versionInfoBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> message = <span class="hljs-string">`This app is using Electron version: <span class="hljs-subst">${electronVersion}</span>`</span>
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'got-version-info'</span>).innerHTML = message
+})
+</code></pre>
+
+          <div class="demo-protip">
+            <h2>ProTip</h2>
+            <strong>Find versions of Chromium, Node.js and V8.</strong>
+            <p>Electron also includes verions of Chromium, Node.js and V8 within the <code>process.versions</code> object. You can get there quickly by opening up developer tools in an Electron app and typing <code>process.versions</code>.</p>
+            <pre><code class="language-js hljs javascript"><span class="hljs-comment">// Returns version of Chromium in use</span>
+process.versions.chrome
+<span class="hljs-comment">// Returns version of V8 in use</span>
+process.versions.v8
+<span class="hljs-comment">// Returns version of Node in use</span>
+process.versions.node</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="sys-info-demo-toggle" class="js-container-target demo-toggle-button">Get system information
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Both</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="sys-info">View Demo</button>
+            <span class="demo-response" id="got-sys-info"></span>
+          </div>
+          <p>The Node.js <code>os</code> module provides useful information about the user's operating system. It's built into Node.js and can be used in both the main and renderer proesses.</p>
+          <p>In the example below we require the module and then return the location of the home directory.</p>
+
+          <p>See the full <a href="https://nodejs.org/api/os.html"> os documentation<span class="u-visible-to-screen-reader">(opens in new window)</span></a> for more.</p>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/system/sys-information.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> os = <span class="hljs-built_in">require</span>(<span class="hljs-string">'os'</span>)
+<span class="hljs-keyword">const</span> homeDir = os.homedir()
+
+<span class="hljs-keyword">const</span> sysInfoBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'sys-info'</span>)
+
+sysInfoBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> message = <span class="hljs-string">`Your system home directory is: <span class="hljs-subst">${homeDir}</span>`</span>
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'got-sys-info'</span>).innerHTML = message
+})
+</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="screen-info-demo-toggle" class="js-container-target demo-toggle-button">Get screen information
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Both</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="screen-info">View Demo</button>
+            <span class="demo-response" id="got-screen-info"></span>
+          </div>
+          <p>The Electron <code>screen</code> module retrieves information about screen size, displays, cursor position, etc. In the example below we retrieve the dimensions of the monitor in use.</p>
+
+          <p>See the full <a href="http://electron.atom.io/docs/api/screen">screen documentation<span class="u-visible-to-screen-reader">(opens in new window)</span></a> for more.</p>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/system/screen-information.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> electronScreen = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).screen
+
+<span class="hljs-keyword">const</span> screenInfoBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'screen-info'</span>)
+<span class="hljs-keyword">const</span> size = electronScreen.getPrimaryDisplay().size
+
+screenInfoBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> message = <span class="hljs-string">`Your screen is: <span class="hljs-subst">${size.width}</span>px x <span class="hljs-subst">${size.height}</span>px`</span>
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'got-screen-info'</span>).innerHTML = message
+})
+</code></pre>
+
+          <div class="demo-protip">
+            <h2>ProTip</h2>
+            <strong>Differences in dimensions.</strong>
+            <p>The <code>.size</code> method in the example returns the raw dimensions of the screen but because of system menu bars this may not be the actual space available for your app.</p>
+
+            <p>To get the dimensions of the available screen space use the <code>.workAreaSize</code> method. Using <code>.workArea</code> will return the coordinates as well as the dimensions of the available screen space.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      require('./renderer-process/system/app-information')
+      require('./renderer-process/system/version-information')
+      require('./renderer-process/system/sys-information')
+      require('./renderer-process/system/screen-information')
+    </script>
+
+  </section>
+
+  <section id="clipboard-section" class="section js-section u-category-system">
+    <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-system"></use></svg>
+          Clipboard
+        </h1>
+        <h3>The <code>clipboard</code> module provides methods to perform copy and paste operations.</h3>
+        <p>This module also has methods for copying text as markup (HTML) to the clipboard.</p>
+
+        <p>Open the <a href="http://electron.atom.io/docs/api/clipboard">full API documentation<span class="u-visible-to-screen-reader">(opens in new window)</span></a> in your browser.</p>
+      </div>
+    </header>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="copy-to-demo-toggle" class="js-container-target demo-toggle-button">Copy
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Both</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="copy-to">Copy</button>
+            <input class="demo-input" id="copy-to-input" aria-label="Click copy" placeholder="Click copy.">
+          </div>
+          <p>In this example we copy a phrase to the clipboard. After clicking 'Copy' use the text area to paste (CMD + V or CTRL + V) the phrase from the clipboard.</p>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/system/copy.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> clipboard = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).clipboard
+
+<span class="hljs-keyword">const</span> copyBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'copy-to'</span>)
+<span class="hljs-keyword">const</span> copyInput = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'copy-to-input'</span>)
+
+copyBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">if</span> (copyInput.value !== <span class="hljs-string">''</span>) copyInput.value = <span class="hljs-string">''</span>
+  copyInput.placeholder = <span class="hljs-string">'Copied! Paste here to see.'</span>
+  clipboard.writeText(<span class="hljs-string">'Electron Demo!'</span>)
+})
+</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="paste-to-demo-toggle" class="js-container-target demo-toggle-button">Paste
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux <span class="demo-meta-divider">|</span> Process: Both</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="paste-to">Paste</button>
+            <span class="demo-response" id="paste-from"></span>
+          </div>
+          <p>In this example we copy a string to the clipboard and then paste the results into a message above.</p>
+
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/system/paste.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> clipboard = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).clipboard
+
+<span class="hljs-keyword">const</span> pasteBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'paste-to'</span>)
+
+pasteBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  clipboard.writeText(<span class="hljs-string">'What a demo!'</span>)
+  <span class="hljs-keyword">const</span> message = <span class="hljs-string">`Clipboard contents: <span class="hljs-subst">${clipboard.readText()}</span>`</span>
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'paste-from'</span>).innerHTML = message
+})
+</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      require('./renderer-process/system/copy')
+      require('./renderer-process/system/paste')
+    </script>
+
+  </section>
+
+  <section id="protocol-section" class="section js-section u-category-system">
+    <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-system"></use></svg>
+          Protocol Handler
+        </h1>
+        <h3>The <code>app</code> module provides methods for handling protocols.</h3>
+        <p>These methods allow you to set and unset the protocols your app should be the default app for. Similar to when a browser asks to be your default for viewing web pages.</p>
+
+        <p>Open the <a href="http://electron.atom.io/docs/api/app">full app API documentation<span class="u-visible-to-screen-reader">(opens in new window)</span></a> in your browser.</p>
+      </div>
+    </header>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="copy-to-demo-toggle" class="js-container-target demo-toggle-button">Launch app from URL in another app
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS <span class="demo-meta-divider">|</span> Process: Main</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="protocol-handler">View Demo</button>
+          </div>
+          <p>You can set your app as the default app to open for a specific protocol. For instance, in this demo we set this app as the default for <code>electron-api-demos://</code>. The demo button above will launch a page in your default browser with a link. Click that link and it will re-launch this app.</p>
+          <h5>Packaging</h5>
+          <p>This feature will only work on macOS when your app is packaged. It will not work when you're launching it in development from the command-line. When you package your app you'll need to make sure the macOS <code>plist</code> for the app is updated to include the new protocol handler. If you're using <code>electron-packager</code> then you can add the flag <code>--extend-info</code> with a path to the <code>plist</code> you've created. The one for this app is below.</p>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/system/protocol-handler.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> shell = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).shell
+
+<span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>)
+
+<span class="hljs-keyword">const</span> protocolHandlerBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'protocol-handler'</span>)
+
+protocolHandlerBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> pageDirectory = __dirname.replace(<span class="hljs-string">'app.asar'</span>, <span class="hljs-string">'app.asar.unpacked'</span>)
+  <span class="hljs-keyword">const</span> pagePath = path.join(<span class="hljs-string">'file://'</span>, pageDirectory, <span class="hljs-string">'../../sections/system/protocol-link.html'</span>)
+  shell.openExternal(pagePath)
+})
+</code></pre>
+          <h5>Main Process</h5>
+          <pre><code data-path="main-process/system/protocol-handler.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> app = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).app
+<span class="hljs-keyword">const</span> dialog = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).dialog
+
+app.setAsDefaultProtocolClient(<span class="hljs-string">'electron-api-demos'</span>)
+
+app.on(<span class="hljs-string">'open-url'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event, url</span>) </span>{
+  dialog.showErrorBox(<span class="hljs-string">'Welcome Back'</span>, <span class="hljs-string">`You arrived from: <span class="hljs-subst">${url}</span>`</span>)
+})
+</code></pre>
+          <h5>macOS plist</h5>
+          <pre><code class="language-xml language-plist hljs" data-path="assets/mac/info.plist"><span class="php"><span class="hljs-meta">&lt;?</span>xml version=<span class="hljs-string">"1.0"</span> encoding=<span class="hljs-string">"UTF-8"</span><span class="hljs-meta">?&gt;</span></span>
+<span class="hljs-meta">&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">plist</span> <span class="hljs-attr">version</span>=<span class="hljs-string">"1.0"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">dict</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>CFBundleURLTypes<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">array</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">dict</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>CFBundleURLSchemes<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">array</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>electron-api-demos<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">array</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>CFBundleURLName<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>Electron API Demos Protocol<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">dict</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">array</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">key</span>&gt;</span>ElectronTeamID<span class="hljs-tag">&lt;/<span class="hljs-name">key</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">string</span>&gt;</span>VEKTX9H2N7<span class="hljs-tag">&lt;/<span class="hljs-name">string</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dict</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">plist</span>&gt;</span>
+</code></pre>
+        </div>
+      </div>
+    </div>
+
+
+    <script type="text/javascript">
+      require('./renderer-process/system/protocol-handler')
+    </script>
+
+  </section>
+
+  <section id="pdf-section" class="section js-section u-category-media">
+    <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-media"></use></svg>
+          Print to PDF
+        </h1>
+        <h3>The <code>browser window</code> module in Electron has a property, <code>webContents</code>, which allows your app to print as well as print to PDF.</h3>
+
+        <p>Open the <a href="http://electron.atom.io/docs/api/web-contents/#webcontentsprintoptions">full API documentation<span class="u-visible-to-screen-reader">(opens in new window)</span></a> in your browser.</p>
+      </div>
+    </header>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="print-pdf-demo-toggle" class="js-container-target demo-toggle-button">Print to PDF
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="print-pdf">View Demo</button>
+            <span class="demo-response is-selectable" id="pdf-path"></span>
+          </div>
+          <p>To demonstrate the print to PDF functionality, the demo button above will save this page as a PDF and, if you have a PDF viewer, open the file.</p>
+          <p>In a real-world application you're more likely to add this to application menu, but for the purposes of the demo we've set it to the demo button.</p>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/media/pdf.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> ipc = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>).ipcRenderer
+
+<span class="hljs-keyword">const</span> printPDFBtn = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'print-pdf'</span>)
+
+printPDFBtn.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  ipc.send(<span class="hljs-string">'print-to-pdf'</span>)
+})
+
+ipc.on(<span class="hljs-string">'wrote-pdf'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event, path</span>) </span>{
+  <span class="hljs-keyword">const</span> message = <span class="hljs-string">`Wrote PDF to: <span class="hljs-subst">${path}</span>`</span>
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'pdf-path'</span>).innerHTML = message
+})
+</code></pre>
+          <h5>Main Process</h5>
+          <pre><code data-path="main-process/media/pdf.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>)
+<span class="hljs-keyword">const</span> os = <span class="hljs-built_in">require</span>(<span class="hljs-string">'os'</span>)
+<span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>)
+<span class="hljs-keyword">const</span> electron = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>)
+<span class="hljs-keyword">const</span> BrowserWindow = electron.BrowserWindow
+<span class="hljs-keyword">const</span> ipc = electron.ipcMain
+<span class="hljs-keyword">const</span> shell = electron.shell
+
+ipc.on(<span class="hljs-string">'print-to-pdf'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  <span class="hljs-keyword">const</span> pdfPath = path.join(os.tmpdir(), <span class="hljs-string">'print.pdf'</span>)
+  <span class="hljs-keyword">const</span> win = BrowserWindow.fromWebContents(event.sender)
+  <span class="hljs-comment">// Use default printing options</span>
+  win.webContents.printToPDF({}, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">error, data</span>) </span>{
+    <span class="hljs-keyword">if</span> (error) <span class="hljs-keyword">throw</span> error
+    fs.writeFile(pdfPath, data, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">error</span>) </span>{
+      <span class="hljs-keyword">if</span> (error) {
+        <span class="hljs-keyword">throw</span> error
+      }
+      shell.openExternal(<span class="hljs-string">'file://'</span> + pdfPath)
+      event.sender.send(<span class="hljs-string">'wrote-pdf'</span>, pdfPath)
+    })
+  })
+})
+</code></pre>
+
+          <div class="demo-protip">
+            <h2>ProTip</h2>
+            <strong>Use a print style sheet.</strong>
+            <p>You can create a stylesheet targeting printing to optimize the look of what your users print. Below is the stylesheet used in this app, located in <code>assets/css/print.css</code>.</p>
+            <pre><code data-path="assets/css/print.css" class="language-css hljs">@<span class="hljs-keyword">media</span> print {
+  <span class="hljs-selector-tag">body</span> {
+    <span class="hljs-attribute">background</span>: none;
+    <span class="hljs-attribute">color</span>: black <span class="hljs-meta">!important</span>;
+    <span class="hljs-attribute">font-size</span>: <span class="hljs-number">70%</span>;
+    <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span>; <span class="hljs-attribute">padding</span>: <span class="hljs-number">0</span>;
+  }
+
+  <span class="hljs-selector-tag">h1</span> {
+    <span class="hljs-attribute">font-size</span>: <span class="hljs-number">22px</span>;
+  }
+
+  <span class="hljs-selector-class">.nav</span>, <span class="hljs-selector-tag">button</span>, <span class="hljs-selector-class">.demo-box</span><span class="hljs-selector-pseudo">:before</span>,
+  <span class="hljs-selector-id">#pdf-path</span>, <span class="hljs-selector-tag">header</span> <span class="hljs-selector-tag">p</span> {
+    <span class="hljs-attribute">display</span>: none;
+  }
+
+  <span class="hljs-selector-class">.demo-box</span>, <span class="hljs-selector-tag">h2</span>,
+  <span class="hljs-selector-tag">pre</span>, <span class="hljs-selector-tag">code</span> {
+    <span class="hljs-attribute">padding</span>: <span class="hljs-number">0</span> <span class="hljs-meta">!important</span>;
+    <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span> <span class="hljs-meta">!important</span>;
+  }
+
+  <span class="hljs-selector-tag">header</span> {
+    <span class="hljs-attribute">padding</span>: <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">10px</span> <span class="hljs-number">0</span>;
+  }
+
+  <span class="hljs-selector-tag">code</span>, <span class="hljs-selector-class">.support</span> {
+    <span class="hljs-attribute">font-size</span>: <span class="hljs-number">10px</span>;
+  }
+}
+</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      require('./renderer-process/media/pdf')
+    </script>
+
+  </section>
+
+  <section id="desktop-capturer-section" class="section js-section u-category-media">
+    <header class="section-header">
+      <div class="section-wrapper">
+        <h1>
+          <svg class="section-icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="assets/img/icons.svg#icon-media"></use></svg>
+          Take a screenshot
+        </h1>
+        <h3>The <code>desktopCapturer</code> module in Electron can be used to access any media, such as audio, video, screen and window, that is available through the <code>getUserMedia</code> web API in Chromium.</h3>
+
+        <p>Open the <a href="http://electron.atom.io/docs/api/desktop-capturer">full API documentation<span class="u-visible-to-screen-reader">(opens in new window)</span></a> in your browser.</p>
+      </div>
+    </header>
+
+    <div class="demo">
+      <div class="demo-wrapper">
+        <button id="print-pdf-demo-toggle" class="js-container-target demo-toggle-button">Take a Screenshot
+          <div class="demo-meta u-avoid-clicks">Supports: Win, macOS, Linux | Process: Renderer</div>
+        </button>
+        <div class="demo-box">
+          <div class="demo-controls">
+            <button class="demo-button" id="screen-shot">View Demo</button>
+            <span class="demo-response is-selectable" id="screenshot-path"></span>
+          </div>
+          <p>This demo uses the <code>desktopCapturer</code> module to gather screens in use and select the entire screen and take a snapshot of what is visible.</p>
+          <p>Clicking the demo button will take a screenshot of your current screen and open it in your default viewer.</p>
+          <h5>Renderer Process</h5>
+          <pre><code data-path="renderer-process/media/desktop-capturer.js" class="language-js hljs javascript"><span class="hljs-keyword">const</span> electron = <span class="hljs-built_in">require</span>(<span class="hljs-string">'electron'</span>)
+<span class="hljs-keyword">const</span> desktopCapturer = electron.desktopCapturer
+<span class="hljs-keyword">const</span> electronScreen = electron.screen
+<span class="hljs-keyword">const</span> shell = electron.shell
+
+<span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>)
+<span class="hljs-keyword">const</span> os = <span class="hljs-built_in">require</span>(<span class="hljs-string">'os'</span>)
+<span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>)
+
+<span class="hljs-keyword">const</span> screenshot = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'screen-shot'</span>)
+<span class="hljs-keyword">const</span> screenshotMsg = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'screenshot-path'</span>)
+
+screenshot.addEventListener(<span class="hljs-string">'click'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+  screenshotMsg.textContent = <span class="hljs-string">'Gathering screens...'</span>
+  <span class="hljs-keyword">const</span> thumbSize = determineScreenShotSize()
+  <span class="hljs-keyword">let</span> options = { <span class="hljs-attr">types</span>: [<span class="hljs-string">'screen'</span>], <span class="hljs-attr">thumbnailSize</span>: thumbSize }
+
+  desktopCapturer.getSources(options, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">error, sources</span>) </span>{
+    <span class="hljs-keyword">if</span> (error) <span class="hljs-keyword">return</span> <span class="hljs-built_in">console</span>.log(error)
+
+    sources.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">source</span>) </span>{
+      <span class="hljs-keyword">if</span> (source.name === <span class="hljs-string">'Entire screen'</span> || source.name === <span class="hljs-string">'Screen 1'</span>) {
+        <span class="hljs-keyword">const</span> screenshotPath = path.join(os.tmpdir(), <span class="hljs-string">'screenshot.png'</span>)
+
+        fs.writeFile(screenshotPath, source.thumbnail.toPng(), <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">error</span>) </span>{
+          <span class="hljs-keyword">if</span> (error) <span class="hljs-keyword">return</span> <span class="hljs-built_in">console</span>.log(error)
+          shell.openExternal(<span class="hljs-string">'file://'</span> + screenshotPath)
+          <span class="hljs-keyword">const</span> message = <span class="hljs-string">`Saved screenshot to: <span class="hljs-subst">${screenshotPath}</span>`</span>
+          screenshotMsg.textContent = message
+        })
+      }
+    })
+  })
+})
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">determineScreenShotSize</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> screenSize = electronScreen.getPrimaryDisplay().workAreaSize
+  <span class="hljs-keyword">const</span> maxDimension = <span class="hljs-built_in">Math</span>.max(screenSize.width, screenSize.height)
+  <span class="hljs-keyword">return</span> {
+    <span class="hljs-attr">width</span>: maxDimension * <span class="hljs-built_in">window</span>.devicePixelRatio,
+    <span class="hljs-attr">height</span>: maxDimension * <span class="hljs-built_in">window</span>.devicePixelRatio
+  }
+}
+</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      require('./renderer-process/media/desktop-capturer')
+    </script>
+
+  </section>
+</main>
+
+  <script>
+    require('./assets/imports')
+    require('./assets/ex-links')
+    require('./assets/nav')
+    require('./assets/demo-btns')
+    require('./assets/code-blocks')
+    require('./assets/normalize-shortcuts')
+  </script>
+  <div id="about-modal" class="about modal">
+    <div class="about-wrapper">
+      <header class="about-header">
+        <img class="about-logo" src="assets/img/about.png" srcset="assets/img/about.png 1x, assets/img/about@2x.png 2x" alt="Electron API Demos">
+      </header>
+      <main class="about-sections">
+        <section class="about-section play-along">
+          <h2>Play Along</h2>
+            <p>Use the demo snippets in an Electron app of your own. The <a href="https://github.com/electron/electron-quick-start">Electron Quick Start<span class="u-visible-to-screen-reader">(opens in new window)</span></a> app is a bare-bones setup that pairs with these demos. Follow the instructions here to get it going. You'll need <a href="https://desktop.github.com/">Git<span class="u-visible-to-screen-reader">(opens in new window)</span></a> and <a href="https://nodejs.org/">Node.js<span class="u-visible-to-screen-reader">(opens in new window)</span></a> on your computer to do this.</p>
+<pre><code class="language-bash hljs">$ git <span class="hljs-built_in">clone</span> https://github.com/electron/electron-quick-start
+$ <span class="hljs-built_in">cd</span> electron-quick-start
+$ npm install &amp;&amp; npm start
+</code></pre>
+        </section>
+        <section class="about-section about-code">
+          <h2>About the Code</h2>
+            <p>The <a href="https://github.com/electron/electron-api-demos">source code of this app<span class="u-visible-to-screen-reader">(opens in new window)</span></a> has been organized with ease of navigation in mind.</p>
+
+            <p>Nearly all (over 90%) of <a href="http://babeljs.io/docs/learn-es2015/">ES2015<span class="u-visible-to-screen-reader">(opens in new window)</span></a> is available to use in Electron <em>without the use of pre-processors</em> because it's a part of <a href="https://developers.google.com/v8/">V8<span class="u-visible-to-screen-reader">(opens in new window)</span></a> which is built into Electron.</p>
+
+            <p>To illustrate this we've made use of <code>const</code>, for unchanging declarations; <code>let</code> for scoped declarations; and template strings like: <code>`Result is ${output}`</code> in the demo snippets.</p>
+        </section>
+        <footer class="about-section footer">
+          <div class="rainbow-button-wrapper">
+            <button id="get-started" class="about-button modal-hide">Get Started</button>
+          </div>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+
+
+</body></html>

@@ -14,6 +14,8 @@ module.exports.provincev2 = (event)=>{
     event.sender.send('province', ({
       province: result
     }));
+    // console.log(event)
+    // event.removeAllListeners('province');
   })
   .catch(err => {
     console.log(err);

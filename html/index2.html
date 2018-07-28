@@ -6,24 +6,36 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
   <link rel="stylesheet" href="../fa5/css/fontawesome-all.min.css">
+  <!-- <link rel="stylesheet" href="../fa5/css/fontawesome-all.min.css"> -->
+  <link type="text/css" rel="stylesheet" href="../css/jsgrid.min.css" />
+  <link type="text/css" rel="stylesheet" href="../css/jsgrid-theme.min.css" />
+  <link rel="stylesheet" href="../css/jsgrid-theme-followup.css">
+  <link rel="stylesheet" href="../css/jquery-ui.css">
   <title>ACF MIS FOR PINS</title>
   <script>
     const electron = require('electron');
     const ipc = electron.ipcRenderer;
-    document.addEventListener('DOMContentLoaded', function () {
-      ipc.send('mainWindowLoaded')
-      ipc.on('msg', function (evt, msg) {
-        let msgEl = document.getElementById('message');
-        msgEl.innerHTML += '<h3>' + msg + '</h3>';
-      });
-    });
+    const remote = electron.remote;
   </script>
+      <link rel="import" href="scrChildv2.html">
+      <link rel="import" href="scrPlwv2.html">
+      <link rel="import" href="otpAddv2.html">
+      <link rel="import" href="otpFollowUpv2.html">
+      <link rel="import" href="otpExitv2.html">
+      <link rel="import" href="sessionsv2.html">
+      <link rel="import" href="scrReportsv2.html">
+      <link rel="import" href="otpReportsv2.html">
+      <link rel="import" href="defaulterv2.html">
+      <link rel="import" href="scrChUpdv2.html">
+      <link rel="import" href="scrPlUpdv2.html">
+      <link rel="import" href="otpAddUpdv2.html">
+      <link rel="import" href="otpExitEditv2.html">
 </head>
 <style>
   body {
     font-size: .875rem;
+    user-select: none;
   }
-
   .feather {
     width: 16px;
     height: 16px;
@@ -282,16 +294,19 @@
         
 
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 ">
-          <div class="card bg-light mb-6">
-            <div class="card-header">Help End Deadly Hunger: Make a Life-Saving Donation Today </div>
-            <div class="card-body">
-              <h5 class="card-title">Action Against Hunger </h5>
-              <p class="card-text">ACF International is an international humanitarian organization committed to saving the lives of malnourished
-                children while providing communities with sustainable access to safe water and long-term solutions to hunger.</p>
-            </div>
-          </div>
+        <div id="jsContent">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 ">
+                <div class="card bg-light mb-6">
+                  <div class="card-header">Help End Deadly Hunger: Make a Life-Saving Donation Today </div>
+                  <div class="card-body">
+                    <h5 class="card-title">Action Against Hunger </h5>
+                    <p class="card-text">ACF International is an international humanitarian organization committed to saving the lives of malnourished
+                      children while providing communities with sustainable access to safe water and long-term solutions to hunger.</p>
+                  </div>
+                </div>
+              </div>
         </div>
+        <button class="btn btn-primary">Show</button>
 
       </main>
 
@@ -304,52 +319,182 @@
     window.$ = window.jQuery = require('jquery');
   </script>
   <script src="../bower_components/bootstrap/dist/js/bootstrap.bundle.js"></script>
+  <script src="../js/jsgrid.min.js"></script>
+  <script src="../js/jquery-ui.min.js"></script>
+
   <script>
     $('#childScr').on('click', function () {
-      ipc.send('nav', 'child');
+      var content = document.querySelector('link[href="scrChildv2.html"]')
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone);
+      var InitGrid = require('./scrChildv2').initGrid;
+      InitGrid();
     })
     $('#plwScr').on('click', function () {
-      ipc.send('nav', 'plw');
+      var content = document.querySelector('link[href="scrPlwv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      var InitScrPlw = require('./scrPlwv2').initScrPlw;
+      InitScrPlw();
+      // ipc.send('nav', 'plw');
     })
     $('#scrReport').on('click', function () {
-      ipc.send('nav', 'report');
+      var content = document.querySelector('link[href="scrReportsv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      var InitScrReportsV2 = require('./scrReportsv2').initScrReportsV2;
+      InitScrReportsV2();
+      // ipc.send('nav', 'report');
     })
     $('#scrChUpd').on('click', function () {
-      ipc.send('nav', 'scrChUpd');
+      var content = document.querySelector('link[href="scrChUpdv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      var InitScrChUpdv2 = require('./scrChUpdv2').initScrChUpdv2;
+      InitScrChUpdv2();
+      // ipc.send('nav', 'scrChUpd');
     })
     $('#scrPlUpd').on('click', function () {
-      ipc.send('nav', 'scrPlUpd');
+      var content = document.querySelector('link[href="scrPlUpdv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      var InitScrPlUpdv2 = require('./scrPlUpdv2').initScrPlUpdv2;
+      InitScrPlUpdv2();
+      // ipc.send('nav', 'scrPlUpd');
     })
     $('#myUpdate').on('click', function () {
       ipc.send('nav', 'scrUpdate');
     })
     $('#otpAdd').on('click', function () {
-      ipc.send('nav', 'otpAdd');
+      var content = document.querySelector('link[href="otpAddv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      var InitOtpAdd = require('./otpAddv2').initOtpAdd;
+      InitOtpAdd();
+      // ipc.send('nav', 'plw');
+      // ipc.send('nav', 'otpAdd');
     })
     $('#addVill').on('click', function () {
       ipc.send('nav', 'addVill');
     })
     $('#addFollowupOtp').on('click', function () {
-      ipc.send('nav', 'addFollowupOtp');
+      var content = document.querySelector('link[href="otpFollowUpv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      var InitOtpFollowUp = require('./otpFollowUpv2').initOtpFollowUp;
+      InitOtpFollowUp();
+      // ipc.send('nav', 'addFollowupOtp');
     })
     $('#otpAddUpdate').on('click', function () {
-      ipc.send('nav', 'otpAddUpdate');
+      var content = document.querySelector('link[href="otpAddUpdv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      var InitOtpAddUpdV2 = require('./otpAddUpdv2').initOtpAddUpdV2;
+      InitOtpAddUpdV2();
+      // ipc.send('nav', 'otpAddUpdate');
     })
     $('#otpExit').on('click', function () {
-      ipc.send('nav', 'otpExit');
+      var content = document.querySelector('link[href="otpExitv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      var InitOtpExit = require('./otpExitv2').initOtpExit;
+      InitOtpExit();
+      // ipc.send('nav', 'otpExit');
     })
     $('#otpExitEdit').on('click', function () {
-      ipc.send('nav', 'otpExitEdit');
+      var content = document.querySelector('link[href="otpExitEditv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      var InitOtpExitEditV2 = require('./otpExitEditv2').initOtpExitEditV2;
+      InitOtpExitEditV2();
+      
+      // ipc.send('nav', 'otpExitEdit');
     })
     $('#sessions').on('click', function () {
-      ipc.send('nav', 'sessions');
+      var content = document.querySelector('link[href="sessionsv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      var InitSessionsV2 = require('./sessionsv2').initSessionsV2;
+      InitSessionsV2();
+      // ipc.send('nav', 'otpExit');
+      // ipc.send('nav', 'sessions');
     })
     $('#otpReport').on('click', function () {
-      ipc.send('nav', 'otpReport');
+      var content = document.querySelector('link[href="otpReportsv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      var InitOtpReportsV2 = require('./otpReportsv2').initOtpReportsV2;
+      InitOtpReportsV2();
+      // ipc.send('nav', 'otpReport');
     })
     $('#defReport').on('click', function () {
-      ipc.send('nav', 'defReport');
+      var content = document.querySelector('link[href="defaulterv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      var InitDefaulterv2 = require('./defaulterv2').initDefaulterv2;
+      InitDefaulterv2();
+      // ipc.send('nav', 'defReport');
     })
+  </script>
+  <script>
+  ipc.on('success', function(evt, result){
+    $('body').append(`<div class="alert alert-success alert-dismissible fade show" role="alert">${result.msg}</div>`)  
+    $('.alert').alert()
+    $(".alert").fadeTo(3000, 1000).slideUp(500, function(){
+    $(".alert").alert('close');
+    $().alert('dispose')
+    })});
+    ipc.on('error', function(evt, result){
+          $('body').append(`<div class="alert alert-warning alert-dismissible fade show" role="alert">${result.msg}</div>`)  
+    $('.alert').alert()
+    $(".alert").fadeTo(3000, 1000).slideUp(500, function(){
+    $(".alert").alert('close');
+    $().alert('dispose')
+    })});
+  
+  </script>
+  <script>
+    var updateInfo= new Notification('Update Available', {
+        body:'test',
+        actions:['Install','Cancel'],
+        icon:'http://www.iconarchive.com/download/i47671/everaldo/crystal-clear/Action-button-home.ico'
+      })
+      $('#testing').on('click', ()=>{
+        updateInfo.show();
+      })
+    ipc.on('updateNote',(e,msg)=>{
+      
+    });
+
+      updateInfo.on('install', ()=>{
+        console.log('install')
+      }) 
   </script>
 </body>
 

@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Syn Data</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="../fa5/css/fontawesome-all.min.css">
+
+</head>
+<style>
+  tbody>tr>td {
+    padding: 0 !important;
+    font-size: 12px !important;
+  }
+
+  thead {
+    font-size: 12px !important;
+    font-weight: bold !important;
+  }
+  #syncTabs{
+    padding-top: 30px;
+  }
+  .lds-roller {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+.lds-roller div {
+  animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  transform-origin: 32px 32px;
+}
+.lds-roller div:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fcf;
+  margin: -3px 0 0 -3px;
+}
+.lds-roller div:nth-child(1) {
+  animation-delay: -0.036s;
+}
+.lds-roller div:nth-child(1):after {
+  top: 50px;
+  left: 50px;
+}
+.lds-roller div:nth-child(2) {
+  animation-delay: -0.072s;
+}
+.lds-roller div:nth-child(2):after {
+  top: 54px;
+  left: 45px;
+}
+.lds-roller div:nth-child(3) {
+  animation-delay: -0.108s;
+}
+.lds-roller div:nth-child(3):after {
+  top: 57px;
+  left: 39px;
+}
+.lds-roller div:nth-child(4) {
+  animation-delay: -0.144s;
+}
+.lds-roller div:nth-child(4):after {
+  top: 58px;
+  left: 32px;
+}
+.lds-roller div:nth-child(5) {
+  animation-delay: -0.18s;
+}
+.lds-roller div:nth-child(5):after {
+  top: 57px;
+  left: 25px;
+}
+.lds-roller div:nth-child(6) {
+  animation-delay: -0.216s;
+}
+.lds-roller div:nth-child(6):after {
+  top: 54px;
+  left: 19px;
+}
+.lds-roller div:nth-child(7) {
+  animation-delay: -0.252s;
+}
+.lds-roller div:nth-child(7):after {
+  top: 50px;
+  left: 14px;
+}
+.lds-roller div:nth-child(8) {
+  animation-delay: -0.288s;
+}
+.lds-roller div:nth-child(8):after {
+  top: 45px;
+  left: 10px;
+}
+@keyframes lds-roller {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+#imran{
+     margin: 0 auto;
+     width: 100px;
+     /* background-color: rgba(100,100,100, 0.5) */
+}
+
+
+</style>
+
+<body >
+    <nav class="navbar navbar-light sticky-top flex-md-nowrap p-0" style="background-color: #e3f2fd;">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
+          <img src="../img/acf-logo.svg" style="height: 50px;" alt="">
+        </a>
+        <ul class="navbar-nav px-3">
+           
+          </ul>
+      </nav>
+      <div id="imran" hidden>
+        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    
+      </div>
+  <div class="container">
+    <div class="row" id="syncTabs">
+      <div class="card col-lg-6 col-md-6 col-sm-6">
+        <div class="card-body">
+          <h4 class="card-title">Update Database</h4>
+          <p class="card-text">This will update geo refference</p>
+          <button id="updateDB" class="btn btn-primary btn-lg btn-block">Update</button>
+        </div>
+      </div>
+      <div class="card col-lg-6 col-md-6 col-sm-6">
+        <div class="card-body">
+          <h4 class="card-title">Update Server</h4>
+          <p class="card-text">This will update server</p>
+          <button id="updateServer" class="btn btn-warning btn-lg btn-block">Update</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+  <script>
+    window.$ = window.jQuery = require('jquery');
+    require('jquery-validation');
+  </script>
+  <script src="../bower_components/bootstrap/dist/js/bootstrap.bundle.js"></script>
+  <script>
+    const ipc = require('electron').ipcRenderer;
+    const remote = require('electron').remote;
+    $('#updateDB').on('click', function (e) {
+      console.log('clicked')
+        ipc.send('updateDB');
+        $('#imran').attr('hidden', false)
+        ipc.on('updateDB', (e, data)=>{
+          $('#imran').attr('hidden', true)
+        })
+    })
+    $('#updateServer').on('click', function (e) {
+        console.log('clicked')
+        ipc.send('updateServer');
+        $('#imran').attr('hidden', false)
+        ipc.on('updateServer', (e, data)=>{
+          $('#imran').attr('hidden', true)
+        })
+
+    })
+      ipc.on('errUpdDb', (e, x)=>{
+        $('body').append(`<div class="alert alert-warning alert-dismissible fade show" role="alert">${x.error}</div>`)  
+    $('.alert').alert()
+    $(".alert").fadeTo(2000, 500).slideUp(500, function(){
+    $(".alert").alert('close');
+      // error = '';
+      remote.app.relaunch();
+    remote.app.exit(0)
+    })
+      })
+      ipc.on('successUpdDb', (e, x)=>{
+        $('body').append(`<div class="alert alert-success alert-dismissible fade show" role="alert">${x.msg}</div>`)  
+    $('.alert').alert()
+    $(".alert").fadeTo(3000, 1000).slideUp(500, function(){
+    $(".alert").alert('close');
+    // error = '';
+    remote.app.relaunch();
+    remote.app.exit(0)
+    })
+      })
+
+            ipc.on('err', (e, x)=>{
+        $('body').append(`<div class="alert alert-warning alert-dismissible fade show" role="alert">${x.error}</div>`)  
+    $('.alert').alert()
+    $(".alert").fadeTo(2000, 500).slideUp(500, function(){
+    $(".alert").alert('close');
+
+    })
+      })
+      ipc.on('success', (e, x)=>{
+        $('body').append(`<div class="alert alert-success alert-dismissible fade show" role="alert">${x.msg}</div>`)  
+    $('.alert').alert()
+    $(".alert").fadeTo(3000, 1000).slideUp(500, function(){
+    $(".alert").alert('close');
+
+    })
+      })
+    // ipc.on('complete', (e, msg)=>{
+
+    // })
+//     ipc.on('resultSent', function(evt, result){
+//       $('body').append(`<div class="alert alert-primary alert-dismissible fade show" role="alert">
+//  ${result.msg}
+// </div>`)
+
+//     $('.alert').alert()
+//     $(".alert").fadeTo(2000, 500).slideUp(500, function(){
+//     $(".alert").alert('close');
+// })
+//     })
+  </script>
+
+</body>
+
+</html>

@@ -7,7 +7,20 @@
   "scripts": {
     "start": "electron . ",
     "rebuild": "electron-rebuild -f -w sqlite3 async",
-    "winbuild": "electron-packager . acf-local-app --out=release-builds-beta2.3 --version-string.CompanyName=ACF --version-string.FileDescription=ACF --version-string.ProductName='ACF Local App' --version-string.FileDescription='Build v1.07 15July18'"
+    "winbuild": "npm run clean && electron-packager . acf-local-app --out=release-builds-beta2.3 --version-string.CompanyName=ACF --version-string.FileDescription=ACF --version-string.ProductName='ACF Local App' --version-string.FileDescription='Build v1.07 15July18'",
+    "publish": "npm run clean && build --win -p always",
+    "clean": "rm -rf ./dist"
+  },
+  "build":{
+    "publish": [{
+      "provider":"github",
+      "owner": "iahmedani",
+      "repo":"acf_mis_local"
+    }],
+    "appId":"com.github.iahmedani.aahmislocalapp",
+    "win": {
+      "icon": "assests/win/logo.ico"
+    }
   },
   "keywords": [],
   "author": "",
@@ -18,6 +31,8 @@
     "async": "^2.6.1",
     "body-parser": "^1.18.2",
     "bower": "^1.8.4",
+    "electron-log": "^2.2.16",
+    "electron-updater": "^3.0.3",
     "jquery": "^3.3.1",
     "jquery-ui": "^1.12.1",
     "jquery-validation": "^1.17.0",
@@ -28,7 +43,8 @@
     "xlsx": "^0.12.13"
   },
   "devDependencies": {
-    "electron": "^2.0.4",
+    "electron": "^2.0.5",
+    "electron-builder": "^20.26.0",
     "electron-packager": "^12.1.0",
     "electron-rebuild": "^1.8.1"
   }
