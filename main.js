@@ -17,9 +17,14 @@ autoUpdater.autoDownload = false;
 // JSON.parse(fs.readFileSync('./config.json', 'utf8'))
 // fs.readfilesy
 
-function sendStatusToWindow(win,text) {
+function sendStatusToWindow1(win,text) {
   log.info(text);
   win.webContents.send('updateNote', text);
+}
+
+function sendStatusToWindow(win,text) {
+  log.info(text);
+  win.webContents.send('message', text);
 }
 
 
@@ -770,31 +775,54 @@ ipcMain.on('otpExitUpdate', (e, data) => {
   // Insert menu
   Menu.setApplicationMenu(mainMenu);
 
-  autoUpdater.on('update-available', (info) => {
-    const options = {
-      type: 'info',
-      title: 'Update Available',
-      message: "Update Available, Would you like to download and install?",
-      buttons: ['Yes', 'No']
-    }
-    dialog.showMessageBox(options, (index)=>{
-      mainWindow.webContents.send('updateNote', index)
-    })
-    ipcMain.on('updateSoftware', (e)=>{
-      autoUpdater.downloadUpdate();
-    })
-    autoUpdater.on('update-downloaded', (info)=>{
-      autoUpdater.quitAndInstall();
-    })
-  })
+  // autoUpdater.on('update-available', (info) => {
+  //   const options = {
+  //     type: 'info',
+  //     title: 'Update Available',
+  //     message: "Update Available, Would you like to download and install?",
+  //     buttons: ['Yes', 'No']
+  //   }
+  //   dialog.showMessageBox(options, (index)=>{
+  //     mainWindow.webContents.send('updateNote', index)
+  //   })
+  //   ipcMain.on('updateSoftware', (e)=>{
+  //     autoUpdater.downloadUpdate();
+  //   })
+  //   autoUpdater.on('update-downloaded', (info)=>{
+  //     autoUpdater.quitAndInstall();
+  //   })
+  // })
 
-  ipcMain.on('updateSoftware',(e)=>{
-    autoUpdater.downloadUpdate().then(result=>{
-      console.log(result);
-    })
-  })
+  // ipcMain.on('updateSoftware',(e)=>{
+  //   autoUpdater.downloadUpdate().then(result=>{
+  //     console.log(result);
+  //   })
+  // })
 
 }
+
+autoUpdater.on('checking-for-update', () => {
+  sendStatusToWindow('Checking for update...');
+})
+autoUpdater.on('update-available', (info) => {
+  sendStatusToWindow('Update available.');
+})
+autoUpdater.on('update-not-available', (info) => {
+  sendStatusToWindow('Update not available.');
+})
+autoUpdater.on('error', (err) => {
+  sendStatusToWindow('Error in auto-updater. ' + err);
+})
+autoUpdater.on('download-progress', (progressObj) => {
+  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  sendStatusToWindow(log_message);
+})
+autoUpdater.on('update-downloaded', (info) => {
+  sendStatusToWindow('Update downloaded');
+  autoUpdater.do
+});
 //Creating main window
 app.on('ready', creatWindow);
 
