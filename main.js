@@ -17,17 +17,6 @@ autoUpdater.autoDownload = false;
 // JSON.parse(fs.readFileSync('./config.json', 'utf8'))
 // fs.readfilesy
 
-function sendStatusToWindow1(win,text) {
-  log.info(text);
-  win.webContents.send('updateNote', text);
-}
-
-function sendStatusToWindow(win,text) {
-  log.info(text);
-  win.webContents.send('message', text);
-}
-
-
 console.log(imran);
 var async = require('async');
 var knex = require("knex")({
@@ -398,6 +387,29 @@ function allScreeningDataPlw(event, qry){
     console.log(result);
   })
 }
+
+// Screening Update: Chilren sending all data
+function allScrChildrenUpdData(event, qry){
+  db.allScrChildrenData(qry, (err, result) => {
+    event.sender.send('allScrChildren', ({
+        err: err,
+        result: result,
+      })
+    )
+    // console.log(result);
+  })
+}
+// Screening Update: PLW NEW sending all data
+function allScrPlwNewUpdData(event, qry){
+  db.allScrPlwNewData(qry, (err, result) => {
+    event.sender.send('allScrPlwNew', ({
+        err: err,
+        result: result,
+      })
+    )
+    console.log(result);
+  })
+}
 // Screening Update: Edit (update) plw record
 function screeningPlUpdDataSave(event, data){
   var plwUpd = {
@@ -505,6 +517,67 @@ function exitUpdDataSave(event, data, client){
       })
 }
 
+// Screening Children Add 
+function childrenScrAddSave(event, data, client, username, project){
+  data.client_id=client;
+  data.username = username;
+  data.project = project;
+  data.upload_status = 0;
+  knex('tblScrChildren')
+    .insert(data)
+    .then(result=>{
+      sucMsg(event,'','Record Successfully added')
+      console.log('func childrenScrAddSave success', result)
+    }).catch(e=>{
+      errMsg(event,'','Record not saved, plz try again or contact admin')
+      console.log('func childrenScrAddSave error',e)
+    })
+}
+// Screening Children Add 
+function plwNewScrAddSave(event, data, client, username, project){
+  data.client_id=client;
+  data.username = username;
+  data.project = project;
+  data.upload_status = 0;
+  knex('tblScrPlw')
+    .insert(data)
+    .then(result=>{
+      sucMsg(event,'','Record Successfully added')
+      console.log('func childrenScrAddSave success', result)
+    }).catch(e=>{
+      errMsg(event,'','Record not saved, plz try again or contact admin')
+      console.log('func childrenScrAddSave error',e)
+    })
+}
+
+// Screening Children update 
+function childrenScrUpdSave(event, data){
+  data.upload_status = 2;
+  knex('tblScrChildren')
+    .update(data)
+    .where('ch_scr_id',data.ch_scr_id)
+    .then(result=>{
+      sucMsg(event,'','Record updated successfully')
+      console.log('func childrenScrUpdSave success', result)
+    }).catch(e=>{
+      errMsg(event,'','Record not updated, plz try again or contact admin')
+      console.log('func childrenScrUpdSave error',e)
+    })
+}
+// Screening PLW NEW update 
+function plwNewScrUpdSave(event, data){
+  data.upload_status = 2;
+  knex('tblScrPlw')
+    .update(data)
+    .where('plw_scr_id',data.plw_scr_id)
+    .then(result=>{
+      sucMsg(event,'','Record updated successfully')
+      console.log('func plwNewScrUpdSave success', result)
+    }).catch(e=>{
+      errMsg(event,'','Record not updated, plz try again or contact admin')
+      console.log('func plwNewScrUpdSave error',e)
+    })
+}
 var db = require('./dbTest');
 const request = require('request');
 
@@ -770,59 +843,110 @@ ipcMain.on('get', (e, site_id) => {
 ipcMain.on('otpExitUpdate', (e, data) => {
   exitUpdDataSave(e, data,imran.client);
 })
+
+// children Screening add Data 
+ipcMain.on('scrChildren', (e, data)=>{
+  console.log(e);
+  childrenScrAddSave(e, data);
+  // (e,data);
+})
+// PLW New Screening add Data 
+ipcMain.on('scrPlwNewAdd', (e, data)=>{
+  console.log(data);
+  plwNewScrAddSave(e, data, imran.client,imran.usernameL, imran.project_nameL,);
+  // (e,data);
+})
+// Screening Children summary: all records for Update
+ipcMain.on('allScrChildren', (e,data)=>{
+  // console.log('data from channel allScrChildren:',data)
+  allScrChildrenUpdData(e,data);
+})
+
+ipcMain.on('allScrPlwNew',(e, data)=>{
+  console.log('data from html on chanel allScrPlwNew', data)
+  allScrPlwNewUpdData(e,data)
+})
+
+// children Screening updat Data 
+ipcMain.on('scrChildrenUpd', (e, data)=>{
+  console.log(data);
+  childrenScrUpdSave(e, data);
+  // (e,data);
+})
+
+// PLW New Screening update data
+ipcMain.on('scrPlwNewUpd', (e,data)=>{
+  plwNewScrUpdSave(e,data);
+})
+
+ipcMain.on('scrChildReport',(e,qry)=>{
+  async.parallel({
+    summary:(cb)=>{
+      db.scrChildReport(qry,(err, result)=>{
+        if(err){
+          cb(err)
+          console.log(err);
+        } else{
+          cb(null, result)
+        }
+      })
+    },
+    single:(cb)=>{
+      db.allScrChildrenData(qry, (err, result)=>{
+        if(err){
+          cb(err)
+          console.log(err);
+        } else{
+          cb(null, result)
+        }
+      })
+    }
+  },(err, results)=>{
+    if(err){
+      errMsg(e,'','Report db query error, plz try again or contact admin')
+      console.log(err);
+    } else {
+      e.sender.send('scrChildReport',({result:results}))
+    }
+  })
+});
+
+ipcMain.on('scrPlwNewReport',(e,qry)=>{
+  async.parallel({
+    summary:(cb)=>{
+      db.scrPlwNewReport(qry,(err, result)=>{
+        if(err){
+          cb(err)
+          console.log(err);
+        } else{
+          cb(null, result)
+        }
+      })
+    },
+    single:(cb)=>{
+      db.allScrPlwNewData(qry, (err, result)=>{
+        if(err){
+          cb(err)
+          console.log(err);
+        } else{
+          cb(null, result)
+        }
+      })
+    }
+  },(err, results)=>{
+    if(err){
+      errMsg(e,'','Report db query error, plz try again or contact admin')
+      console.log(err);
+    } else {
+      e.sender.send('scrPlwNewReport',({result:results}))
+    }
+  })
+});
   // Build main menu from template
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
   // Insert menu
   Menu.setApplicationMenu(mainMenu);
-
-  // autoUpdater.on('update-available', (info) => {
-  //   const options = {
-  //     type: 'info',
-  //     title: 'Update Available',
-  //     message: "Update Available, Would you like to download and install?",
-  //     buttons: ['Yes', 'No']
-  //   }
-  //   dialog.showMessageBox(options, (index)=>{
-  //     mainWindow.webContents.send('updateNote', index)
-  //   })
-  //   ipcMain.on('updateSoftware', (e)=>{
-  //     autoUpdater.downloadUpdate();
-  //   })
-  //   autoUpdater.on('update-downloaded', (info)=>{
-  //     autoUpdater.quitAndInstall();
-  //   })
-  // })
-
-  // ipcMain.on('updateSoftware',(e)=>{
-  //   autoUpdater.downloadUpdate().then(result=>{
-  //     console.log(result);
-  //   })
-  // })
-
 }
-
-autoUpdater.on('checking-for-update', () => {
-  sendStatusToWindow('Checking for update...');
-})
-autoUpdater.on('update-available', (info) => {
-  sendStatusToWindow('Update available.');
-})
-autoUpdater.on('update-not-available', (info) => {
-  sendStatusToWindow('Update not available.');
-})
-autoUpdater.on('error', (err) => {
-  sendStatusToWindow('Error in auto-updater. ' + err);
-})
-autoUpdater.on('download-progress', (progressObj) => {
-  let log_message = "Download speed: " + progressObj.bytesPerSecond;
-  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-  sendStatusToWindow(log_message);
-})
-autoUpdater.on('update-downloaded', (info) => {
-  sendStatusToWindow('Update downloaded');
-  autoUpdater.do
-});
 //Creating main window
 app.on('ready', creatWindow);
 

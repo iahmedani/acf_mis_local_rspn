@@ -16,8 +16,9 @@
     const ipc = electron.ipcRenderer;
     const remote = electron.remote;
   </script>
-  <link rel="import" href="scrChildv2.html">
-  <link rel="import" href="scrPlwv2.html">
+  <!-- <link rel="import" href="scrChildv2.html"> -->
+  <!-- <link rel="import" href="scrPlwv2.html"> -->
+  <link rel="import" href="scrPlwNew.html">
   <link rel="import" href="otpAddv2.html">
   <link rel="import" href="otpFollowUpv2.html">
   <link rel="import" href="otpExitv2.html">
@@ -25,10 +26,15 @@
   <link rel="import" href="scrReportsv2.html">
   <link rel="import" href="otpReportsv2.html">
   <link rel="import" href="defaulterv2.html">
-  <link rel="import" href="scrChUpdv2.html">
-  <link rel="import" href="scrPlUpdv2.html">
+  <!-- <link rel="import" href="scrChUpdv2.html"> -->
+  <link rel="import" href="scrPlwNewUpd.html">
+  <!-- <link rel="import" href="scrPlUpdv2.html"> -->
   <link rel="import" href="otpAddUpdv3.html">
   <link rel="import" href="otpExitEditv2.html">
+  <link rel="import" href="scrChildren.html">
+  <link rel="import" href="scrChildrenUpd.html">
+  <link rel="import" href="scrChildReportNew.html">
+  <link rel="import" href="scrPlwReportNew.html">
 </head>
 <style>
 
@@ -180,6 +186,9 @@
     transition-property: width;
 
   }
+  .not-req{
+    background-color: lightgray;
+  }
 </style>
 
 <body>
@@ -226,7 +235,13 @@
             <span class="hidden-sm-down">Reports</span>
           </a>
           <div class="collapse" id="menu4">
-            <a href="#" class="list-group-item" data-parent="#menu4" id="scrReport">Screening</a>
+              <a href="#menu4sub1" class="list-group-item" data-toggle="collapse" aria-expanded="false">Screening</a>
+              <div class="collapse" id="menu4sub1">
+                <a href="#" class="list-group-item" data-parent="#menu4sub1" id="scrChdNewReport">Children</a>
+                <a href="#" class="list-group-item" data-parent="#menu4sub1" id="scrPlwNewReport">PLW</a>
+              </div>                      
+            <!-- <a href="#" class="list-group-item" data-parent="#menu4" id="scrReport">Screening</a> -->
+
             <!-- <a href="#" class="list-group-item" data-parent="#menu3">FollowUp</a> -->
             <a href="#" class="list-group-item" data-parent="#menu4" id="otpReport">O.T.P</a>
             <a href="#" class="list-group-item" data-parent="#menu4" id="defReport">Defaulter</a>
@@ -244,23 +259,6 @@
                 <p class="card-text">ACF International is an international humanitarian organization committed to saving the lives of malnourished
                   children while providing communities with sustainable access to safe water and long-term solutions to hunger.</p>
               </div>
-              <div id="version">
-
-                  Current version: <span id="version">vX.Y.Z</span>
-                  <div id="messages"></div>
-                <script>
-                // Display the current version
-                let version = window.location.hash.substring(1);
-                document.getElementById('version').innerText = version;
-                // Listen for messages
-                ipc.on('message', function(event, text) {
-                  var container = document.getElementById('messages');
-                  var message = document.createElement('div');
-                  message.innerHTML = text;
-                  container.appendChild(message);
-                })
-                </script>
-                </div>
             </div>
           </div>
         </div>
@@ -356,8 +354,10 @@
   <script src="../js/jsgrid.min.js"></script>
   <script src="../js/jquery-ui.min.js"></script>
   <script>
-    var InitGrid = require('./scrChildv2').initGrid;
-    var InitScrPlw = require('./scrPlwv2').initScrPlw;
+    // var InitGrid = require('./scrChildv2').initGrid;
+    var InitGrid = require('./scrChildren').initGrid;
+    // var InitScrPlw = require('./scrPlwv2').initScrPlw;
+    var InitScrPlwNew = require('./scrPlwNew').initScrPlwNew;
     var InitScrReportsV2 = require('./scrReportsv2').initScrReportsV2;
     var InitScrChUpdv2 = require('./scrChUpdv2').initScrChUpdv2;
     var InitScrPlUpdv2 = require('./scrPlUpdv2').initScrPlUpdv2;
@@ -369,6 +369,10 @@
     var InitSessionsV2 = require('./sessionsv2').initSessionsV2;
     var InitOtpReportsV2 = require('./otpReportsv2').initOtpReportsV2;
     var InitDefaulterv2 = require('./def2').initDefaulterv2;
+    var InitScrChildrenUpd = require('./scrChildrenUpd').initScrChildrenUpd;
+    var InitScrPlwNewUpd = require('./scrPlwNewUpd').initScrPlwNewUpd;
+    var InitScrChildrenReport = require('./scrChildrenReport').initScrChildrenReport;
+    var InitScrPlwNewReport = require('./scrPlwNewReport').initScrPlwNewReport;
     // var InitDefaulterv2 = require('./defaulterv2').initDefaulterv2;
 
     function defReportTemplate() {
@@ -444,12 +448,12 @@
     }
 
     function scrPlUpdTemplate() {
-      var content = document.querySelector('link[href="scrPlUpdv2.html"]');
+      var content = document.querySelector('link[href="scrPlwNewUpd.html"]');
       var template = content.import.querySelector('template');
       var clone = document.importNode(template.content, true);
       $('#jsContent').empty();
       document.querySelector('#jsContent').appendChild(clone)
-      InitScrPlUpdv2();
+      InitScrPlwNewUpd();
     }
 
     function scrChUpdTemplate() {
@@ -460,6 +464,14 @@
       document.querySelector('#jsContent').appendChild(clone)
       InitScrChUpdv2();
     }
+    function scrChUpdTemplate1() {
+      var content = document.querySelector('link[href="scrChildrenUpd.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitScrChildrenUpd();
+    }
 
     function scrReportTemplate() {
       var content = document.querySelector('link[href="scrReportsv2.html"]');
@@ -468,6 +480,22 @@
       $('#jsContent').empty();
       document.querySelector('#jsContent').appendChild(clone)
       InitScrReportsV2();
+    }
+    function scrReportTemplateNew() {
+      var content = document.querySelector('link[href="scrChildReportNew.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitScrChildrenReport();
+    }
+    function scrReportTemplatePlwNew() {
+      var content = document.querySelector('link[href="scrPlwReportNew.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitScrPlwNewReport();
     }
 
     function addScrChildTemplate() {
@@ -478,18 +506,26 @@
       document.querySelector('#jsContent').appendChild(clone);
       InitGrid();
     }
+    function addScrChildTemplate1() {
+      var content = document.querySelector('link[href="scrChildren.html"]')
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone);
+      InitGrid();
+    }
 
     function addScrPlwTemplate() {
-      var content = document.querySelector('link[href="scrPlwv2.html"]');
+      var content = document.querySelector('link[href="scrPlwNew.html"]');
       var template = content.import.querySelector('template');
       var clone = document.importNode(template.content, true);
       $('#jsContent').empty();
       document.querySelector('#jsContent').appendChild(clone)
-      InitScrPlw();
+      InitScrPlwNew();
     }
     
     $('#childScr').on('click', function () {
-      addScrChildTemplate()
+      addScrChildTemplate1()
     })
     $('#plwScr').on('click', function () {
       addScrPlwTemplate();
@@ -500,7 +536,7 @@
       // ipc.send('nav', 'report');
     })
     $('#scrChUpd').on('click', function () {
-      scrChUpdTemplate();
+      scrChUpdTemplate1();
       // ipc.send('nav', 'scrChUpd');
     })
     $('#scrPlUpd').on('click', function () {
@@ -544,6 +580,12 @@
     $('#defReport').on('click', function () {
       defReportTemplate();
       // ipc.send('nav', 'defReport');
+    })
+    $('#scrChdNewReport').on('click',function(){
+      scrReportTemplateNew();
+    })
+    $('#scrPlwNewReport').on('click',function(){
+      scrReportTemplatePlwNew();
     })
   </script>
   <script>

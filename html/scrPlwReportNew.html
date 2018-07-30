@@ -1,0 +1,102 @@
+<template>
+    <div class="container-fluid">
+        <div class="form-group row">
+          <div class="col-sm-2">
+            <label for="ddProvince" class="col-form-label">Province:</label>
+            <select id="ddProvince" class="form-control form-control-sm">
+              <option value="">Select One</option>
+            </select>
+          </div>
+          <div class="col-sm-2">
+            <label for="ddDistrict" class="col-form-label">District:</label>
+            <select id="ddDistrict" class="form-control form-control-sm">
+              <option value="">Select One</option>
+            </select>
+          </div>
+          <div class="col-sm-2">
+            <label for="ddTehsil" class="col-form-label">Tehsil:</label>
+            <select id="ddTehsil" class="form-control form-control-sm">
+              <option value="">Select One</option>
+            </select>
+          </div>
+          <div class="col-sm-2">
+            <label for="ddUC" class="col-form-label">UC:</label>
+            <select id="ddUC" class="form-control form-control-sm">
+              <option value="">Select One</option>
+            </select>
+          </div>
+          <!-- </div> -->
+          <!-- <div class="form-group row"> -->
+          <div class="col-sm-2">
+            <label for="site_id" class="col-form-label">Site Name:</label>
+            <select id="ddHealthHouse" class="form-control form-control-sm" required>
+              <option selected disabled>Select One</option>
+            </select>
+          </div>
+          <div class="form-group col-sm-2">
+            <label for="interval" class="col-form-label">Inverval</label>
+            <select name="internval" id="ddInterval" class="form-control form-control-sm" required>
+              <option value="0" selected>No</option>
+              <option value="1">Yes</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="start_date" class="col-sm-1 col-form-label">Start Date:</label>
+          <div class="form-group col-sm-3" id="picYear">
+            <input type="date" name="start_date" id="start_date" class="form-control form-control-sm" disabled required>
+          </div>
+          <label for="end_date" class="col-sm-1 col-form-label">End Date:</label>
+          <div class="form-group col-sm-3" id="picQuarter">
+            <input type="date" name="end_date" id="end_date" disabled class="form-control form-control-sm" required>
+          </div>
+          <div class="form-group col-sm-2 align-self-end">
+            <button class="btn btn-info btn-sm btn-block form-control shadow-sm" id="showDataScrPlwReport">
+              <i class="fas fa-filter"></i> Show Data</button>
+          </div>
+          <div class="form-group col-sm-2 align-self-end">
+            <button class="btn btn-success btn-sm btn-block form-control shadow-sm" id="exportScrPlwReport">
+              <i class="fas fa-file-excel"></i> Export</button>
+          </div>
+        </div>
+        <div class="row">
+            <table class="table table-sm table-bordered rounded text-center" id="scrPlwNewSum">
+                <tr>
+                  <th class="bg-info text-white align-middle">Category</th>
+                  <th class="bg-info text-white align-middle">Total Screened Women</th>
+                  <th class="bg-info text-white align-middle">Newly Screened Women</th>
+                  <th class="bg-info text-white align-middle">MUAC <small>(&lt; 21cm)</small></th>
+                  <th class="bg-info text-white align-middle">MUAC <small>(&geq; 21cm)</small></th>
+                  <th class="bg-info text-white align-middle">Women Received IFA Tablets</th>
+                </tr>
+                <tr>
+                  <th class="align-middle">Total</th>        
+                  <td class="align-middle" id="total_scr"></td>
+                  <td class="align-middle" id="total_new"></td>
+                  <td class="align-middle" id="total_muac_le_21"></td>
+                  <td class="align-middle" id="total_muac_gt_21"></td>
+                  <td class="align-middle" id="total_ifa_tabs_rec"></td>
+                </tr>
+                <tr>
+                  <th class="align-middle">Pragnent</th>        
+                  <td class="align-middle" id="total_scr_pragnent"></td>
+                  <td class="align-middle" id="new_scr_pragnent"></td>
+                  <td class="align-middle" id="muac_le_21_pragnent"></td>
+                  <td class="align-middle" id="muac_gt_21_pragnent"></td>
+                  <td class="align-middle" id="ifa_tabs_rec_pragnent"></td>
+                </tr>
+                <tr>
+                  <th class="align-middle">Lactating</th>        
+                  <td class="align-middle" id="total_scr_lactating"></td>
+                  <td class="align-middle" id="new_scr_lactating"></td>
+                  <td class="align-middle" id="muac_le_21_lactating"></td>
+                  <td class="align-middle" id="muac_gt_21_lactating"></td>
+                  <td class="align-middle" id="ifa_tabs_rec_lactating"></td>
+                </tr>
+              </table>
+        </div>
+      </div>
+      <table class="table-bordered text-center" style="font-size: 10px;" id="scrPlwNewSingle" hidden>
+    
+      </table>
+</template>
