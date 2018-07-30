@@ -375,4 +375,120 @@ FROM   [main].[v_geo]
        INNER JOIN [main].[tblSessions] ON [main].[tblSessions].[site_id] = [main].[v_geo].[site_id];
 `
 createNewTable(knex,'v_session_full', qryVScreeningFull)
+
+var qryScrNewChildren = `CREATE TABLE [tblScrChildren](
+  [ch_scr_id] INTEGER PRIMARY KEY AUTOINCREMENT, 
+  [site_id] INTEGER, 
+  [screening_date] DATE, 
+  [created_at] DATE, 
+  [village] VARCHAR(50), 
+  [staff_name] VARCHAR(50), 
+  [staff_code] VARCHAR(10),
+  [sup_name] VARCHAR(50), 
+  [sup_code] VARCHAR(10), 
+  [total_scr_girls] INTEGER, 
+  [total_scr_boys] INTEGER, 
+  [sam_without_comp_girls_623] INTEGER, 
+  [sam_without_comp_boys_623] INTEGER, 
+  [sam_with_comp_girls_623] INTEGER, 
+  [sam_with_comp_boys_623] INTEGER, 
+  [mam_girls_623] INTEGER, 
+  [mam_boys_623] INTEGER, 
+  [sam_without_comp_girls_2459] INTEGER, 
+  [sam_without_comp_boys_2459] INTEGER, 
+  [sam_with_comp_girls_2459] INTEGER, 
+  [sam_with_comp_boys_2459] INTEGER, 
+  [mam_girls_2459] INTEGER, 
+  [mam_boys_2459] INTEGER, 
+  [reffer_tsfp_girls] INTEGER, 
+  [reffer_otp_girls] INTEGER, 
+  [reffer_tsfp_boys] INTEGER, 
+  [reffer_otp_boys] INTEGER, 
+  [reffer_sc_girls] inteGER, 
+  [reffer_sc_boys] integer, 
+  [normal_boys_623] INTEGER, 
+  [normal_girls_623] INTEGER, 
+  [normal_boys_2459] INTEGER, 
+  [normal_girls_2459] INTEGER, 
+  [mnp_30_girls] INTEGER, 
+  [mnp_30_boys] INTEGER,
+  [deworming_girls] INTEGER, 
+  [deworming_boys] INTEGER, 
+  [new_boys] INTEGER, 
+  [new_girls] INTEGER, 
+  [no_oedema_girls] INTEGER, 
+  [no_oedema_boys] INTEGER, 
+  [plus12_oedema_girls] INTEGER, 
+  [plus12_oedema_boys] INTEGER, 
+  [plus3_oedema_girls] INTEGER, 
+  [plus3_oedema_boys] INTEGER, 
+  [client_id] INTEGER, 
+  [username] VARCHAR, 
+  [project] VARCHAR, 
+  [upload_status] INTEGER, 
+  [approved] INTEGER, 
+  [is_deleted] INTEGER);
+`
+createNewTable(knex,'tblScrChildren', qryScrNewChildren);
+
+var qryScrPlwNew = `CREATE TABLE [tblScrPlw](
+  [plw_scr_id] INTEGER PRIMARY KEY AUTOINCREMENT, 
+  [site_id] INTEGER, 
+  [screening_date] DATE, 
+  [created_at] DATE, 
+  [village] VARCHAR(50), 
+  [staff_name] VARCHAR(50), 
+  [staff_code] VARCHAR(10),
+  [sup_name] VARCHAR(50), 
+  [sup_code] VARCHAR(10),
+  [total_scr_pragnent] INTEGER, 
+  [total_scr_lactating] INTEGER,
+  [new_scr_pragnent] INTEGER, 
+  [new_scr_lactating] INTEGER,
+  [ifa_tabs_rec_pragnent] INTEGER, 
+  [ifa_tabs_rec_lactating] INTEGER,
+  [muac_gt_21_pragnent] INTEGER, 
+  [muac_gt_21_lactating] INTEGER,
+  [muac_le_21_pragnent] INTEGER, 
+  [muac_le_21_lactating] INTEGER,
+  [client_id] INTEGER, 
+  [username] VARCHAR, 
+  [project] VARCHAR, 
+  [upload_status] INTEGER, 
+  [approved] INTEGER, 
+  [is_deleted] INTEGER);
+`
+createNewTable(knex,'tblScrPlw',qryScrPlwNew);
+
+var qryScrNewChildrenFull = `CREATE VIEW v_tblScrChildrenFull as SELECT 
+[main].[v_geo].[province], 
+[main].[v_geo].[district_name], 
+[main].[v_geo].[province_id], 
+[main].[v_geo].[district_id], 
+[main].[v_geo].[tehsil_id], 
+[main].[v_geo].[tehsil_name], 
+[main].[v_geo].[uc_id], 
+[main].[v_geo].[uc_name], 
+[main].[v_geo].[site_name], 
+[tblScrChildren].*
+FROM   [main].[tblScrChildren]
+INNER JOIN [main].[v_geo] ON [main].[tblScrChildren].[site_id] = [main].[v_geo].[site_id];
+`
+createNewTable(knex,'v_tblScrChildrenFull', qryScrNewChildrenFull);
+
+var qryScrPlwNewFull = `CREATE VIEW v_tblScrPlwFull as SELECT 
+[main].[v_geo].[province], 
+[main].[v_geo].[district_name], 
+[main].[v_geo].[province_id], 
+[main].[v_geo].[district_id], 
+[main].[v_geo].[tehsil_id], 
+[main].[v_geo].[tehsil_name], 
+[main].[v_geo].[uc_id], 
+[main].[v_geo].[uc_name], 
+[main].[v_geo].[site_name], 
+[tblScrPlw].*
+FROM   [main].[v_geo]
+INNER JOIN [main].[tblScrPlw] ON [main].[tblScrPlw].[site_id] = [main].[v_geo].[site_id];
+`
+createNewTable(knex,'v_tblScrPlwFull',qryScrPlwNewFull);
 }

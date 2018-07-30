@@ -1,7 +1,7 @@
 {
   "name": "acf_mis_local",
   "productName": "ACF MIS Local app",
-  "version": "1.0.6",
+  "version": "1.0.6.01",
   "description": "ACF MIS FOR PINS",
   "main": "main.js",
   "scripts": {
@@ -9,15 +9,18 @@
     "rebuild": "electron-rebuild -f -w sqlite3 async",
     "winbuild": "npm run clean && electron-packager . acf-local-app --out=release-builds-beta2.3 --version-string.CompanyName=ACF --version-string.FileDescription=ACF --version-string.ProductName='ACF Local App' --version-string.FileDescription='Build v1.07 15July18'",
     "publish": "npm run clean && build --win -p always",
-    "clean": "rm -rf ./dist"
+    "clean": "rm -rf ./dist",
+    "postinstall": "electron-builder install-app-deps"
   },
-  "build":{
-    "publish": [{
-      "provider":"github",
-      "owner": "iahmedani",
-      "repo":"acf_mis_local"
-    }],
-    "appId":"com.github.iahmedani.aahmislocalapp",
+  "build": {
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "iahmedani",
+        "repo": "acf_mis_local"
+      }
+    ],
+    "appId": "com.github.iahmedani.aahmislocalapp",
     "win": {
       "icon": "build/win/logo.ico"
     }
@@ -45,7 +48,6 @@
   "devDependencies": {
     "electron": "^2.0.5",
     "electron-builder": "^20.26.0",
-    "electron-packager": "^12.1.0",
-    "electron-rebuild": "^1.8.1"
+    "electron-packager": "^12.1.0"
   }
 }
