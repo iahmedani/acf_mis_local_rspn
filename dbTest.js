@@ -580,8 +580,8 @@ module.exports.scrChildReport= function (cond, callback){
       sum(reffer_tsfp_girls + reffer_tsfp_boys) as total_tsfp
       sum(reffer_otp_girls + reffer_otp_boys) as total_otp
       sum(reffer_sc_girls + reffer_sc_boys) as total_sc
-      sum(mnp_30_girls + mnp_30_boys) as total_mnp_sch
-    `)).from('v_tblScrChildrenFull')
+      sum(mnp_30_girls + mnp_30_boys) as total_mnp_sch,
+    sum(deworming_girls + deworming_boys) as total_deworming`)).from('v_tblScrChildrenFull')
       .sum({mnp_30_boys:'mnp_30_boys'})
       .sum({total_scr_boys:'total_scr_boys'})
       .sum({new_boys:'new_boys'})
@@ -618,6 +618,8 @@ module.exports.scrChildReport= function (cond, callback){
       .sum({reffer_otp_girls:'reffer_otp_girls'})
       .sum({reffer_sc_girls:'reffer_sc_girls'})
       .sum({mnp_30_girls:'mnp_30_girls'})
+      .sum({deworming_boys:'deworming_boys'})
+      .sum({deworming_girls:'deworming_girls'})
       .then(result=>{
         callback(null, result);
       })
@@ -642,7 +644,8 @@ module.exports.scrChildReport= function (cond, callback){
       sum(reffer_tsfp_girls + reffer_tsfp_boys) as total_tsfp,
       sum(reffer_otp_girls + reffer_otp_boys) as total_otp,
       sum(reffer_sc_girls + reffer_sc_boys) as total_sc,
-      sum(mnp_30_girls + mnp_30_boys) as total_mnp_sch
+      sum(mnp_30_girls + mnp_30_boys) as total_mnp_sch,
+      sum(deworming_girls + deworming_boys) as total_deworming
     `)).from('v_tblScrChildrenFull')
       .sum({mnp_30_boys:'mnp_30_boys'})
       .sum({total_scr_boys:'total_scr_boys'})
@@ -680,6 +683,8 @@ module.exports.scrChildReport= function (cond, callback){
       .sum({reffer_otp_girls:'reffer_otp_girls'})
       .sum({reffer_sc_girls:'reffer_sc_girls'})
       .sum({mnp_30_girls:'mnp_30_girls'})
+      .sum({deworming_boys:'deworming_boys'})
+      .sum({deworming_girls:'deworming_girls'})
       .where((builder)=>{
       if(!cond.date){
         builder.where(cond);

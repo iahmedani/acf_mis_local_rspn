@@ -1,9 +1,9 @@
 module.exports.initScrChildrenReport= function(){
   $(function () {
-    var datePickerId_end = document.getElementById('end_date');
-    datePickerId_end.max = new Date().toISOString().split("T")[0];
-    var datePickerId_start = document.getElementById('start_date');
-    datePickerId_start.min = new Date(2018,07,01).toISOString().split("T")[0];
+    // var datePickerId_end = document.getElementById('end_date');
+    // datePickerId_end.max = new Date().toISOString().split("T")[0];
+    // var datePickerId_start = document.getElementById('start_date');
+    // datePickerId_start.min = new Date(2018,07,01).toISOString().split("T")[0];
 
     $('#ddInterval').on('change', function () {
       var value = $(this).val();
@@ -113,9 +113,12 @@ module.exports.initScrChildrenReport= function(){
       })
       })      
     }
-$('#showDataScrReport').on('click', function(){
+$('#showDataScrReport').on('click', function(e){
+  e.preventDefault();
   var fullTextCh = ['Province','District','Tehsil','UC','Village','Nutrition Site','Screening Date','Staff Name','Staff Code','Supervisor Name','Supervisor Code','Total Screened (Girls)','Total Screened (Boys)','First time Screened (Girls)','First time screened (Boys)','Normal (6 to 23 Girls)','Normal (6 to 23 Boys)','Normal (24 to 59 Girls)','Normal (24 to 59 Boys)','MAM (6 to 23 Girls)','MAM (6 to 23 Boys)','MAM (24 to 59 Girls)','MAM (24 to 59 Boys)','SAM without complication (6 to 23 Girls)','SAM without complication (6 to 23 Boys)','SAM without complication (24 to 59 Girls)','SAM without complication (24 to 59 Boys)','SAM with complication (6 to 23 Girls)','SAM with complication (6 to 23 Boys)','SAM with complication (24 to 59 Girls)','SAM with complication (24 to 59 Boys)','No Oedema (Girls)','No Oedema (Boys)','+,++ Oedema (Girls)','+,++ Oedema (Boys)','+++ Oedema (Girls)','+++ Oedema (Boys)','Refered TSFP (Girls)','Refered TSFP (Boys)','Refeedr OTP (Girls)','Refered OTP (Boys)','Refered SC (Girls)','Refered SC (Boys)','Deworming Girls','Deworming Boys','MNP Sachet distributed (Girls)','MNP Sachet distributed (Boys)']
 var colNameCh = ['province','district_name','tehsil_name','uc_name','village','site_name','screening_date','staff_name','staff_code','sup_name','sup_code','total_scr_girls','total_scr_boys','new_girls','new_boys','normal_girls_623','normal_boys_623','normal_girls_2459','normal_boys_2459','mam_girls_623','mam_boys_623',,'mam_girls_2459','mam_boys_2459','sam_without_comp_girls_623','sam_without_comp_boys_623','sam_without_comp_girls_2459','sam_without_comp_boys_2459','sam_with_comp_girls_623','sam_with_comp_boys_623','sam_with_comp_girls_2459','sam_with_comp_boys_2459','no_oedema_girls','no_oedema_boys','plus12_oedema_girls','plus12_oedema_boys','plus3_oedema_girls','plus3_oedema_boys','reffer_tsfp_girls','reffer_tsfp_boys','reffer_otp_girls','reffer_otp_boys','reffer_sc_girls','reffer_sc_boys','deworming_girls','deworming_boys','mnp_30_girls','mnp_30_boys']
+// $('#filterDate').validate();
+if($('#filterDate').valid()){
 
   scrChildReport(prepareQry())
     .then(result=>{
@@ -126,6 +129,7 @@ var colNameCh = ['province','district_name','tehsil_name','uc_name','village','s
     .catch(e=>{
       console.log('error occured during summary table creation')
     })
+}
   });
 $('#exportScrChReport').on('click', function(){  
   export_xlsx();
@@ -157,7 +161,8 @@ XLSX.utils.book_append_sheet(workbook, ws2, "Screening Detail");
 				name: "Spreadsheets",
 				extensions: XTENSION
 			}]
-		});
+    });
+    
 		console.log(o);
 		XLSX.writeFile(workbook, o);
 		electron.dialog.showMessageBox({ message: "Exported data to " + o, buttons: ["OK"] });

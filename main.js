@@ -847,7 +847,7 @@ ipcMain.on('otpExitUpdate', (e, data) => {
 // children Screening add Data 
 ipcMain.on('scrChildren', (e, data)=>{
   console.log(e);
-  childrenScrAddSave(e, data);
+  childrenScrAddSave(e, data,imran.client,imran.usernameL,imran.project_nameL);
   // (e,data);
 })
 // PLW New Screening add Data 

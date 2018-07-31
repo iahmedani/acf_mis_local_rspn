@@ -597,7 +597,10 @@
         $(".alert").alert('close');
         $().alert('dispose')
         $('#messages').empty()
-        ipc.removeAllListeners('success');
+        console.log(ipc.listeners());
+        ipc.removeListener('success',ipc.listeners()[0]);
+        // console.log(ipc.listeners()[0]);
+
       })
     });
     ipc.on('error', function (evt, result) {
@@ -608,8 +611,9 @@
         $(".alert").alert('close');
         $().alert('dispose')
         $('#messages').empty()
-        ipc.removeAllListeners('error');
-
+        console.log(ipc.listeners());
+        ipc.removeListener('error',ipc.listeners()[0]);
+        // console.log(ipc.listeners()[0]);
       })
     });
     ipc.on('updateNote', (e, index)=>{
