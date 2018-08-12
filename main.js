@@ -3,7 +3,8 @@ const {
   app,
   BrowserWindow,
   ipcMain,
-  Menu, dialog
+  Menu,
+  dialog
 } = electron;
 const firstRunDB = require('./firstRunCreateDb').firstCreateDb;
 const url = require('url');
@@ -12,7 +13,9 @@ var fs = require('fs');
 var geo = require('./geoData');
 var imran = {};
 const log = require('electron-log');
-const {autoUpdater} = require("electron-updater");
+const {
+  autoUpdater
+} = require("electron-updater");
 autoUpdater.autoDownload = false;
 // JSON.parse(fs.readFileSync('./config.json', 'utf8'))
 // fs.readfilesy
@@ -28,19 +31,23 @@ var knex = require("knex")({
 });
 const serverUrl = 'http://52.15.65.89:5000';
 
-let sucMsg = function(event, listenChannel, message){
-  event.sender.send('success', {msg:message})
-        // ipcMain.removeAllListeners(listenChannel)
-        ipcMain.removeAllListeners('success')
+let sucMsg = function (event, listenChannel, message) {
+  event.sender.send('success', {
+    msg: message
+  })
+  // ipcMain.removeAllListeners(listenChannel)
+  ipcMain.removeAllListeners('success')
 }
 
-let errMsg =function(event, listenChannel, message){
-  event.sender.send('error', {msg:message})
-        // ipcMain.removeAllListeners(listenChannel)
-        ipcMain.removeAllListeners('error')
+let errMsg = function (event, listenChannel, message) {
+  event.sender.send('error', {
+    msg: message
+  })
+  // ipcMain.removeAllListeners(listenChannel)
+  ipcMain.removeAllListeners('error')
 }
 // OTP Admission data save
-function otpAddDataSave(event, addOtpData, config, client){
+function otpAddDataSave(event, addOtpData, config, client) {
   //console.log(addFormOtp);
   delete addOtpData.province;
   delete addOtpData.Tehsil;
@@ -58,7 +65,7 @@ function otpAddDataSave(event, addOtpData, config, client){
     .insert(addFormOtp)
     .then(result => {
       console.log(result + 'OTP addmision added')
-      sucMsg(event,'','OTP admission added successfully')
+      sucMsg(event, '', 'OTP admission added successfully')
       // addOtp.webContents.send("resultSentOtpAdd", {
       //   'msg': 'records added'
       // });
@@ -71,14 +78,14 @@ function otpAddDataSave(event, addOtpData, config, client){
         quantity1: addFormOtp.quantity1,
         ration2: (addFormOtp.ration2 ? addFormOtp.ration2 : ''),
         quantity2: addFormOtp.quantity2,
-        ration3: (addFormOtp.ration3 ? addFormOtp.ration3: ''),
+        ration3: (addFormOtp.ration3 ? addFormOtp.ration3 : ''),
         quantity3: addFormOtp.quantity3,
         curr_date: localDate(),
         created_at: localDate(),
         status: 'open',
         next_followup: function () {
           var myDate = new Date();
-          myDate.setDate(myDate.getDate() + (addOtpData.prog_type =='sfp'? 14 : 7))
+          myDate.setDate(myDate.getDate() + (addOtpData.prog_type == 'sfp' ? 14 : 7))
           return myDate.toLocaleDateString();
         }()
       }
@@ -96,35 +103,35 @@ function otpAddDataSave(event, addOtpData, config, client){
       //   'err': 'records not added, plz try again'
       // });
     })
-    // addFormOtp = null;
+  // addFormOtp = null;
 }
 // followup interm data share
-function followupIntermData (event, site_id){
- console.log('site_id from html', site_id);
-    knex.from('tblOtpAdd')
-      .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
-      .where({
-        site_id: site_id,
-        status: 'open'
-      })
-      .then(result => {
-        // result.location = 'Follow up interim call'
-        console.log(result)
-        event.sender.send('getInterim', ({
-          result: result
-        }))
-        result = null;
-      })
-      .catch(e => {
-        // e.location = 'Follow up interim call'
-        console.log(e);
-        event.sender.send('getInterim', ({
-          err: e
-        }))
-      })
+function followupIntermData(event, site_id) {
+  console.log('site_id from html', site_id);
+  knex.from('tblOtpAdd')
+    .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
+    .where({
+      site_id: site_id,
+      status: 'open'
+    })
+    .then(result => {
+      // result.location = 'Follow up interim call'
+      console.log(result)
+      event.sender.send('getInterim', ({
+        result: result
+      }))
+      result = null;
+    })
+    .catch(e => {
+      // e.location = 'Follow up interim call'
+      console.log(e);
+      event.sender.send('getInterim', ({
+        err: e
+      }))
+    })
 }
 // adding followup 
-function followupAddData (event, item){
+function followupAddData(event, item) {
   var interimUpd = {
     muac: item.muac,
     weight: item.weight,
@@ -215,54 +222,54 @@ function followupAddData (event, item){
 
 }
 // sending all admisions for otp exit
-function otpAddDataForExit(event, site_id ){  
+function otpAddDataForExit(event, site_id) {
   knex.from('tblOtpAdd')
-  .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
-  .where({
-    site_id: site_id,
-    status: 'open'
-  })
-  .then(result => {
-    event.sender.send('getOtpAll', ({
-      result: result
-    }))
-  })
-  .catch(e => {
-    event.sender.send('getOtpAll', ({
-      err: e
-    }))
-  })
+    .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
+    .where({
+      site_id: site_id,
+      status: 'open'
+    })
+    .then(result => {
+      event.sender.send('getOtpAll', ({
+        result: result
+      }))
+    })
+    .catch(e => {
+      event.sender.send('getOtpAll', ({
+        err: e
+      }))
+    })
 }
 // add OTP Exit 
-function otpExitAddDataSave (event, data, client){
-    data.client_id = client;
-    data.upload_status = 0;
-    const otpExitAddData= data;
-    knex('tblOtpExit')
-      .insert(data)
-      .then(result => {
-        console.log(result);
-        sucMsg(event,'','Patient exit record is saved')
-        return knex('tblInterimOtp')
-          .where('otp_id', otpExitAddData.otp_id)
-          .update({
-            status: otpExitAddData.exit_reason
-          })
-      })
-      .then(result => {
-        console.log({
-          msg: 'interm table updated',
-          data: result
+function otpExitAddDataSave(event, data, client) {
+  data.client_id = client;
+  data.upload_status = 0;
+  const otpExitAddData = data;
+  knex('tblOtpExit')
+    .insert(data)
+    .then(result => {
+      console.log(result);
+      sucMsg(event, '', 'Patient exit record is saved')
+      return knex('tblInterimOtp')
+        .where('otp_id', otpExitAddData.otp_id)
+        .update({
+          status: otpExitAddData.exit_reason
         })
+    })
+    .then(result => {
+      console.log({
+        msg: 'interm table updated',
+        data: result
       })
-      .catch(e => {
-        console.log(e);
-        errMsg(event,'','Patient exit record not saved, plz try again or contact admin')
-      })
+    })
+    .catch(e => {
+      console.log(e);
+      errMsg(event, '', 'Patient exit record not saved, plz try again or contact admin')
+    })
 }
 
 // sending all session of site 
-function allSessionsData (event, data){
+function allSessionsData(event, data) {
   console.log(data);
   knex('tblSessions')
     .where('site_id', data)
@@ -278,7 +285,7 @@ function allSessionsData (event, data){
     })
 }
 // adding session data 
-function sessionsDataSave(event, item, config, client){
+function sessionsDataSave(event, item, config, client) {
 
   item.upload_status = 0;
   item.client_id = client;
@@ -317,7 +324,7 @@ function sessionsDataSave(event, item, config, client){
     })
 }
 // updatinf session data
-function sessionUpdateSave(event, item){
+function sessionUpdateSave(event, item) {
   item.upload_status = 2;
   item.updated_at = localDate();
   knex('tblSessions')
@@ -340,7 +347,7 @@ function sessionUpdateSave(event, item){
 }
 
 // Screening Update: Children sending all data
-function allScreeningData(event, qry){
+function allScreeningData(event, qry) {
   db.scrChild(qry, (err, result) => {
     event.sender.send('getScrChAll', ({
         err: err,
@@ -353,7 +360,7 @@ function allScreeningData(event, qry){
   })
 }
 // Screening Update: Edit (update) children record
-function screeningChUpDataSave (event, data){
+function screeningChUpDataSave(event, data) {
   var chUpd = {
     screening_id: data.screening_id,
     name: data.name,
@@ -377,41 +384,38 @@ function screeningChUpDataSave (event, data){
 
 }
 // Screening Update: Plw sending all data
-function allScreeningDataPlw(event, qry){
+function allScreeningDataPlw(event, qry) {
   db.scrPlw(qry, (err, result) => {
     event.sender.send('getScrPlwAll', ({
-        err: err,
-        result: result,
-      })
-    )
+      err: err,
+      result: result,
+    }))
     console.log(result);
   })
 }
 
 // Screening Update: Chilren sending all data
-function allScrChildrenUpdData(event, qry){
+function allScrChildrenUpdData(event, qry) {
   db.allScrChildrenData(qry, (err, result) => {
     event.sender.send('allScrChildren', ({
-        err: err,
-        result: result,
-      })
-    )
+      err: err,
+      result: result,
+    }))
     // console.log(result);
   })
 }
 // Screening Update: PLW NEW sending all data
-function allScrPlwNewUpdData(event, qry){
+function allScrPlwNewUpdData(event, qry) {
   db.allScrPlwNewData(qry, (err, result) => {
     event.sender.send('allScrPlwNew', ({
-        err: err,
-        result: result,
-      })
-    )
+      err: err,
+      result: result,
+    }))
     console.log(result);
   })
 }
 // Screening Update: Edit (update) plw record
-function screeningPlUpdDataSave(event, data){
+function screeningPlUpdDataSave(event, data) {
   var plwUpd = {
     screening_id: data.screening_id,
     name: data.name,
@@ -432,25 +436,25 @@ function screeningPlUpdDataSave(event, data){
   })
 }
 // Admission Update: sending all data
-function allOtpAddUpdData (event, site_id){
+function allOtpAddUpdData(event, site_id) {
   knex('tblOtpAdd')
-      .where({
-        site_id: site_id
-      })
-      .then(result => {
-        event.sender.send('allOtp', ({
-          result: result
-        }))
-      })
-      .catch(e => {
-        event.send.send('allOtp', ({
-          err: e
-        }))
-      })
+    .where({
+      site_id: site_id
+    })
+    .then(result => {
+      event.sender.send('allOtp', ({
+        result: result
+      }))
+    })
+    .catch(e => {
+      event.send.send('allOtp', ({
+        err: e
+      }))
+    })
 
 }
 // Admission Update: Edit (update) one record
-function otpAddUpdDataSave(event, item){
+function otpAddUpdDataSave(event, item) {
   console.log(item);
   item.upload_status = 2;
   knex('tblOtpAdd')
@@ -459,137 +463,147 @@ function otpAddUpdDataSave(event, item){
     .then(result => {
       sucMsg(event, '', 'Record successfully updated')
       console.log(result);
-    })    
+    })
     .catch(e => {
       console.log(e)
-      errMsg(event,'','Record no updated, plz try again or contact admin')
+      errMsg(event, '', 'Record no updated, plz try again or contact admin')
     })
 }
 
 // Exit Update: sending all data
-function allExitData (event, site_id){
+function allExitData(event, site_id) {
 
   knex.from('tblOtpExit')
-  .innerJoin('tblOtpAdd', 'tblOtpAdd.otp_id', 'tblOtpExit.otp_id')
-  .where({
-    site_id: site_id,
-  })
-  .then(result => {
-    console.log(result)
-    event.sender.send('have', ({
-      result: result
-    }))
-  })
-  .catch(e => {
-    event.sender.send('have', ({
-      err: e
-    }))
-  })
+    .innerJoin('tblOtpAdd', 'tblOtpAdd.otp_id', 'tblOtpExit.otp_id')
+    .where({
+      site_id: site_id,
+    })
+    .then(result => {
+      console.log(result)
+      event.sender.send('have', ({
+        result: result
+      }))
+    })
+    .catch(e => {
+      event.sender.send('have', ({
+        err: e
+      }))
+    })
 }
 // Exit Update: Edit (update) one record
-function exitUpdDataSave(event, data, client){
+function exitUpdDataSave(event, data, client) {
   data.client_id = client;
-    data.upload_status = 2;
-    const otpExitAddData = data;
-    console.log(otpExitAddData);
+  data.upload_status = 2;
+  const otpExitAddData = data;
+  console.log(otpExitAddData);
 
-    knex('tblOtpExit')
-      .where('otp_id', otpExitAddData.otp_id)
-      .update(otpExitAddData)
-      .then(result => {
-        console.log(result);
-        sucMsg(event,'','Record updated Successfully')
-        return knex('tblInterimOtp')
-          .where('otp_id', otpExitAddData.otp_id)
-          .update({
-            status: otpExitAddData.exit_reason
-          })
-      })
-      .then(result => {
-        console.log({
-          msg: 'interm table updated',
-          data: result
+  knex('tblOtpExit')
+    .where('otp_id', otpExitAddData.otp_id)
+    .update(otpExitAddData)
+    .then(result => {
+      console.log(result);
+      sucMsg(event, '', 'Record updated Successfully')
+      return knex('tblInterimOtp')
+        .where('otp_id', otpExitAddData.otp_id)
+        .update({
+          status: otpExitAddData.exit_reason
         })
+    })
+    .then(result => {
+      console.log({
+        msg: 'interm table updated',
+        data: result
       })
-      .catch(e => {
-        console.log(e);
-        errMsg(event,'','Record not updated, plz try again or contact admin')
-      })
+    })
+    .catch(e => {
+      console.log(e);
+      errMsg(event, '', 'Record not updated, plz try again or contact admin')
+    })
 }
 
 // Screening Children Add 
-function childrenScrAddSave(event, data, client, username, project){
-  data.client_id=client;
+function childrenScrAddSave(event, data, client, username, project) {
+  data.client_id = client;
   data.username = username;
   data.project = project;
   data.upload_status = 0;
   knex('tblScrChildren')
     .insert(data)
-    .then(result=>{
-      sucMsg(event,'','Record Successfully added')
+    .then(result => {
+      sucMsg(event, '', 'Record Successfully added')
       console.log('func childrenScrAddSave success', result)
-    }).catch(e=>{
-      errMsg(event,'','Record not saved, plz try again or contact admin')
-      console.log('func childrenScrAddSave error',e)
+    }).catch(e => {
+      errMsg(event, '', 'Record not saved, plz try again or contact admin')
+      console.log('func childrenScrAddSave error', e)
     })
 }
 // Screening Children Add 
-function plwNewScrAddSave(event, data, client, username, project){
-  data.client_id=client;
+function plwNewScrAddSave(event, data, client, username, project) {
+  data.client_id = client;
   data.username = username;
   data.project = project;
   data.upload_status = 0;
   knex('tblScrPlw')
     .insert(data)
-    .then(result=>{
-      sucMsg(event,'','Record Successfully added')
+    .then(result => {
+      sucMsg(event, '', 'Record Successfully added')
       console.log('func childrenScrAddSave success', result)
-    }).catch(e=>{
-      errMsg(event,'','Record not saved, plz try again or contact admin')
-      console.log('func childrenScrAddSave error',e)
+    }).catch(e => {
+      errMsg(event, '', 'Record not saved, plz try again or contact admin')
+      console.log('func childrenScrAddSave error', e)
     })
 }
 
 // Screening Children update 
-function childrenScrUpdSave(event, data){
+function childrenScrUpdSave(event, data) {
   data.upload_status = 2;
   knex('tblScrChildren')
     .update(data)
-    .where('ch_scr_id',data.ch_scr_id)
-    .then(result=>{
-      sucMsg(event,'','Record updated successfully')
+    .where('ch_scr_id', data.ch_scr_id)
+    .then(result => {
+      sucMsg(event, '', 'Record updated successfully')
       console.log('func childrenScrUpdSave success', result)
-    }).catch(e=>{
-      errMsg(event,'','Record not updated, plz try again or contact admin')
-      console.log('func childrenScrUpdSave error',e)
+    }).catch(e => {
+      errMsg(event, '', 'Record not updated, plz try again or contact admin')
+      console.log('func childrenScrUpdSave error', e)
     })
 }
 // Screening PLW NEW update 
-function plwNewScrUpdSave(event, data){
+function plwNewScrUpdSave(event, data) {
   data.upload_status = 2;
   knex('tblScrPlw')
     .update(data)
-    .where('plw_scr_id',data.plw_scr_id)
-    .then(result=>{
-      sucMsg(event,'','Record updated successfully')
+    .where('plw_scr_id', data.plw_scr_id)
+    .then(result => {
+      sucMsg(event, '', 'Record updated successfully')
       console.log('func plwNewScrUpdSave success', result)
-    }).catch(e=>{
-      errMsg(event,'','Record not updated, plz try again or contact admin')
-      console.log('func plwNewScrUpdSave error',e)
+    }).catch(e => {
+      errMsg(event, '', 'Record not updated, plz try again or contact admin')
+      console.log('func plwNewScrUpdSave error', e)
     })
 }
 var db = require('./dbTest');
 const request = require('request');
 
+function isEmpty(arg) {
+  for (var item in arg) {
+    return false;
+  }
+  return true;
+}
 // const bParser = require('body-parser');
 
 // app.use(bParser.json());
 // first run check
-function firstRun(){
-  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+function firstRun() {
+  const {
+    width,
+    height
+  } = electron.screen.getPrimaryDisplay().workAreaSize
   var client_id = imran.client;
   runFirst = new BrowserWindow({
-    width, height,
+    width,
+    height,
     title: 'first Run'
   });
 
@@ -599,7 +613,7 @@ function firstRun(){
     slashes: true
   }));
 
-  ipcMain.on('firstRun', (e, firstRunInfo)=>{
+  ipcMain.on('firstRun', (e, firstRunInfo) => {
     console.log(firstRunInfo);
     var usernameL = firstRunInfo.username.toLowerCase();
     usernameL = usernameL.replace(/\s+/g, '');
@@ -615,7 +629,7 @@ function firstRun(){
 
     var client = firstRunInfo.client.toLowerCase();
     client = client.replace(/\s+/g, '');
-    
+
 
     var configInformation = {
       usernameL,
@@ -626,15 +640,15 @@ function firstRun(){
     }
 
     var thisJson = JSON.stringify(configInformation);
-    fs.writeFile('config.json', thisJson, 'utf8', (err)=>{
-      if(err){
+    fs.writeFile('config.json', thisJson, 'utf8', (err) => {
+      if (err) {
         runFirst.webContents.send('firstRunResponse', ({
-          err:err
+          err: err
         }))
       } else {
         runFirst.webContents.send('firstRunResponse', ({
-          success:1,
-          msg:'Your configuration is saved, thanks!!'
+          success: 1,
+          msg: 'Your configuration is saved, thanks!!'
         }))
       }
     });
@@ -650,39 +664,44 @@ function firstRun(){
 }
 let mainWindow;
 
-function creatWindow(){
+function creatWindow() {
   var config = {};
-  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+  const {
+    width,
+    height
+  } = electron.screen.getPrimaryDisplay().workAreaSize
   mainWindow = new BrowserWindow({
-    width, height,show:false
+    width,
+    height,
+    show: false
   });
   // mainWindow.fullscreen = true;
-  fs.stat('config.json', function(err, stat) {
-    if(err == null) {
-        console.log('File exists');
-        mainWindow.once('ready-to-show', () => {
-          mainWindow.maximize();          
-          imran = config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));          
-          mainWindow.show()
+  fs.stat('config.json', function (err, stat) {
+    if (err == null) {
+      console.log('File exists');
+      mainWindow.once('ready-to-show', () => {
+        mainWindow.maximize();
+        imran = config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
+        mainWindow.show()
 
-        });
-    } else if(err.code == 'ENOENT') {
-        // file does not exist
-        firstRun();
-        firstRunDB(knex);
+      });
+    } else if (err.code == 'ENOENT') {
+      // file does not exist
+      firstRun();
+      firstRunDB(knex);
     } else {
-        console.log('Some other error: ', err.code);
+      console.log('Some other error: ', err.code);
     }
-});
+  });
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, '/html/index3.html'),
     protocol: 'file:',
     slashes: true
   }));
- 
-  ipcMain.on('getProvince', (evt)=>{
+
+  ipcMain.on('getProvince', (evt) => {
     geo.provincev2(evt)
-    
+
     // console.log(ipcMain.getMaxListeners())
   })
   ipcMain.on('getDistrict', function (event, prov) {
@@ -695,7 +714,7 @@ function creatWindow(){
   });
   ipcMain.on('getUC', function (event, tehs) {
     console.log(tehs)
-    geo.ucv2(tehs,event);
+    geo.ucv2(tehs, event);
 
   });
   ipcMain.on('getHealthHouse', function (event, ucs) {
@@ -744,204 +763,270 @@ function creatWindow(){
     }
   })
   //Adding Screening - Child
-  ipcMain.on('scrChildAdd', (evt, data)=>{
+  ipcMain.on('scrChildAdd', (evt, data) => {
     console.log(data);
     knex('Screening')
       .insert(data)
-      .then(result=>{
-        console.log({scrChildSucess:result})
-       sucMsg(evt,'scrChildAdd',`Screening - Children: ${result.length} records added successfully`)
+      .then(result => {
+        console.log({
+          scrChildSucess: result
+        })
+        sucMsg(evt, 'scrChildAdd', `Screening - Children: ${result.length} records added successfully`)
       })
-      .catch(e=>{
-        console.log({scrChildError:e})
-        errMsg(evt,'scrChildAdd',`Screening - Children: records not added please check again or contact system admin`)
+      .catch(e => {
+        console.log({
+          scrChildError: e
+        })
+        errMsg(evt, 'scrChildAdd', `Screening - Children: records not added please check again or contact system admin`)
       })
   });
   //Adding Screening - PLW
-  ipcMain.on('scrPlwAdd', (evt, data)=>{
+  ipcMain.on('scrPlwAdd', (evt, data) => {
     console.log(data);
     knex('Screening')
       .insert(data)
-      .then(result=>{
-        console.log({scrPlwSucess:result})
-        sucMsg(evt,'scrPlwAdd',`Screening - Plw: ${result.length} records added successfully`)
+      .then(result => {
+        console.log({
+          scrPlwSucess: result
+        })
+        sucMsg(evt, 'scrPlwAdd', `Screening - Plw: ${result.length} records added successfully`)
       })
-      .catch(e=>{
-        console.log({scrChildError:result})
-        errMsg(evt,'scrPlwAdd',`Screening - Plw: records not added please check again or contact system admin`)
+      .catch(e => {
+        console.log({
+          scrChildError: result
+        })
+        errMsg(evt, 'scrPlwAdd', `Screening - Plw: records not added please check again or contact system admin`)
       })
   })
   // Adding OTP Admission
   ipcMain.on('submitOtpAdd', function (event, addOtpData) {
-    console.log({location:'otp add, channel submitOtpAdd', formData: addOtpData})
+    console.log({
+      location: 'otp add, channel submitOtpAdd',
+      formData: addOtpData
+    })
     otpAddDataSave(event, addOtpData, config, imran.client);
   });
 
   // Followup interm data for followup add
   ipcMain.on('getInterim', (event, data) => {
-    followupIntermData(event,data);
+    followupIntermData(event, data);
   })
   // follow up adding records;
   ipcMain.on('addFollowup', (e, item) => {
     followupAddData(e, item);
   });
-// sending all admission for exit
+  // sending all admission for exit
   ipcMain.on('getOtpAll', (e, site_id) => {
     otpAddDataForExit(e, site_id);
   });
-// to add exit record
+  // to add exit record
   ipcMain.on('otpExitAdd', (e, data) => {
     console.log(data);
-    otpExitAddDataSave(e,data,imran.client);
+    otpExitAddDataSave(e, data, imran.client);
   })
-// sending all sessions 
-ipcMain.on('getSessionsAll', (e, data) => {
-  allSessionsData(e,data);
-});
-// adding (inserting) one session 
-ipcMain.on('insertSessionsSingle', (e, item) => {
-  sessionsDataSave(e, item, config, imran.client);
-})
-// editing (updating) one session
-ipcMain.on('updateSessionsSingle', (e, item) => {
-  sessionUpdateSave(e,item);
-});
+  // sending all sessions 
+  ipcMain.on('getSessionsAll', (e, data) => {
+    allSessionsData(e, data);
+  });
+  // adding (inserting) one session 
+  ipcMain.on('insertSessionsSingle', (e, item) => {
+    sessionsDataSave(e, item, config, imran.client);
+  })
+  // editing (updating) one session
+  ipcMain.on('updateSessionsSingle', (e, item) => {
+    sessionUpdateSave(e, item);
+  });
 
-// Screening Update: Children sending data 
-ipcMain.on('getScrChAll', function (e, qry) {
-  allScreeningData(e, qry)
-})
-// Screening Update: Children edit (update) record
-ipcMain.on('updScrChSingle', function (e, data) {
-  screeningChUpDataSave(e,data);
-})
+  // Screening Update: Children sending data 
+  ipcMain.on('getScrChAll', function (e, qry) {
+    allScreeningData(e, qry)
+  })
+  // Screening Update: Children edit (update) record
+  ipcMain.on('updScrChSingle', function (e, data) {
+    screeningChUpDataSave(e, data);
+  })
 
-// Screening Update: PLW sending data 
-ipcMain.on('getScrPlwAll', function (e, qry) {
-  allScreeningDataPlw(e,qry)
-})
-// Screening Update: PLW edit (update) record
-ipcMain.on('updScrPlwSingle', function (e, data) {
-  screeningPlUpdDataSave(e, data);
-})
+  // Screening Update: PLW sending data 
+  ipcMain.on('getScrPlwAll', function (e, qry) {
+    allScreeningDataPlw(e, qry)
+  })
+  // Screening Update: PLW edit (update) record
+  ipcMain.on('updScrPlwSingle', function (e, data) {
+    screeningPlUpdDataSave(e, data);
+  })
 
-// Admission Update: sending all data 
-ipcMain.on('allOtp', (e, site_id) => {
-  allOtpAddUpdData(e,site_id);
-})
-// Admission Update: Edit (update) one record
-ipcMain.on('submitOtpAddUpd', (e,otpAddFormData)=>{
-  console.log(otpAddFormData);
-  otpAddUpdDataSave(e,otpAddFormData);
-});
+  // Admission Update: sending all data 
+  ipcMain.on('allOtp', (e, site_id) => {
+    allOtpAddUpdData(e, site_id);
+  })
+  // Admission Update: Edit (update) one record
+  ipcMain.on('submitOtpAddUpd', (e, otpAddFormData) => {
+    console.log(otpAddFormData);
+    otpAddUpdDataSave(e, otpAddFormData);
+  });
 
-// Exit Update: sending all data
-ipcMain.on('get', (e, site_id) => {
-  allExitData(e,site_id);
-})
-//Exit Update: Edit (update) one record
-ipcMain.on('otpExitUpdate', (e, data) => {
-  exitUpdDataSave(e, data,imran.client);
-})
+  // Exit Update: sending all data
+  ipcMain.on('get', (e, site_id) => {
+    allExitData(e, site_id);
+  })
+  //Exit Update: Edit (update) one record
+  ipcMain.on('otpExitUpdate', (e, data) => {
+    exitUpdDataSave(e, data, imran.client);
+  })
 
-// children Screening add Data 
-ipcMain.on('scrChildren', (e, data)=>{
-  console.log(e);
-  childrenScrAddSave(e, data,imran.client,imran.usernameL,imran.project_nameL);
-  // (e,data);
-})
-// PLW New Screening add Data 
-ipcMain.on('scrPlwNewAdd', (e, data)=>{
-  console.log(data);
-  plwNewScrAddSave(e, data, imran.client,imran.usernameL, imran.project_nameL,);
-  // (e,data);
-})
-// Screening Children summary: all records for Update
-ipcMain.on('allScrChildren', (e,data)=>{
-  // console.log('data from channel allScrChildren:',data)
-  allScrChildrenUpdData(e,data);
-})
+  // children Screening add Data 
+  ipcMain.on('scrChildren', (e, data) => {
+    console.log(e);
+    childrenScrAddSave(e, data, imran.client, imran.usernameL, imran.project_nameL);
+    // (e,data);
+  })
+  // PLW New Screening add Data 
+  ipcMain.on('scrPlwNewAdd', (e, data) => {
+    console.log(data);
+    plwNewScrAddSave(e, data, imran.client, imran.usernameL, imran.project_nameL, );
+    // (e,data);
+  })
+  // Screening Children summary: all records for Update
+  ipcMain.on('allScrChildren', (e, data) => {
+    // console.log('data from channel allScrChildren:',data)
+    allScrChildrenUpdData(e, data);
+  })
 
-ipcMain.on('allScrPlwNew',(e, data)=>{
-  console.log('data from html on chanel allScrPlwNew', data)
-  allScrPlwNewUpdData(e,data)
-})
+  ipcMain.on('allScrPlwNew', (e, data) => {
+    console.log('data from html on chanel allScrPlwNew', data)
+    allScrPlwNewUpdData(e, data)
+  })
 
-// children Screening updat Data 
-ipcMain.on('scrChildrenUpd', (e, data)=>{
-  console.log(data);
-  childrenScrUpdSave(e, data);
-  // (e,data);
-})
+  // children Screening updat Data 
+  ipcMain.on('scrChildrenUpd', (e, data) => {
+    console.log(data);
+    childrenScrUpdSave(e, data);
+    // (e,data);
+  })
 
-// PLW New Screening update data
-ipcMain.on('scrPlwNewUpd', (e,data)=>{
-  plwNewScrUpdSave(e,data);
-})
+  // PLW New Screening update data
+  ipcMain.on('scrPlwNewUpd', (e, data) => {
+    plwNewScrUpdSave(e, data);
+  })
 
-ipcMain.on('scrChildReport',(e,qry)=>{
-  async.parallel({
-    summary:(cb)=>{
-      db.scrChildReport(qry,(err, result)=>{
-        if(err){
-          cb(err)
-          console.log(err);
-        } else{
-          cb(null, result)
-        }
-      })
-    },
-    single:(cb)=>{
-      db.allScrChildrenData(qry, (err, result)=>{
-        if(err){
-          cb(err)
-          console.log(err);
-        } else{
-          cb(null, result)
-        }
-      })
-    }
-  },(err, results)=>{
-    if(err){
-      errMsg(e,'','Report db query error, plz try again or contact admin')
-      console.log(err);
+  ipcMain.on('scrChildReport', (e, qry) => {
+    async.parallel({
+      summary: (cb) => {
+        db.scrChildReport(qry, (err, result) => {
+          if (err) {
+            cb(err)
+            console.log(err);
+          } else {
+            cb(null, result)
+          }
+        })
+      },
+      single: (cb) => {
+        db.allScrChildrenData(qry, (err, result) => {
+          if (err) {
+            cb(err)
+            console.log(err);
+          } else {
+            cb(null, result)
+          }
+        })
+      }
+    }, (err, results) => {
+      if (err) {
+        errMsg(e, '', 'Report db query error, plz try again or contact admin')
+        console.log(err);
+      } else {
+        e.sender.send('scrChildReport', ({
+          result: results
+        }))
+      }
+    })
+  });
+
+  ipcMain.on('scrPlwNewReport', (e, qry) => {
+    async.parallel({
+      summary: (cb) => {
+        db.scrPlwNewReport(qry, (err, result) => {
+          if (err) {
+            cb(err)
+            console.log(err);
+          } else {
+            cb(null, result)
+          }
+        })
+      },
+      single: (cb) => {
+        db.allScrPlwNewData(qry, (err, result) => {
+          if (err) {
+            cb(err)
+            console.log(err);
+          } else {
+            cb(null, result)
+          }
+        })
+      }
+    }, (err, results) => {
+      if (err) {
+        errMsg(e, '', 'Report db query error, plz try again or contact admin')
+        console.log(err);
+      } else {
+        e.sender.send('scrPlwNewReport', ({
+          result: results
+        }))
+      }
+    })
+  });
+
+  ipcMain.on('addExitReport', (e, qry) => {
+    if (isEmpty(qry)) {
+      errMsg(e, '', 'Atleast one item need to be selected')
     } else {
-      e.sender.send('scrChildReport',({result:results}))
-    }
-  })
-});
-
-ipcMain.on('scrPlwNewReport',(e,qry)=>{
-  async.parallel({
-    summary:(cb)=>{
-      db.scrPlwNewReport(qry,(err, result)=>{
-        if(err){
-          cb(err)
-          console.log(err);
-        } else{
-          cb(null, result)
+      async.parallel({
+        add: (cb) => {
+          db.AdmissionsReport(qry, (err, result) => {
+            if (err) {
+              cb(err)
+            } else {
+              cb(null, result)
+            }
+          })
+        },
+        exit: (cb) => {
+          db.ExitReport(qry, (err, result) => {
+            if (err) {
+              cb(err)
+            } else {
+              cb(null, result)
+            }
+          })
+        },
+        addTable: (cb) => {
+          db.otpAddTable(qry, (err, result) => {
+            if (err) {
+              cb(err)
+            } else {
+              cb(null, result)
+            }
+          })
+        },
+        exitTable: (cb) => {
+          db.otpExitTable(qry, (err, result) => {
+            if (err) {
+              cb(err)
+            } else {
+              cb(null, result)
+            }
+          })
+        }
+      }, (err, results) => {
+        if (err) {
+          errMsg(e, '', 'DB error please try again or contact admin')
+        } else {
+          e.sender.send('addExitReport', results)
         }
       })
-    },
-    single:(cb)=>{
-      db.allScrPlwNewData(qry, (err, result)=>{
-        if(err){
-          cb(err)
-          console.log(err);
-        } else{
-          cb(null, result)
-        }
-      })
-    }
-  },(err, results)=>{
-    if(err){
-      errMsg(e,'','Report db query error, plz try again or contact admin')
-      console.log(err);
-    } else {
-      e.sender.send('scrPlwNewReport',({result:results}))
     }
   })
-});
   // Build main menu from template
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
   // Insert menu
@@ -1061,7 +1146,7 @@ app.on('ready', creatWindow);
 //           err: e
 //         }))
 //       })
-  
+
 //       item = null;
 //   });
 //   session.on('close', function () {
@@ -1747,7 +1832,7 @@ app.on('ready', creatWindow);
 //   });
 
 //   ipcMain.on('scrAddChild', function (event, scrForm) {
-    
+
 //     console.log(scrForm)
 //     var village = scrForm.txtVillage;
 //     var site_id = scrForm.ddHealthHouse;
@@ -1854,7 +1939,7 @@ app.on('ready', creatWindow);
 //       ipcMain.removeAllListeners(myChan[i])
 //       console.log('channel removed ', myChan[i])
 //     }
-    
+
 //     addScrChild = null;
 //   })
 // }
@@ -1991,7 +2076,7 @@ app.on('ready', creatWindow);
 //           });
 //         })
 //     }
-    
+
 //     console.log(scrForm)
 //     scrForm = null;
 //   });
@@ -2009,7 +2094,7 @@ app.on('ready', creatWindow);
 //       ipcMain.removeAllListeners(myChan[i])
 //       console.log('channel removed ', myChan[i])
 //     }
-    
+
 //     addScrPlw = null;
 //   })
 // }
@@ -2400,10 +2485,14 @@ app.on('ready', creatWindow);
 // }
 // Creating Screening : Reports
 function scrReports() {
-  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+  const {
+    width,
+    height
+  } = electron.screen.getPrimaryDisplay().workAreaSize
 
   scrReport = new BrowserWindow({
-    width,height,
+    width,
+    height,
     title: 'Screening: Reports'
   });
   scrReport.loadURL(url.format({
@@ -2424,7 +2513,7 @@ function scrReports() {
   });
   ipcMain.on('scrRpt_getUC', function (event, tehs) {
     console.log(tehs)
-    geo.uc(tehs,scrReport);
+    geo.uc(tehs, scrReport);
 
   });
   ipcMain.on('scrRpt_getHealthHouse', function (event, ucs) {
@@ -2489,8 +2578,9 @@ function scrReports() {
       'scrRpt_getTehsil',
       'scrRpt_getUC',
       'scrRpt_getHealthHouse',
-      'data']
-    for (const i in myChan){
+      'data'
+    ]
+    for (const i in myChan) {
       ipcMain.removeAllListeners(myChan[i])
       console.log('channel removed ', myChan[i])
     }
@@ -2500,10 +2590,14 @@ function scrReports() {
 
 // Creating Screening : Reports
 function defReports() {
-  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+  const {
+    width,
+    height
+  } = electron.screen.getPrimaryDisplay().workAreaSize
 
   reportDef = new BrowserWindow({
-    width:250,height:250,
+    width: 250,
+    height: 250,
     title: 'Defauler: Reports'
   });
   reportDef.loadURL(url.format({
@@ -2516,34 +2610,40 @@ function defReports() {
   ipcMain.on('data', function (e, arg) {
     console.log('defaulter report' + arg)
     knex('v_defaulter')
-      .then(result=>{
+      .then(result => {
         console.log(result);
-        reportDef.webContents.send('data',{result: result})
+        reportDef.webContents.send('data', {
+          result: result
+        })
       })
-      .catch(e=>{
+      .catch(e => {
         console.log(e);
       })
 
-    })
-    
- 
-    reportDef.on('close', function () {
-      var myChan = ['data']
-    for (const i in myChan){
+  })
+
+
+  reportDef.on('close', function () {
+    var myChan = ['data']
+    for (const i in myChan) {
       ipcMain.removeAllListeners(myChan[i])
       console.log('channel removed ', myChan[i])
     }
-      reportDef = null;
+    reportDef = null;
   })
 }
 
 
 // Creating Screening : Reports
 function otpReports() {
-  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+  const {
+    width,
+    height
+  } = electron.screen.getPrimaryDisplay().workAreaSize
 
   reportOtp = new BrowserWindow({
-    width,height,
+    width,
+    height,
     title: 'OTP: Reports'
   });
   reportOtp.loadURL(url.format({
@@ -2564,7 +2664,7 @@ function otpReports() {
   });
   ipcMain.on('otpRpt_getUC', function (event, tehs) {
     console.log(tehs)
-    geo.uc(tehs,reportOtp);
+    geo.uc(tehs, reportOtp);
 
   });
   ipcMain.on('otpRpt_getHealthHouse', function (event, ucs) {
@@ -2628,15 +2728,16 @@ function otpReports() {
   })
   reportOtp.on('close', function () {
     var myChan = ['otpRpt_getProvince',
-    'otpRpt_getDistrict',
-    'otpRpt_getTehsil',
-    'otpRpt_getUC',
-    'otpRpt_getHealthHouse',
-    'data']
-  for (const i in myChan){
-    ipcMain.removeAllListeners(myChan[i])
-    console.log('channel removed ', myChan[i])
-  }
+      'otpRpt_getDistrict',
+      'otpRpt_getTehsil',
+      'otpRpt_getUC',
+      'otpRpt_getHealthHouse',
+      'data'
+    ]
+    for (const i in myChan) {
+      ipcMain.removeAllListeners(myChan[i])
+      console.log('channel removed ', myChan[i])
+    }
     reportOtp = null;
   })
 }
@@ -3170,7 +3271,7 @@ function runDemo() {
 //       }
 
 //     })
-  
+
 //   knex('tblSessions')
 //       .where({upload_status:0})
 //       .orWhereNull('upload_status')
@@ -3313,12 +3414,16 @@ function runDemo() {
 
 // Creating Admin : sync Refference
 function newSync() {
-  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
+  const {
+    width,
+    height
+  } = electron.screen.getPrimaryDisplay().workAreaSize
 
   var surl = serverUrl;
   console.log(surl);
   syncNew = new BrowserWindow({
-    width, height,
+    width,
+    height,
     title: 'System: Sync'
   });
   syncNew.loadURL(url.format({
@@ -3328,7 +3433,7 @@ function newSync() {
   }));
   ipcMain.on('updateDB', function () {
     async.series({
-      province: (cb)=>{
+      province: (cb) => {
         var options = {
           method: 'GET',
           uri: surl + '/getProvince',
@@ -3345,31 +3450,31 @@ function newSync() {
                   .where({
                     id: el.id
                   })
-                  .then(result=>{
-                    if(result.length > 0){
+                  .then(result => {
+                    if (result.length > 0) {
                       console.log('Province Not added as already available')
                     } else {
-                    knex('tblGeoProvince')
-                    .insert(el)
-                    .then(ret => {
-                      console.log(ret);
-                  })
+                      knex('tblGeoProvince')
+                        .insert(el)
+                        .then(ret => {
+                          console.log(ret);
+                        })
 
                     }
                   })
-                  
-                  .catch(e=>{
-                   console.log(e)
-                  })    
-                })
-                cb(null, body)
-            }    
-          } else{
+
+                  .catch(e => {
+                    console.log(e)
+                  })
+              })
+              cb(null, body)
+            }
+          } else {
             cb(err)
           }
         })
       },
-      district: (cb)=>{
+      district: (cb) => {
         var options = {
           method: 'GET',
           uri: surl + '/getDistrict',
@@ -3377,7 +3482,7 @@ function newSync() {
           json: true
         }
         request(options, function (err, response, body) {
-          if (!err)  {
+          if (!err) {
             // var data = JSON.parse(body);
             var data = body;
             if (data.length > 0) {
@@ -3386,31 +3491,31 @@ function newSync() {
                   .where({
                     id: el.id
                   })
-                  .then(result=>{
-                    if(result.length >0){
+                  .then(result => {
+                    if (result.length > 0) {
 
                       console.log('District Not added as already available')
-                    }else{
+                    } else {
                       knex('tblGeoDistrict')
                         .insert(el)
-                        .then(ret=>{
-                         console.log(ret)
+                        .then(ret => {
+                          console.log(ret)
                         })
                     }
                   })
-                  
-                  .catch(e=>{
+
+                  .catch(e => {
                     cb(e)
-                  })    
+                  })
               })
               cb(null, body);
-            } 
+            }
           } else {
             cb(err)
           }
         })
       },
-      tehsil: (cb)=>{
+      tehsil: (cb) => {
         var options = {
           method: 'GET',
           uri: surl + '/getTehsil',
@@ -3418,7 +3523,7 @@ function newSync() {
           json: true
         }
         request(options, function (err, response, body) {
-          if (!err)  {
+          if (!err) {
             var data = body;
 
             // var data = JSON.parse(body);
@@ -3428,31 +3533,31 @@ function newSync() {
                   .where({
                     id: el.id
                   })
-                  .then(result=>{
-                    if(result.length >0){
-                    console.log('Tehsil Not added as already available')
-                    } else{
-                knex('tblGeoTehsil')
-                .insert(el)
-                .then(ret=>{
-                  console.log(ret)
-                })
+                  .then(result => {
+                    if (result.length > 0) {
+                      console.log('Tehsil Not added as already available')
+                    } else {
+                      knex('tblGeoTehsil')
+                        .insert(el)
+                        .then(ret => {
+                          console.log(ret)
+                        })
                     }
                   })
-                  
-                  .catch(e=>{
+
+                  .catch(e => {
                     cb(e)
-                  })    
+                  })
               })
               cb(null, body);
-            } 
+            }
           } else {
             cb(err)
 
           }
         })
       },
-      uc:(cb)=>{
+      uc: (cb) => {
         var options = {
           method: 'GET',
           uri: surl + '/getUC',
@@ -3478,15 +3583,15 @@ function newSync() {
                         .into('tblGeoUC')
                         .then(ret => {
                           console.log(ret);
-    
+
                         })
-    
+
                     }
                   })
-                  .catch(e=>{
+                  .catch(e => {
                     console.log(e)
                   })
-    
+
               })
               cb(null, body)
             }
@@ -3495,7 +3600,7 @@ function newSync() {
           }
         })
       },
-      site: (cb)=>{
+      site: (cb) => {
         var options = {
           method: 'GET',
           uri: surl + '/getSite',
@@ -3503,7 +3608,7 @@ function newSync() {
           json: true
         }
         request(options, function (err, response, body) {
-          if (!err)  {
+          if (!err) {
             var data = body;
 
             // var data = JSON.parse(body);
@@ -3513,37 +3618,41 @@ function newSync() {
                   .where({
                     id: el.id
                   })
-                  .then(result=>{
-                    if(result.length >0){
+                  .then(result => {
+                    if (result.length > 0) {
                       console.log('Site already avaialble')
                     } else {
-                knex('tblGeoNutSite')
-                      .insert(el)
-                      .then(ret=>{
-                        console.log(ret)
-                      })
+                      knex('tblGeoNutSite')
+                        .insert(el)
+                        .then(ret => {
+                          console.log(ret)
+                        })
                     }
-                  })                  
-                  .catch(e=>{
+                  })
+                  .catch(e => {
                     console.log(e)
                   })
-    
+
               })
               cb(null, body);
-            }     
+            }
           } else {
             cb(err)
           }
         })
       }
-    }, function(err, results){
-      if(err){
+    }, function (err, results) {
+      if (err) {
         console.log(err)
-        syncNew.webContents.send('errUpdDb', {error:'DB not updated'})
+        syncNew.webContents.send('errUpdDb', {
+          error: 'DB not updated'
+        })
         syncNew.webContents.send('updateDB', 'a')
       } else {
-        console.log(results)        
-        syncNew.webContents.send('successUpdDb', {msg: 'DB updated successfully, App will restart within 3 seconds.'})
+        console.log(results)
+        syncNew.webContents.send('successUpdDb', {
+          msg: 'DB updated successfully, App will restart within 3 seconds.'
+        })
         syncNew.webContents.send('updateDB', 'a')
         // app.relaunch();
         // app.exit();
@@ -3553,11 +3662,13 @@ function newSync() {
 
   ipcMain.on('updateServer', function () {
     async.series({
-      uploadScr: (cb)=>{
+      uploadScr: (cb) => {
         knex('Screening')
-          .where({upload_status:0})
-          .then(result=>{
-            if(result.length > 0){
+          .where({
+            upload_status: 0
+          })
+          .then(result => {
+            if (result.length > 0) {
 
               var options = {
                 method: 'POST',
@@ -3566,19 +3677,21 @@ function newSync() {
                 json: true
               }
               // console.log(result)
-              request(options, (err, response, body)=>{
-                if(err){
+              request(options, (err, response, body) => {
+                if (err) {
                   cb(err)
                 } else {
                   console.log(typeof body);
                   // body = JSON.parse(body);
-                  if(body.success === 'SCR Added'){
-                    result.forEach(el=>{
+                  if (body.success === 'SCR Added') {
+                    result.forEach(el => {
                       console.log(el);
-                       knex('Screening')
-                        .where({screening_id: el.screening_id})
+                      knex('Screening')
+                        .where({
+                          screening_id: el.screening_id
+                        })
                         .update('upload_status', 1)
-                        .then(result=>{
+                        .then(result => {
                           console.log(result)
                         })
                     })
@@ -3590,15 +3703,17 @@ function newSync() {
               cb(null, 'No new Scrrening record')
             }
           })
-          .catch(e=>{
+          .catch(e => {
             cb(e)
           })
       },
-      updateScr: (cb)=>{
+      updateScr: (cb) => {
         knex('Screening')
-          .where({upload_status:2})
-          .then(result=>{
-            if(result.length > 0){
+          .where({
+            upload_status: 2
+          })
+          .then(result => {
+            if (result.length > 0) {
               var options = {
                 method: 'PUT',
                 uri: surl + '/scrv1',
@@ -3606,19 +3721,21 @@ function newSync() {
                 json: true
               }
               // console.log(result)
-              request(options, (err, response, body)=>{
-                if(err){
+              request(options, (err, response, body) => {
+                if (err) {
                   cb(err)
                 } else {
                   console.log(typeof body);
                   // body = JSON.parse(body);
-                  if(body.success === 'SCR Updated'){
-                    result.forEach(el=>{
+                  if (body.success === 'SCR Updated') {
+                    result.forEach(el => {
                       console.log(el);
-                       knex('Screening')
-                        .where({screening_id: el.screening_id})
+                      knex('Screening')
+                        .where({
+                          screening_id: el.screening_id
+                        })
                         .update('upload_status', 1)
-                        .then(result=>{
+                        .then(result => {
                           console.log(result)
                         })
                     })
@@ -3629,38 +3746,226 @@ function newSync() {
             } else {
               cb(null, 'No new record')
             }
-           
+
           })
-          
-          .catch(e=>{
+
+          .catch(e => {
             cb(e)
           })
       },
-      uploadOtp: (cb)=>{
+      uploadChScrNew: (cb) => {
+        knex('tblScrChildren')
+          .where({
+            upload_status: 0
+          })
+          .then(result => {
+            if (result.length > 0) {
+
+              var options = {
+                method: 'POST',
+                uri: surl + '/newChScr',
+                body: result,
+                json: true
+              }
+              // console.log(result)
+              request(options, (err, response, body) => {
+                if (err) {
+                  console.log(JSON.stringify(err));
+                  cb(err)
+                } else {
+                  console.log(typeof body);
+                  // body = JSON.parse(body);
+                  if (body.success === 'Children screening uploaded') {
+                    result.forEach(el => {
+                      console.log(el);
+                      knex('tblScrChildren')
+                        .where({
+                          ch_scr_id: el.ch_scr_id
+                        })
+                        .update('upload_status', 1)
+                        .then(result => {
+                          console.log(result)
+                        })
+                    })
+                  }
+                  cb(null, body)
+                }
+              })
+            } else {
+              cb(null, 'No new Scrrening record')
+            }
+          })
+          .catch(e => {
+            cb(e)
+          })
+      },
+      updateChScrNew: (cb) => {
+        knex('tblScrChildren')
+          .where({
+            upload_status: 2
+          })
+          .then(result => {
+            if (result.length > 0) {
+              var options = {
+                method: 'PUT',
+                uri: surl + '/newChScr',
+                body: result,
+                json: true
+              }
+              // console.log(result)
+              request(options, (err, response, body) => {
+                if (err) {
+                  cb(err)
+                } else {
+                  console.log(typeof body);
+                  // body = JSON.parse(body);
+                  if (body.success === 'Children Screening record(s) updated') {
+                    result.forEach(el => {
+                      console.log(el);
+                      knex('tblScrChildren')
+                        .where({
+                          ch_scr_id: el.ch_scr_id
+                        })
+                        .update('upload_status', 1)
+                        .then(result => {
+                          console.log(result)
+                        })
+                    })
+                  }
+                  cb(null, body)
+                }
+              })
+            } else {
+              cb(null, 'No new record')
+            }
+
+          })
+
+          .catch(e => {
+            cb(e)
+          })
+      },
+      uploadPlwScrNew: (cb) => {
+        knex('tblScrPlw')
+          .where({
+            upload_status: 0
+          })
+          .then(result => {
+            if (result.length > 0) {
+
+              var options = {
+                method: 'POST',
+                uri: surl + '/newPlwScr',
+                body: result,
+                json: true
+              }
+              // console.log(result)
+              request(options, (err, response, body) => {
+                if (err) {
+                  console.log(JSON.stringify(err));
+                  cb(err)
+                } else {
+                  console.log(typeof body);
+                  // body = JSON.parse(body);
+                  if (body.success === 'PLW screening uploaded') {
+                    result.forEach(el => {
+                      console.log(el);
+                      knex('tblScrPlw')
+                        .where({
+                          plw_scr_id: el.plw_scr_id
+                        })
+                        .update('upload_status', 1)
+                        .then(result => {
+                          console.log(result)
+                        })
+                    })
+                  }
+                  cb(null, body)
+                }
+              })
+            } else {
+              cb(null, 'No new Scrrening record')
+            }
+          })
+          .catch(e => {
+            cb(e)
+          })
+      },
+      updatePlwScrNew: (cb) => {
+        knex('tblScrPlw')
+          .where({
+            upload_status: 2
+          })
+          .then(result => {
+            if (result.length > 0) {
+              var options = {
+                method: 'PUT',
+                uri: surl + '/newPlwScr',
+                body: result,
+                json: true
+              }
+              // console.log(result)
+              request(options, (err, response, body) => {
+                if (err) {
+                  cb(err)
+                } else {
+                  console.log(typeof body);
+                  // body = JSON.parse(body);
+                  if (body.success === 'PLW Screening record(s) updated') {
+                    result.forEach(el => {
+                      console.log(el);
+                      knex('tblScrPlw')
+                        .where({
+                          plw_scr_id: el.plw_scr_id
+                        })
+                        .update('upload_status', 1)
+                        .then(result => {
+                          console.log(result)
+                        })
+                    })
+                  }
+                  cb(null, body)
+                }
+              })
+            } else {
+              cb(null, 'No new record')
+            }
+
+          })
+
+          .catch(e => {
+            cb(e)
+          })
+      },
+      uploadOtp: (cb) => {
         knex('tblOtpAdd')
-          .where({upload_status: 0})
+          .where({
+            upload_status: 0
+          })
           .orWhereNull('upload_status')
-          .then(result=>{
-            if(result.length > 0 ){
+          .then(result => {
+            if (result.length > 0) {
               var options = {
                 method: 'POST',
                 uri: surl + '/otpv1',
                 body: result,
                 json: true
               }
-              request(options, (err, response, body)=>{
-                if(err){
+              request(options, (err, response, body) => {
+                if (err) {
                   cb(err)
                 } else {
-                  if(body.success === 'OTP Added'){
+                  if (body.success === 'OTP Added') {
                     cb(null, body);
-                    result.forEach(el=>{
+                    result.forEach(el => {
                       knex('tblOtpAdd')
-                          .where({otp_id: el.otp_id})
-                          .update('upload_status',1)
-                          .then(x=>{
-                            console.log(x)
-                          })
+                        .where({
+                          otp_id: el.otp_id
+                        })
+                        .update('upload_status', 1)
+                        .then(x => {
+                          console.log(x)
+                        })
                     })
                   } else {
                     cb(body);
@@ -3670,37 +3975,41 @@ function newSync() {
             } else {
               cb(null, 'OTP Add: No new record')
             }
-           
+
           })
-          .catch(e=>{
+          .catch(e => {
             cb(e)
           })
       },
-      updateOtp: (cb)=>{
+      updateOtp: (cb) => {
         knex('tblOtpAdd')
-          .where({upload_status: 2})
+          .where({
+            upload_status: 2
+          })
           .orWhereNull('upload_status')
-          .then(result=>{
-            if(result.length > 0){
+          .then(result => {
+            if (result.length > 0) {
               var options = {
                 method: 'PUT',
                 uri: surl + '/otpv1',
                 body: result,
                 json: true
               }
-              request(options, (err, response, body)=>{
-                if(err){
+              request(options, (err, response, body) => {
+                if (err) {
                   cb(err)
                 } else {
-                  if(body.success === 'OTP Updated'){
+                  if (body.success === 'OTP Updated') {
                     cb(null, body);
-                    result.forEach(el=>{
+                    result.forEach(el => {
                       knex('tblOtpAdd')
-                          .where({otp_id: el.otp_id})
-                          .update('upload_status',1)
-                          .then(x=>{
-                            console.log(x)
-                          })
+                        .where({
+                          otp_id: el.otp_id
+                        })
+                        .update('upload_status', 1)
+                        .then(x => {
+                          console.log(x)
+                        })
                     })
                   } else {
                     cb(body);
@@ -3710,77 +4019,85 @@ function newSync() {
             } else {
               cb(null, 'OTP Update: No new record')
             }
-            
+
           })
-          .catch(e=>{
+          .catch(e => {
             cb(e)
           })
       },
-      uploadOtpExit: (cb)=>{
+      uploadOtpExit: (cb) => {
         knex('tblOtpExit')
-          .where({upload_status: 0})
+          .where({
+            upload_status: 0
+          })
           .orWhereNull('upload_status')
-          .then(result=>{
-            if(result.length > 0 ){
+          .then(result => {
+            if (result.length > 0) {
               var options = {
                 method: 'POST',
                 uri: surl + '/otpExitv1',
                 body: result,
                 json: true
               }
-              request(options, (err, response, body)=>{
-                if(err){
+              request(options, (err, response, body) => {
+                if (err) {
                   cb(err)
                 } else {
-                  if(body.success === 'OTP Exit Added'){
+                  if (body.success === 'OTP Exit Added') {
                     cb(null, body);
-                    result.forEach(el=>{
+                    result.forEach(el => {
                       knex('tblOtpExit')
-                          .where({exit_id: el.exit_id})
-                          .update('upload_status',1)
-                          .then(x=>{
-                            console.log(x)
-                          })
+                        .where({
+                          exit_id: el.exit_id
+                        })
+                        .update('upload_status', 1)
+                        .then(x => {
+                          console.log(x)
+                        })
                     })
                   } else {
                     cb(body);
                   }
                 }
               })
-            }else {
+            } else {
               cb(null, 'OTP Exit: No new record')
             }
-            
+
           })
-          .catch(e=>{
+          .catch(e => {
             cb(e)
           })
       },
-      updateOtpExit: (cb)=>{
+      updateOtpExit: (cb) => {
         knex('tblOtpExit')
-          .where({upload_status: 2})
+          .where({
+            upload_status: 2
+          })
           .orWhereNull('upload_status')
-          .then(result=>{
-            if(result.length > 0){
+          .then(result => {
+            if (result.length > 0) {
               var options = {
                 method: 'PUT',
                 uri: surl + '/otpExitv1',
                 body: result,
                 json: true
               }
-              request(options, (err, response, body)=>{
-                if(err){
+              request(options, (err, response, body) => {
+                if (err) {
                   cb(err)
                 } else {
-                  if(body.success === 'OTP exit updated'){
+                  if (body.success === 'OTP exit updated') {
                     cb(null, body);
-                    result.forEach(el=>{
+                    result.forEach(el => {
                       knex('tblOtpExit')
-                          .where({exit_id: el.exit_id})
-                          .update('upload_status',1)
-                          .then(x=>{
-                            console.log(x)
-                          })
+                        .where({
+                          exit_id: el.exit_id
+                        })
+                        .update('upload_status', 1)
+                        .then(x => {
+                          console.log(x)
+                        })
                     })
                   } else {
                     cb(body);
@@ -3790,37 +4107,41 @@ function newSync() {
             } else {
               cb(null, 'OTP Exit Update: No new record')
             }
-            
+
           })
-          .catch(e=>{
+          .catch(e => {
             cb(e)
           })
       },
-      uploadSession: (cb)=>{
+      uploadSession: (cb) => {
         knex('tblSessions')
-          .where({upload_status: 0})
+          .where({
+            upload_status: 0
+          })
           .orWhereNull('upload_status')
-          .then(result=>{
-            if(result.length > 0 ){
+          .then(result => {
+            if (result.length > 0) {
               var options = {
                 method: 'POST',
                 uri: surl + '/sessionsv1',
                 body: result,
                 json: true
               }
-              request(options, (err, response, body)=>{
-                if(err){
+              request(options, (err, response, body) => {
+                if (err) {
                   cb(err)
                 } else {
-                  if(body.success === 'Sessions uploaded'){
+                  if (body.success === 'Sessions uploaded') {
                     cb(null, body);
-                    result.forEach(el=>{
+                    result.forEach(el => {
                       knex('tblSessions')
-                          .where({session_id: el.session_id})
-                          .update('upload_status',1)
-                          .then(x=>{
-                            console.log(x)
-                          })
+                        .where({
+                          session_id: el.session_id
+                        })
+                        .update('upload_status', 1)
+                        .then(x => {
+                          console.log(x)
+                        })
                     })
                   } else {
                     cb(body);
@@ -3830,57 +4151,63 @@ function newSync() {
             } else {
               cb(null, 'Session Add: No new record')
             }
-            
+
           })
-          .catch(e=>{
+          .catch(e => {
             cb(e)
           })
       },
-      updateSession: (cb)=>{
+      updateSession: (cb) => {
         knex('tblSessions')
-          .where({upload_status: 2})
+          .where({
+            upload_status: 2
+          })
           .orWhereNull('upload_status')
-          .then(result=>{
-            if(result.length > 0){
+          .then(result => {
+            if (result.length > 0) {
               var options = {
                 method: 'PUT',
                 uri: surl + '/sessionsv1',
                 body: result,
                 json: true
               }
-              request(options, (err, response, body)=>{
-                if(err){
+              request(options, (err, response, body) => {
+                if (err) {
                   cb(err)
                 } else {
-                  if(body.success === 'Sessions Updated'){
+                  if (body.success === 'Sessions Updated') {
                     cb(null, body);
-                    result.forEach(el=>{
+                    result.forEach(el => {
                       knex('tblSessions')
-                          .where({session_id: el.session_id})
-                          .update('upload_status',1)
-                          .then(x=>{
-                            console.log(x)
-                          })
+                        .where({
+                          session_id: el.session_id
+                        })
+                        .update('upload_status', 1)
+                        .then(x => {
+                          console.log(x)
+                        })
                     })
                   } else {
                     cb(body);
                   }
                 }
               })
-            }else{
+            } else {
               cb(null, 'Session Update: No new record')
             }
-            
+
           })
-          .catch(e=>{
+          .catch(e => {
             cb(e)
           })
       },
-      uploadFollowup: (cb)=>{
+      uploadFollowup: (cb) => {
         knex('tblOtpFollowup')
-          .where({upload_status:0})
-          .then(result=>{
-            if(result.length > 0){
+          .where({
+            upload_status: 0
+          })
+          .then(result => {
+            if (result.length > 0) {
               var options = {
                 method: 'POST',
                 uri: surl + '/followupv1',
@@ -3888,20 +4215,22 @@ function newSync() {
                 json: true
               }
               // console.log(result)
-              request(options, (err, response, body)=>{
-                if(err){
+              request(options, (err, response, body) => {
+                if (err) {
                   cb(err)
                 } else {
                   console.log(typeof body);
                   // body = JSON.parse(body);
-                  if(body.success === 'Followups Added'){
+                  if (body.success === 'Followups Added') {
                     cb(null, body)
-                    result.forEach(el=>{
+                    result.forEach(el => {
                       console.log(el);
-                       knex('tblOtpFollowup')
-                        .where({followup_id: el.followup_id})
+                      knex('tblOtpFollowup')
+                        .where({
+                          followup_id: el.followup_id
+                        })
                         .update('upload_status', 1)
-                        .then(result=>{
+                        .then(result => {
                           console.log(result)
                         })
                     })
@@ -3914,35 +4243,40 @@ function newSync() {
               cb(null, 'Followup Add: No new record')
 
             }
-           
-          })          
-          .catch(e=>{
+
+          })
+          .catch(e => {
             cb(e)
           })
       },
-    }, function(err, results){
-      if(err){
-        syncNew.webContents.send('err', {error:'Server not updated'})
-        syncNew.webContents.send('updateServer','a')
+    }, function (err, results) {
+      if (err) {
+        syncNew.webContents.send('err', {
+          error: 'Server not updated'
+        })
+        syncNew.webContents.send('updateServer', 'a')
         console.log(err)
-      } else{
+      } else {
         console.log(results)
-        syncNew.webContents.send('success', {msg: 'Server updated successfully'})
-        syncNew.webContents.send('updateServer','a')
+        syncNew.webContents.send('success', {
+          msg: 'Server updated successfully'
+        })
+        syncNew.webContents.send('updateServer', 'a')
 
       }
     })
   })
   syncNew.on('close', function () {
-    var myChan = ['err','success',
-    'updateServer',
-    'errUpdDb',
-    'successUpdDb',
-    'updateDB']
-  for (const i in myChan){
-    ipcMain.removeAllListeners(myChan[i])
-    console.log('channel removed ', myChan[i])
-  }
+    var myChan = ['err', 'success',
+      'updateServer',
+      'errUpdDb',
+      'successUpdDb',
+      'updateDB'
+    ]
+    for (const i in myChan) {
+      ipcMain.removeAllListeners(myChan[i])
+      console.log('channel removed ', myChan[i])
+    }
     syncNew = null;
   })
 }
@@ -4042,7 +4376,9 @@ const mainMenuTemplate = [
 
 
 
-app.on("window-all-closed", () => {
+app.on('window-all-closed', () => {
   mainWindow = null;
-  app.quit()
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
 })
