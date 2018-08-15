@@ -31,6 +31,11 @@ var knex = require("knex")({
 });
 const serverUrl = 'http://52.15.65.89:5000';
 
+function localDate() {
+  var x = new Date();
+  x.setDate(x.getDate());
+  return x.toLocaleDateString();
+}
 let sucMsg = function (event, listenChannel, message) {
   event.sender.send('success', {
     msg: message

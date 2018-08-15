@@ -29,7 +29,7 @@
       <!-- <div class="form-group row"> -->
       <div class="col-sm-2">
         <label for="site_id" class="col-form-label">Site Name:</label>
-        <select  id="ddHealthHouse" class="form-control form-control-sm" required>
+        <select id="ddHealthHouse" class="form-control form-control-sm" required>
           <option selected disabled>Select One</option>
         </select>
       </div>
@@ -54,12 +54,12 @@
         <button class="btn btn-info btn-sm btn-block form-control shadow-sm" id="showDataScrChildren">
           <i class="fas fa-filter"></i> Show Data</button>
       </div>
-      </div>
-      <div class="row">
-        <div id="jsGrid" class="col-sm-4 table-responsive-sm"></div>
-        <div class="col-sm-8 border border-primary rounded shadow-sm">
-            <form id="scrChildrenUpdForm">
-              <div class="form-group row">
+    </div>
+    <div class="row">
+      <div id="jsGrid" class="col-sm-4 table-responsive-sm"></div>
+      <div class="col-sm-8 border border-primary rounded shadow-sm">
+        <form id="scrChildrenUpdForm">
+          <div class="form-group row">
             <div class="col-sm-4">
               <label for="village" class="col-form-label">Village:</label>
               <input type="text" name="village" id="village" class="form-control form-control-sm" required>
@@ -84,239 +84,315 @@
               <label for="screening_date" class=" col-form-label">Screening Date:</label>
               <input type="date" name="screening_date" id="txtScrChildDate" class="form-control form-control-sm" required>
             </div>
-            
+
           </div>
-    <!-- </div>
+          <!-- </div>
     <div class="row"> -->
-      <table class="table-sm table-bordered rounded">
-        <tr>
-          <th class="bg-info text-white" rowspan="2">Category</th>
-          <th class="bg-info text-white" colspan="2">6-23 Months Children Screened</th>
-          <th class="bg-info text-white" colspan="2">24-59 Months Children Screened</th>
-          <th class="bg-info text-white" rowspan="2">Girls</th>
-          <th class="bg-info text-white" rowspan="2">Boys</th>
-        </tr>
-        <tr>
-          <th class="bg-info text-white">Girls</th>
-          <th class="bg-info text-white">Boys</th>
-          <th class="bg-info text-white">Girls</th>
-          <th class="bg-info text-white">Boys</th>
-        </tr>
-        <tr>
-          <td>Total Screened</td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="total_scr_girls" id="total_scr_girls">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="total_scr_boys" id="total_scr_boys">
-          </td>
-        </tr>
-        <tr>
-          <td>New Screened</td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="new_girls" id="new_girls">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="new_boys" id="new_boys">
-          </td>
-        </tr>
-        <tr>
-          <td>Normal
-            <small>(MUAC &geq; 12.5cm)</small>
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="normal_girls_623" id="normal_girls_623">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="normal_boys_623" id="normal_boys_623">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="normal_girls_2459" id="normal_girls_2459">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="normal_boys_2459" id="normal_boys_2459">
-          </td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-        </tr>
-        <tr>
-          <td>MAM
-            <small>(MUAC 11.5-12.4cm)</small>
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="mam_girls_623" id="mam_girls_623">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="mam_boys_623" id="mam_boys_623">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="mam_girls_2459" id="mam_girls_2459">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="mam_boys_2459" id="mam_boys_2459">
-          </td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-        </tr>
-        <tr>
-          <td>SAM
-            <small>(without Complication MUAC &leq; 12.5cm)</small>
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="sam_without_comp_girls_623" id="sam_without_comp_girls_623">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="sam_without_comp_boys_623" id="sam_without_comp_boys_623">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="sam_without_comp_girls_2459" id="sam_without_comp_girls_2459">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="sam_without_comp_boys_2459" id="sam_without_comp_boyss_2459">
-          </td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-        </tr>
-        <tr>
-          <td>SAM
-            <small>(with Complication MUAC &leq; 12.5cm)</small>
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="sam_with_comp_girls_623" id="sam_with_comp_girls_623">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="sam_with_comp_boys_623" id="sam_with_comp_boys_623">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="sam_with_comp_girls_2459" id="sam_with_comp_girls_2459">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="sam_with_comp_boys_2459" id="sam_with_comp_boyss_2459">
-          </td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-        </tr>
-        <tr>
-          <td>Oedema
-            <small>(Absent)</small>
-          </td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="no_oedema_girls" id="no_oedema_girls">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="no_oedema_boys" id="no_oedema_boys">
-          </td>
-        </tr>
-        <tr>
-          <td>Oedema
-            <small>(&plus;,&plus;&plus;)</small>
-          </td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="plus12_oedema_girls" id="plus12_oedema_girls">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="plus12_oedema_boys" id="plus12_oedema_boys">
-          </td>
-        </tr>
-        <tr>
-          <td>Oedema
-            <small>(&plus;&plus;&plus;)</small>
-          </td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="plus3_oedema_girls" id="plus3_oedema_girls">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="plus3_oedema_boys" id="plus3_oedema_boys">
-          </td>
-        </tr>
-        <tr>
-          <td>Reffer to TSFP </td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="reffer_tsfp_girls" id="reffer_tsfp_girls">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="reffer_tsfp_boys" id="reffer_tsfp_boys">
-          </td>
-        </tr>
-        <tr>
-          <td>Reffer to OTP </td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="reffer_otp_girls" id="reffer_otp_girls">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="reffer_otp_boys" id="reffer_otp_boys">
-          </td>
-        </tr>
-        <tr>
-          <td>Reffer to SC </td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="reffer_sc_girls" id="reffer_sc_girls">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="reffer_sc_boys" id="reffer_sc_boys">
-          </td>
-        </tr>
-        <tr>
-          <td>MNP Sch: Distributed</td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="mnp_30_girls" id="mnp_30_girls">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="mnp_30_boys" id="mnp_30_boys">
-          </td>
-        </tr>
-        <tr>
-          <td>Deworming</td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td class="not-req"></td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="deworming_girls" id="deworming_girls">
-          </td>
-          <td>
-            <input type="number" required class="form-control form-control-sm" name="deworming_boys" id="deworming_boys">
-          </td>
-        </tr>
-      </table>
-      <input type="number" name="ch_scr_id" id="ch_scr_id" required hidden>
-      <button type="submit" id="submitScrChildUpdForm" class="btn btn-sm btn-block btn-warning">Save</button>
+          <table class="table-sm table-bordered rounded">
+            <tr>
+              <th class="bg-info text-white" rowspan="2">Category</th>
+              <th class="bg-info text-white" colspan="2">6-23 Months Children Screened</th>
+              <th class="bg-info text-white" colspan="2">24-59 Months Children Screened</th>
+              <th class="bg-info text-white" rowspan="2">Girls</th>
+              <th class="bg-info text-white" rowspan="2">Boys</th>
+            </tr>
+            <tr>
+              <th class="bg-info text-white">Girls</th>
+              <th class="bg-info text-white">Boys</th>
+              <th class="bg-info text-white">Girls</th>
+              <th class="bg-info text-white">Boys</th>
+            </tr>
+            <tr>
+              <td>Total Screened</td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="total_scr_girls" id="total_scr_girls">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="total_scr_boys" id="total_scr_boys">
+              </td>
+            </tr>
+            <tr>
+              <td>New Screened</td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="new_girls" id="new_girls">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="new_boys" id="new_boys">
+              </td>
+            </tr>
+            <tr>
+              <td>Re-Screened</td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="reScreened_girls" id="reScreened_girls">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="reScreened_boys" id="reScreened_boys">
+              </td>
+            </tr>
+            <tr>
+              <td>Normal
+                <small>(MUAC &geq; 12.5cm)</small>
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="normal_girls_623" id="normal_girls_623">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="normal_boys_623" id="normal_boys_623">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="normal_girls_2459" id="normal_girls_2459">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="normal_boys_2459" id="normal_boys_2459">
+              </td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+            </tr>
+            <tr>
+              <td>MAM
+                <small>(MUAC 11.5-12.4cm)</small>
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="mam_girls_623" id="mam_girls_623">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="mam_boys_623" id="mam_boys_623">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="mam_girls_2459" id="mam_girls_2459">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="mam_boys_2459" id="mam_boys_2459">
+              </td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+            </tr>
+            <tr>
+              <td>SAM
+                <small>(without Complication MUAC &leq; 12.5cm)</small>
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="sam_without_comp_girls_623" id="sam_without_comp_girls_623">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="sam_without_comp_boys_623" id="sam_without_comp_boys_623">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="sam_without_comp_girls_2459" id="sam_without_comp_girls_2459">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="sam_without_comp_boys_2459" id="sam_without_comp_boyss_2459">
+              </td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+            </tr>
+            <tr>
+              <td>SAM
+                <small>(with Complication MUAC &leq; 12.5cm)</small>
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="sam_with_comp_girls_623" id="sam_with_comp_girls_623">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="sam_with_comp_boys_623" id="sam_with_comp_boys_623">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="sam_with_comp_girls_2459" id="sam_with_comp_girls_2459">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="sam_with_comp_boys_2459" id="sam_with_comp_boyss_2459">
+              </td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+            </tr>
+            <tr>
+              <td>Oedema
+                <small>(Absent)</small>
+              </td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="no_oedema_girls" id="no_oedema_girls">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="no_oedema_boys" id="no_oedema_boys">
+              </td>
+            </tr>
+            <tr>
+              <td>Oedema
+                <small>(&plus;,&plus;&plus;)</small>
+              </td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="plus12_oedema_girls" id="plus12_oedema_girls">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="plus12_oedema_boys" id="plus12_oedema_boys">
+              </td>
+            </tr>
+            <tr>
+              <td>Oedema
+                <small>(&plus;&plus;&plus;)</small>
+              </td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="plus3_oedema_girls" id="plus3_oedema_girls">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="plus3_oedema_boys" id="plus3_oedema_boys">
+              </td>
+            </tr>
+            <tr>
+              <td>Reffer to TSFP </td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="reffer_tsfp_girls" id="reffer_tsfp_girls">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="reffer_tsfp_boys" id="reffer_tsfp_boys">
+              </td>
+            </tr>
+            <tr>
+              <td>Reffer to OTP </td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="reffer_otp_girls" id="reffer_otp_girls">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="reffer_otp_boys" id="reffer_otp_boys">
+              </td>
+            </tr>
+            <tr class="bg-warning">
+              <td>MNP Sch: Distributed
+                <small>1st Time</td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="first_mnp_30_girls" id="first_mnp_30_girls">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="first_mnp_30_boys" id="first_mnp_30_boys">
+              </td>
+            </tr>
+            <tr class="bg-warning">
+              <td>MNP Sch: Distributed
+                <small>2nd Time</small>
+              </td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="second_mnp_30_girls" id="second_mnp_30_girls">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="second_mnp_30_boys" id="second_mnp_30_boys">
+              </td>
+            </tr>
+            <tr class="bg-warning">
+              <td>MNP Sch: Distributed
+                <small>3rd Time</small>
+              </td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="third_mnp_30_girls" id="third_mnp_30_girls">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="third_mnp_30_boys" id="third_mnp_30_boys">
+              </td>
+            </tr>
+            <tr class="bg-warning">
+              <td>MNP Sch: Distributed
+                <small>4th Time</small>
+              </td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="fourth_mnp_30_girls" id="fourth_mnp_30_girls">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="fourth_mnp_30_boys" id="fourth_mnp_30_boys">
+              </td>
+            </tr>
+            <tr class="bg-warning">
+              <td>MNP Sch: Distributed
+                <small>5th Time</small>
+              </td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="fifth_mnp_30_girls" id="fifth_mnp_30_girls">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="fifth_mnp_30_boys" id="fifth_mnp_30_boys">
+              </td>
+            </tr>
+            <tr class="bg-warning">
+              <td>MNP Sch: Distributed
+                <small>6th Time</small>
+              </td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="sixth_mnp_30_girls" id="sixth_mnp_30_girls">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="sixth_mnp_30_boys" id="sixth_mnp_30_boys">
+              </td>
+            </tr>
+            <tr>
+              <td>Deworming</td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td class="not-req"></td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="deworming_girls" id="deworming_girls">
+              </td>
+              <td>
+                <input type="number" required class="form-control form-control-sm" name="deworming_boys" id="deworming_boys">
+              </td>
+            </tr>
+          </table>
+          <input type="number" name="ch_scr_id" id="ch_scr_id" required hidden>
+          <button type="submit" id="submitScrChildUpdForm" class="btn btn-sm btn-block btn-warning">Save</button>
       </div>
     </div>
     </form>

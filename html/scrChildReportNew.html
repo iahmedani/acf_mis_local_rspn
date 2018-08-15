@@ -68,11 +68,12 @@
           <th rowspan="2" class="text-center text-capitalize ">Category</th>
           <th rowspan="2" class="text-center text-capitalize ">Total Screened</th>
           <th rowspan="2" class="text-center text-capitalize ">New / First Time Screened Children</th>
+          <th rowspan="2" class="text-center text-capitalize ">Re-Screened Children</th>
           <th colspan="4" class="text-center text-capitalize ">6-23 Months Children</th>
           <th colspan="4" class="text-center text-capitalize ">23-59 Months Children</th>
           <th colspan="3" class="text-center text-capitalize ">Oedema</th>
-          <th colspan="3" class="text-center text-capitalize ">Children Refered to</th>
-          <th rowspan="2" class="text-center text-capitalize ">Total Number of children received 30 sachet of MNP</th>
+          <th colspan="2" class="text-center text-capitalize ">Children Refered to</th>
+          <th rowspan="1" colspan="6" class="text-center text-capitalize ">Total Number of children received 30 sachet of MNP</th>
           <th rowspan="2" class="text-center text-capitalize ">Deworming</th>
         </tr>
         <tr>
@@ -89,12 +90,18 @@
           <th class="text-center text-capitalize ">(&plus;&plus;&plus;)</th>
           <th class="text-center text-capitalize ">TSFP</th>
           <th class="text-center text-capitalize ">OTP</th>
-          <th class="text-center text-capitalize ">SC</th>
+          <th class="text-center text-capitalize">1st</th>
+          <th class="text-center text-capitalize">2nd</th>
+          <th class="text-center text-capitalize">3rd</th>
+          <th class="text-center text-capitalize">4th</th>
+          <th class="text-center text-capitalize">5th</th>
+          <th class="text-center text-capitalize">6th</th>
         </tr>
         <tr>
           <th class="text-center">Total</th>
           <td class="text-center" id="total_scr"></td>
           <td class="text-center" id="total_new"></td>
+          <td class="text-center" id="total_reScreened"></td>
           <td class="text-center" id="total_normal_623"></td>
           <td class="text-center" id="total_mam_623"></td>
           <td class="text-center" id="total_sam_without_comp_623"></td>
@@ -108,14 +115,19 @@
           <td class="text-center" id="total_plus3_oedema"></td>
           <td class="text-center" id="total_tsfp"></td>
           <td class="text-center" id="total_otp"></td>
-          <td class="text-center" id="total_sc"></td>
-          <td class="text-center" id="total_mnp_sch"></td>
+          <td class="text-center" id="total_mnp_sch_first"></td>
+          <td class="text-center" id="total_mnp_sch_second"></td>
+          <td class="text-center" id="total_mnp_sch_third"></td>
+          <td class="text-center" id="total_mnp_sch_fourth"></td>
+          <td class="text-center" id="total_mnp_sch_fifth"></td>
+          <td class="text-center" id="total_mnp_sch_sixth"></td>
           <td class="text-center" id="total_deworming"></td>
         </tr>
         <tr>
           <th class="text-center">Boys</th>
           <td class="text-center" id="total_scr_boys"></td>
           <td class="text-center" id="new_boys"></td>
+          <td class="text-center" id="reScreened_boys"></td>
           <td class="text-center" id="normal_boys_623"></td>
           <td class="text-center" id="mam_boys_623"></td>
           <td class="text-center" id="sam_without_comp_boys_623"></td>
@@ -129,14 +141,19 @@
           <td class="text-center" id="plus3_oedema_boys"></td>
           <td class="text-center" id="reffer_tsfp_boys"></td>
           <td class="text-center" id="reffer_otp_boys"></td>
-          <td class="text-center" id="reffer_sc_boys"></td>
-          <td class="text-center" id="mnp_30_boys"></td>
+          <td class="text-center" id="first_mnp_30_boys"></td>
+          <td class="text-center" id="second_mnp_30_boys"></td>
+          <td class="text-center" id="third_mnp_30_boys"></td>
+          <td class="text-center" id="fourth_mnp_30_boys"></td>
+          <td class="text-center" id="fifth_mnp_30_boys"></td>
+          <td class="text-center" id="sixth_mnp_30_boys"></td>
           <td class="text-center" id="deworming_boys"></td>
         </tr>
         <tr>
           <th class="text-center">Girls</th>
           <td class="text-center" id="total_scr_girls"></td>
           <td class="text-center" id="new_girls"></td>
+          <td class="text-center" id="reScreened_girls"></td>
           <td class="text-center" id="normal_girls_623"></td>
           <td class="text-center" id="mam_girls_623"></td>
           <td class="text-center" id="sam_without_comp_girls_623"></td>
@@ -150,8 +167,12 @@
           <td class="text-center" id="plus3_oedema_girls"></td>
           <td class="text-center" id="reffer_tsfp_girls"></td>
           <td class="text-center" id="reffer_otp_girls"></td>
-          <td class="text-center" id="reffer_sc_girls"></td>
-          <td class="text-center" id="mnp_30_girls"></td>
+          <td class="text-center" id="first_mnp_30_girls"></td>
+          <td class="text-center" id="second_mnp_30_girls"></td>
+          <td class="text-center" id="third_mnp_30_girls"></td>
+          <td class="text-center" id="fourth_mnp_30_girls"></td>
+          <td class="text-center" id="fifth_mnp_30_girls"></td>
+          <td class="text-center" id="sixth_mnp_30_girls"></td>
           <td class="text-center" id="deworming_girls"></td>
         </tr>
       </table>
