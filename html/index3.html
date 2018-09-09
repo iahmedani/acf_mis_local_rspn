@@ -35,6 +35,8 @@
   <link rel="import" href="scrChildrenUpd.html">
   <link rel="import" href="scrChildReportNew.html">
   <link rel="import" href="scrPlwReportNew.html">
+  <link rel="import" href="stockEntry.html">
+  <link rel="import" href="autoStock.html">
 </head>
 <style>
 
@@ -215,6 +217,7 @@
             <a href="#" class="list-group-item" data-parent="#menu1" id="addFollowupOtp">Follow Up</a>
             <a href="#" class="list-group-item" data-parent="#menu1" id="otpExit">Exits</a>
             <a href="#" class="list-group-item" data-parent="#menu1" id="sessions">Sessions</a>
+            <a href="#" class="list-group-item" data-parent="#menu1" id="stockEntry">Stock Entry</a>
           </div>
           <a href="#menu3" class="list-group-item collapsed" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
             <i class="fa fa-book"></i>
@@ -245,6 +248,7 @@
             <!-- <a href="#" class="list-group-item" data-parent="#menu3">FollowUp</a> -->
             <a href="#" class="list-group-item" data-parent="#menu4" id="otpReport">Admission & Exit</a>
             <a href="#" class="list-group-item" data-parent="#menu4" id="defReport">Defaulter</a>
+            <a href="#" class="list-group-item" data-parent="#menu4" id="autoStock">Stock</a>
           </div>
         </div>
       </div>
@@ -372,9 +376,19 @@
     var InitScrChildrenUpd = require('./scrChildrenUpd').initScrChildrenUpd;
     var InitScrPlwNewUpd = require('./scrPlwNewUpd').initScrPlwNewUpd;
     var InitScrChildrenReport = require('./scrChildrenReport').initScrChildrenReport;
-    var InitScrPlwNewReport = require('./scrPlwNewReport').initScrPlwNewReport;
+    var InitScrChildrenReport = require('./scrChildrenReport').initScrChildrenReport;
+    var InitStockEntry = require('./stockEntry').stockEntry;
+    var InitAutoStock = require('./autoStock').autoStock;
     // var InitDefaulterv2 = require('./defaulterv2').initDefaulterv2;
 
+    function autoStockTemplate() {
+      var content = document.querySelector('link[href="autoStock.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitAutoStock();
+    }
     function defReportTemplate() {
       var content = document.querySelector('link[href="defaulterv2.html"]');
       var template = content.import.querySelector('template');
@@ -524,6 +538,18 @@
       InitScrPlwNew();
     }
     
+    function stockEntryTemplate() {
+      var content = document.querySelector('link[href="stockEntry.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitStockEntry();
+    }
+    
+    $('#autoStock').on('click', function () {
+      autoStockTemplate()
+    })
     $('#childScr').on('click', function () {
       addScrChildTemplate1()
     })
@@ -586,6 +612,9 @@
     })
     $('#scrPlwNewReport').on('click',function(){
       scrReportTemplatePlwNew();
+    })
+    $('#stockEntry').on('click',function(){
+      stockEntryTemplate();
     })
   </script>
   <script>

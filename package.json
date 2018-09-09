@@ -1,7 +1,7 @@
 {
   "name": "acf_mis_local",
   "productName": "ACF MIS Local app",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "ACF MIS FOR PINS",
   "main": "main.js",
   "scripts": {
@@ -14,11 +14,13 @@
     "dist": "electron-builder"
   },
   "build": {
-    "publish": [{
-      "provider": "github",
-      "owner": "iahmedani",
-      "repo": "acf_mis_local"
-    }],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "iahmedani",
+        "repo": "acf_mis_local"
+      }
+    ],
     "appId": "com.github.iahmedani.aahmislocalapp",
     "win": {
       "icon": "build/win/logo.ico"
@@ -39,8 +41,9 @@
     "jquery-ui": "^1.12.1",
     "jquery-validation": "^1.17.0",
     "knex": "^0.14.6",
+    "nodemailer": "^4.6.8",
     "request": "^2.87.0",
-    "sqlite3": "^4.0.1",
+    "sqlite3": "^4.0.2",
     "update-electron-app": "^1.3.0",
     "xlsx": "^0.12.13"
   },

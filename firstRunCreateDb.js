@@ -516,4 +516,20 @@ FROM   [main].[v_geo]
 INNER JOIN [main].[tblScrPlw] ON [main].[tblScrPlw].[site_id] = [main].[v_geo].[site_id];
 `
   createNewTable(knex, 'v_tblScrPlwFull', qryScrPlwNewFull);
+
+  var qryStockEntryTable = `CREATE TABLE [tblStock](
+  [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL,  
+  [dn_number] VARCHAR, 
+  [dn_date] DATE, 
+  [country_code] VARCHAR, 
+  [base_code] VARCHAR, 
+  [dept_code] VARCHAR, 
+  [proc_req] VARCHAR, 
+  [proc_line] VARCHAR, 
+  [item_desc] VARCHAR, 
+  [disp_qty] INTEGER, 
+  [disp_unit] VARCHAR, 
+  [rec_qty] INTEGER, 
+  [rec_obs] VARCHAR);`
+  createNewTable(knex, 'tblStock', qryStockEntryTable);
 }

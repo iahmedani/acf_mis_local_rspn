@@ -351,6 +351,51 @@ function sessionUpdateSave(event, item) {
     })
 }
 
+ipcMain.on('rusfStock', (e, data) => {
+  rusfStockDetails(e);
+})
+
+function rusfStockDetails(event) {
+  
+  async.series({
+    dist: cb => {
+      knex.select('*').from('v_total_dist')
+        .sum({ distribution: 'distribution' })
+        .groupBy('month','year')
+        .then(result => cb(null, result))
+        .catch(e=>cb(e))
+    },
+    stockIn: cb => {
+      knex.select('item_desc').as('commodity').from('tblStock')
+        .sum({ rec_qty: 'rec_qty' })
+        .where({ item_desc: 'RUTF Sachets' })
+        .groupBy('item_desc')
+        .then(result => cb(null, result))
+        .catch(e => cb(e))     
+
+    }
+  }, function (err, results) {
+    if (err) {
+        errMsg(event, '', 'Data Fetch error')
+    } else {
+      mainWindow.webContents.send('rusfStock', results);
+      }
+  })
+}
+
+// Save Stock Entry
+function stockSave(event, data) {
+  console.log(data)
+  knex('tblStock')
+    .insert(data)
+    .then(result => {
+      sucMsg(event,'','Stock Entry Save')
+    }).catch(e => {
+      console.log(e)
+      errMsg(event,'','Stock entry db error')
+    })
+}
+
 // Screening Update: Children sending all data
 function allScreeningData(event, qry) {
   db.scrChild(qry, (err, result) => {
@@ -877,6 +922,10 @@ function creatWindow() {
   //Exit Update: Edit (update) one record
   ipcMain.on('otpExitUpdate', (e, data) => {
     exitUpdDataSave(e, data, imran.client);
+  })
+  // Stock Entry:
+  ipcMain.on('stockEntry', (e, data) => {
+    stockSave(e, data);
   })
 
   // children Screening add Data 

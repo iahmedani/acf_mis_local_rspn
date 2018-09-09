@@ -1,0 +1,32 @@
+<template>
+  <div class="col-sm-12">
+    <h5>Test</h5>
+    <table id="stockTab" class="table table-bordered">
+      <tr>
+        <th>Year</th>
+        <th>Month</th>
+        <th>Commodity</th>
+        <th>Total Stock In</th>
+        <th>Total Distriuted</th>
+        <th>Remaining</th>
+      </tr>
+    </table>
+    <div>
+      <table id="summary" class="table table-bordered">
+        <tr>
+          <th>Analysis Type</th>
+          <th>Analysis Value</th>
+        </tr>
+        <tr>
+          <td id="amc">Average Monthly Consumption (AMC) </td>
+          <td id="amc_val"></td>
+        </tr>
+        <tr>
+          <td id="stock">Stock (%)</td>
+          <td id="stock_val"></td>
+        </tr>
+      </table>
+      <button id="reqBtn" class="btn btn-sm btn-primary" hidden>Send Stock Request</button>
+    </div>
+  </div>
+</template>

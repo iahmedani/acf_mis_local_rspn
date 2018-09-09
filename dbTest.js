@@ -1,12 +1,12 @@
-var knex = require('knex')({
-  client: 'sqlite3',
+var knex = require("knex")({
+  client: "sqlite3",
   connection: {
-    filename: 'acf_mis_local.sqlite3'
+    filename: "acf_mis_local.sqlite3"
   }
 });
 
-module.exports.test = function (cond, cb) {
-  knex('scr_report_final')
+module.exports.test = function(cond, cb) {
+  knex("scr_report_final")
     .where({
       province_id: cond
     })
@@ -16,73 +16,73 @@ module.exports.test = function (cond, cb) {
     .catch(err => {
       cb(err);
       console.log(err);
-    })
-}
+    });
+};
 
-module.exports.scrSummary = function (cond, callback) {
-  console.log(cond)
+module.exports.scrSummary = function(cond, callback) {
+  console.log(cond);
 
   if (!cond) {
-    knex('scr_report_final')
+    knex("scr_report_final")
       .sum({
-        tChildScrActive_M: 'tChildScrActive_M'
+        tChildScrActive_M: "tChildScrActive_M"
       })
       .sum({
-        tChildScrActive_F: 'tChildScrActive_F'
+        tChildScrActive_F: "tChildScrActive_F"
       })
       .sum({
-        tPlwScrActive_P: 'tPlwScrActive_P'
+        tPlwScrActive_P: "tPlwScrActive_P"
       })
       .sum({
-        tPlwScrActive_L: 'tPlwScrActive_L'
+        tPlwScrActive_L: "tPlwScrActive_L"
       })
       .sum({
-        tChildScrPassive_M: 'tChildScrPassive_M'
+        tChildScrPassive_M: "tChildScrPassive_M"
       })
       .sum({
-        tChildScrPassive_F: 'tChildScrPassive_F'
+        tChildScrPassive_F: "tChildScrPassive_F"
       })
       .sum({
-        tPlwScrPassive_P: 'tPlwScrPassive_P'
+        tPlwScrPassive_P: "tPlwScrPassive_P"
       })
       .sum({
-        tPlwScrPassive_L: 'tPlwScrPassive_L'
+        tPlwScrPassive_L: "tPlwScrPassive_L"
       })
       .sum({
-        ChildScrActive_M115: 'ChildScrActive_M115'
+        ChildScrActive_M115: "ChildScrActive_M115"
       })
       .sum({
-        ChildScrActive_F115: 'ChildScrActive_F115'
+        ChildScrActive_F115: "ChildScrActive_F115"
       })
       .sum({
-        ChildScrActive_M115124: 'ChildScrActive_M115124'
+        ChildScrActive_M115124: "ChildScrActive_M115124"
       })
       .sum({
-        ChildScrActive_F115124: 'ChildScrActive_F115124'
+        ChildScrActive_F115124: "ChildScrActive_F115124"
       })
       .sum({
-        PlwScrActive_P21: 'PlwScrActive_P21'
+        PlwScrActive_P21: "PlwScrActive_P21"
       })
       .sum({
-        PlwScrActive_L21: 'PlwScrActive_L21'
+        PlwScrActive_L21: "PlwScrActive_L21"
       })
       .sum({
-        ChildScrPassive_M115: 'ChildScrPassive_M115'
+        ChildScrPassive_M115: "ChildScrPassive_M115"
       })
       .sum({
-        ChildScrPassive_F115: 'ChildScrPassive_F115'
+        ChildScrPassive_F115: "ChildScrPassive_F115"
       })
       .sum({
-        ChildScrPassive_M115124: 'ChildScrPassive_M115124'
+        ChildScrPassive_M115124: "ChildScrPassive_M115124"
       })
       .sum({
-        tChildScrPassive_F115124: 'tChildScrPassive_F115124'
+        tChildScrPassive_F115124: "tChildScrPassive_F115124"
       })
       .sum({
-        PlwScrPassive_P21: 'PlwScrPassive_P21'
+        PlwScrPassive_P21: "PlwScrPassive_P21"
       })
       .sum({
-        PlwScrPassive_L21: 'PlwScrPassive_L21'
+        PlwScrPassive_L21: "PlwScrPassive_L21"
       })
       .then(result => {
         // resp.json(result);
@@ -91,70 +91,70 @@ module.exports.scrSummary = function (cond, callback) {
       .catch(err => {
         callback(err);
         // resp.json(err);
-      })
+      });
   } else {
-    knex('scr_report_final')
+    knex("scr_report_final")
       .sum({
-        tChildScrActive_M: 'tChildScrActive_M'
+        tChildScrActive_M: "tChildScrActive_M"
       })
       .sum({
-        tChildScrActive_F: 'tChildScrActive_F'
+        tChildScrActive_F: "tChildScrActive_F"
       })
       .sum({
-        tPlwScrActive_P: 'tPlwScrActive_P'
+        tPlwScrActive_P: "tPlwScrActive_P"
       })
       .sum({
-        tPlwScrActive_L: 'tPlwScrActive_L'
+        tPlwScrActive_L: "tPlwScrActive_L"
       })
       .sum({
-        tChildScrPassive_M: 'tChildScrPassive_M'
+        tChildScrPassive_M: "tChildScrPassive_M"
       })
       .sum({
-        tChildScrPassive_F: 'tChildScrPassive_F'
+        tChildScrPassive_F: "tChildScrPassive_F"
       })
       .sum({
-        tPlwScrPassive_P: 'tPlwScrPassive_P'
+        tPlwScrPassive_P: "tPlwScrPassive_P"
       })
       .sum({
-        tPlwScrPassive_L: 'tPlwScrPassive_L'
+        tPlwScrPassive_L: "tPlwScrPassive_L"
       })
       .sum({
-        ChildScrActive_M115: 'ChildScrActive_M115'
+        ChildScrActive_M115: "ChildScrActive_M115"
       })
       .sum({
-        ChildScrActive_F115: 'ChildScrActive_F115'
+        ChildScrActive_F115: "ChildScrActive_F115"
       })
       .sum({
-        ChildScrActive_M115124: 'ChildScrActive_M115124'
+        ChildScrActive_M115124: "ChildScrActive_M115124"
       })
       .sum({
-        ChildScrActive_F115124: 'ChildScrActive_F115124'
+        ChildScrActive_F115124: "ChildScrActive_F115124"
       })
       .sum({
-        PlwScrActive_P21: 'PlwScrActive_P21'
+        PlwScrActive_P21: "PlwScrActive_P21"
       })
       .sum({
-        PlwScrActive_L21: 'PlwScrActive_L21'
+        PlwScrActive_L21: "PlwScrActive_L21"
       })
       .sum({
-        ChildScrPassive_M115: 'ChildScrPassive_M115'
+        ChildScrPassive_M115: "ChildScrPassive_M115"
       })
       .sum({
-        ChildScrPassive_F115: 'ChildScrPassive_F115'
+        ChildScrPassive_F115: "ChildScrPassive_F115"
       })
       .sum({
-        ChildScrPassive_M115124: 'ChildScrPassive_M115124'
+        ChildScrPassive_M115124: "ChildScrPassive_M115124"
       })
       .sum({
-        tChildScrPassive_F115124: 'tChildScrPassive_F115124'
+        tChildScrPassive_F115124: "tChildScrPassive_F115124"
       })
       .sum({
-        PlwScrPassive_P21: 'PlwScrPassive_P21'
+        PlwScrPassive_P21: "PlwScrPassive_P21"
       })
       .sum({
-        PlwScrPassive_L21: 'PlwScrPassive_L21'
+        PlwScrPassive_L21: "PlwScrPassive_L21"
       })
-      .where((builder) => {
+      .where(builder => {
         if (!cond.date) {
           builder.where(cond);
         } else {
@@ -179,15 +179,14 @@ module.exports.scrSummary = function (cond, callback) {
       .catch(err => {
         callback(err);
         // resp.json(err);
-      })
-
+      });
   }
-}
+};
 
-module.exports.scrPlw = function (cond, callback) {
-  console.log(cond)
+module.exports.scrPlw = function(cond, callback) {
+  console.log(cond);
   if (!cond) {
-    knex('v_screening')
+    knex("v_screening")
       .where({
         is_plw: true
       })
@@ -196,13 +195,13 @@ module.exports.scrPlw = function (cond, callback) {
       })
       .catch(err => {
         callback(err);
-      })
+      });
   } else {
-    knex('v_screening')
+    knex("v_screening")
       .where({
         is_plw: true
       })
-      .where((builder) => {
+      .where(builder => {
         if (!cond.date) {
           builder.where(cond);
         } else {
@@ -225,13 +224,13 @@ module.exports.scrPlw = function (cond, callback) {
       })
       .catch(err => {
         callback(err);
-      })
+      });
   }
-}
+};
 
-module.exports.scrChild = function (cond, callback) {
+module.exports.scrChild = function(cond, callback) {
   if (!cond) {
-    knex('v_screening')
+    knex("v_screening")
       .where({
         is_plw: false
       })
@@ -240,13 +239,13 @@ module.exports.scrChild = function (cond, callback) {
       })
       .catch(err => {
         callback(err);
-      })
+      });
   } else {
-    knex('v_screening')
+    knex("v_screening")
       .where({
         is_plw: false
       })
-      .where((builder) => {
+      .where(builder => {
         if (!cond.date) {
           builder.where(cond);
         } else {
@@ -269,76 +268,73 @@ module.exports.scrChild = function (cond, callback) {
       })
       .catch(err => {
         callback(err);
-      })
-
+      });
   }
-}
+};
 
 function isEmpty(obj) {
   for (var key in obj) {
-    if (obj.hasOwnProperty(key))
-      return false;
+    if (obj.hasOwnProperty(key)) return false;
   }
   return true;
 }
 
-module.exports.updScr = function (data, cb) {
-  knex('Screening')
+module.exports.updScr = function(data, cb) {
+  knex("Screening")
     .where({
       screening_id: data.screening_id
     })
     .update(data)
     .then(res => {
       if (res === 1) {
-        return knex('v_screening')
-          .where({
-            screening_id: data.screening_id
-          })
+        return knex("v_screening").where({
+          screening_id: data.screening_id
+        });
       }
     })
     .then(result => {
-      cb(null, result)
+      cb(null, result);
     })
     .catch(err => {
       cb(err);
-    })
-}
+    });
+};
 
-module.exports.otpAdd = function (cond, callback) {
-  console.log(cond)
-  knex('v_otpAddFull_report')
+module.exports.otpAdd = function(cond, callback) {
+  console.log(cond);
+  knex("v_otpAddFull_report_v2")
     .sum({
-      New_Addmision: 'New_Addmision'
+      New_Addmision: "New_Addmision"
     })
     .sum({
-      Relapse: 'Relapse'
+      Relapse: "Relapse"
     })
     .sum({
-      Def_SFP: 'Def_SFP'
+      Def_SFP: "Def_SFP"
     })
     .sum({
-      Def_OTP: 'Def_OTP'
+      Def_OTP: "Def_OTP"
     })
     .sum({
-      Abbondon: 'Abbondon'
+      Abbondon: "Abbondon"
     })
     .sum({
-      Pro_in_from_SC: 'Pro_in_from_SC'
+      Pro_in_from_SC: "Pro_in_from_SC"
     })
     .sum({
-      Trasfer_in_from_other_OTP: 'Trasfer_in_from_other_OTP'
+      Trasfer_in_from_other_OTP: "Trasfer_in_from_other_OTP"
     })
     .sum({
-      Transfer_in_from_SFP: 'Transfer_in_from_SFP'
+      Transfer_in_from_SFP: "Transfer_in_from_SFP"
     })
     .sum({
-      Other: 'Other'
+      Other: "Other"
     })
     .sum({
-      add_Total: 'add_Total'
+      add_Total: "add_Total"
     })
-    .groupBy(['age', 'gender'])
-    .where((builder) => {
+    .groupBy(["age", "gender"])
+    .where(builder => {
       if (!cond.date) {
         builder.where(cond);
       } else {
@@ -358,45 +354,45 @@ module.exports.otpAdd = function (cond, callback) {
     })
     .then(result => {
       // resp.json(result);
+      console.log(result);
       callback(null, result);
     })
     .catch(err => {
       callback(err);
       // resp.json(err);
-    })
+    });
+};
 
-}
+module.exports.otpExit = function(cond, callback) {
+  console.log(cond);
 
-module.exports.otpExit = function (cond, callback) {
-  console.log(cond)
-
-  knex('v_otpExitFull_report')
+  knex("v_otpExitFull_report")
     .sum({
-      cured: 'cured'
+      cured: "cured"
     })
     .sum({
-      defaulter: 'defaulter'
+      defaulter: "defaulter"
     })
     .sum({
-      non_responder: 'non_responder'
+      non_responder: "non_responder"
     })
     .sum({
-      death: 'death'
+      death: "death"
     })
     .sum({
-      medical_transfer_SC: 'medical_transfer_SC'
+      medical_transfer_SC: "medical_transfer_SC"
     })
     .sum({
-      transfer_out_other_OTP: 'transfer_out_other_OTP'
+      transfer_out_other_OTP: "transfer_out_other_OTP"
     })
     .sum({
-      Other: 'Other'
+      Other: "Other"
     })
     .sum({
-      exit_total: 'exit_total'
+      exit_total: "exit_total"
     })
-    .groupBy(['age', 'gender'])
-    .where((builder) => {
+    .groupBy(["age", "gender"])
+    .where(builder => {
       if (!cond.date) {
         builder.where(cond);
       } else {
@@ -407,10 +403,10 @@ module.exports.otpExit = function (cond, callback) {
           delete newCond.date;
         }
         if (date && isEmpty(newCond)) {
-          builder.whereBetween('exit_date', date.y);
+          builder.whereBetween("exit_date", date.y);
         } else {
           console.log(date);
-          builder.where(newCond).whereBetween('exit_date', date.y);
+          builder.where(newCond).whereBetween("exit_date", date.y);
         }
       }
     })
@@ -421,24 +417,23 @@ module.exports.otpExit = function (cond, callback) {
     .catch(err => {
       callback(err);
       // resp.json(err);
-    })
+    });
+};
 
-}
-
-module.exports.otpAddTable = function (cond, callback) {
-  console.log(cond)
+module.exports.otpAddTable = function(cond, callback) {
+  console.log(cond);
   if (!cond) {
-    knex('v_otpAdd_full')
+    knex("v_otpAdd_full_v2")
       .then(result => {
         callback(null, result);
       })
       .catch(err => {
         callback(err);
-      })
+      });
   } else {
-    knex('v_otpAdd_full')
-      .whereRaw('muac < 11.5')
-      .where((builder) => {
+    knex("v_otpAdd_full")
+      // .whereRaw("muac < 11.5")
+      .where(builder => {
         if (!cond.date) {
           builder.where(cond);
         } else {
@@ -449,34 +444,35 @@ module.exports.otpAddTable = function (cond, callback) {
             delete newCond.date;
           }
           if (date && isEmpty(newCond)) {
-            builder.whereBetween('reg_date', date.y);
+            builder.whereBetween("reg_date", date.y);
           } else {
             console.log(date);
-            builder.where(newCond).whereBetween('reg_date', date.y);
+            builder.where(newCond).whereBetween("reg_date", date.y);
           }
         }
       })
       .then(result => {
+        console.log(result);
         callback(null, result);
       })
       .catch(err => {
         callback(err);
-      })
+      });
   }
-}
+};
 
-module.exports.otpExitTable = function (cond, callback) {
+module.exports.otpExitTable = function(cond, callback) {
   if (!cond) {
-    knex('v_otpExit_full')
+    knex("v_otpExit_full")
       .then(result => {
         callback(null, result);
       })
       .catch(err => {
         callback(err);
-      })
+      });
   } else {
-    knex('v_otpExit_full')
-      .where((builder) => {
+    knex("v_otpExit_full")
+      .where(builder => {
         if (!cond.date) {
           builder.where(cond);
         } else {
@@ -487,10 +483,10 @@ module.exports.otpExitTable = function (cond, callback) {
             delete newCond.date;
           }
           if (date && isEmpty(newCond)) {
-            builder.whereBetween('exit_date', date.y);
+            builder.whereBetween("exit_date", date.y);
           } else {
             console.log(date);
-            builder.where(newCond).whereBetween('exit_date', date.y);
+            builder.where(newCond).whereBetween("exit_date", date.y);
           }
         }
       })
@@ -499,22 +495,21 @@ module.exports.otpExitTable = function (cond, callback) {
       })
       .catch(err => {
         callback(err);
-      })
-
+      });
   }
-}
-module.exports.allScrChildrenData = function (cond, callback) {
+};
+module.exports.allScrChildrenData = function(cond, callback) {
   if (!cond) {
-    knex('v_tblScrChildrenFull')
+    knex("v_tblScrChildrenFull")
       .then(result => {
         callback(null, result);
       })
       .catch(err => {
         callback(err);
-      })
+      });
   } else {
-    knex('v_tblScrChildrenFull')
-      .where((builder) => {
+    knex("v_tblScrChildrenFull")
+      .where(builder => {
         if (!cond.date) {
           builder.where(cond);
         } else {
@@ -525,10 +520,10 @@ module.exports.allScrChildrenData = function (cond, callback) {
             delete newCond.date;
           }
           if (date && isEmpty(newCond)) {
-            builder.whereBetween('screening_date', date.y);
+            builder.whereBetween("screening_date", date.y);
           } else {
             console.log(date);
-            builder.where(newCond).whereBetween('screening_date', date.y);
+            builder.where(newCond).whereBetween("screening_date", date.y);
           }
         }
       })
@@ -537,22 +532,21 @@ module.exports.allScrChildrenData = function (cond, callback) {
       })
       .catch(err => {
         callback(err);
-      })
-
+      });
   }
-}
-module.exports.allScrPlwNewData = function (cond, callback) {
+};
+module.exports.allScrPlwNewData = function(cond, callback) {
   if (!cond) {
-    knex('v_tblScrPlwFull')
+    knex("v_tblScrPlwFull")
       .then(result => {
         callback(null, result);
       })
       .catch(err => {
         callback(err);
-      })
+      });
   } else {
-    knex('v_tblScrPlwFull')
-      .where((builder) => {
+    knex("v_tblScrPlwFull")
+      .where(builder => {
         if (!cond.date) {
           builder.where(cond);
         } else {
@@ -563,10 +557,10 @@ module.exports.allScrPlwNewData = function (cond, callback) {
             delete newCond.date;
           }
           if (date && isEmpty(newCond)) {
-            builder.whereBetween('screening_date', date.y);
+            builder.whereBetween("screening_date", date.y);
           } else {
             console.log(date);
-            builder.where(newCond).whereBetween('screening_date', date.y);
+            builder.where(newCond).whereBetween("screening_date", date.y);
           }
         }
       })
@@ -575,14 +569,14 @@ module.exports.allScrPlwNewData = function (cond, callback) {
       })
       .catch(err => {
         callback(err);
-      })
-
+      });
   }
-}
+};
 
-module.exports.scrChildReport = function (cond, callback) {
+module.exports.scrChildReport = function(cond, callback) {
   if (!cond) {
-    knex.select(
+    knex
+      .select(
         knex.raw(`SUM(total_scr_girls + total_scr_boys) as total_scr,
       SUM(new_boys + new_girls) as total_new,
       SUM(reScreened_boys + reScreened_girls) as total_reScreened,
@@ -605,153 +599,156 @@ module.exports.scrChildReport = function (cond, callback) {
       sum(fourth_mnp_30_girls + fourth_mnp_30_boys) as total_mnp_sch_fourth,
       sum(fifth_mnp_30_girls + fifth_mnp_30_boys) as total_mnp_sch_fifth,
       sum(sixth_mnp_30_girls + sixth_mnp_30_boys) as total_mnp_sch_sixth,
-    sum(deworming_girls + deworming_boys) as total_deworming`)).from('v_tblScrChildrenFull')
+    sum(deworming_girls + deworming_boys) as total_deworming`)
+      )
+      .from("v_tblScrChildrenFull")
       .sum({
-        total_scr_boys: 'total_scr_boys'
+        total_scr_boys: "total_scr_boys"
       })
       .sum({
-        new_boys: 'new_boys'
+        new_boys: "new_boys"
       })
       .sum({
-        reScreened_boys: 'reScreened_boys'
+        reScreened_boys: "reScreened_boys"
       })
       .sum({
-        normal_boys_623: 'normal_boys_623'
+        normal_boys_623: "normal_boys_623"
       })
       .sum({
-        mam_boys_623: 'mam_boys_623'
+        mam_boys_623: "mam_boys_623"
       })
       .sum({
-        sam_without_comp_boys_623: 'sam_without_comp_boys_623'
+        sam_without_comp_boys_623: "sam_without_comp_boys_623"
       })
       .sum({
-        sam_with_comp_boys_623: 'sam_with_comp_boys_623'
+        sam_with_comp_boys_623: "sam_with_comp_boys_623"
       })
       .sum({
-        normal_boys_2459: 'normal_boys_2459'
+        normal_boys_2459: "normal_boys_2459"
       })
       .sum({
-        mam_boys_2459: 'mam_boys_2459'
+        mam_boys_2459: "mam_boys_2459"
       })
       .sum({
-        sam_without_comp_boys_2459: 'sam_without_comp_boys_2459'
+        sam_without_comp_boys_2459: "sam_without_comp_boys_2459"
       })
       .sum({
-        sam_with_comp_boys_2459: 'sam_with_comp_boys_2459'
+        sam_with_comp_boys_2459: "sam_with_comp_boys_2459"
       })
       .sum({
-        no_oedema_boys: 'no_oedema_boys'
+        no_oedema_boys: "no_oedema_boys"
       })
       .sum({
-        plus12_oedema_boys: 'plus12_oedema_boys'
+        plus12_oedema_boys: "plus12_oedema_boys"
       })
       .sum({
-        plus3_oedema_boys: 'plus3_oedema_boys'
+        plus3_oedema_boys: "plus3_oedema_boys"
       })
       .sum({
-        reffer_tsfp_boys: 'reffer_tsfp_boys'
+        reffer_tsfp_boys: "reffer_tsfp_boys"
       })
       .sum({
-        reffer_otp_boys: 'reffer_otp_boys'
+        reffer_otp_boys: "reffer_otp_boys"
       })
       .sum({
-        first_mnp_30_boys: 'first_mnp_30_boys'
+        first_mnp_30_boys: "first_mnp_30_boys"
       })
       .sum({
-        first_mnp_30_girls: 'first_mnp_30_girls'
+        first_mnp_30_girls: "first_mnp_30_girls"
       })
       .sum({
-        second_mnp_30_boys: 'second_mnp_30_boys'
+        second_mnp_30_boys: "second_mnp_30_boys"
       })
       .sum({
-        second_mnp_30_girls: 'second_mnp_30_girls'
+        second_mnp_30_girls: "second_mnp_30_girls"
       })
       .sum({
-        third_mnp_30_boys: 'third_mnp_30_boys'
+        third_mnp_30_boys: "third_mnp_30_boys"
       })
       .sum({
-        third_mnp_30_girls: 'third_mnp_30_girls'
+        third_mnp_30_girls: "third_mnp_30_girls"
       })
       .sum({
-        fourth_mnp_30_boys: 'fourth_mnp_30_boys'
+        fourth_mnp_30_boys: "fourth_mnp_30_boys"
       })
       .sum({
-        fourth_mnp_30_girls: 'fourth_mnp_30_girls'
+        fourth_mnp_30_girls: "fourth_mnp_30_girls"
       })
       .sum({
-        fifth_mnp_30_boys: 'fifth_mnp_30_boys'
+        fifth_mnp_30_boys: "fifth_mnp_30_boys"
       })
       .sum({
-        fifth_mnp_30_girls: 'fifth_mnp_30_girls'
+        fifth_mnp_30_girls: "fifth_mnp_30_girls"
       })
       .sum({
-        sixth_mnp_30_boys: 'sixth_mnp_30_boys'
+        sixth_mnp_30_boys: "sixth_mnp_30_boys"
       })
       .sum({
-        sixth_mnp_30_girls: 'sixth_mnp_30_girls'
+        sixth_mnp_30_girls: "sixth_mnp_30_girls"
       })
       .sum({
-        total_scr_girls: 'total_scr_girls'
+        total_scr_girls: "total_scr_girls"
       })
       .sum({
-        new_girls: 'new_girls'
+        new_girls: "new_girls"
       })
       .sum({
-        reScreened_girls: 'reScreened_girls'
+        reScreened_girls: "reScreened_girls"
       })
       .sum({
-        normal_girls_623: 'normal_girls_623'
+        normal_girls_623: "normal_girls_623"
       })
       .sum({
-        mam_girls_623: 'mam_girls_623'
+        mam_girls_623: "mam_girls_623"
       })
       .sum({
-        sam_without_comp_girls_623: 'sam_without_comp_girls_623'
+        sam_without_comp_girls_623: "sam_without_comp_girls_623"
       })
       .sum({
-        sam_with_comp_girls_623: 'sam_with_comp_girls_623'
+        sam_with_comp_girls_623: "sam_with_comp_girls_623"
       })
       .sum({
-        normal_girls_2459: 'normal_girls_2459'
+        normal_girls_2459: "normal_girls_2459"
       })
       .sum({
-        mam_girls_2459: 'mam_girls_2459'
+        mam_girls_2459: "mam_girls_2459"
       })
       .sum({
-        sam_without_comp_girls_2459: 'sam_without_comp_girls_2459'
+        sam_without_comp_girls_2459: "sam_without_comp_girls_2459"
       })
       .sum({
-        sam_with_comp_girls_2459: 'sam_with_comp_girls_2459'
+        sam_with_comp_girls_2459: "sam_with_comp_girls_2459"
       })
       .sum({
-        no_oedema_girls: 'no_oedema_girls'
+        no_oedema_girls: "no_oedema_girls"
       })
       .sum({
-        plus12_oedema_girls: 'plus12_oedema_girls'
+        plus12_oedema_girls: "plus12_oedema_girls"
       })
       .sum({
-        plus3_oedema_girls: 'plus3_oedema_girls'
+        plus3_oedema_girls: "plus3_oedema_girls"
       })
       .sum({
-        reffer_tsfp_girls: 'reffer_tsfp_girls'
+        reffer_tsfp_girls: "reffer_tsfp_girls"
       })
       .sum({
-        reffer_otp_girls: 'reffer_otp_girls'
+        reffer_otp_girls: "reffer_otp_girls"
       })
       .sum({
-        deworming_boys: 'deworming_boys'
+        deworming_boys: "deworming_boys"
       })
       .sum({
-        deworming_girls: 'deworming_girls'
+        deworming_girls: "deworming_girls"
       })
       .then(result => {
         callback(null, result);
       })
       .catch(err => {
         callback(err);
-      })
+      });
   } else {
-    knex.select(
+    knex
+      .select(
         knex.raw(`SUM(total_scr_girls + total_scr_boys) as total_scr,
     SUM(new_boys + new_girls) as total_new,
     SUM(reScreened_boys + reScreened_girls) as total_reScreened,
@@ -774,146 +771,148 @@ module.exports.scrChildReport = function (cond, callback) {
     sum(fourth_mnp_30_girls + fourth_mnp_30_boys) as total_mnp_sch_fourth,
     sum(fifth_mnp_30_girls + fifth_mnp_30_boys) as total_mnp_sch_fifth,
     sum(sixth_mnp_30_girls + sixth_mnp_30_boys) as total_mnp_sch_sixth,
-  sum(deworming_girls + deworming_boys) as total_deworming`)).from('v_tblScrChildrenFull')
+  sum(deworming_girls + deworming_boys) as total_deworming`)
+      )
+      .from("v_tblScrChildrenFull")
       .sum({
-        total_scr_boys: 'total_scr_boys'
+        total_scr_boys: "total_scr_boys"
       })
       .sum({
-        new_boys: 'new_boys'
+        new_boys: "new_boys"
       })
       .sum({
-        reScreened_boys: 'reScreened_boys'
+        reScreened_boys: "reScreened_boys"
       })
       .sum({
-        normal_boys_623: 'normal_boys_623'
+        normal_boys_623: "normal_boys_623"
       })
       .sum({
-        mam_boys_623: 'mam_boys_623'
+        mam_boys_623: "mam_boys_623"
       })
       .sum({
-        sam_without_comp_boys_623: 'sam_without_comp_boys_623'
+        sam_without_comp_boys_623: "sam_without_comp_boys_623"
       })
       .sum({
-        sam_with_comp_boys_623: 'sam_with_comp_boys_623'
+        sam_with_comp_boys_623: "sam_with_comp_boys_623"
       })
       .sum({
-        normal_boys_2459: 'normal_boys_2459'
+        normal_boys_2459: "normal_boys_2459"
       })
       .sum({
-        mam_boys_2459: 'mam_boys_2459'
+        mam_boys_2459: "mam_boys_2459"
       })
       .sum({
-        sam_without_comp_boys_2459: 'sam_without_comp_boys_2459'
+        sam_without_comp_boys_2459: "sam_without_comp_boys_2459"
       })
       .sum({
-        sam_with_comp_boys_2459: 'sam_with_comp_boys_2459'
+        sam_with_comp_boys_2459: "sam_with_comp_boys_2459"
       })
       .sum({
-        no_oedema_boys: 'no_oedema_boys'
+        no_oedema_boys: "no_oedema_boys"
       })
       .sum({
-        plus12_oedema_boys: 'plus12_oedema_boys'
+        plus12_oedema_boys: "plus12_oedema_boys"
       })
       .sum({
-        plus3_oedema_boys: 'plus3_oedema_boys'
+        plus3_oedema_boys: "plus3_oedema_boys"
       })
       .sum({
-        reffer_tsfp_boys: 'reffer_tsfp_boys'
+        reffer_tsfp_boys: "reffer_tsfp_boys"
       })
       .sum({
-        reffer_otp_boys: 'reffer_otp_boys'
+        reffer_otp_boys: "reffer_otp_boys"
       })
       .sum({
-        first_mnp_30_boys: 'first_mnp_30_boys'
+        first_mnp_30_boys: "first_mnp_30_boys"
       })
       .sum({
-        first_mnp_30_girls: 'first_mnp_30_girls'
+        first_mnp_30_girls: "first_mnp_30_girls"
       })
       .sum({
-        second_mnp_30_boys: 'second_mnp_30_boys'
+        second_mnp_30_boys: "second_mnp_30_boys"
       })
       .sum({
-        second_mnp_30_girls: 'second_mnp_30_girls'
+        second_mnp_30_girls: "second_mnp_30_girls"
       })
       .sum({
-        third_mnp_30_boys: 'third_mnp_30_boys'
+        third_mnp_30_boys: "third_mnp_30_boys"
       })
       .sum({
-        third_mnp_30_girls: 'third_mnp_30_girls'
+        third_mnp_30_girls: "third_mnp_30_girls"
       })
       .sum({
-        fourth_mnp_30_boys: 'fourth_mnp_30_boys'
+        fourth_mnp_30_boys: "fourth_mnp_30_boys"
       })
       .sum({
-        fourth_mnp_30_girls: 'fourth_mnp_30_girls'
+        fourth_mnp_30_girls: "fourth_mnp_30_girls"
       })
       .sum({
-        fifth_mnp_30_boys: 'fifth_mnp_30_boys'
+        fifth_mnp_30_boys: "fifth_mnp_30_boys"
       })
       .sum({
-        fifth_mnp_30_girls: 'fifth_mnp_30_girls'
+        fifth_mnp_30_girls: "fifth_mnp_30_girls"
       })
       .sum({
-        sixth_mnp_30_boys: 'sixth_mnp_30_boys'
+        sixth_mnp_30_boys: "sixth_mnp_30_boys"
       })
       .sum({
-        sixth_mnp_30_girls: 'sixth_mnp_30_girls'
+        sixth_mnp_30_girls: "sixth_mnp_30_girls"
       })
       .sum({
-        total_scr_girls: 'total_scr_girls'
+        total_scr_girls: "total_scr_girls"
       })
       .sum({
-        new_girls: 'new_girls'
+        new_girls: "new_girls"
       })
       .sum({
-        reScreened_girls: 'reScreened_girls'
+        reScreened_girls: "reScreened_girls"
       })
       .sum({
-        normal_girls_623: 'normal_girls_623'
+        normal_girls_623: "normal_girls_623"
       })
       .sum({
-        mam_girls_623: 'mam_girls_623'
+        mam_girls_623: "mam_girls_623"
       })
       .sum({
-        sam_without_comp_girls_623: 'sam_without_comp_girls_623'
+        sam_without_comp_girls_623: "sam_without_comp_girls_623"
       })
       .sum({
-        sam_with_comp_girls_623: 'sam_with_comp_girls_623'
+        sam_with_comp_girls_623: "sam_with_comp_girls_623"
       })
       .sum({
-        normal_girls_2459: 'normal_girls_2459'
+        normal_girls_2459: "normal_girls_2459"
       })
       .sum({
-        mam_girls_2459: 'mam_girls_2459'
+        mam_girls_2459: "mam_girls_2459"
       })
       .sum({
-        sam_without_comp_girls_2459: 'sam_without_comp_girls_2459'
+        sam_without_comp_girls_2459: "sam_without_comp_girls_2459"
       })
       .sum({
-        sam_with_comp_girls_2459: 'sam_with_comp_girls_2459'
+        sam_with_comp_girls_2459: "sam_with_comp_girls_2459"
       })
       .sum({
-        no_oedema_girls: 'no_oedema_girls'
+        no_oedema_girls: "no_oedema_girls"
       })
       .sum({
-        plus12_oedema_girls: 'plus12_oedema_girls'
+        plus12_oedema_girls: "plus12_oedema_girls"
       })
       .sum({
-        plus3_oedema_girls: 'plus3_oedema_girls'
+        plus3_oedema_girls: "plus3_oedema_girls"
       })
       .sum({
-        reffer_tsfp_girls: 'reffer_tsfp_girls'
+        reffer_tsfp_girls: "reffer_tsfp_girls"
       })
       .sum({
-        reffer_otp_girls: 'reffer_otp_girls'
+        reffer_otp_girls: "reffer_otp_girls"
       })
       .sum({
-        deworming_boys: 'deworming_boys'
+        deworming_boys: "deworming_boys"
       })
       .sum({
-        deworming_girls: 'deworming_girls'
+        deworming_girls: "deworming_girls"
       })
-      .where((builder) => {
+      .where(builder => {
         if (!cond.date) {
           builder.where(cond);
         } else {
@@ -924,10 +923,10 @@ module.exports.scrChildReport = function (cond, callback) {
             delete newCond.date;
           }
           if (date && isEmpty(newCond)) {
-            builder.whereBetween('screening_date', date.y);
+            builder.whereBetween("screening_date", date.y);
           } else {
             console.log(date);
-            builder.where(newCond).whereBetween('screening_date', date.y);
+            builder.where(newCond).whereBetween("screening_date", date.y);
           }
         }
       })
@@ -936,14 +935,15 @@ module.exports.scrChildReport = function (cond, callback) {
       })
       .catch(err => {
         callback(err);
-      })
-
+      });
   }
-}
+};
 
-module.exports.scrPlwNewReport = function (cond, callback) {
+module.exports.scrPlwNewReport = function(cond, callback) {
   if (!cond) {
-    knex.select(knex.raw(`SUM(total_scr_pragnent + total_scr_lactating) as total_scr,
+    knex
+      .select(
+        knex.raw(`SUM(total_scr_pragnent + total_scr_lactating) as total_scr,
       Sum(new_scr_pragnent + new_scr_lactating) as total_new,
       Sum(reScreened_scr_pragnent + reScreened_scr_lactating) as total_reScreened,
       sum(muac_le_21_pragnent + muac_le_21_lactating) as total_muac_le_21,
@@ -953,81 +953,85 @@ module.exports.scrPlwNewReport = function (cond, callback) {
       sum(third_ifa_tabs_rec_pragnent + third_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_third,
       sum(fourth_ifa_tabs_rec_pragnent + fourth_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_fourth,
       sum(fifth_ifa_tabs_rec_pragnent + fifth_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_fifth,
-      sum(sixth_ifa_tabs_rec_pragnent + sixth_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_sixth`)).from('v_tblScrPlwFull')
+      sum(sixth_ifa_tabs_rec_pragnent + sixth_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_sixth`)
+      )
+      .from("v_tblScrPlwFull")
       .sum({
-        total_scr_pragnent: 'total_scr_pragnent'
+        total_scr_pragnent: "total_scr_pragnent"
       })
       .sum({
-        total_scr_lactating: 'total_scr_lactating'
+        total_scr_lactating: "total_scr_lactating"
       })
       .sum({
-        new_scr_pragnent: 'new_scr_pragnent'
+        new_scr_pragnent: "new_scr_pragnent"
       })
       .sum({
-        reScreened_scr_pragnent: 'reScreened_scr_pragnent'
+        reScreened_scr_pragnent: "reScreened_scr_pragnent"
       })
       .sum({
-        new_scr_lactating: 'new_scr_lactating'
+        new_scr_lactating: "new_scr_lactating"
       })
       .sum({
-        reScreened_scr_lactating: 'reScreened_scr_lactating'
+        reScreened_scr_lactating: "reScreened_scr_lactating"
       })
       .sum({
-        first_ifa_tabs_rec_pragnent: 'first_ifa_tabs_rec_pragnent'
+        first_ifa_tabs_rec_pragnent: "first_ifa_tabs_rec_pragnent"
       })
       .sum({
-        first_ifa_tabs_rec_lactating: 'first_ifa_tabs_rec_lactating'
+        first_ifa_tabs_rec_lactating: "first_ifa_tabs_rec_lactating"
       })
       .sum({
-        second_ifa_tabs_rec_pragnent: 'second_ifa_tabs_rec_pragnent'
+        second_ifa_tabs_rec_pragnent: "second_ifa_tabs_rec_pragnent"
       })
       .sum({
-        second_ifa_tabs_rec_lactating: 'second_ifa_tabs_rec_lactating'
+        second_ifa_tabs_rec_lactating: "second_ifa_tabs_rec_lactating"
       })
       .sum({
-        third_ifa_tabs_rec_pragnent: 'third_ifa_tabs_rec_pragnent'
+        third_ifa_tabs_rec_pragnent: "third_ifa_tabs_rec_pragnent"
       })
       .sum({
-        third_ifa_tabs_rec_lactating: 'third_ifa_tabs_rec_lactating'
+        third_ifa_tabs_rec_lactating: "third_ifa_tabs_rec_lactating"
       })
       .sum({
-        fourth_ifa_tabs_rec_pragnent: 'fourth_ifa_tabs_rec_pragnent'
+        fourth_ifa_tabs_rec_pragnent: "fourth_ifa_tabs_rec_pragnent"
       })
       .sum({
-        fourth_ifa_tabs_rec_lactating: 'fourth_ifa_tabs_rec_lactating'
+        fourth_ifa_tabs_rec_lactating: "fourth_ifa_tabs_rec_lactating"
       })
       .sum({
-        fifth_ifa_tabs_rec_pragnent: 'fifth_ifa_tabs_rec_pragnent'
+        fifth_ifa_tabs_rec_pragnent: "fifth_ifa_tabs_rec_pragnent"
       })
       .sum({
-        fifth_ifa_tabs_rec_lactating: 'fifth_ifa_tabs_rec_lactating'
+        fifth_ifa_tabs_rec_lactating: "fifth_ifa_tabs_rec_lactating"
       })
       .sum({
-        sixth_ifa_tabs_rec_pragnent: 'sixth_ifa_tabs_rec_pragnent'
+        sixth_ifa_tabs_rec_pragnent: "sixth_ifa_tabs_rec_pragnent"
       })
       .sum({
-        sixth_ifa_tabs_rec_lactating: 'sixth_ifa_tabs_rec_lactating'
+        sixth_ifa_tabs_rec_lactating: "sixth_ifa_tabs_rec_lactating"
       })
       .sum({
-        muac_gt_21_pragnent: 'muac_gt_21_pragnent'
+        muac_gt_21_pragnent: "muac_gt_21_pragnent"
       })
       .sum({
-        muac_gt_21_lactating: 'muac_gt_21_lactating'
+        muac_gt_21_lactating: "muac_gt_21_lactating"
       })
       .sum({
-        muac_le_21_pragnent: 'muac_le_21_pragnent'
+        muac_le_21_pragnent: "muac_le_21_pragnent"
       })
       .sum({
-        muac_le_21_lactating: 'muac_le_21_lactating'
+        muac_le_21_lactating: "muac_le_21_lactating"
       })
       .then(result => {
         callback(null, result);
       })
       .catch(err => {
         callback(err);
-      })
+      });
   } else {
-    knex.select(knex.raw(`SUM(total_scr_pragnent + total_scr_lactating) as total_scr,
+    knex
+      .select(
+        knex.raw(`SUM(total_scr_pragnent + total_scr_lactating) as total_scr,
       Sum(new_scr_pragnent + new_scr_lactating) as total_new,
       Sum(reScreened_scr_pragnent + reScreened_scr_lactating) as total_reScreened,
       sum(muac_le_21_pragnent + muac_le_21_lactating) as total_muac_le_21,
@@ -1037,74 +1041,76 @@ module.exports.scrPlwNewReport = function (cond, callback) {
       sum(third_ifa_tabs_rec_pragnent + third_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_third,
       sum(fourth_ifa_tabs_rec_pragnent + fourth_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_fourth,
       sum(fifth_ifa_tabs_rec_pragnent + fifth_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_fifth,
-      sum(sixth_ifa_tabs_rec_pragnent + sixth_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_sixth`)).from('v_tblScrPlwFull')
+      sum(sixth_ifa_tabs_rec_pragnent + sixth_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_sixth`)
+      )
+      .from("v_tblScrPlwFull")
       .sum({
-        total_scr_pragnent: 'total_scr_pragnent'
+        total_scr_pragnent: "total_scr_pragnent"
       })
       .sum({
-        total_scr_lactating: 'total_scr_lactating'
+        total_scr_lactating: "total_scr_lactating"
       })
       .sum({
-        new_scr_pragnent: 'new_scr_pragnent'
+        new_scr_pragnent: "new_scr_pragnent"
       })
       .sum({
-        reScreened_scr_pragnent: 'reScreened_scr_pragnent'
+        reScreened_scr_pragnent: "reScreened_scr_pragnent"
       })
       .sum({
-        new_scr_lactating: 'new_scr_lactating'
+        new_scr_lactating: "new_scr_lactating"
       })
       .sum({
-        reScreened_scr_lactating: 'reScreened_scr_lactating'
+        reScreened_scr_lactating: "reScreened_scr_lactating"
       })
       .sum({
-        first_ifa_tabs_rec_pragnent: 'first_ifa_tabs_rec_pragnent'
+        first_ifa_tabs_rec_pragnent: "first_ifa_tabs_rec_pragnent"
       })
       .sum({
-        first_ifa_tabs_rec_lactating: 'first_ifa_tabs_rec_lactating'
+        first_ifa_tabs_rec_lactating: "first_ifa_tabs_rec_lactating"
       })
       .sum({
-        second_ifa_tabs_rec_pragnent: 'second_ifa_tabs_rec_pragnent'
+        second_ifa_tabs_rec_pragnent: "second_ifa_tabs_rec_pragnent"
       })
       .sum({
-        second_ifa_tabs_rec_lactating: 'second_ifa_tabs_rec_lactating'
+        second_ifa_tabs_rec_lactating: "second_ifa_tabs_rec_lactating"
       })
       .sum({
-        third_ifa_tabs_rec_pragnent: 'third_ifa_tabs_rec_pragnent'
+        third_ifa_tabs_rec_pragnent: "third_ifa_tabs_rec_pragnent"
       })
       .sum({
-        third_ifa_tabs_rec_lactating: 'third_ifa_tabs_rec_lactating'
+        third_ifa_tabs_rec_lactating: "third_ifa_tabs_rec_lactating"
       })
       .sum({
-        fourth_ifa_tabs_rec_pragnent: 'fourth_ifa_tabs_rec_pragnent'
+        fourth_ifa_tabs_rec_pragnent: "fourth_ifa_tabs_rec_pragnent"
       })
       .sum({
-        fourth_ifa_tabs_rec_lactating: 'fourth_ifa_tabs_rec_lactating'
+        fourth_ifa_tabs_rec_lactating: "fourth_ifa_tabs_rec_lactating"
       })
       .sum({
-        fifth_ifa_tabs_rec_pragnent: 'fifth_ifa_tabs_rec_pragnent'
+        fifth_ifa_tabs_rec_pragnent: "fifth_ifa_tabs_rec_pragnent"
       })
       .sum({
-        fifth_ifa_tabs_rec_lactating: 'fifth_ifa_tabs_rec_lactating'
+        fifth_ifa_tabs_rec_lactating: "fifth_ifa_tabs_rec_lactating"
       })
       .sum({
-        sixth_ifa_tabs_rec_pragnent: 'sixth_ifa_tabs_rec_pragnent'
+        sixth_ifa_tabs_rec_pragnent: "sixth_ifa_tabs_rec_pragnent"
       })
       .sum({
-        sixth_ifa_tabs_rec_lactating: 'sixth_ifa_tabs_rec_lactating'
+        sixth_ifa_tabs_rec_lactating: "sixth_ifa_tabs_rec_lactating"
       })
       .sum({
-        muac_gt_21_pragnent: 'muac_gt_21_pragnent'
+        muac_gt_21_pragnent: "muac_gt_21_pragnent"
       })
       .sum({
-        muac_gt_21_lactating: 'muac_gt_21_lactating'
+        muac_gt_21_lactating: "muac_gt_21_lactating"
       })
       .sum({
-        muac_le_21_pragnent: 'muac_le_21_pragnent'
+        muac_le_21_pragnent: "muac_le_21_pragnent"
       })
       .sum({
-        muac_le_21_lactating: 'muac_le_21_lactating'
+        muac_le_21_lactating: "muac_le_21_lactating"
       })
-      .where((builder) => {
+      .where(builder => {
         if (!cond.date) {
           builder.where(cond);
         } else {
@@ -1115,10 +1121,10 @@ module.exports.scrPlwNewReport = function (cond, callback) {
             delete newCond.date;
           }
           if (date && isEmpty(newCond)) {
-            builder.whereBetween('screening_date', date.y);
+            builder.whereBetween("screening_date", date.y);
           } else {
             console.log(date);
-            builder.where(newCond).whereBetween('screening_date', date.y);
+            builder.where(newCond).whereBetween("screening_date", date.y);
           }
         }
       })
@@ -1127,27 +1133,28 @@ module.exports.scrPlwNewReport = function (cond, callback) {
       })
       .catch(err => {
         callback(err);
-      })
-
+      });
   }
-}
+};
 
-module.exports.AdmissionsReport = function (cond, callback) {
-  knex('v_otpAddNewReport')
-    .select(knex.raw(`count( case when ent_reason = 'no_prv_pro' then '' END ) as newAdmision,
+module.exports.AdmissionsReport = function(cond, callback) {
+  knex("v_otpAddNewReport")
+    .select(
+      knex.raw(`count( case when ent_reason = 'no_prv_pro' then '' END ) as newAdmision,
   count( case when ent_reason = 'relapse' then '' END ) as 'Relapse',
-  sum( case when ent_reason = 'def_sfp' or ent_reason = 'def_otp' then '' END) as 'default',
+  count( case when ent_reason = 'return_def' then '' END) as 'default',
   count( case when ent_reason = 'abb_inp' then '' END ) as 'Abbondon',
   count( case when ent_reason = 'promotion_in_from_sc' then '' END ) as 'Pro_in_from_SC',
   count( case when ent_reason = 'tranfer_in_other_otp' then '' END ) as 'Trasfer_in_from_other_OTP',
   count( case when ent_reason = 'tranfer_in_from_sfp' then '' END ) as 'Transfer_in_from_SFP',
-  count( case when ent_reason = 'other' then '' END ) as 'Other'`))
-    .count({
-      totalAd: 'otp_id'
-    })
-    .select('age', 'gender')
-    .andWhereNotBetween('age', ['above59', 'below_6'])
-    .where((builder) => {
+  count( case when ent_reason = 'other' then '' END ) as 'Other',
+  (case when age BETWEEN 6 AND 23  then 'range6to23' ELSE 'range24-59' END) as age`)
+    )
+    .count({ totalAd: "otp_id" })
+    .select("gender")
+    .whereNull("plw_type")
+    // .andWhereNotBetween("age", ["above59", "below_6"])
+    .where(builder => {
       if (!cond.date) {
         builder.where(cond);
       } else {
@@ -1158,36 +1165,43 @@ module.exports.AdmissionsReport = function (cond, callback) {
           delete newCond.date;
         }
         if (date && isEmpty(newCond)) {
-          builder.whereBetween('reg_date', date.y);
+          builder.whereBetween("reg_date", date.y);
         } else {
           console.log(date);
-          builder.where(newCond).whereBetween('reg_date', date.y);
+          builder.where(newCond).whereBetween("reg_date", date.y);
         }
       }
     })
-    .groupBy('gender', 'age')
-    .then(result => callback(null, result))
-    .catch(e => callback(e));
-}
-
-module.exports.ExitReport = function (cond, callback) {
-  knex('v_otpExitReportNew')
-    .select({
-      eAge: 'age',
-      eGender: 'gender'
+    .groupBy("gender", "age")
+    .then(result => {
+      console.log(result);
+      callback(null, result);
     })
-    .andWhereNotBetween('age', ['above59', 'below_6'])
-    .select(knex.raw(`count( case when exit_reason = 'cured' then '' END ) as 'cured',
+    .catch(e => {
+      console.log(e);
+      callback(e);
+    });
+};
+
+module.exports.ExitReport = function(cond, callback) {
+  knex("v_otpExitReportNew")
+    .select({
+      eGender: "gender"
+    })
+    .whereIn(kne)
+    .select(
+      knex.raw(`count( case when exit_reason = 'cured' then '' END ) as 'cured',
   count( case when exit_reason = 'death' then '' END ) as 'death',
   count( case when exit_reason = 'defaulter' then '' END ) as 'defaulter',
   count( case when exit_reason = 'non_responder' then '' END ) as 'non_responder',
   count( case when exit_reason = 'medical_transfer_sc' then '' END ) as 'medical_transfer_SC',
   count( case when exit_reason = 'transfer_out_to_other_otp' then '' END ) as 'transfer_out_other_OTP',
-  count( case when exit_reason = 'other' then '' END ) as 'Other'`))
+  count( case when exit_reason = 'other' then '' END ) as 'Other'`)
+    )
     .count({
-      totalExit: 'otp_id'
+      totalExit: "otp_id"
     })
-    .where((builder) => {
+    .where(builder => {
       if (!cond.date) {
         builder.where(cond);
       } else {
@@ -1198,14 +1212,14 @@ module.exports.ExitReport = function (cond, callback) {
           delete newCond.date;
         }
         if (date && isEmpty(newCond)) {
-          builder.whereBetween('exit_date', date.y);
+          builder.whereBetween("exit_date", date.y);
         } else {
           console.log(date);
-          builder.where(newCond).whereBetween('exit_date', date.y);
+          builder.where(newCond).whereBetween("exit_date", date.y);
         }
       }
     })
-    .groupBy('gender', 'age')
+    .groupBy("gender", "age")
     .then(result => callback(null, result))
     .catch(e => callback(e));
-}
+};
