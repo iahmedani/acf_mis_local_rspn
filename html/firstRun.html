@@ -70,7 +70,7 @@
         </div>
         <div class="form-group">
           <label for="client">Licence Key:</label>
-          <input type="number" minlength="7" maxlength="7" name="client" class="form-control" id="client" placeholder="AAF Provided software licence key">
+          <input type="text" minlength="36" maxlength="36" name="client" class="form-control" id="client" placeholder="AAF Provided software licence key">
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>
@@ -110,6 +110,7 @@
     $('#myForm').on('submit', function (e) {
       if ($(this).valid()) {
         var formData = $(this).serializeFormJSON();
+        console.log(formData)
         e.preventDefault();
         ipc.send('firstRun', formData);
       }
@@ -137,6 +138,7 @@
         })
       }
     })
+    
   </script>
 
 </body>

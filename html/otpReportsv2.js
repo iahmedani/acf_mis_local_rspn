@@ -1,4 +1,6 @@
-module.exports.initOtpReportsV2 = function() {
+var async = require('async');
+module.exports.initOtpReportsV2 = function () {
+
   $("#ddInterval").on("change", function() {
     var value = $(this).val();
     console.log(value);
@@ -67,7 +69,7 @@ module.exports.initOtpReportsV2 = function() {
     e.preventDefault();
     ipc.send("addExitReport", prepareQry());
     ipc.on("addExitReport", (e, data) => {
-      pushData(data);
+      myPushData(data);
       $("#addExitSummary td:empty").each(function(el, y) {
         $(y).text("0");
       });
@@ -75,102 +77,71 @@ module.exports.initOtpReportsV2 = function() {
       createTblExit(data.exitTable, "tblExit");
     });
   });
-
-  function pushData(x) {
-    console.log(x);
-    var nArr = [];
-    x.add.forEach(adEl => {
-      // console.log(adEl)
-      x.exit.forEach(exEl => {
-        if (adEl.age == exEl.eAge && adEl.gender == exEl.eGender) {
-          adEl.exit = exEl;
-          // console.log(exEl);
-          // var colname = adEl.age + '_' + 'adEl.gender'
-          nArr.push(adEl);
-          // console.log(adEl);
-        } else if (adEl.age != exEl.eAge && adEl.gender != exEl.eGender) {
-          nArr.push(adEl);
-        }
-      });
-    });
-    nArr.forEach(function(el) {
+  
+  function myPushData(x) {
+    console.log(x)
+    x.add.forEach(el => {
       if (el.age == "range6to23" && el.gender == "male") {
-        console.log(true);
-        delete el.age;
-        delete el.gender;
+        console.log("range6to23" + "male")
         for (add in el) {
-          if (add != "exit") {
-            // console.log($(`#623_boys_add_${add}`).text());
-            $(`#623_boys_add_${add}`).empty();
-
-            $(`#623_boys_add_${add}`).text(el[add] ? el[add] : 0);
-          } else {
-            delete el.exit.eAge;
-            delete el.exit.eGender;
-            for (exit in el.exit) {
-              $(`#623_boys_exit_${exit}`).empty();
-              $(`#623_boys_exit_${exit}`).text(el[exit] ? el[exit] : 0);
-            }
-          }
+          $(`#623_boys_add_${add}`).empty();
+          $(`#623_boys_add_${add}`).text(el[add] ? el[add] : 0);
         }
-      } else if (el.age == "range6to23" && el.gender == "female") {
-        delete el.age;
-        delete el.gender;
-        for (add in el) {
-          if (add != "exit") {
-            // console.log($(`#623_girls_add_${add}`).text());
-            $(`#623_girls_add_${add}`).empty();
+        
+      } else if ((el.age == "range6to23" && el.gender == "female")) {
+        console.log("range6to23" + "female")
 
-            $(`#623_girls_add_${add}`).text(el[add] ? el[add] : 0);
-          } else {
-            delete el.exit.eAge;
-            delete el.exit.eGender;
-            for (exit in el.exit) {
-              $(`#623_girls_exit_${exit}`).empty();
-              $(`#623_girls_exit_${exit}`).text(el[exit] ? el[exit] : 0);
-            }
-          }
-        }
-      } else if (el.age == "range24-59" && el.gender == "male") {
-        delete el.age;
-        delete el.gender;
         for (add in el) {
-          if (add != "exit") {
-            // console.log($(`#2459_boys_add_${add}`).text());
-            $(`#2459_boys_add_${add}`).empty();
+          $(`#623_girls_add_${add}`).empty();
+          $(`#623_girls_add_${add}`).text(el[add] ? el[add] : 0);
+        }
+      } else if ((el.age == "range24-59" && el.gender == "male")) {
+        console.log("range24-59" + "male")
 
-            $(`#2459_boys_add_${add}`).text(el[add] ? el[add] : 0);
-          } else {
-            delete el.exit.eAge;
-            delete el.exit.eGender;
-            for (exit in el.exit) {
-              $(`#2459_boys_exit_${exit}`).empty();
-              $(`#2459_boys_exit_${exit}`).text(el[exit] ? el[exit] : 0);
-            }
-          }
-        }
-      } else if (el.age == "range24-59" && el.gender == "female") {
-        delete el.age;
-        delete el.gender;
         for (add in el) {
-          if (add != "exit") {
-            // console.log($(`#2459_girls_add_${add}`).text());
-            $(`#2459_girls_add_${add}`).empty();
-            $(`#2459_girls_add_${add}`).text(el[add] ? el[add] : 0);
-          } else {
-            delete el.exit.eAge;
-            delete el.exit.eGender;
-            for (exit in el.exit) {
-              $(`#2459_girls_exit_${exit}`).empty();
-              $(`#2459_girls_exit_${exit}`).text(el[exit] ? el[exit] : 0);
-            }
-          }
+          $(`#2459_boys_add_${add}`).empty();
+          $(`#2459_boys_add_${add}`).text(el[add] ? el[add] : 0);
+        }
+      } else if ((el.age == "range24-59" && el.gender == "female")) {
+        console.log("range24-59" + "female")
+
+        for (add in el) {
+          $(`#2459_girls_add_${add}`).empty();
+          $(`#2459_girls_add_${add}`).text(el[add] ? el[add] : 0);
         }
       } else {
         console.log(el);
       }
     });
+    x.exit.forEach(el => {
+      if (el.eAge == "range6to23" && el.eGender == "male") {
+        for (exit in el) {
+          $(`#623_boys_exit_${exit}`).empty();
+          $(`#623_boys_exit_${exit}`).text(el[exit] ? el[exit] : 0);
+        }
+        
+      } else if ((el.eAge == "range6to23" && el.eGender == "female")) {
+        for (exit in el) {
+          $(`#623_girls_exit_${exit}`).empty();
+          $(`#623_girls_exit_${exit}`).text(el[exit] ? el[exit] : 0);
+        }
+      } else if ((el.eAge == "range24-59" && el.eGender == "male")) {
+        for (exit in el) {
+          $(`#2459_boys_exit_${exit}`).empty();
+          $(`#2459_boys_exit_${exit}`).text(el[exit] ? el[exit] : 0);
+        }
+      } else if ((el.eAge == "range24-59" && el.eGender == "female")) {
+        for (exit in el) {
+          $(`#2459_girls_exit_${exit}`).empty();
+          $(`#2459_girls_exit_${exit}`).text(el[exit] ? el[exit] : 0);
+        }
+      } else {
+        console.log(el);
+      }
+    });
+
   }
+
 
   function prepareQry() {
     var qry = {};

@@ -106,6 +106,7 @@ module.exports.initScrChildrenReport = function () {
       return new Promise((resolve, reject) => {
         ipc.send('scrChildReport', (qry));
         ipc.on('scrChildReport', (e, result) => {
+          console.log(result)
           if (result.err) {
             reject(result.err)
             ipc.removeAllListeners('scrChildReport')
@@ -124,6 +125,7 @@ module.exports.initScrChildrenReport = function () {
 
         scrChildReport(prepareQry())
           .then(result => {
+            console.log(result)
             putSummaryDataToTable('scrChildNewSum', result.summary)
             createSingleEntryTable('scrChildNewSingle', result.single, fullTextCh, colNameCh)
 

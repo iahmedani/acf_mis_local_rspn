@@ -452,7 +452,6 @@ module.exports.otpAddTable = function(cond, callback) {
         }
       })
       .then(result => {
-        console.log(result);
         callback(null, result);
       })
       .catch(err => {
@@ -1174,11 +1173,9 @@ module.exports.AdmissionsReport = function(cond, callback) {
     })
     .groupBy("gender", "age")
     .then(result => {
-      console.log(result);
       callback(null, result);
     })
     .catch(e => {
-      console.log(e);
       callback(e);
     });
 };
@@ -1186,9 +1183,9 @@ module.exports.AdmissionsReport = function(cond, callback) {
 module.exports.ExitReport = function(cond, callback) {
   knex("v_otpExitReportNew")
     .select({
-      eGender: "gender"
+      eGender: "gender",
     })
-    .whereIn(kne)
+    // .whereIn(kne)
     .select(
       knex.raw(`count( case when exit_reason = 'cured' then '' END ) as 'cured',
   count( case when exit_reason = 'death' then '' END ) as 'death',
@@ -1196,10 +1193,11 @@ module.exports.ExitReport = function(cond, callback) {
   count( case when exit_reason = 'non_responder' then '' END ) as 'non_responder',
   count( case when exit_reason = 'medical_transfer_sc' then '' END ) as 'medical_transfer_SC',
   count( case when exit_reason = 'transfer_out_to_other_otp' then '' END ) as 'transfer_out_other_OTP',
-  count( case when exit_reason = 'other' then '' END ) as 'Other'`)
+  count( case when exit_reason = 'other' then '' END ) as 'Other',
+  (case when age BETWEEN 6 AND 23  then 'range6to23' ELSE 'range24-59' END) as eAge`)
     )
     .count({
-      totalExit: "otp_id"
+      totalExit: "exit_id"
     })
     .where(builder => {
       if (!cond.date) {

@@ -42,7 +42,7 @@ module.exports.autoStock = function () {
   })
   $('#reqBtn').on('click', (e) => {
     var req_val = ((amc_actual * 3) + (amc_actual * 0.15)).toFixed(2)
-    var html = `<style>tr th td { border=0px solid black}</style><p>Dear ACF Team, </p> <p>You are hereby requested to dispatch commodities as per following table</p>
+    var html = `<style>tr th td { border: 0.5px solid black;}</style><p>Dear ACF Team, </p> <p>You are hereby requested to dispatch commodities as per following table</p>
       <table ><tr ><th>Commodity</th><th>Qty</th></tr><tr><td>RUTF Sachets</td><td>${req_val}</td></tr></table><p>Regards, </p>`
     const nodemailer = require('nodemailer');
 
@@ -56,7 +56,8 @@ module.exports.autoStock = function () {
 
     const mailOptions = {
       from: 'PM PINS2 Dadu', // sender address
-      to: 'shumaila.db@gmail.com', // list of receivers
+      to: 'imm.pk@acf-international.org; shumaila.db@gmail.com',
+      cc: 'logco.pk@acf-international.org; dcd.pk@acf-international.org', // list of receivers
       subject: 'Stock Request', // Subject line
       html: html, // html body
     };

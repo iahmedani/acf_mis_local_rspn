@@ -525,6 +525,64 @@ FROM   [main].[v_geo]
 INNER JOIN [main].[tblScrPlw] ON [main].[tblScrPlw].[site_id] = [main].[v_geo].[site_id];
 `
   createNewTable(knex, 'v_tblScrPlwFull', qryScrPlwNewFull);
+
+  var qryOtpExitReportNew = `create view v_otpExitReportNew as
+SELECT 
+       [v_geo].*, 
+       [tblOtpExit].*, 
+       [tblOtpAdd].[gender], 
+       [tblOtpAdd].[age]
+FROM   [main].[v_geo]
+       INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo].[site_id] = [main].[tblOtpAdd].[site_id]
+       INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+`;
+  
+  createNewTable(knex, 'v_otpExitReportNew', qryOtpExitReportNew);
+
+  var qryotpAddNewReport = `SELECT 
+       [v_geo].*, 
+       [main].[tblOtpAdd].[site_village], 
+       [main].[tblOtpAdd].[otp_id], 
+       [main].[tblOtpAdd].[reg_date], 
+       [main].[tblOtpAdd].[reg_id], 
+       [main].[tblOtpAdd].[p_name], 
+       [main].[tblOtpAdd].[f_or_h_name], 
+       [main].[tblOtpAdd].[cnic], 
+       [main].[tblOtpAdd].[address], 
+       [main].[tblOtpAdd].[cnt_number], 
+       [main].[tblOtpAdd].[age], 
+       [main].[tblOtpAdd].[gender], 
+       [main].[tblOtpAdd].[plw_type], 
+       [main].[tblOtpAdd].[ent_reason], 
+       [main].[tblOtpAdd].[ref_type], 
+       [main].[tblOtpAdd].[oedema], 
+       [main].[tblOtpAdd].[muac], 
+       [main].[tblOtpAdd].[diarrhoea], 
+       [main].[tblOtpAdd].[vomiting], 
+       [main].[tblOtpAdd].[cough], 
+       [main].[tblOtpAdd].[appetite], 
+       [main].[tblOtpAdd].[daily_stool], 
+       [main].[tblOtpAdd].[pass_urine], 
+       [main].[tblOtpAdd].[b_Feeding], 
+       [main].[tblOtpAdd].[weight], 
+       [main].[tblOtpAdd].[height], 
+       [main].[tblOtpAdd].[ration1], 
+       [main].[tblOtpAdd].[quantity1], 
+       [main].[tblOtpAdd].[ration2], 
+       [main].[tblOtpAdd].[quantity2], 
+       [main].[tblOtpAdd].[ration3], 
+       [main].[tblOtpAdd].[quantity3], 
+       [main].[tblOtpAdd].[prog_type], 
+       [main].[tblOtpAdd].[upload_status], 
+       [main].[tblOtpAdd].[username], 
+       [main].[tblOtpAdd].[org_name], 
+       [main].[tblOtpAdd].[project_name]
+FROM   [main].[v_geo]
+       INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo].[site_id] = [main].[tblOtpAdd].[site_id]
+`;
+  createNewTable(knex, 'v_otpAddNewReport', qryotpAddNewReport);
+  
+  
 }
 
 firstCreateDb(knex);

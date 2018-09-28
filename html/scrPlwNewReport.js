@@ -122,6 +122,7 @@ module.exports.initScrPlwNewReport = function () {
 
       scrChildReport(prepareQry())
         .then(result => {
+          console.log(result)
           putSummaryDataToTable('scrPlwNewSum', result.summary)
           createSingleEntryTable('scrPlwNewSingle', result.single, fullTextPlw, colNamePlw)
 

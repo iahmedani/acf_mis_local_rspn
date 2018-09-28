@@ -664,6 +664,7 @@ function firstRun() {
   }));
 
   ipcMain.on('firstRun', (e, firstRunInfo) => {
+    require('getmac').getMac((e, mac) => {
     console.log(firstRunInfo);
     var usernameL = firstRunInfo.username.toLowerCase();
     usernameL = usernameL.replace(/\s+/g, '');
@@ -679,29 +680,72 @@ function firstRun() {
 
     var client = firstRunInfo.client.toLowerCase();
     client = client.replace(/\s+/g, '');
-
-
+    
     var configInformation = {
       usernameL,
       org_nameL,
       project_nameL,
       passwordL,
-      client
+      client,
     }
+    
+      configInformation.mac = mac
+      console.log(mac)
+    
 
-    var thisJson = JSON.stringify(configInformation);
-    fs.writeFile('config.json', thisJson, 'utf8', (err) => {
-      if (err) {
-        runFirst.webContents.send('firstRunResponse', ({
-          err: err
-        }))
-      } else {
-        runFirst.webContents.send('firstRunResponse', ({
-          success: 1,
-          msg: 'Your configuration is saved, thanks!!'
-        }))
+
+    
+    console.log(configInformation)
+
+      var thisJson = JSON.stringify(configInformation);
+      var regData = {
+        client_id: client,
+        mac:mac
       }
-    });
+      request({
+        url: serverUrl + '/app_register',
+        method: 'POST',
+        body: {
+          client_id: client,
+          mac: mac
+        },
+        json:true
+      }, function (err, response, body) {
+        console.log(body)
+          if(err) {
+            runFirst.webContents.send('firstRunResponse', ({
+              err:err
+            }))
+          } else  {
+             console.log(body)
+            fs.writeFile('config.json', thisJson, 'utf8', (err) => {
+              if (err) {
+                runFirst.webContents.send('firstRunResponse', ({
+                  err: err
+                }))
+              } else {
+                runFirst.webContents.send('firstRunResponse', ({
+                  success: 1,
+                  msg: 'Your configuration is saved, thanks!!'
+                }))
+              }
+            });
+          } 
+      })
+      
+    // fs.writeFile('config.json', thisJson, 'utf8', (err) => {
+    //   if (err) {
+    //     runFirst.webContents.send('firstRunResponse', ({
+    //       err: err
+    //     }))
+    //   } else {
+    //     runFirst.webContents.send('firstRunResponse', ({
+    //       success: 1,
+    //       msg: 'Your configuration is saved, thanks!!'
+    //     }))
+    //   }
+    //   });
+    })
   })
 
   runFirst.on('closed', function () {
@@ -978,9 +1022,10 @@ function creatWindow() {
       single: (cb) => {
         db.allScrChildrenData(qry, (err, result) => {
           if (err) {
-            cb(err)
             console.log(err);
+            cb(err)
           } else {
+
             cb(null, result)
           }
         })
@@ -990,6 +1035,8 @@ function creatWindow() {
         errMsg(e, '', 'Report db query error, plz try again or contact admin')
         console.log(err);
       } else {
+        console.log(results);
+
         e.sender.send('scrChildReport', ({
           result: results
         }))
@@ -1024,6 +1071,8 @@ function creatWindow() {
         errMsg(e, '', 'Report db query error, plz try again or contact admin')
         console.log(err);
       } else {
+        console.log(results);
+
         e.sender.send('scrPlwNewReport', ({
           result: results
         }))
@@ -1074,8 +1123,11 @@ function creatWindow() {
         }
       }, (err, results) => {
         if (err) {
+          console.log(err)
           errMsg(e, '', 'DB error please try again or contact admin')
         } else {
+          console.log(results
+          )
           e.sender.send('addExitReport', results)
         }
       })
@@ -3465,7 +3517,8 @@ function runDemo() {
 //     syncData = null;
 //   })
 // }
-
+const mac = '01:02:03:0a:0b:0c';
+const appKey = 'A4C74FBD-2375-496E-97BA-C4C3E4D3F868';
 // Creating Admin : sync Refference
 function newSync() {
   const {
@@ -3473,6 +3526,7 @@ function newSync() {
     height
   } = electron.screen.getPrimaryDisplay().workAreaSize
 
+  console.log(imran);
   var surl = serverUrl;
   console.log(surl);
   syncNew = new BrowserWindow({
@@ -3491,6 +3545,9 @@ function newSync() {
         var options = {
           method: 'GET',
           uri: surl + '/getProvince',
+          headers: {
+            'Authorization': `Bearer ${imran.client} ${imran.mac}`
+          },
           // body: result,
           json: true
         }
