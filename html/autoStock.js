@@ -40,6 +40,13 @@ module.exports.autoStock = function () {
 
     }
   })
+  $('#btnConfirmation').on('click', (e) => {
+    var req_val = ((amc_actual * 3) + (amc_actual * 0.15)).toFixed(2)
+    var html = `<h4 class="text-danger"> Do you confirm to send following stock request? </h4>
+      <table class="table table-bordered table-sm" ><tr ><th>Commodity</th><th>Qty</th></tr><tr><td>RUTF Sachets</td><td>${req_val}</td></tr></table>`
+    $('#reqTable').empty();
+    $('#reqTable').append(html);
+    });
   $('#reqBtn').on('click', (e) => {
     var req_val = ((amc_actual * 3) + (amc_actual * 0.15)).toFixed(2)
     var html = `<style>tr th td { border: 0.5px solid black;}</style><p>Dear ACF Team, </p> <p>You are hereby requested to dispatch commodities as per following table</p>
@@ -57,7 +64,7 @@ module.exports.autoStock = function () {
     const mailOptions = {
       from: 'PM PINS2 Dadu', // sender address
       to: 'imm.pk@acf-international.org; shumaila.db@gmail.com',
-      cc: 'logco.pk@acf-international.org; dcd.pk@acf-international.org', // list of receivers
+      // cc: 'logco.pk@acf-international.org; dcd.pk@acf-international.org', // list of receivers
       subject: 'Stock Request', // Subject line
       html: html, // html body
     };

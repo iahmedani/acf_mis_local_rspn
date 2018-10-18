@@ -3590,6 +3590,9 @@ function newSync() {
           method: 'GET',
           uri: surl + '/getDistrict',
           // body: result,
+          headers: {
+            'Authorization': `Bearer ${imran.client} ${imran.mac}`
+          },
           json: true
         }
         request(options, function (err, response, body) {
@@ -3631,6 +3634,9 @@ function newSync() {
           method: 'GET',
           uri: surl + '/getTehsil',
           // body: result,
+          headers: {
+            'Authorization': `Bearer ${imran.client} ${imran.mac}`
+          },
           json: true
         }
         request(options, function (err, response, body) {
@@ -3673,6 +3679,9 @@ function newSync() {
           method: 'GET',
           uri: surl + '/getUC',
           // body: result,
+          headers: {
+            'Authorization': `Bearer ${imran.client} ${imran.mac}`
+          },
           json: true
         }
         request(options, function (err, response, body) {
@@ -3716,6 +3725,9 @@ function newSync() {
           method: 'GET',
           uri: surl + '/getSite',
           // body: result,
+           headers: {
+            'Authorization': `Bearer ${imran.client} ${imran.mac}`
+          },
           json: true
         }
         request(options, function (err, response, body) {
