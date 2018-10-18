@@ -3557,6 +3557,7 @@ function newSync() {
             var data = body;
             if (data.length > 0) {
               data.forEach(el => {
+                delete el.isActive;
                 knex('tblGeoProvince')
                   .where({
                     id: el.id
@@ -3600,6 +3601,8 @@ function newSync() {
             // var data = JSON.parse(body);
             var data = body;
             if (data.length > 0) {
+              delete el.isActive;
+
               data.forEach(el => {
                 knex('tblGeoDistrict')
                   .where({
@@ -3646,6 +3649,7 @@ function newSync() {
             // var data = JSON.parse(body);
             if (data.length > 0) {
               data.forEach(el => {
+                delete el.isActive;
                 knex('tblGeoTehsil')
                   .where({
                     id: el.id
@@ -3690,6 +3694,8 @@ function newSync() {
 
             // var data = JSON.parse(body);
             if (data.length > 0) {
+              delete el.isActive;
+
               data.forEach(el => {
                 knex('tblGeoUC')
                   .where({
@@ -3725,7 +3731,7 @@ function newSync() {
           method: 'GET',
           uri: surl + '/getSite',
           // body: result,
-           headers: {
+          headers: {
             'Authorization': `Bearer ${imran.client} ${imran.mac}`
           },
           json: true
@@ -3736,7 +3742,10 @@ function newSync() {
 
             // var data = JSON.parse(body);
             if (data.length > 0) {
+
               data.forEach(el => {
+                delete el.isActive;
+
                 knex('tblGeoNutSite')
                   .where({
                     id: el.id
