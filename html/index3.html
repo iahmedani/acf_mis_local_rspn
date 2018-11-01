@@ -306,6 +306,12 @@
         })
         ipc.removeAllListeners('province')
       }
+    const commodity = async (com, id)=>{
+        await asyncForEach(com.commodity, async(el)=>{
+          $('#'+id).append(`<option value="${el.item_name}">${el.item_name}</option>`);
+        })
+        ipc.removeAllListeners('commodity')
+      }
     const dist = async (district)=>{
         await asyncForEach(district.district, async(el)=>{
           $('#ddDistrict').append(`<option value="${el.id}">${el.districtName}</option>`);           

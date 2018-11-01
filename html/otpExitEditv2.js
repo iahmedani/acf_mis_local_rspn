@@ -44,7 +44,34 @@ module.exports.initOtpExitEditV2 = function(){
       var datePickerId = document.getElementById('exit_date');
       datePickerId.max = new Date().toISOString().split("T")[0];
     });
-    $(function(){
+  $(function () {
+    var inDays = function (d1, d2) {
+      var date1 = new Date(d1);
+      var date2 = new Date(d2);
+      var t2 = date2.getTime();
+      var t1 = date1.getTime();
+
+      return parseInt((t2 - t1) / (24 * 3600 * 1000));
+    };
+    $('#exit_date').on('change', function () {
+      console.log('clicked')
+      var days = inDays($('#add_date').val(), $(this).val());
+      console.log(days)
+      $('#days_in_program').empty();
+      $('#days_in_program').val(days);
+      var gKgDay = (($('#exit_weight').val() - $('#add_weight').val()) * 1000) / days
+      $('#weight_gain').empty();
+      $('#weight_gain').val(gKgDay);
+    })
+    ipc.send('getCommodity');
+    ipc.on('commodity', function (evt, com) {
+      $('#exit_ration1').children('option:not(:first)').remove();
+      $('#exit_ration2').children('option:not(:first)').remove();
+      $('#exit_ration3').children('option:not(:first)').remove();
+      commodity(com, 'exit_ration1');
+      commodity(com, 'exit_ration2');
+      commodity(com, 'exit_ration3');
+    })
       ipc.send('getProvince');
       ipc.on('province', function(evt, province){
         $('#ddProvince').children('option:not(:first)').remove();   
@@ -232,7 +259,8 @@ module.exports.initOtpExitEditV2 = function(){
             $('#exit_reason').val(data.exit_reason);
             $('#weight_gain').val(data.weight_gain);
             $('#days_in_program').val(data.days_in_program);
-            
+            $('#add_weight').val(data.weight);            
+            $('#add_date').val(data.reg_date);         
             console.log(args.item);
           }
           // ,
@@ -248,6 +276,7 @@ module.exports.initOtpExitEditV2 = function(){
           // }, // on done of controller.updateItem
         });
       })
-    })
-    
+  })
+ 
+ 
 }

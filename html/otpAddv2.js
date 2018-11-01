@@ -1,11 +1,18 @@
-
-
 module.exports.initOtpAdd = function (){
 $(function () {
     var datePickerId = document.getElementById('reg_date');
     datePickerId.max = new Date().toISOString().split("T")[0];
   });
-$(function(){
+  $(function () {
+    ipc.send('getCommodity');
+    ipc.on('commodity', function (evt, com) {
+      $('#ration1').children('option:not(:first)').remove(); 
+      $('#ration2').children('option:not(:first)').remove(); 
+      $('#ration3').children('option:not(:first)').remove();
+      commodity(com, 'ration1');
+      commodity(com, 'ration2');
+      commodity(com, 'ration3');
+    })
   ipc.send('getProvince');
   ipc.on('province', function(evt, province){
     $('#ddProvince').children('option:not(:first)').remove();   

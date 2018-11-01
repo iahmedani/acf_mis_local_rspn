@@ -21,6 +21,19 @@ module.exports.provincev2 = (event)=>{
     console.log(err);
   })
 }
+module.exports.commodity = (event)=>{
+  knex('tblCommodity')
+  .then(result => {
+    event.sender.send('commodity', ({
+      commodity: result
+    }));
+    // console.log(event)
+    // event.removeAllListeners('province');
+  })
+  .catch(err => {
+    console.log(err);
+  })
+}
 module.exports.districtv2 = (province, event)=>{
   knex('tblGeoDistrict')
     .where({

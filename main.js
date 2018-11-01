@@ -250,6 +250,21 @@ function otpExitAddDataSave(event, data, client) {
   data.client_id = client;
   data.upload_status = 0;
   const otpExitAddData = data;
+  console.log({ location: 'OTP ADD EXIT', data });
+  const followup = {
+    otp_id: data.otp_id,
+    client_id: data.client_id,
+    weight: data.exit_weight,
+    ration1: (data.exit_ration1) ? data.exit_ration1 : '' ,
+    quantity1: (data.exit_quantity1) ? data.exit_quantity1 : '',
+    ration2: (data.exit_ration2) ? data.exit_ration2 : '',
+    quantity2: (data.exit_quantity2) ? data.exit_quantity2 : '',
+    ration3: (data.exit_ration3) ? data.exit_ration3 : '',
+    quantity3: (data.exit_quantity3) ? data.exit_quantity3 : '',
+    muac: data.exit_muac,
+    status: data.exit_reason,
+    curr_date: data.exit_date
+  }
   knex('tblOtpExit')
     .insert(data)
     .then(result => {
@@ -264,6 +279,15 @@ function otpExitAddDataSave(event, data, client) {
     .then(result => {
       console.log({
         msg: 'interm table updated',
+        data: result
+      })
+      console.log(followup)
+      return knex('tblOtpFollowup')
+              .insert(followup)
+    })
+    .then(result => {
+      console.log({
+        msg: 'followup table updated',
         data: result
       })
     })
@@ -796,6 +820,10 @@ function creatWindow() {
   ipcMain.on('getProvince', (evt) => {
     geo.provincev2(evt)
 
+    // console.log(ipcMain.getMaxListeners())
+  })
+  ipcMain.on('getCommodity', (evt) => {
+    geo.commodity(evt)
     // console.log(ipcMain.getMaxListeners())
   })
   ipcMain.on('getDistrict', function (event, prov) {
@@ -3601,9 +3629,9 @@ function newSync() {
             // var data = JSON.parse(body);
             var data = body;
             if (data.length > 0) {
-              delete el.isActive;
-
+              
               data.forEach(el => {
+                delete el.isActive;
                 knex('tblGeoDistrict')
                   .where({
                     id: el.id
@@ -3694,9 +3722,9 @@ function newSync() {
 
             // var data = JSON.parse(body);
             if (data.length > 0) {
-              delete el.isActive;
 
               data.forEach(el => {
+                delete el.isActive;
                 knex('tblGeoUC')
                   .where({
                     id: el.id
@@ -3755,6 +3783,53 @@ function newSync() {
                       console.log('Site already avaialble')
                     } else {
                       knex('tblGeoNutSite')
+                        .insert(el)
+                        .then(ret => {
+                          console.log(ret)
+                        })
+                    }
+                  })
+                  .catch(e => {
+                    console.log(e)
+                  })
+
+              })
+              cb(null, body);
+            }
+          } else {
+            cb(err)
+          }
+        })
+      },
+      itemList: (cb) => {
+        var options = {
+          method: 'GET',
+          uri: surl + '/getItems',
+          // body: result,
+          headers: {
+            'Authorization': `Bearer ${imran.client} ${imran.mac}`
+          },
+          json: true
+        }
+        request(options, function (err, response, body) {
+          if (!err) {
+            var data = body;
+
+            // var data = JSON.parse(body);
+            if (data.length > 0) {
+
+              data.forEach(el => {
+                // delete el.isActive;
+
+                knex('tblCommodity')
+                  .where({
+                    id: el.id
+                  })
+                  .then(result => {
+                    if (result.length > 0) {
+                      console.log('Commodity already avaialble')
+                    } else {
+                      knex('tblCommodity')
                         .insert(el)
                         .then(ret => {
                           console.log(ret)

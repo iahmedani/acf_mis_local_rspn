@@ -10,7 +10,7 @@ module.exports.stockEntry = function () {
       if ($('#stockEntryForm').valid()) {
 
         data.push(item);
-        console.log(data);
+        // console.log(data);
       }
 
       // data.push(item);
@@ -43,7 +43,7 @@ module.exports.stockEntry = function () {
       var tempVar = false;
       data.forEach((el, i) => {
         if (el.id == item.id) {
-          console.log('item matched in update')
+          // console.log('item matched in update')
           data[i] = item;
           tempVar = true
         }
@@ -51,7 +51,7 @@ module.exports.stockEntry = function () {
 
       if (tempVar) {
         // delIndex.splice(index, 1);
-        console.log(data);
+        // console.log(data);
         resolve(item)
       } else {
         reject()
@@ -59,7 +59,44 @@ module.exports.stockEntry = function () {
     })
   }
   $(() => {
+    var sendValue = function (varName, value) {
+      // console.log(varName, value)
+      var xx = varName.filter(el => el.item == value)
+      // console.log(xx)
+      return xx;
+    }
     
+    var items = [
+      { Name: "", Id: 0, },
+      { Name: "RUTF", Id: 1,  },
+      { Name: "Test", Id: 2,  }
+    ];
+    // sendValue(items, 1);
+    var Unit = [
+      { Name: '', Id: 0 , item: ''},
+      { Name: 'Carton', Id: 1, item:'RUTF'},
+      { Name: 'Kg', Id: 2 , item:'Test'}
+    ];
+    var Description = [
+      {
+        Name: '', Id: 0,item:''
+      },
+      { Name: 'Test1', Id: 1,item:'RUTF' },
+      { Name: 'Test2', Id: 2,item:'Test' }
+    ];
+    var SubUnit = [
+      {
+        Name: '', Id: 0,item:''
+      },
+      {
+        Name: 'Sch', Id: 1,item:'RUTF'
+      },
+      {
+        Name: 'Tab', Id: 2,item:'Test'
+      }
+    ]
+    // var itemId = '';
+
     $("#jsGrid").jsGrid({
       width: "100%",
       height: "400px",
@@ -77,7 +114,7 @@ module.exports.stockEntry = function () {
           return myInsert(item)
         },
         updateItem: function (item) {
-          console.log('updateitem clicked', item)
+          // console.log('updateitem clicked', item)
           return updItem(item)
         },
 
@@ -87,18 +124,75 @@ module.exports.stockEntry = function () {
       },
 
       fields: [
-        {name:'country_code', title:'Country Code', type:'text'},
-        {name:'base_code', title:'Base Code', type:'text'},
-        {name:'dept_code', title:'Dept Code', type:'text'},
-        {name:'proc_req', title:'Proc: Req: #', type:'text'},
-        {name:'proc_line', title:'Proc: Line', type:'text'},
-        {name:'item_desc', title:'Description', type:'text'},
-        {name:'disp_qty', title:'Quantity', type:'number'},
-        {name:'disp_unit', title:'Unit', type:'text'},
+        // {name:'country_code', title:'Country Code', type:'text'},
+        // {name:'base_code', title:'Base Code', type:'text'},
+        // {name:'dept_code', title:'Dept Code', type:'text'},
+        // {name:'proc_req', title:'Proc: Req: #', type:'text'},
+        // {name:'proc_line', title:'Proc: Line', type:'text'},
+        {
+          name: 'item_name', title: 'Item', type: 'select', items: items, valueField: "Name",
+          textField: "Name", valueType:'string',insertTemplate: function () {
+            var descField = this._grid.fields[1];
+            var unitField = this._grid.fields[2];
+            var subUnitField = this._grid.fields[3];
+            var $inertControl = jsGrid.fields.select.prototype.insertTemplate.call(this);
+            $inertControl.on('change', function () {
+              var itemId = $(this).val();
+              descField.items = sendValue(Description, itemId);
+              $(".item_desc-insert").empty().append(descField.insertTemplate());
+              unitField.items = sendValue(Unit, itemId);
+              $(".disp_unit-insert").empty().append(unitField.insertTemplate());
+              subUnitField.items = sendValue(SubUnit, itemId);
+              $(".disp_sub_unit-insert").empty().append(subUnitField.insertTemplate());
+
+            })
+            return $inertControl;
+          },
+          editTemplate: function (value) {
+            var descField = this._grid.fields[1];
+            var unitField = this._grid.fields[2];
+            var subUnitField = this._grid.fields[3];
+            var $editControl = jsGrid.fields.select.prototype.editTemplate.call(this, value);
+
+            var changeItem = function () {
+              var editVal = $editControl.val();
+              // console.log({editVal: editVal})
+              descField.items = sendValue(Description, editVal);
+              $(".item_desc-update").empty().append(descField.editTemplate());
+              unitField.items = sendValue(Unit, editVal);
+              $(".disp_unit-update").empty().append(unitField.editTemplate());
+              subUnitField.items = sendValue(SubUnit, editVal);
+              $(".disp_sub_unit-update").empty().append(subUnitField.editTemplate());
+            };
+            $editControl.on('change', changeItem);
+            changeItem();
+            return $editControl;
+          }
+        },
+        {
+          name: 'item_desc', title: 'Description', type: 'select', items: Description
+          , valueField: "Name", valueType: 'string',
+          textField: "Name", insertcss: 'item_desc-insert', updatecss: 'item_desc-update', itemTemplate: function (item_desc) {
+            return item_desc;
+          }
+      },
+        {
+          name: 'disp_unit', title: 'Unit', type: 'select', items: Unit, valueField: "Name", valueType: 'string',
+          textField: "Name", insertcss: 'disp_unit-insert', updatecss: 'disp_unit-update', itemTemplate: function (disp_unit) {
+            return disp_unit;
+          }
+        },
+        {
+          name: 'disp_sub_unit', title: 'Sub Unit', type: 'select', items: SubUnit, valueField: "Name", valueType: 'string',
+          textField: "Name", insertcss: 'disp_sub_unit-insert', updatecss: 'disp_sub_unit-update', itemTemplate: function (disp_sub_unit) {
+            return disp_sub_unit;
+          }},
+        {name:'disp_qty', title:'Quantity Dispatched', type:'number'},
         { name: 'rec_qty', title:'Received  Quantity (*)', type:'number'},
         { name: 'rec_obs', title:'Quality, observations', type:'text'},
       {
         type: "control",
+        editButton: false, modeSwitchButton: false 
       }
       ],
 

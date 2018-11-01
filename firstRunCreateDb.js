@@ -521,15 +521,20 @@ INNER JOIN [main].[tblScrPlw] ON [main].[tblScrPlw].[site_id] = [main].[v_geo].[
   [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL,  
   [dn_number] VARCHAR, 
   [dn_date] DATE, 
-  [country_code] VARCHAR, 
-  [base_code] VARCHAR, 
-  [dept_code] VARCHAR, 
-  [proc_req] VARCHAR, 
-  [proc_line] VARCHAR, 
+  [item_name] VARCHAR, 
   [item_desc] VARCHAR, 
   [disp_qty] INTEGER, 
   [disp_unit] VARCHAR, 
+  [disp_sub_unit] VARCHAR, 
   [rec_qty] INTEGER, 
   [rec_obs] VARCHAR);`
   createNewTable(knex, 'tblStock', qryStockEntryTable);
+
+  var qryCommodityTable = `CREATE TABLE [tblCommodity](
+  [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL,  
+  [item_name] VARCHAR,
+  [item_desc] VARCHAR,
+  [item_unit] VARCHAR,
+  [item_sub_unit] VARCHAR);`
+  createNewTable(knex, 'tblCommodity', qryCommodityTable);
 }

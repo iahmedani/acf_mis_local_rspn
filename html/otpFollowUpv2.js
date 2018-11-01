@@ -139,183 +139,143 @@ module.exports.initOtpFollowUp = function (){
     $('#ddHealthHouse').on('change', function () {
       var site_id = $(this).val();
       console.log('site_id', site_id);
-      var commodity = [{
-        Name: 'Choose',
-        value: 'none'
-      }, {
-        Name: 'RUTF Sachets',
-        value: 'RUTF Sachets'
-      }, {
-        Name: 'Amoxicillin',
-        value: 'Amoxicillin'
-      }, {
-        Name: 'Folic Acid',
-        value: 'Folic Acid'
-      }, {
-        Name: 'MM Sachets',
-        value: 'MM Sachets'
-      }, {
-        Name: 'MM Tablets',
-        value: 'MM Tablets'
-      }, {
-        Name: 'Mebendazole',
-        value: 'Mebendazole'
-      }, {
-        Name: 'Meteronidazole',
-        value: 'Meteronidazole'
-      }, {
-        Name: 'Paracetamol',
-        value: 'Paracetamol'
-      }, {
-        Name: 'Chloroquine',
-        value: 'Chloroquine'
-      }, {
-        Name: 'Zinc',
-        value: 'Zinc'
-      }, {
-        Name: 'Tertacycline',
-        value: 'Tertacycline'
-      }, {
-        Name: 'Benzyl Benzoate',
-        value: 'Benzyl Benzoate'
-      }, {
-        Name: 'IYCF Cups & Spoons',
-        value: 'IYCF_Cups_and_Spoons'
-      }]
-      
+      ipc.send('getCommodity');
 
-      $("#jsGrid").jsGrid({
-        height: "500px",
-        width: "100%",
-        // filtering: true,
-        // inserting: true,
-        editing: true,
-        // sorting: true,
-        paging: true,
-        autoload: true,
-        pageLoading: true, // this is the clue
-        pageSize: 10,
-        pageButtonCount: 5,
-        deleteConfirm: "Do you really want to delete client?",
-        controller: {
-          loadData: function (filter) {
-            console.log('loaddata', site_id)
-            return getInterimData(site_id);
-          },
-          updateItem: function (item) {
-            console.log('update')
-            // item.followup_date = $('#followup_date').val();
-            console.log(item);
-            return addFollowup(item);
+      ipc.on('commodity', (evt, com) => {
+        var commodities = [{Name:'Choose', value:'none'}]
+        com.commodity.forEach((el, i) => {
+          commodities.push({ Name: el.item_name, value: el.item_name });
+          if (com.commodity.length - 1 == i) {
+            grid(commodities);
           }
-        },
-        fields: [
-          // {
-          //   name: "otp_id",
-          //   title: "ID",
-          //   type: "number",
-          //   width: 30,
-          //   editing: false
-          // },
-           {
-            name: "reg_id",
-            title: "Reg #",
-            type: "text",
-            width: 50,
-            editing: false
-          }, {
-            name: "p_name",
-            title: "Name",
-            type: "text",
-            width: 100,
-            editing: false
-          }, {
-            name: "f_or_h_name",
-            title: "Husband Name",
-            type: "text",
-            width: 100,
-            editing: false
-          }, {
-            name: "site_village",
-            title: "Village",
-            type: "text",
-            width: 100,
-            editing: false
+        })
+      })
+      function grid( commodities) {
+        $("#jsGrid").jsGrid({
+          height: "500px",
+          width: "100%",
+          // filtering: true,
+          // inserting: true,
+          editing: true,
+          // sorting: true,
+          paging: true,
+          autoload: true,
+          pageLoading: true, // this is the clue
+          pageSize: 10,
+          pageButtonCount: 5,
+          deleteConfirm: "Do you really want to delete client?",
+          controller: {
+            loadData: function (filter) {
+              console.log('loaddata', site_id)
+              return getInterimData(site_id);
+            },
+            updateItem: function (item) {
+              console.log('update')
+              // item.followup_date = $('#followup_date').val();
+              console.log(item);
+              return addFollowup(item);
+            }
           },
-          {
-            name: "weight",
-            title: "Weight",
-            type: "number",
-            width: 50,
-            editing: true,
-            validate: "required"
-          }, {
-            name: 'ration1',
-            title: 'Ration-1',
-            type: 'select',
-            items: commodity,
-            valueField: 'value',
-            textField: 'Name',
-            width: 80,
-            validate: "required"
-          }, {
-            name: 'quantity1',
-            title: 'Qty-1',
-            type: 'number',
-            width: 40,
-            validate:{
-              validator: "min",
-             param:0
-            }
-          }, {
-            name: 'ration2',
-            title: 'Ration-2',
-            type: 'select',
-            items: commodity,
-            valueField: 'value',
-            textField: 'Name',
-            width: 80,
-            validate: "required"
-          }, {
-            name: 'quantity2',
-            title: 'Qty-2',
-            type: 'number',
-            width: 40,
-            validate:{
-              validator: "min",
-             param:0
-            }
-          }, {
-            name: 'ration3',
-            title: 'Ration-3',
-            type: 'select',
-            items: commodity,
-            valueField: 'value',
-            textField: 'Name',
-            width: 80,
-            validate: "required"
-          }, {
-            name: 'quantity3',
-            title: 'Qty-3',
-            type: 'number',
-            width: 50,
-            validate:{
-              validator: "min",
-             param:0
-            }
-          },{
-              name:'next_followup',
+          fields: [
+            // {
+            //   name: "otp_id",
+            //   title: "ID",
+            //   type: "number",
+            //   width: 30,
+            //   editing: false
+            // },
+            {
+              name: "reg_id",
+              title: "Reg #",
+              type: "text",
+              width: 50,
+              editing: false
+            }, {
+              name: "p_name",
+              title: "Name",
+              type: "text",
+              width: 100,
+              editing: false
+            }, {
+              name: "f_or_h_name",
+              title: "Husband Name",
+              type: "text",
+              width: 100,
+              editing: false
+            }, {
+              name: "site_village",
+              title: "Village",
+              type: "text",
+              width: 100,
+              editing: false
+            },
+            {
+              name: "weight",
+              title: "Weight",
+              type: "number",
+              width: 50,
+              editing: true,
+              validate: "required"
+            }, {
+              name: 'ration1',
+              title: 'Ration-1',
+              type: 'select',
+              items: commodities,
+              valueField: 'value',
+              textField: 'Name',
+              width: 80,
+              validate: "required"
+            }, {
+              name: 'quantity1',
+              title: 'Qty-1',
+              type: 'number',
+              width: 40,
+              validate: {
+                validator: "min",
+                param: 0
+              }
+            }, {
+              name: 'ration2',
+              title: 'Ration-2',
+              type: 'select',
+              items: commodities,
+              valueField: 'value',
+              textField: 'Name',
+              width: 80
+            }, {
+              name: 'quantity2',
+              title: 'Qty-2',
+              type: 'number',
+              width: 40
+            }, {
+              name: 'ration3',
+              title: 'Ration-3',
+              type: 'select',
+              items: commodities,
+              valueField: 'value',
+              textField: 'Name',
+              width: 80,
+            }, {
+              name: 'quantity3',
+              title: 'Qty-3',
+              type: 'number',
+              width: 50
+            }, {
+              name: 'next_followup',
               type: 'date',
-              title:'Next Follow Up',
-            editing: false,
-            align:'right'
+              title: 'Next Follow Up',
+              editing: false,
+              align: 'right'
 
             }, {
-            type: "control",
-            deleteButton: false,
-          }
-        ]
-      });
+              type: "control",
+              deleteButton: false,
+            }
+          ]
+        });
+      }
+
+      
     })
 
 }
