@@ -595,4 +595,33 @@ module.exports.initOtpAddUpdV2 = function() {
   //     // addScrChildTemplate()
   //   e.preventDefault();
   // })
+  function rusfOnWeigth(_weight) {
+    console.log(_weight);
+    if ($('#ddProgramType').val() == 'otp') {
+      $('#ration1').val('RUTF');
+      var qty = $('#quantity1');
+      if (_weight >= 3.5 && _weight <= 3.9) {
+        qty.val(11);
+      } else if (_weight >= 4 && _weight <= 5.4) {
+        qty.val(14);
+      } else if (_weight >= 5.5 && _weight <= 6.9) {
+        qty.val(18)
+      } else if (_weight >= 7 && _weight <= 8.4) {
+        qty.val(21)
+      } else if (_weight >= 8.5 && _weight <= 9.4) {
+        qty.val(25)
+      } else if (_weight >= 9.5 && _weight <= 10.4) {
+        qty.val(28)
+      } else if (_weight >= 10.5 && _weight <= 11.9) {
+        qty.val(32)
+      } else if (_weight >= 12) {
+        qty.val(35)
+      }
+    }
+  }
+
+  $('#weight').on('change', function (e) {
+    var _weight = $(this).val();
+    rusfOnWeigth(_weight);
+  })
 };

@@ -537,4 +537,26 @@ INNER JOIN [main].[tblScrPlw] ON [main].[tblScrPlw].[site_id] = [main].[v_geo].[
   [item_unit] VARCHAR,
   [item_sub_unit] VARCHAR);`
   createNewTable(knex, 'tblCommodity', qryCommodityTable);
+
+  var qryv_stockDist = `create view v_stockDist as 
+select ration, month, year, sum(quantity) as tQuantity from (select ration1 as ration, quantity1 as quantity, STRFTIME('%m',[main].[tblOtpAdd].[reg_date]) AS [month], STRFTIME('%Y',[main].[tblOtpAdd].[reg_date]) AS [year] from tblOtpAdd WHERE ration1 <> ''
+UNION ALL
+select ration2 as ration, quantity2 as quantity,  STRFTIME('%m',[main].[tblOtpAdd].[reg_date]) AS [month], STRFTIME('%Y',[main].[tblOtpAdd].[reg_date]) AS [year] from tblOtpAdd WHERE ration2
+<> ''
+UNION ALL 
+select ration3 as ration, quantity3 as quantity,  STRFTIME('%m',[main].[tblOtpAdd].[reg_date]) AS [month], STRFTIME('%Y',[main].[tblOtpAdd].[reg_date]) AS [year] from tblOtpAdd WHERE ration3
+<> ''
+UNION ALL
+select ration1 as ration, quantity1 as quantity,  STRFTIME('%m',[main].[tblOtpFollowup].[curr_date]) AS [month], STRFTIME('%Y',[main].[tblOtpFollowup].[curr_date]) AS [year] from tblOtpFollowup WHERE ration1
+<> ''
+UNION ALL
+select ration2 as ration, quantity2 as quantity, STRFTIME('%m',[main].[tblOtpFollowup].[curr_date]) AS [month], STRFTIME('%Y',[main].[tblOtpFollowup].[curr_date]) AS [year]  from tblOtpFollowup WHERE ration2
+<> ''
+UNION ALL 
+select ration3 as ration, quantity3 as quantity, STRFTIME('%m',[main].[tblOtpFollowup].[curr_date]) AS [month], STRFTIME('%Y',[main].[tblOtpFollowup].[curr_date]) AS [year]  from tblOtpFollowup WHERE ration3
+<> ''
+)
+where ration is not null  and quantity > 0
+group by ration, month, year;`
+  createNewTable(knex, 'v_stockDist', qryv_stockDist);
 }

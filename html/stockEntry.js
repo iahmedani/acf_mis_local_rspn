@@ -65,138 +65,171 @@ module.exports.stockEntry = function () {
       // console.log(xx)
       return xx;
     }
-    
-    var items = [
-      { Name: "", Id: 0, },
-      { Name: "RUTF", Id: 1,  },
-      { Name: "Test", Id: 2,  }
-    ];
-    // sendValue(items, 1);
-    var Unit = [
-      { Name: '', Id: 0 , item: ''},
-      { Name: 'Carton', Id: 1, item:'RUTF'},
-      { Name: 'Kg', Id: 2 , item:'Test'}
-    ];
-    var Description = [
-      {
-        Name: '', Id: 0,item:''
-      },
-      { Name: 'Test1', Id: 1,item:'RUTF' },
-      { Name: 'Test2', Id: 2,item:'Test' }
-    ];
-    var SubUnit = [
-      {
-        Name: '', Id: 0,item:''
-      },
-      {
-        Name: 'Sch', Id: 1,item:'RUTF'
-      },
-      {
-        Name: 'Tab', Id: 2,item:'Test'
-      }
-    ]
-    // var itemId = '';
+    ipc.send('getCommodity');
+    ipc.on('commodity', (evt, com) => {
+      var Description  = [{ Name: '', Id: 0, item: '' }];
+      var Unit  = [{ Name: '', Id: 0, item: '' }];
+      var SubUnit  = [{ Name: '', Id: 0, item: '' }];
+      var items = [{ Name: "", Id: 0, }];
+      com.commodity.forEach((el, i) => {
+        Description.push({
+          Name: el.item_desc,
+          Id: el.id,
+          item: el.item_name
+        })
+        Unit.push({
+          Name: el.item_unit,
+          Id: el.id,
+          item: el.item_name
+        })
+        SubUnit.push({
+          Name: el.item_sub_unit,
+          Id: el.id,
+          item: el.item_name
+        })
+        items.push({
+          Name: el.item_name,
+          Id: el.id,
+        })
+        if (com.commodity.length - 1 == i) {
+          stockGrid(Description, Unit, items, SubUnit);
+        }
+      })
+    })
+    // var items = [
+    //   { Name: "", Id: 0, },
+    //   { Name: "RUTF", Id: 1,  },
+    //   { Name: "Test", Id: 2,  }
+    // ];
+    // // sendValue(items, 1);
+    // var Unit = [
+    //   { Name: '', Id: 0 , item: ''},
+    //   { Name: 'Carton', Id: 1, item:'RUTF'},
+    //   { Name: 'Kg', Id: 2 , item:'Test'}
+    // ];
+    // var Description = [
+    //   {
+    //     Name: '', Id: 0,item:''
+    //   },
+    //   { Name: 'Test1', Id: 1,item:'RUTF' },
+    //   { Name: 'Test2', Id: 2,item:'Test' }
+    // ];
+    // var SubUnit = [
+    //   {
+    //     Name: '', Id: 0,item:''
+    //   },
+    //   {
+    //     Name: 'Sch', Id: 1,item:'RUTF'
+    //   },
+    //   {
+    //     Name: 'Tab', Id: 2,item:'Test'
+    //   }
+    // ]
+    // // var itemId = '';
+    function stockGrid(Description, Unit, items, SubUnit) {
+      $("#jsGrid").jsGrid({
+        width: "100%",
+        height: "400px",
 
-    $("#jsGrid").jsGrid({
-      width: "100%",
-      height: "400px",
+        inserting: true,
+        editing: true,
+        sorting: true,
+        paging: true,
 
-      inserting: true,
-      editing: true,
-      sorting: true,
-      paging: true,
-
-      controller: {
-        loadData: (filter) => {
-          return data;
-        },
-        insertItem: (item) => {
-          return myInsert(item)
-        },
-        updateItem: function (item) {
-          // console.log('updateitem clicked', item)
-          return updItem(item)
-        },
-
-        deleteItem: function (item) {
-          return delItem(item);
-        },
-      },
-
-      fields: [
-        // {name:'country_code', title:'Country Code', type:'text'},
-        // {name:'base_code', title:'Base Code', type:'text'},
-        // {name:'dept_code', title:'Dept Code', type:'text'},
-        // {name:'proc_req', title:'Proc: Req: #', type:'text'},
-        // {name:'proc_line', title:'Proc: Line', type:'text'},
-        {
-          name: 'item_name', title: 'Item', type: 'select', items: items, valueField: "Name",
-          textField: "Name", valueType:'string',insertTemplate: function () {
-            var descField = this._grid.fields[1];
-            var unitField = this._grid.fields[2];
-            var subUnitField = this._grid.fields[3];
-            var $inertControl = jsGrid.fields.select.prototype.insertTemplate.call(this);
-            $inertControl.on('change', function () {
-              var itemId = $(this).val();
-              descField.items = sendValue(Description, itemId);
-              $(".item_desc-insert").empty().append(descField.insertTemplate());
-              unitField.items = sendValue(Unit, itemId);
-              $(".disp_unit-insert").empty().append(unitField.insertTemplate());
-              subUnitField.items = sendValue(SubUnit, itemId);
-              $(".disp_sub_unit-insert").empty().append(subUnitField.insertTemplate());
-
-            })
-            return $inertControl;
+        controller: {
+          loadData: (filter) => {
+            return data;
           },
-          editTemplate: function (value) {
-            var descField = this._grid.fields[1];
-            var unitField = this._grid.fields[2];
-            var subUnitField = this._grid.fields[3];
-            var $editControl = jsGrid.fields.select.prototype.editTemplate.call(this, value);
+          insertItem: (item) => {
+            return myInsert(item)
+          },
+          updateItem: function (item) {
+            // console.log('updateitem clicked', item)
+            return updItem(item)
+          },
 
-            var changeItem = function () {
-              var editVal = $editControl.val();
-              // console.log({editVal: editVal})
-              descField.items = sendValue(Description, editVal);
-              $(".item_desc-update").empty().append(descField.editTemplate());
-              unitField.items = sendValue(Unit, editVal);
-              $(".disp_unit-update").empty().append(unitField.editTemplate());
-              subUnitField.items = sendValue(SubUnit, editVal);
-              $(".disp_sub_unit-update").empty().append(subUnitField.editTemplate());
-            };
-            $editControl.on('change', changeItem);
-            changeItem();
-            return $editControl;
-          }
+          deleteItem: function (item) {
+            return delItem(item);
+          },
         },
-        {
-          name: 'item_desc', title: 'Description', type: 'select', items: Description
-          , valueField: "Name", valueType: 'string',
-          textField: "Name", insertcss: 'item_desc-insert', updatecss: 'item_desc-update', itemTemplate: function (item_desc) {
-            return item_desc;
-          }
-      },
-        {
-          name: 'disp_unit', title: 'Unit', type: 'select', items: Unit, valueField: "Name", valueType: 'string',
-          textField: "Name", insertcss: 'disp_unit-insert', updatecss: 'disp_unit-update', itemTemplate: function (disp_unit) {
-            return disp_unit;
-          }
-        },
-        {
-          name: 'disp_sub_unit', title: 'Sub Unit', type: 'select', items: SubUnit, valueField: "Name", valueType: 'string',
-          textField: "Name", insertcss: 'disp_sub_unit-insert', updatecss: 'disp_sub_unit-update', itemTemplate: function (disp_sub_unit) {
-            return disp_sub_unit;
-          }},
-        {name:'disp_qty', title:'Quantity Dispatched', type:'number'},
-        { name: 'rec_qty', title:'Received  Quantity (*)', type:'number'},
-        { name: 'rec_obs', title:'Quality, observations', type:'text'},
-      {
-        type: "control",
-        editButton: false, modeSwitchButton: false 
-      }
-      ],
 
-    });
+        fields: [
+          // {name:'country_code', title:'Country Code', type:'text'},
+          // {name:'base_code', title:'Base Code', type:'text'},
+          // {name:'dept_code', title:'Dept Code', type:'text'},
+          // {name:'proc_req', title:'Proc: Req: #', type:'text'},
+          // {name:'proc_line', title:'Proc: Line', type:'text'},
+          {
+            name: 'item_name', title: 'Item', type: 'select', items: items, valueField: "Name",
+            textField: "Name", valueType: 'string', insertTemplate: function () {
+              var descField = this._grid.fields[1];
+              var unitField = this._grid.fields[2];
+              var subUnitField = this._grid.fields[3];
+              var $inertControl = jsGrid.fields.select.prototype.insertTemplate.call(this);
+              $inertControl.on('change', function () {
+                var itemId = $(this).val();
+                descField.items = sendValue(Description, itemId);
+                $(".item_desc-insert").empty().append(descField.insertTemplate());
+                unitField.items = sendValue(Unit, itemId);
+                $(".disp_unit-insert").empty().append(unitField.insertTemplate());
+                subUnitField.items = sendValue(SubUnit, itemId);
+                $(".disp_sub_unit-insert").empty().append(subUnitField.insertTemplate());
+
+              })
+              return $inertControl;
+            },
+            editTemplate: function (value) {
+              var descField = this._grid.fields[1];
+              var unitField = this._grid.fields[2];
+              var subUnitField = this._grid.fields[3];
+              var $editControl = jsGrid.fields.select.prototype.editTemplate.call(this, value);
+
+              var changeItem = function () {
+                var editVal = $editControl.val();
+                // console.log({editVal: editVal})
+                descField.items = sendValue(Description, editVal);
+                $(".item_desc-update").empty().append(descField.editTemplate());
+                unitField.items = sendValue(Unit, editVal);
+                $(".disp_unit-update").empty().append(unitField.editTemplate());
+                subUnitField.items = sendValue(SubUnit, editVal);
+                $(".disp_sub_unit-update").empty().append(subUnitField.editTemplate());
+              };
+              $editControl.on('change', changeItem);
+              changeItem();
+              return $editControl;
+            }
+          },
+          {
+            name: 'item_desc', title: 'Description', type: 'select', items: Description
+            , valueField: "Name", valueType: 'string',
+            textField: "Name", insertcss: 'item_desc-insert', updatecss: 'item_desc-update', itemTemplate: function (item_desc) {
+              return item_desc;
+            }
+          },
+          {
+            name: 'disp_unit', title: 'Unit', type: 'select', items: Unit, valueField: "Name", valueType: 'string',
+            textField: "Name", insertcss: 'disp_unit-insert', updatecss: 'disp_unit-update', itemTemplate: function (disp_unit) {
+              return disp_unit;
+            }
+          },
+          {
+            name: 'disp_sub_unit', title: 'Sub Unit', type: 'select', items: SubUnit, valueField: "Name", valueType: 'string',
+            textField: "Name", insertcss: 'disp_sub_unit-insert', updatecss: 'disp_sub_unit-update', itemTemplate: function (disp_sub_unit) {
+              return disp_sub_unit;
+            }
+          },
+          { name: 'disp_qty', title: 'Quantity Dispatched', type: 'number' },
+          { name: 'rec_qty', title: 'Received  Quantity (*)', type: 'number' },
+          { name: 'rec_obs', title: 'Quality, observations', type: 'text' },
+          {
+            type: "control",
+            editButton: false, modeSwitchButton: false
+          }
+        ],
+
+      });
+    }
+    
   });
   $(function () {
     var datePickerId = document.getElementById('dn_date');

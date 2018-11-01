@@ -163,7 +163,7 @@ $('#otpAddSubmit').on('click', (e)=>{
   function rusfOnWeigth(_weight) {
     console.log(_weight);
     if ($('#ddProgramType').val() == 'otp') {
-      $('#ration1').val('RUTF Sachets');
+      $('#ration1').val('RUTF');
       var qty = $('#quantity1');
       if (_weight >= 3.5 && _weight <= 3.9) {
         qty.val(11);
