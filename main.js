@@ -374,38 +374,64 @@ function sessionUpdateSave(event, item) {
       }))
     })
 }
-
-ipcMain.on('rusfStock', (e, data) => {
-  rusfStockDetails(e);
+ipcMain.on('stocks', (e, data) => {
+  stockMovement(e);
 })
-
-function rusfStockDetails(event) {
-  
-  async.series({
-    dist: cb => {
-      knex.select('*').from('v_total_dist')
-        .sum({ distribution: 'distribution' })
-        .groupBy('month','year')
-        .then(result => cb(null, result))
-        .catch(e=>cb(e))
-    },
-    stockIn: cb => {
-      knex.select('item_desc').as('commodity').from('tblStock')
-        .sum({ rec_qty: 'rec_qty' })
-        .where({ item_desc: 'RUTF Sachets' })
-        .groupBy('item_desc')
-        .then(result => cb(null, result))
-        .catch(e => cb(e))     
-
-    }
-  }, function (err, results) {
-    if (err) {
-        errMsg(event, '', 'Data Fetch error')
-    } else {
-      mainWindow.webContents.send('rusfStock', results);
-      }
-  })
+function stockMovement(event) {
+  knex('v_StockMovement')
+    .orderBy('year', 'asc')
+    .orderBy('month', 'asc')
+    .then(result => {
+      mainWindow.webContents.send('stocks', result)
+    })
+    .catch(e => {
+      errMsg(event, '', 'Data Fetch error')
+    })
 }
+ipcMain.on('enterRequest', (event, data)=>{
+  stockRequest(event, data);
+})
+function stockRequest(event, data) {
+  knex('tblStockRequest')
+    .insert(data)
+    .then(result => {
+      sucMsg(event, '', 'Stock request email is sent')
+    })
+    .catch(e => {
+      errMsg(event, '', 'Stock Request: Db error ')
+    })
+}
+// ipcMain.on('rusfStock', (e, data) => {
+//   rusfStockDetails(e);
+// })
+
+// function rusfStockDetails(event) {
+  
+//   async.series({
+//     dist: cb => {
+//       knex.select('*').from('v_total_dist')
+//         .sum({ distribution: 'distribution' })
+//         .groupBy('month','year')
+//         .then(result => cb(null, result))
+//         .catch(e=>cb(e))
+//     },
+//     stockIn: cb => {
+//       knex.select('item_desc').as('commodity').from('tblStock')
+//         .sum({ rec_qty: 'rec_qty' })
+//         .where({ item_desc: 'RUTF Sachets' })
+//         .groupBy('item_desc')
+//         .then(result => cb(null, result))
+//         .catch(e => cb(e))     
+
+//     }
+//   }, function (err, results) {
+//     if (err) {
+//         errMsg(event, '', 'Data Fetch error')
+//     } else {
+//       mainWindow.webContents.send('rusfStock', results);
+//       }
+//   })
+// }
 
 // Save Stock Entry
 function stockSave(event, data) {

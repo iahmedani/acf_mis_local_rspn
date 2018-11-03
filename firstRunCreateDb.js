@@ -537,6 +537,18 @@ INNER JOIN [main].[tblScrPlw] ON [main].[tblScrPlw].[site_id] = [main].[v_geo].[
   [item_unit] VARCHAR,
   [item_sub_unit] VARCHAR);`
   createNewTable(knex, 'tblCommodity', qryCommodityTable);
+  createNewTable(knex, 'tblStock', qryStockEntryTable);
+
+  var qrytblStockRequest = `CREATE TABLE [tblStockRequest](
+  [id] INT PRIMARY KEY UNIQUE, 
+  [req_date] DATE NOT NULL, 
+  [req_district] VARCHAR NOT NULL, 
+  [req_email] VARCHAR NOT NULL, 
+  [req_sender] VARCHAR NOT NULL, 
+  [req_data] TEXT NOT NULL, 
+  [req_id] VARCHAR NOT NULL);
+`
+  createNewTable(knex, 'tblStockRequest', qrytblStockRequest);
 
   var qryv_stockDist = `create view v_stockDist as 
 select ration, month, year, sum(quantity) as tQuantity from (select ration1 as ration, quantity1 as quantity, STRFTIME('%m',[main].[tblOtpAdd].[reg_date]) AS [month], STRFTIME('%Y',[main].[tblOtpAdd].[reg_date]) AS [year] from tblOtpAdd WHERE ration1 <> ''
