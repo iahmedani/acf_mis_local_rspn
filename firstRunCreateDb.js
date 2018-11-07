@@ -546,7 +546,9 @@ INNER JOIN [main].[tblScrPlw] ON [main].[tblScrPlw].[site_id] = [main].[v_geo].[
   [req_email] VARCHAR NOT NULL, 
   [req_sender] VARCHAR NOT NULL, 
   [req_data] TEXT NOT NULL, 
-  [req_id] VARCHAR NOT NULL);
+  [req_id] VARCHAR NOT NULL,
+  [client_id] VARCHAR,
+  [upload_status] INT);
 `
   createNewTable(knex, 'tblStockRequest', qrytblStockRequest);
 

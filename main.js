@@ -29,7 +29,8 @@ var knex = require("knex")({
     // filename: './acf_mis_local.sqlite3'
   }
 });
-const serverUrl = 'http://52.15.65.89:5000';
+const serverUrl = JSON.parse(fs.readFileSync('./config.json', 'utf8')).localUrl || 'http://52.15.65.89:5000';
+console.log(serverUrl)
 
 function localDate() {
   var x = new Date();
@@ -392,6 +393,7 @@ ipcMain.on('enterRequest', (event, data)=>{
   stockRequest(event, data);
 })
 function stockRequest(event, data) {
+  data.client_id = client_id;
   knex('tblStockRequest')
     .insert(data)
     .then(result => {
@@ -4474,6 +4476,54 @@ function newSync() {
               })
             } else {
               cb(null, 'Followup Add: No new record')
+
+            }
+
+          })
+          .catch(e => {
+            cb(e)
+          })
+      },
+      uploadStockRequest: (cb) => {
+        knex('tblStockRequest')
+          .where({
+            upload_status: 0
+          })
+          .then(result => {
+            if (result.length > 0) {
+              var options = {
+                method: 'POST',
+                uri: surl + '/stock_reqv1',
+                body: result,
+                json: true
+              }
+              // console.log(result)
+              request(options, (err, response, body) => {
+                if (err) {
+                  cb(err)
+                } else {
+                  console.log(typeof body);
+                  // body = JSON.parse(body);
+                  if (body.success === 'Stock Request Added') {
+                    cb(null, body)
+                    result.forEach(el => {
+                      console.log(el);
+                      knex('tblStockRequest')
+                        .where({
+                          id: el.id
+                        })
+                        .update('upload_status', 1)
+                        .then(result => {
+                          console.log(result)
+                        })
+                    })
+                  } else {
+                    cb(body)
+                  }
+                }
+              })
+            } else {
+              cb(null, 'Stock Request Add: No new record')
 
             }
 

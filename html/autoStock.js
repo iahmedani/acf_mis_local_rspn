@@ -1,4 +1,5 @@
 module.exports.autoStock = function () { 
+
   const nodemailer = require('nodemailer');
   const uuid = require('uuidv4');
   (function ($) {
@@ -87,6 +88,26 @@ module.exports.autoStock = function () {
               $('#btnStockRequest').attr("hidden",false)
             }
             $(() => {
+              if ($.fn.DataTable.isDataTable("#example")) {
+                $("#example")
+                  .DataTable()
+                  .clear()
+                  .destroy();
+              }
+              if ($.fn.DataTable.isDataTable("#avgs")) {
+                $("#avgs")
+                  .DataTable()
+                  .clear()
+                  .destroy();
+              }
+              if ($.fn.DataTable.isDataTable("#reqTable")) {
+                $("#reqTable")
+                  .DataTable()
+                  .clear()
+                  .destroy();
+              }
+
+
               $('#example').DataTable({
                 data: test,
                 dom: 'Bfrtip',
