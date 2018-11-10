@@ -29,7 +29,7 @@ var knex = require("knex")({
     // filename: './acf_mis_local.sqlite3'
   }
 });
-const serverUrl = JSON.parse(fs.readFileSync('./config.json', 'utf8')).localUrl || 'http://52.15.65.89:5000';
+const serverUrl = 'http://52.15.65.89:5000';
 console.log(serverUrl)
 
 function localDate() {
