@@ -1,0 +1,154 @@
+<template>
+    <div >
+        <div id="filter"  class="rounded">
+          <form action="#!" id="frmFilter">
+          <div class="row">
+            <div class="form-group col-sm-3 ">
+              <label for="province">Province</label>
+              <select name="province" id="ddProvince" class="form-control form-control-sm">
+                <option selected disabled>Choose</option>
+                
+              </select>
+            </div>
+            <div class="form-group col-sm-3 ">
+    
+              <label for="district">District</label>
+              <select name="district" id="ddDistrict" class="form-control form-control-sm">
+                <option selected disabled>Choose</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-3 ">
+    
+              <label for="Tehsil">Tehsil</label>
+              <select name="Tehsil" id="ddTehsil" class="form-control form-control-sm">
+                <option selected disabled>Choose</option>
+    
+              </select>
+            </div>
+            <div class="form-group col-sm-3 ">
+              <label for="uc">UC</label>
+              <select name="uc" id="ddUC" class="form-control form-control-sm">
+                <option selected disabled>Choose</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+                <div class="form-group col-sm-2">
+                  <label for="interval">Inverval</label>
+                  <select name="internval" id="ddInterval" class="form-control form-control-sm">
+                    <option selected disabled>Choose</option>
+                    
+                    <option value="monthly">Monthly</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="yearly">Yearly</option>
+                    <option value="none">None</option>
+                  </select>
+                </div>
+    
+            <div class="form-group col-sm-2" id="picYear">
+              <label for="year">Year</label>
+              <select name="year" id="year" required class="form-control form-control-sm" disabled>
+                <option selected disabled>Choose</option>
+                <option value="2018">2018</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-2" id="picQuarter">
+              <label for="quarter">Quarter</label>
+              <select name="quarter" id="quarter" class="form-control form-control-sm"  required disabled>
+                <option selected disabled>Choose</option>
+                <option value="0">Q1</option>
+                <option value="1">Q2</option>
+                <option value="2">Q3</option>
+                <option value="3">Q4</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-2" id="picMonth">
+              <label for="month">Month</label>
+              <select name="month" id="month" class="form-control form-control-sm" required disabled>
+                <option value=""  >Choose</option>
+                <option value="1">JAN</option>
+                <option value="2">FEB</option>
+                <option value="3">MAR</option>
+                <option value="4">APR</option>
+                <option value="5">MAY</option>
+                <option value="6">JUN</option>
+                <option value="7">JUL</option>
+                <option value="8">AUG</option>
+                <option value="9">SEP</option>
+                <option value="10">OCT</option>
+                <option value="11">NOV</option>
+                <option value="12">DEC</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-2 align-self-end">
+              <button class="btn btn-primary btn-sm btn-block form-control shadow-sm" id="addFilter"><i class="fas fa-filter"></i> Filter</button>
+            </div>
+            <div class="form-group col-sm-2 align-self-end">
+              <button class="btn btn-success btn-sm btn-block form-control shadow-sm" onclick="export_xlsx();"><i class="far fa-file-excel"></i> Export</button>
+            </div>
+          </div>
+        </form>
+        </div>
+        
+        <div class="row">
+        <div id="report" class="col col-sm-12 rounded table-responsive-sm">
+          <!-- <ul class="list-group"> -->
+            <p class="list-group-item align-center text-center h5" style="background-color: lightgray">Screening Summary</p>
+          <!-- </ul> -->
+              <table id="customers" class="table table-bordered rounded table-sm">
+                  <tr>
+                    <th colspan="2">Children</th>
+                    <th>Screening</th>
+                    <th>MUAC
+                      <11.5 cm</th>
+                        <th>MUAC 11.5 - 12.4 cm</th>
+                        <th>PLW</th>
+                        <th>Screening</th>
+                        <th>MUAC
+                          <21 cm</th>
+                  </tr>
+                  <tr rowspan="2">
+                    <th rowspan="2" >Active</th>
+                    <th>Male</th>
+                    <td id="tChildScrActive_M"></td>
+                    <td id="ChildScrActive_M115"></td>
+                    <td id="ChildScrActive_M115124"></td>
+                    <th>Pregnant</th>
+                    <td id="tPlwScrActive_P"></td>
+                    <td id="PlwScrActive_P21"></td>
+                  </tr>
+                  <tr>
+                    <th>Female</th>
+                    <td id="tChildScrActive_F"></td>
+                    <td id="ChildScrActive_F115"></td>
+                    <td id="ChildScrActive_F115124"></td>
+                    <th>Lactating</th>
+                    <td id="tPlwScrActive_L"></td>
+                    <td id="PlwScrActive_L21"></td>
+                  </tr>
+                  <tr rowspan="2">
+                    <th rowspan="2" >Passive</th>
+                    <th>Male</th>
+                    <td id="tChildScrPassive_M"></td>
+                    <td id="ChildScrPassive_M115"></td>
+                    <td id="ChildScrPassive_M115124"></td>
+                    <th>Pregnant</th>
+                    <td id="tPlwScrPassive_P"></td>
+                    <td id="PlwScrPassive_P21"></td>
+                  </tr>
+                  <tr>
+                    <th>Female</th>
+                    <td id="tChildScrPassive_F"></td>
+                    <td id="ChildScrPassive_F115"></td>
+                    <td id="ChildScrPassive_F115124"></td>
+                    <th>Lactating</th>
+                    <td id="tPlwScrPassive_L"></td>
+                    <td id="PlwScrPassive_L21"></td>
+                  </tr>
+                </table>
+                <table id="tblChild" class="table table-bordered " hidden></table>
+                <table id="tblPlw" class="table table-bordered " hidden></table>
+          </div>
+        </div>
+      </div>
+</template>

@@ -11,7 +11,7 @@ const url = require('url');
 const path = require('path');
 var fs = require('fs');
 var geo = require('./geoData');
-var imran = {};
+let imran = {};
 const log = require('electron-log');
 const {
   autoUpdater
@@ -19,6 +19,7 @@ const {
 autoUpdater.autoDownload = false;
 // JSON.parse(fs.readFileSync('./config.json', 'utf8'))
 // fs.readfilesy
+
 
 console.log(imran);
 var async = require('async');
@@ -447,6 +448,62 @@ function stockSave(event, data) {
       errMsg(event,'','Stock entry db error')
     })
 }
+ipcMain.on('geoList', (evt, data) => {
+  async.series({
+    province: (cb) => {
+      knex('tblGeoProvince')
+        .then(result => {
+          cb(null,result)
+        })
+        .catch(e => {
+          cb(e);
+        })
+    },
+    district: (cb) => {
+      knex('tblGeoDistrict')
+        .then(result => {
+          cb(null, result)
+        })
+        .catch(e => {
+          cb(e);
+        })
+    },
+    tehsil: (cb) => {
+      knex('tblGeoTehsil')
+        .then(result => {
+          cb(null, result)
+        })
+        .catch(e => {
+          cb(e);
+        })
+    },
+    uc: (cb) => {
+      knex('tblGeoUC')
+        .then(result => {
+          cb(null, result)
+        })
+        .catch(e => {
+          cb(e);
+        })
+    },
+    site: (cb) => {
+      knex('tblGeoNutSite')
+        .then(result => {
+          cb(null, result)
+        })
+        .catch(e => {
+          cb(e);
+        })
+    }
+  }, (err, results) => {
+    evt.sender.send("geoList", (results));
+    
+  })
+})
+
+
+
+
 
 // Screening Update: Children sending all data
 function allScreeningData(event, qry) {
@@ -4665,3 +4722,14 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
+
+// External files;
+
+var clientMessages = {
+  sucMsg,
+  errMsg
+};
+
+require("./mainfunc/supervisors")(ipcMain, knex, fs, clientMessages);
+require("./mainfunc/stafflist")(ipcMain, knex, fs, clientMessages);
+require("./mainfunc/villagelist")(ipcMain, knex, fs, clientMessages);

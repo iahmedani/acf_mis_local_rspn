@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="../css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="../css/buttons.dataTables.min.css">
   <link rel="stylesheet" href="../css/dataTables.checkboxes.css">
+  <link rel="stylesheet" href="../css/style.css">
   
   <title>ACF MIS FOR PINS</title>
   <script>
@@ -41,161 +42,12 @@
   <link rel="import" href="scrPlwReportNew.html">
   <link rel="import" href="stockEntry.html">
   <link rel="import" href="autoStock.html">
+  <link rel="import" href="scrStock.html">
+  <link rel="import" href="supList.html">
+  <link rel="import" href="staffList.html">
+  <link rel="import" href="villageList.html">
 </head>
-<style>
 
-  body {
-    user-select: none;
-  }
-  main {
-    font-size: 0.75rem;
-  }
-  .otp-upd {
-    padding-left: 5px !important;
-    padding-right: 5px !important;
-  }
-  .otp-upd-1 {
-    padding-left: 10px !important;
-    padding-right: 0px !important;
-  }
-  .upd-row {
-    margin-right: 0% !important;
-    margin-left: 0% !important;
-  }
-  .upd-body {
-    margin: 10px !important;
-  }
-  .otp-upd-2 {
-    padding-left: 5px !important;
-    padding-right: 10px !important;
-  }
-  p.list-group-item {
-    padding: 0.35rem 0.75rem !important;
-    /* font-size: 1rem; */
-    font-weight: bold;
-
-  }
-
-  .error {
-    font-size: 10px;
-    color: red;
-    font-weight: bolder;
-  }
-
-  #sidebar {
-    height: 100vh;
-    background-color: #333;
-    /* background-color: #4C9CB8; */
-    /* color: white !important; */
-  }
-
-  #sidebar .list-group-item {
-    border-radius: 0;
-    /* background-color: #4C9CB8; */
-
-    background-color: #333;
-    color: rgb(255, 255, 255);
-    border-left: 0;
-    border-right: 0;
-    border-color: #2c2c2c;
-    white-space: nowrap;
-    text-decoration: none;
-  }
-
-  /* highlight active menu */
-
-  #sidebar .list-group-item:not(.collapsed) {
-    background-color: #222;
-  }
-
-  /* closed state */
-
-  #sidebar .list-group .list-group-item[aria-expanded="false"]::after {
-    content: " \f35a";
-    font-family: 'Font Awesome\ 5 Free';
-    display: inline;
-    text-align: right;
-    padding-left: 5px;
-  }
-
-  /* open state */
-
-  #sidebar .list-group .list-group-item[aria-expanded="true"] {
-    background-color: rgb(34, 34, 34);
-  }
-
-  #sidebar .list-group .list-group-item[aria-expanded="true"]::after {
-    content: " \f358";
-    font-family: 'Font Awesome\ 5 Free';
-    display: inline;
-    text-align: right;
-    padding-left: 5px;
-  }
-
-  /* level 1*/
-
-  #sidebar .list-group .collapse .list-group-item {
-    padding-left: 20px;
-  }
-
-  /* level 2*/
-
-  #sidebar .list-group .collapse>.collapse .list-group-item {
-    padding-left: 30px;
-  }
-
-  /* level 3*/
-
-  #sidebar .list-group .collapse>.collapse>.collapse .list-group-item {
-    padding-left: 40px;
-  }
-
-  @media (max-width:48em) {
-    /* overlay sub levels on small screens */
-    #sidebar .list-group .collapse.in,
-    #sidebar .list-group .collapsing {
-      position: absolute;
-      z-index: 1;
-      width: 190px;
-    }
-    #sidebar .list-group>.list-group-item {
-      text-align: center;
-      padding: .75rem .5rem;
-      min-width: 39px;
-    }
-    /* hide caret icons of top level when collapsed */
-    #sidebar .list-group>.list-group-item[aria-expanded="true"]::after,
-    #sidebar .list-group>.list-group-item[aria-expanded="false"]::after {
-      display: none;
-    }
-  }
-
-  /* change transition animation to width when entire sidebar is toggled */
-
-  #sidebar.collapse {
-    -webkit-transition-timing-function: ease;
-    -o-transition-timing-function: ease;
-    transition-timing-function: ease;
-    -webkit-transition-duration: .2s;
-    -o-transition-duration: .2s;
-    transition-duration: .2s;
-  }
-
-  #sidebar.collapsing {
-    opacity: 0.8;
-    width: 0;
-    -webkit-transition-timing-function: ease-in;
-    -o-transition-timing-function: ease-in;
-    transition-timing-function: ease-in;
-    -webkit-transition-property: width;
-    -o-transition-property: width;
-    transition-property: width;
-
-  }
-  .not-req{
-    background-color: lightgray;
-  }
-</style>
 
 <body>
   <div class="container-fluid">
@@ -216,6 +68,7 @@
             <div class="collapse" id="menu1sub1">
               <a href="#" class="list-group-item" data-parent="#menu1sub1" id="childScr">Children</a>
               <a href="#" class="list-group-item" data-parent="#menu1sub1" id="plwScr">PLW</a>
+              <a href="#" class="list-group-item" data-parent="#menu1sub1" id="scrStock">Stocks</a>
             </div>
             <a href="#" class="list-group-item" data-parent="#menu1" id="otpAdd">Admission</a>
             <a href="#" class="list-group-item" data-parent="#menu1" id="addFollowupOtp">Follow Up</a>
@@ -254,6 +107,16 @@
             <a href="#" class="list-group-item" data-parent="#menu4" id="defReport">Defaulter</a>
             <a href="#" class="list-group-item" data-parent="#menu4" id="autoStock">Stock</a>
           </div>
+          <a href="#menu5" class="list-group-item collapsed" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
+            <i class="fa fa-book"></i>
+            <span class="hidden-sm-down">Admin Tools</span>
+          </a>
+          <div class="collapse" id="menu5">
+            <a href="#" class="list-group-item" data-parent="#menu5" id="supList">Supervisor List</a>
+            <a href="#" class="list-group-item" data-parent="#menu5" id="staffList">CHW/LHW List</a>
+            <a href="#" class="list-group-item" data-parent="#menu5" id="villageList">Village List</a>
+          </div>
+          
         </div>
       </div>
       <main class="col-md-10 col-xs-11 p-l-2 p-t-2">
@@ -340,6 +203,27 @@
         })
         ipc.removeAllListeners('hh');
     }
+    const staffListener = async (staffs) => {
+        await asyncForEach(staffs, async (el) => {
+          $('#ddStaff_code').append(`<option value="${el.staff_code}">${el.staff_code}</option>`);
+          $('#ddStaff_name').append(`<option value="${el.staff_code}">${el.staff_name}</option>`);
+        })
+        ipc.removeAllListeners('haveStaff');
+      }
+    const supListener = async (_sups) => {
+        await asyncForEach(_sups, async (el) => {
+          $('#ddSup_code').append(`<option value="${el.sup_code}">${el.sup_code}</option>`);
+          $('#ddSup_name').append(`<option value="${el.sup_code}">${el.sup_name}</option>`);
+        })
+        ipc.removeAllListeners('haveSups');
+      }
+    const villListener = async (_villages) => {
+        await asyncForEach(_villages, async (el) => {
+          $('#ddVillageName').append(`<option value="${el.villageName}">${el.villageName}</option>`);
+          // $('#ddSup_name').append(`<option value="${el.sup_code}">${el.sup_name}</option>`);
+        })
+        ipc.removeAllListeners('haveVillage');
+      }
     const hhTypeListener= async(h_id,hh)=>{
             if(h_id === ""){
               $('#txtSiteType').val().empty();  
@@ -395,7 +279,45 @@
     var InitScrPlwNewReport = require('./scrPlwNewReport').initScrPlwNewReport;
     var InitStockEntry = require('./stockEntry').stockEntry;
     var InitAutoStock = require('./autoStock').autoStock;
+    var InitScrStock = require('./scrStock').scrStock;
+    var InitSupList = require('./supList').SupList;
+    var InitStaffList = require('./staffList').StaffList;
+    var InitVillageList = require('./villageList').VillageList;
     // var InitDefaulterv2 = require('./defaulterv2').initDefaulterv2;
+
+    function supListTemplate() {
+        var content = document.querySelector('link[href="supList.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitSupList();
+      }
+    function staffListTemplate() {
+        var content = document.querySelector('link[href="staffList.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitStaffList();
+      }
+    function villageListTemplate() {
+        var content = document.querySelector('link[href="villageList.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitVillageList();
+      }
+
+    function scrStockTemplate() {
+        var content = document.querySelector('link[href="scrStock.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitScrStock();
+      }
 
     function autoStockTemplate() {
       var content = document.querySelector('link[href="autoStock.html"]');
@@ -565,6 +487,18 @@
     
     $('#autoStock').on('click', function () {
       autoStockTemplate()
+    })
+    $('#supList').on('click', function () {
+      supListTemplate();
+    })
+    $('#staffList').on('click', function () {
+      staffListTemplate();
+    })
+    $('#villageList').on('click', function () {
+      villageListTemplate();
+    })
+    $('#scrStock').on('click', function () {
+      scrStockTemplate()
     })
     $('#childScr').on('click', function () {
       addScrChildTemplate1()

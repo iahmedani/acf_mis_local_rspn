@@ -48,10 +48,10 @@
 
           <select name="prog_type" id="ddProgramType" class="form-control form-control-sm" required>
             <option selected disabled>Select One</option>
-            <option value="sfp">SFP</option>
-            <option value="sfp_Plw">SFP-PLW</option>
+            <option value="sfp">TSFP</option>
+            <option value="sfp_Plw">TSFP-PLW</option>
             <option value="otp">OTP</option>
-            <option value="sc">SC</option>
+            <option value="sc">NSC</option>
           </select>
 
         </div>
@@ -59,7 +59,9 @@
 
           <label for="site_village" class="form-label">Village:</label>
 
-          <input type="text" name="site_village" class="form-control form-control-sm" required>
+          <select name="site_village" id="ddVillageName" class="form-control form-control-sm" required>
+            <option value="">Select One</option>
+          </select>
         </div>
         <div class="form-group col-sm-2">
 
@@ -103,7 +105,7 @@
                     <input type="text" name="cnt_number" id="cnt_number" minlength="11" maxlength="11" class="form-control form-control-sm" required>
                   </div>
                   <div class="form-group col-sm-2">
-                    <label for="age" class="form-label">Age</label>
+                    <label for="age" class="form-label">Age <small id="labAge">(in months)</small></label>
                     <input type="number" name="age" id="age" class="form-control form-control-sm" required>
                   </div>
                 </div>
@@ -129,15 +131,15 @@
                     <select name="ent_reason" id="ent_reason" class="form-control form-control-sm" required>
                       <option selected disabled>Choose</option>
                       <option value="no_prv_pro">New Admission</option>
-                      <option value="relapse">Replapse</option>
+                      <option value="relapse">Relapse</option>
                       <option value="return_def">Defaulter</option>
-                      <option value="abb_inp">Abbondon INP</option>
-                      <option value="promotion_in_from_sc">Promotion in from SC</option>
+                      <!-- <option value="abb_inp">Abbondon INP</option> -->
+                      <option value="transfer_in_from_nsc">Transfer in from NSC</option>
                       <option value="tranfer_in_other_otp">Transfer in
                         <small>From other OTP</small>
                       </option>
                       <option value="tranfer_in_from_sfp">Transfer in
-                        <small>From SFP</small>
+                        <small>From TSFP</small>
                       </option>
                       <option value="other">Other</option>
                     </select>
@@ -147,15 +149,16 @@
                     <select name="ref_type" id="ref_type" class="form-control form-control-sm" required>
                       <option selected disabled>Choose</option>
                       <option value="self">Self</option>
-                      <option value="peer">Peer</option>
+                      <option value="peer">Peer to Peer</option>
                       <option value="chw">CHW</option>
                       <option value="lhw">LHW</option>
                       <option value="doh_staff">DOH Staff</option>
-                      <option value="parents">Parents</option>
+                      <!-- <option value="parents">Parents</option> -->
                       <option value="com_org">Community Org</option>
                       <option value="by_sc_care">By SC Care</option>
                       <option value="by_otp">By OTP</option>
-                      <option value="by_sfp">By SFP</option>
+                      <option value="from_opd">From OPD</option>
+                      <!-- <option value="by_sfp">By SFP</option> -->
                       <option value="by_tsfp">By TSFP</option>
                       <option value="other">Other</option>
                     </select>
@@ -268,7 +271,7 @@
                 <p class="list-group-item bg-info text-white sm">Ration Supplies</p>
                 <div class="row">
                   <div class="form-group col-sm-2">
-                    <label for="ration1">Ration 1:</label>
+                    <label for="ration1">Commodity 1:</label>
                     <select name="ration1" class="form-control form-control-sm" id="ration1" required>
                       <option selected disabled>Choose</option>
                       <option value="RUTF Sachets">RUTF Sachets</option>
@@ -293,7 +296,7 @@
                     <input type="number" name="quantity1" id="quantity1" class="form-control form-control-sm" min="0" required>
                   </div>
                   <div class="form-group col-sm-2">
-                    <label for="ration2">Ration 2:</label>
+                    <label for="ration2">Commodity 2:</label>
                     <select name="ration2" class="form-control form-control-sm" id="ration2">
                       <option selected disabled>Choose</option>
 
@@ -317,7 +320,7 @@
                     <input type="number" name="quantity2" id="quantity2" class="form-control form-control-sm" min="0">
                   </div>
                   <div class="form-group col-sm-2">
-                    <label for="ration3">Ration 3:</label>
+                    <label for="ration3">Commodity 3:</label>
                     <select name="ration3" class="form-control form-control-sm" id="ration3">
                       <option selected disabled>Choose</option>
                       <option value="RUTF Sachets">RUTF Sachets</option>

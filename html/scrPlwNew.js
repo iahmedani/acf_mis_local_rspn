@@ -48,7 +48,42 @@ module.exports.initScrPlwNew = function (){
           $('#ddHealthHouse').children('option:not(:first)').remove();
         hhListener(hh);
         })
-      })
+    })
+    $("#ddHealthHouse").on("change", function () {
+      var siteId = $(this).val();
+      // ucForHH = ucs;
+      ipc.send("getStaff", siteId);
+      ipc.send("getSups", siteId);
+
+      ipc.on("haveStaff", function (evt, staffs) {
+        $("#ddStaff_code")
+          .children("option:not(:first)")
+          .remove();
+        staffListener(staffs);
+      });
+      ipc.on("haveSups", function (evt, _sups) {
+        $("#ddSup_code")
+          .children("option:not(:first)")
+          .remove();
+        supListener(_sups);
+      });
+    });
+    $("#ddStaff_code").on("change", function () {
+      var staff_code = $(this).val();
+      $("#ddStaff_name").val(staff_code);
+    });
+    $("#ddStaff_name").on("change", function () {
+      var staff_code = $(this).val();
+      $("#ddStaff_code").val(staff_code);
+    });
+    $("#ddSup_code").on("change", function () {
+      var sup_code = $(this).val();
+      $("#ddSup_name").val(sup_code);
+    });
+    $("#ddSup_name").on("change", function () {
+      var sup_code = $(this).val();
+      $("#ddSup_code").val(sup_code);
+    });
     })
   $('#submitScrPlwNew').on('click', (e)=>{
     // console.log(data);

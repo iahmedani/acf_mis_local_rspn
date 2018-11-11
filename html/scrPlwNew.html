@@ -35,40 +35,52 @@
           </select>
         </div>
         <div class="col-sm-2">
-          <label for="village" class="col-form-label">Village:</label>
-          <input type="text" name="village" id="village" class="form-control form-control-sm" required>
+          <label for="staff_code" class="col-form-label">Staff Code:</label>
+          <select id="ddStaff_code" name="staff_code" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
         </div>
         <div class="col-sm-2">
           <label for="staff_name" class="col-form-label">Staff Name:</label>
-          <input type="text" name="staff_name" id="staff_name" class="form-control form-control-sm" required>
-        </div>
-        <div class="col-sm-2">
-          <label for="staff_code" class="col-form-label">Staff Code:</label>
-          <input type="text" name="staff_code" id="staff_code" class="form-control form-control-sm" required>
-        </div>
-        <div class="col-sm-2">
-          <label for="sup_name" class=" col-form-label">Supervisor Name:</label>
-          <input type="text" name="sup_name" id="sup_name" class="form-control form-control-sm" required>
+          <select id="ddStaff_name" name="staff_name" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
         </div>
         <div class="col-sm-2">
           <label for="sup_code" class=" col-form-label">Supervisor Code:</label>
-          <input type="text" name="sup_code" id="sup_code" class="form-control form-control-sm" required>
+          <select id="ddSup_code" name="sup_code" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
         </div>
-        <div class="col-sm-4">
-          <label for="screening_date" class=" col-form-label">Screening Date:</label>
+        <div class="col-sm-2">
+          <label for="sup_name" class=" col-form-label">Supervisor Name:</label>
+          <select id="ddSup_name" name="sup_name" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="village" class="col-form-label">No. of villages:</label>
+          <input type="number" name="village" id="village" class="form-control form-control-sm" required>
+        </div>
+        <div class="col-sm-2">
+          <label for="screening_date" class=" col-form-label">Entry Date:</label>
           <input type="date" name="screening_date" id="txtScrChildDate" class="form-control form-control-sm" required>
+        </div>
+        <div class="col-sm-2">
+          <label for="report_month" class=" col-form-label">Report Month</label>
+          <input type="month" name="report_month" class="form-control form-control-sm" required>
         </div>
       </div>
       <div class="row">
         <table class="table table-sm table-bordered rounded text-center">
           <tr>
             <th class="bg-info text-white align-middle" rowspan="2">Category</th>
-            <th class="bg-info text-white align-middle" rowspan="2">Total Screened Women</th>
-            <th class="bg-info text-white align-middle" rowspan="2">Newly Screened Women</th>
-            <th class="bg-info text-white align-middle" rowspan="2">Re-Screened Women</th>
-            <th class="bg-info text-white align-middle" rowspan="1" colspan="6">Women Received IFA Tablets</th>
-            <th class="bg-info text-white align-middle" rowspan="2">MUAC &geq; 21 CM</th>
+            <th class="bg-info text-white align-middle" rowspan="2">Total Screened PLW</th>
+            <th class="bg-info text-white align-middle" rowspan="2">Newly Screened PLW</th>
+            <th class="bg-info text-white align-middle" rowspan="2">Re-Screened PLW</th>
+            <th class="bg-info text-white align-middle" rowspan="1" colspan="6">PLW Received IFA Tablets</th>
             <th class="bg-info text-white align-middle" rowspan="2">MUAC &lt; 21 CM</th>
+            <th class="bg-info text-white align-middle" rowspan="2">MUAC &geq; 21 CM</th>
           </tr>
           <tr>
             <th class="bg-info text-white align-middle">1st Time/Visit</th>
@@ -108,10 +120,10 @@
               <input required min="0" type="number" class="form-control form-control-sm" name="sixth_ifa_tabs_rec_pragnent" id="sixth_ifa_tabs_rec_pragnent">
             </td>
             <td class="align-middle">
-              <input required min="0" type="number" class="form-control form-control-sm" name="muac_gt_21_pragnent" id="muac_gt_21_pragnent">
+              <input required min="0" type="number" class="form-control form-control-sm" name="muac_le_21_pragnent" id="muac_le_21_pragnent">
             </td>
             <td class="align-middle">
-              <input required min="0" type="number" class="form-control form-control-sm" name="muac_le_21_pragnent" id="muac_le_21_pragnent">
+              <input required min="0" type="number" class="form-control form-control-sm" name="muac_gt_21_pragnent" id="muac_gt_21_pragnent">
             </td>
           </tr>
           <th class="align-middle">Lactating</th>
@@ -143,10 +155,10 @@
             <input required min="0" type="number" class="form-control form-control-sm" name="sixth_ifa_tabs_rec_lactating" id="sixth_ifa_tabs_rec_lactating">
           </td>
           <td class="align-middle">
-            <input required min="0" type="number" class="form-control form-control-sm" name="muac_gt_21_lactating" id="muac_gt_21_lactating">
+            <input required min="0" type="number" class="form-control form-control-sm" name="muac_le_21_lactating" id="muac_le_21_lactating">
           </td>
           <td class="align-middle">
-            <input required min="0" type="number" class="form-control form-control-sm" name="muac_le_21_lactating" id="muac_le_21_lactating">
+            <input required min="0" type="number" class="form-control form-control-sm" name="muac_gt_21_lactating" id="muac_gt_21_lactating">
           </td>
           <tr>
             <td colspan="10" class="not-req"></td>

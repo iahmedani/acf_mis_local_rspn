@@ -216,7 +216,16 @@ module.exports.initOtpFollowUp = function (){
               width: 50,
               editing: true,
               validate: "required"
-            }, {
+            },
+            {
+              name: "muac",
+              title: "MUAC",
+              type: "number",
+              width: 50,
+              editing: true,
+              validate: "required"
+            },
+            {
               name: 'ration1',
               title: 'Ration-1',
               type: 'select',

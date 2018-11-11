@@ -48,7 +48,94 @@ module.exports.initScrChildrenUpd = function (){
           $('#ddHealthHouse').children('option:not(:first)').remove();
         hhListener(hh);
         })
-      })
+    })
+    $("#ddHealthHouse").on("change", function () {
+      var siteId = $(this).val();
+      // ucForHH = ucs;
+      ipc.send("getStaff", siteId);
+      ipc.send("getSups", siteId);
+
+      ipc.on("haveStaff", function (evt, staffs) {
+        $("#ddStaff_code")
+          .children("option:not(:first)")
+          .remove();
+        staffListener(staffs);
+      });
+      ipc.on("haveSups", function (evt, _sups) {
+        $("#ddSup_code")
+          .children("option:not(:first)")
+          .remove();
+        supListener(_sups);
+      });
+    });
+    $("#ddStaff_code").on("change", function () {
+      var staff_code = $(this).val();
+      $("#ddStaff_name").val(staff_code);
+    });
+    $("#ddStaff_name").on("change", function () {
+      var staff_code = $(this).val();
+      $("#ddStaff_code").val(staff_code);
+    });
+    $("#ddSup_code").on("change", function () {
+      var sup_code = $(this).val();
+      $("#ddSup_name").val(sup_code);
+    });
+    $("#ddSup_name").on("change", function () {
+      var sup_code = $(this).val();
+      $("#ddSup_code").val(sup_code);
+    });
+    $('.sum_normal_boys').on('change', function () {
+      var sum =
+        (($("#normal_boys_623").val()) ? parseInt($("#normal_boys_623").val()) : 0)
+        + (($("#normal_boys_2459").val()) ? parseInt($("#normal_boys_2459").val()) : 0);
+      $("#total_normal_boys").empty();
+      $("#total_normal_boys").val(sum);
+    });
+    $(".sum_normal_girls").on("change", function () {
+      var sum = (($("#normal_girls_623").val()) ? parseInt($("#normal_girls_623").val()) : 0)
+        + (($("#normal_girls_2459").val()) ? parseInt($("#normal_girls_2459").val()) : 0);
+      $("#total_normal_girls").empty();
+      $("#total_normal_girls").val(sum);
+    });
+    $('.mam_boys').on('change', function () {
+      var sum =
+        (($("#mam_boys_623").val()) ? parseInt($("#mam_boys_623").val()) : 0)
+        + (($("#mam_boys_2459").val()) ? parseInt($("#mam_boys_2459").val()) : 0);
+      $("#total_mam_boys").empty();
+      $("#total_mam_boys").val(sum);
+    });
+    $(".mam_girls").on("change", function () {
+      var sum = (($("#mam_girls_623").val()) ? parseInt($("#mam_girls_623").val()) : 0)
+        + (($("#mam_girls_2459").val()) ? parseInt($("#mam_girls_2459").val()) : 0);
+      $("#total_mam_girls").empty();
+      $("#total_mam_girls").val(sum);
+    });
+    $('.sam_boys').on('change', function () {
+      var sum =
+        (($("#sam_without_comp_boys_623").val()) ? parseInt($("#sam_without_comp_boys_623").val()) : 0)
+        + (($("#sam_without_comp_boys_2459").val()) ? parseInt($("#sam_without_comp_boys_2459").val()) : 0);
+      $("#total_sam_boys").empty();
+      $("#total_sam_boys").val(sum);
+    });
+    $(".sam_girls").on("change", function () {
+      var sum = (($("#sam_without_comp_girls_623").val()) ? parseInt($("#sam_without_comp_girls_623").val()) : 0)
+        + (($("#sam_without_comp_girls_2459").val()) ? parseInt($("#sam_without_comp_girls_2459").val()) : 0);
+      $("#total_sam_girls").empty();
+      $("#total_sam_girls").val(sum);
+    });
+    $('.comp_boys').on('change', function () {
+      var sum =
+        (($("#sam_with_comp_boys_623").val()) ? parseInt($("#sam_with_comp_boys_623").val()) : 0)
+        + (($("#sam_with_comp_boys_2459").val()) ? parseInt($("#sam_with_comp_boys_2459").val()) : 0);
+      $("#total_comp_boys").empty();
+      $("#total_comp_boys").val(sum);
+    });
+    $(".comp_girls").on("change", function () {
+      var sum = (($("#sam_with_comp_girls_623").val()) ? parseInt($("#sam_with_comp_girls_623").val()) : 0)
+        + (($("#sam_with_comp_girls_2459").val()) ? parseInt($("#sam_with_comp_girls_2459").val()) : 0);
+      $("#total_comp_girls").empty();
+      $("#total_comp_girls").val(sum);
+    });
     })
   $(()=>{
     function prepareQry() {
@@ -149,7 +236,7 @@ module.exports.initScrChildrenUpd = function (){
         },
         fields:[{
           name:'screening_date',
-          title:'Date',
+          title:'Entry Date',
           type:'text',
           editing: false
           // editing:false
@@ -176,9 +263,35 @@ module.exports.initScrChildrenUpd = function (){
           console.log(dataKeys)
           dataKeys.forEach(el=>{
               $(`input[name="${el}"]`).val(data[el]);
-              console.log(data[el])
+              $(`select[name="${el}"]`).val(data[el]);
+              // console.log(data[el])
             // }
           })
+          var normal_boys = data.normal_boys_623 + data.normal_boys_2459;
+          var normal_girls = data.normal_girls_623 + data.normal_girls_2459;
+          var mam_boys = data.mam_boys_623 + data.mam_boys_2459;
+          var mam_girls = data.mam_girls_623 + data.mam_girls_2459;
+          var sam_comp_boys = data.sam_with_comp_boys_623 + data.sam_with_comp_boys_2459;
+          var sam_comp_girls = data.sam_with_comp_girls_623 + data.sam_with_comp_girls_2459;
+          var sam_boys = data.sam_without_comp_boys_623 + data.sam_without_comp_boys_2459;
+          var sam_girls = data.sam_without_comp_girls_623 + data.sam_without_comp_girls_2459;
+          $('#total_normal_boys').empty();
+          $('#total_normal_boys').val(normal_boys);
+          $('#total_normal_girls').empty();
+          $('#total_normal_girls').val(normal_girls);
+          $('#total_mam_boys').empty();
+          $('#total_mam_boys').val(mam_boys);
+          $('#total_mam_girls').empty();
+          $('#total_mam_girls').val(mam_girls);
+          $('#total_sam_boys').empty();
+          $('#total_sam_boys').val(sam_boys);
+          $('#total_sam_girls').empty();
+          $('#total_sam_girls').val(sam_girls);
+          $('#total_comp_boys').empty();
+          $('#total_comp_boys').val(sam_comp_boys);
+          $('#total_comp_girls').empty();
+          $('#total_comp_girls').val(sam_comp_girls);
+          
           // $('#p_name').val(data.p_name);
           // $('#gender').val(data.gender);
           // $('#village').val(data.site_village);

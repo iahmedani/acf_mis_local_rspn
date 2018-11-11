@@ -142,7 +142,26 @@ module.exports.initSessionsV2 = function (){
               validator: 'min',
               param: 0
             }
-          },{
+            },
+            {
+              name: "pragnent",
+              title: "Pragnent",
+              type: "number",
+              validate: {
+                validator: 'min',
+                param: 0
+              }
+            },
+            {
+              name: "lactating",
+              title: "Lactating",
+              type: "number",
+              validate: {
+                validator: 'min',
+                param: 0
+              }
+            },
+            {
             name:'upload_status',
             title:'Upload Status',
             type:'select',

@@ -75,7 +75,15 @@ $(function () {
     $('#ddHealthHouse').on('change', function(){
       // var ucs = $('#ddUC').val();
       var h_id = $(this).val();
-      ipc.send('getHealthHouseType', h_id )
+      ipc.send("getVillage", h_id);
+      ipc.on("haveVillage", (evt, _villages) => {
+        $("#ddVillageName")
+          .children("option:not(:first)")
+          .remove();
+        villListener(_villages);
+        
+      });
+      ipc.send('getHealthHouseType', h_id)
       ipc.on('hhType', function(evt, hh){
         // var result = hh.hh.filter(el => el.id == $(this).val());
         // if(h_id === ""){
@@ -189,5 +197,40 @@ $('#otpAddSubmit').on('click', (e)=>{
     var _weight = $(this).val();
     rusfOnWeigth(_weight);
      })
-
+  $('#ddProgramType').on('change', function () {
+    var progType = $(this).val();
+    if (progType == 'sfp_Plw') {
+      $("#labAge").empty();
+      $("#labAge").text('(in years)');
+      $("#age").attr('min', false);
+      $("#age").attr('max', false);
+      
+    } else {
+      $("#labAge").empty();
+      $("#labAge").text('(in months)');
+      $("#age").attr('min','6');
+      $("#age").attr('max','59');
+    }
+  })
+  $("#oedema").on('change', function () {
+    var val = $(this).val();
+    var muacEl = $('#muac');
+    var progType = $("#ddProgramType").val();
+    // var muacEl = $('#muac');
+    if (val == 'absent') {
+      if (progType == 'sc' || progType == 'otp') {
+        muacEl.attr('max', "11.4");
+        muacEl.attr('min', "1");
+      } else if (progType == 'sfp') {
+        muacEl.attr("max", "12.4");
+        muacEl.attr("min", "11.5");
+      } else { 
+        muacEl.attr("max", "21");
+        muacEl.attr("min", "0");
+      }
+    } else {
+      muacEl.attr('max', false);
+      muacEl.attr('min', false);
+    }
+  });
 }
