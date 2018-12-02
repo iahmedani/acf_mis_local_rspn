@@ -423,7 +423,9 @@ module.exports.otpExit = function(cond, callback) {
 module.exports.otpAddTable = function(cond, callback) {
   console.log(cond);
   if (!cond) {
-    knex("v_otpAdd_full_v2")
+    knex("v_otpAdd_full")
+      .where({ is_deleted: 0 })
+      .whereNull('plw_type')
       .then(result => {
         callback(null, result);
       })
@@ -433,6 +435,8 @@ module.exports.otpAddTable = function(cond, callback) {
   } else {
     knex("v_otpAdd_full")
       // .whereRaw("muac < 11.5")
+      .where({ is_deleted: 0 })
+      .whereNull("plw_type")
       .where(builder => {
         if (!cond.date) {
           builder.where(cond);
@@ -463,6 +467,8 @@ module.exports.otpAddTable = function(cond, callback) {
 module.exports.otpExitTable = function(cond, callback) {
   if (!cond) {
     knex("v_otpExit_full")
+      .whereNull('plw_type')
+      .where({ is_deleted: 0 })     
       .then(result => {
         callback(null, result);
       })
@@ -471,6 +477,8 @@ module.exports.otpExitTable = function(cond, callback) {
       });
   } else {
     knex("v_otpExit_full")
+      .whereNull("plw_type")
+      .where({ is_deleted: 0 })
       .where(builder => {
         if (!cond.date) {
           builder.where(cond);
@@ -1138,8 +1146,7 @@ module.exports.scrPlwNewReport = function(cond, callback) {
 
 module.exports.AdmissionsReport = function(cond, callback) {
   knex("v_otpAddNewReport")
-    .select(
-      knex.raw(`count( case when ent_reason = 'no_prv_pro' then '' END ) as newAdmision,
+    .select(knex.raw(`count( case when ent_reason = 'no_prv_pro' then '' END ) as newAdmision,
   count( case when ent_reason = 'relapse' then '' END ) as 'Relapse',
   count( case when ent_reason = 'return_def' then '' END) as 'default',
   count( case when ent_reason = 'abb_inp' then '' END ) as 'Abbondon',
@@ -1147,11 +1154,11 @@ module.exports.AdmissionsReport = function(cond, callback) {
   count( case when ent_reason = 'tranfer_in_other_otp' then '' END ) as 'Trasfer_in_from_other_OTP',
   count( case when ent_reason = 'tranfer_in_from_sfp' then '' END ) as 'Transfer_in_from_SFP',
   count( case when ent_reason = 'other' then '' END ) as 'Other',
-  (case when age BETWEEN 6 AND 23  then 'range6to23' ELSE 'range24-59' END) as age`)
-    )
+  (case when age BETWEEN 6 AND 23  then 'range6to23' ELSE 'range24-59' END) as age`))
     .count({ totalAd: "otp_id" })
     .select("gender")
     .whereNull("plw_type")
+    .where({ is_deleted: 0 })
     // .andWhereNotBetween("age", ["above59", "below_6"])
     .where(builder => {
       if (!cond.date) {
@@ -1182,23 +1189,19 @@ module.exports.AdmissionsReport = function(cond, callback) {
 
 module.exports.ExitReport = function(cond, callback) {
   knex("v_otpExitReportNew")
-    .select({
-      eGender: "gender",
-    })
+    .select({ eGender: "gender" })
     // .whereIn(kne)
-    .select(
-      knex.raw(`count( case when exit_reason = 'cured' then '' END ) as 'cured',
+    .select(knex.raw(`count( case when exit_reason = 'cured' then '' END ) as 'cured',
   count( case when exit_reason = 'death' then '' END ) as 'death',
   count( case when exit_reason = 'defaulter' then '' END ) as 'defaulter',
   count( case when exit_reason = 'non_responder' then '' END ) as 'non_responder',
   count( case when exit_reason = 'medical_transfer_sc' then '' END ) as 'medical_transfer_SC',
   count( case when exit_reason = 'transfer_out_to_other_otp' then '' END ) as 'transfer_out_other_OTP',
   count( case when exit_reason = 'other' then '' END ) as 'Other',
-  (case when age BETWEEN 6 AND 23  then 'range6to23' ELSE 'range24-59' END) as eAge`)
-    )
-    .count({
-      totalExit: "exit_id"
-    })
+  (case when age BETWEEN 6 AND 23  then 'range6to23' ELSE 'range24-59' END) as eAge`))
+    .count({ totalExit: "exit_id" })
+    .whereNull("plw_type")
+    .where({ is_deleted: 0 })
     .where(builder => {
       if (!cond.date) {
         builder.where(cond);

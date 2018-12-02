@@ -1,6 +1,32 @@
 
 
-module.exports.initOtpFollowUp = function (){
+module.exports.initOtpFollowUp = function () {
+  function DecimalField(config) {
+    jsGrid.fields.number.call(this, config);
+  }
+
+  DecimalField.prototype = new jsGrid.fields.number({
+
+    filterValue: function () {
+      return this.filterControl.val()
+        ? parseFloat(this.filterControl.val() || 0, 10)
+        : undefined;
+    },
+
+    insertValue: function () {
+      return this.insertControl.val()
+        ? parseFloat(this.insertControl.val() || 0, 10)
+        : undefined;
+    },
+
+    editValue: function () {
+      return this.editControl.val()
+        ? parseFloat(this.editControl.val() || 0, 10)
+        : undefined;
+    }
+  });
+
+  jsGrid.fields.decimal = jsGrid.DecimalField = DecimalField;
 
   $(function () {
     var datePickerId = document.getElementById('followup_date');
@@ -114,7 +140,8 @@ module.exports.initOtpFollowUp = function (){
           }
         })
       })
-    }
+  }
+  
     let addFollowup = (item) => {
       return new Promise((resolve, reject) => {
         $('#addFollowupForm').validate();
@@ -165,12 +192,12 @@ module.exports.initOtpFollowUp = function (){
           pageButtonCount: 5,
           deleteConfirm: "Do you really want to delete client?",
           controller: {
-            loadData: function (filter) {
-              console.log('loaddata', site_id)
+            loadData: function(filter) {
+              console.log(site_id);
               return getInterimData(site_id);
             },
-            updateItem: function (item) {
-              console.log('update')
+            updateItem: function(item) {
+              console.log("update");
               // item.followup_date = $('#followup_date').val();
               console.log(item);
               return addFollowup(item);
@@ -190,19 +217,22 @@ module.exports.initOtpFollowUp = function (){
               type: "text",
               width: 50,
               editing: false
-            }, {
+            },
+            {
               name: "p_name",
               title: "Name",
               type: "text",
               width: 100,
               editing: false
-            }, {
+            },
+            {
               name: "f_or_h_name",
-              title: "Husband Name",
+              title: "Father/Husb: Name",
               type: "text",
               width: 100,
               editing: false
-            }, {
+            },
+            {
               name: "site_village",
               title: "Village",
               type: "text",
@@ -220,71 +250,89 @@ module.exports.initOtpFollowUp = function (){
             {
               name: "muac",
               title: "MUAC",
-              type: "number",
+              type: "decimal",
               width: 50,
               editing: true,
               validate: "required"
             },
             {
-              name: 'ration1',
-              title: 'Ration-1',
-              type: 'select',
+              name: "ration1",
+              title: "Ration-1",
+              type: "select",
               items: commodities,
-              valueField: 'value',
-              textField: 'Name',
+              valueField: "value",
+              textField: "Name",
               width: 80,
               validate: "required"
-            }, {
-              name: 'quantity1',
-              title: 'Qty-1',
-              type: 'number',
+            },
+            {
+              name: "quantity1",
+              title: "Qty-1",
+              type: "number",
               width: 40,
               validate: {
                 validator: "min",
                 param: 0
               }
-            }, {
-              name: 'ration2',
-              title: 'Ration-2',
-              type: 'select',
+            },
+            {
+              name: "ration2",
+              title: "Ration-2",
+              type: "select",
               items: commodities,
-              valueField: 'value',
-              textField: 'Name',
+              valueField: "value",
+              textField: "Name",
               width: 80
-            }, {
-              name: 'quantity2',
-              title: 'Qty-2',
-              type: 'number',
+            },
+            {
+              name: "quantity2",
+              title: "Qty-2",
+              type: "number",
               width: 40
-            }, {
-              name: 'ration3',
-              title: 'Ration-3',
-              type: 'select',
+            },
+            {
+              name: "ration3",
+              title: "Ration-3",
+              type: "select",
               items: commodities,
-              valueField: 'value',
-              textField: 'Name',
-              width: 80,
-            }, {
-              name: 'quantity3',
-              title: 'Qty-3',
-              type: 'number',
+              valueField: "value",
+              textField: "Name",
+              width: 80
+            },
+            {
+              name: "quantity3",
+              title: "Qty-3",
+              type: "number",
               width: 50
-            }, {
-              name: 'next_followup',
-              type: 'date',
-              title: 'Next Follow Up',
+            },
+            {
+              name: "other_com_name",
+              title: "Other Com: Name",
+              type: "text",
+              width: 50
+            },
+            {
+              name: "other_com_qty",
+              title: "Other Com: Qty",
+              type: "number",
+              width: 50
+            },
+            {
+              name: "next_followup",
+              type: "date",
+              title: "Next Follow Up",
               editing: false,
-              align: 'right'
-
-            }, {
+              align: "right"
+            },
+            {
               type: "control",
-              deleteButton: false,
+              deleteButton: false
             }
           ]
         });
       }
 
       
-    })
-
+  })
+  
 }

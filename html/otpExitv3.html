@@ -6,41 +6,45 @@
 
         <div class="form-group col-sm-2 ">
           <label for="province">Province</label>
-          <select name="province" id="ddProvince" class="form-control form-control-sm">
-            <option selected disabled>Choose</option>
+          <select  id="ddProvince" class="form-control form-control-sm eFilter">
+            <option selected value="" >Choose</option>
   
           </select>
         </div>
         <div class="form-group col-sm-2 ">
           
           <label for="district">District</label>
-          <select name="district" id="ddDistrict" class="form-control form-control-sm">
-            <option selected disabled>Choose</option>
+          <select  id="ddDistrict" class="form-control form-control-sm eFilter">
+            <option selected value="" >Choose</option>
           </select>
         </div>
         <div class="form-group col-sm-2 ">
   
           <label for="Tehsil">Tehsil</label>
-          <select name="Tehsil" id="ddTehsil" class="form-control form-control-sm">
-            <option selected disabled>Choose</option>
+          <select  id="ddTehsil" class="form-control form-control-sm eFilter">
+            <option selected value="" >Choose</option>
             
           </select>
         </div>
         <div class="form-group col-sm-2 ">
           <label for="uc">UC</label>
-          <select name="uc" id="ddUC" class="form-control form-control-sm">
-            <option selected disabled>Choose</option>
+          <select  id="ddUC" class="form-control form-control-sm eFilter">
+            <option selected value="" >Choose</option>
           </select>
         </div>
         <div class="form-group col-sm-4">
           
           <label for="site_id" class="form-label">Site Name:</label>
           
-          <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm">
+          <select id="ddHealthHouse" class="form-control form-control-sm eFilter">
             <option value="">Select One</option>
           </select>
         </div>
         
+      </div>
+      <div class="row">
+
+        <div id="jsGrid" class="table-responsive col col-sm-12"></div>
       </div>
       <!-- <div class="card">
         <div class="card-header">
@@ -49,8 +53,7 @@
           <div class="card-body"> -->
   <div class="row">
     
-    <div id="jsGrid" class="table-responsive col col-sm-4"></div>
-    <div id="exitEntry" class="col-sm-8 border rounded">
+    <div id="exitEntry" class="col-sm-12 border rounded">
       <form  id="exitAddForm">
       <!-- <form  id="myForm"> -->
         <div class="row">
@@ -168,19 +171,13 @@
         <label for="exit_quantity3">Quantity:</label>
         <input type="number" name="exit_quantity3" id="exit_quantity3" class="form-control form-control-sm" min="0">
       </div>
-      <div class="form-group col-sm-4">
-        <label for="exit_other_com_name" class="form-label">Other Commodity Name:</label>
-        <input type="text" name="exit_other_com_name" id="exit_other_com_name" class="form-control form-control-sm clr">
+      <div class="form-group col-sm-2">
+        <label for="other_com_name" class="form-label">Other Commodity Name</label>
+        <input type="text" name="other_com_name" id="other_com_name" class="form-control form-control-sm clr">
       </div>
-      <div class="form-group col-sm-4">
-        <label for="exit_other_com_qty" class="form-label">Other Commodity Qunatity:</label>
-        <input type="number" name="exit_other_com_qty" id="exit_other_com_qty" class="form-control form-control-sm clr">
-      </div>
-      <div class="form-group col-sm-4">
-      
-        <label for="exit_date" class="form-label">Exit Date:</label>
-      
-        <input type="date" name="exit_date" id="exit_date" class="form-control form-control-sm" required>
+      <div class="form-group col-sm-2">
+        <label for="other_com_qty" class="form-label">Other Commodity Qunatity</label>
+        <input type="number" name="other_com_qty" id="other_com_qty" class="form-control form-control-sm clr">
       </div>
       <input type="number" name="otp_id" id="otp_id" hidden>
       <input type="number"  id="add_weight" hidden>
@@ -188,7 +185,12 @@
       
     </div>
   <div class="row">
+    <div class="form-group col-sm-3">
     
+      <label for="exit_date" class="form-label">Exit Date:</label>
+    
+      <input type="date" name="exit_date" id="exit_date" class="form-control form-control-sm" required>
+    </div>
     <div class="form-group col-sm-3">
     
       <label for="days_in_program" class="form-label">Days in Program:</label>

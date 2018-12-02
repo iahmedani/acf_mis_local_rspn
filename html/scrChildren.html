@@ -31,45 +31,45 @@
         <div class="col-sm-2">
           <label for="site_id" class="col-form-label">Site Name:</label>
           <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm" required>
-            <option selected disabled>Select One</option>
+            <option selected value="">Select One</option>
           </select>
         </div>
         
         <div class="col-sm-2">
           <label for="staff_code" class="col-form-label">Staff Code:</label>
-          <select id="ddStaff_code" name="staff_code" class="form-control form-control-sm">
+          <select id="ddStaff_code" name="staff_code" class="form-control form-control-sm cld">
             <option value="">Select One</option>
           </select>
         </div>
         <div class="col-sm-2">
           <label for="staff_name" class="col-form-label">Staff Name:</label>
-          <select id="ddStaff_name" name="staff_name" class="form-control form-control-sm">
+          <select id="ddStaff_name" name="staff_name" class="form-control form-control-sm cld">
             <option value="">Select One</option>
           </select>
         </div>
         <div class="col-sm-2">
           <label for="sup_code" class=" col-form-label">Supervisor Code:</label>
-          <select id="ddSup_code" name="sup_code" class="form-control form-control-sm">
+          <select id="ddSup_code" name="sup_code" class="form-control form-control-sm cld">
             <option value="">Select One</option>
           </select>
         </div>
         <div class="col-sm-2">
           <label for="sup_name" class=" col-form-label">Supervisor Name:</label>
-          <select id="ddSup_name" name="sup_name" class="form-control form-control-sm">
+          <select id="ddSup_name" name="sup_name" class="form-control form-control-sm cld">
             <option value="">Select One</option>
           </select>
         </div>
         <div class="col-sm-2">
           <label for="village" class="col-form-label">No. of villages:</label>
-          <input type="number" name="village" id="village" class="form-control form-control-sm" required>
+          <input type="number" name="village" id="village" class="form-control form-control-sm clr" required>
         </div>
         <div class="col-sm-2">
           <label for="screening_date" class=" col-form-label">Entry Date:</label>
-          <input type="date" name="screening_date" id="txtScrChildDate" class="form-control form-control-sm" required>
+          <input type="date" name="screening_date" id="txtScrChildDate" class="form-control form-control-sm clr" required>
         </div>
         <div class="col-sm-2">
           <label for="report_month" class=" col-form-label">Report Month</label>
-          <input type="month" name="report_month" class="form-control form-control-sm" required>
+          <input type="month" name="report_month" class="form-control form-control-sm clr"  required>
         </div>
         <div class="col-sm-2">
           <label for="" class="text-white col-form-label">Save</label>
@@ -102,10 +102,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="total_scr_boys" id="total_scr_boys">
+              <input type="number" required class="form-control form-control-sm clr" name="total_scr_boys" id="total_scr_boys" readonly>
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="total_scr_girls" id="total_scr_girls">
+              <input type="number" required class="form-control form-control-sm clr" name="total_scr_girls" id="total_scr_girls" readonly>
             </td>
           </tr>
           <tr>
@@ -115,10 +115,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="new_boys" id="new_boys">
+              <input type="number" required class="form-control form-control-sm tb clr" name="new_boys" id="new_boys">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="new_girls" id="new_girls">
+              <input type="number" required class="form-control form-control-sm tg clr" name="new_girls" id="new_girls">
             </td>
           </tr>
           <tr>
@@ -128,10 +128,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="reScreened_boys" id="reScreened_boys">
+              <input type="number" required class="form-control form-control-sm tb clr" name="reScreened_boys" id="reScreened_boys">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="reScreened_girls" id="reScreened_girls">
+              <input type="number" required class="form-control form-control-sm tg clr" name="reScreened_girls" id="reScreened_girls">
             </td>
           </tr>
           <tr>
@@ -139,19 +139,19 @@
               <small>(MUAC &geq; 12.5cm)</small>
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm sum_normal_boys" name="normal_boys_623" id="normal_boys_623">
+              <input type="number" required class="form-control form-control-sm sum_normal_boys clr tbb" name="normal_boys_623" id="normal_boys_623">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm sum_normal_girls" name="normal_girls_623" id="normal_girls_623">
+              <input type="number" required class="form-control form-control-sm sum_normal_girls clr tgg" name="normal_girls_623" id="normal_girls_623">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm sum_normal_boys" name="normal_boys_2459" id="normal_boys_2459">
+              <input type="number" required class="form-control form-control-sm sum_normal_boys clr tbb" name="normal_boys_2459" id="normal_boys_2459">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm sum_normal_girls" name="normal_girls_2459" id="normal_girls_2459">
+              <input type="number" required class="form-control form-control-sm sum_normal_girls clr tgg" name="normal_girls_2459" id="normal_girls_2459">
             </td>
-              <td><input type="number" class="form-control form-control-sm" id="total_normal_boys" readonly></td> 
-              <td><input type="number" class="form-control form-control-sm" id="total_normal_girls" readonly></td> 
+              <td><input type="number" class="form-control form-control-sm clr" id="total_normal_boys" readonly></td> 
+              <td><input type="number" class="form-control form-control-sm clr" id="total_normal_girls" readonly></td> 
               <!-- <td class="form-control form-control-sm" id="total_normal_girls"></td> -->
           </tr>
           <tr>
@@ -159,19 +159,19 @@
               <small>(MUAC 11.5-12.4cm)</small>
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm mam_boys" name="mam_boys_623" id="mam_boys_623">
+              <input type="number" required class="form-control form-control-sm mam_boys clr tbb" name="mam_boys_623" id="mam_boys_623">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm mam_girls" name="mam_girls_623" id="mam_girls_623">
+              <input type="number" required class="form-control form-control-sm mam_girls clr tgg" name="mam_girls_623" id="mam_girls_623">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm mam_boys" name="mam_boys_2459" id="mam_boys_2459">
+              <input type="number" required class="form-control form-control-sm mam_boys clr tbb" name="mam_boys_2459" id="mam_boys_2459">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm mam_girls" name="mam_girls_2459" id="mam_girls_2459">
+              <input type="number" required class="form-control form-control-sm mam_girls clr tgg" name="mam_girls_2459" id="mam_girls_2459">
             </td>
-            <td><input type="number" class="form-control form-control-sm" id="total_mam_boys" readonly></td>
-            <td><input type="number" class="form-control form-control-sm" id="total_mam_girls" readonly></td>
+            <td><input type="number" class="form-control form-control-sm clr" id="total_mam_boys" readonly></td>
+            <td><input type="number" class="form-control form-control-sm clr" id="total_mam_girls" readonly></td>
             <!-- <td class="not-req"></td>
             <td class="not-req"></td> -->
           </tr>
@@ -180,19 +180,19 @@
               <small>(without Complication MUAC &leq; 11.5cm)</small>
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm sam_boys" name="sam_without_comp_boys_623" id="sam_without_comp_boys_623">
+              <input type="number" required class="form-control form-control-sm sam_boys clr tbb" name="sam_without_comp_boys_623" id="sam_without_comp_boys_623">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm sam_girls" name="sam_without_comp_girls_623" id="sam_without_comp_girls_623">
+              <input type="number" required class="form-control form-control-sm sam_girls clr tgg" name="sam_without_comp_girls_623" id="sam_without_comp_girls_623">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm sam_boys" name="sam_without_comp_boys_2459" id="sam_without_comp_boys_2459">
+              <input type="number" required class="form-control form-control-sm sam_boys clr tbb" name="sam_without_comp_boys_2459" id="sam_without_comp_boys_2459">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm sam_girls" name="sam_without_comp_girls_2459" id="sam_without_comp_girls_2459">
+              <input type="number" required class="form-control form-control-sm sam_girls clr tgg" name="sam_without_comp_girls_2459" id="sam_without_comp_girls_2459">
             </td>
-          <td><input type="number" class="form-control form-control-sm" id="total_sam_boys" readonly></td>
-          <td><input type="number" class="form-control form-control-sm" id="total_sam_girls" readonly></td>
+          <td><input type="number" class="form-control form-control-sm clr" id="total_sam_boys" readonly></td>
+          <td><input type="number" class="form-control form-control-sm clr" id="total_sam_girls" readonly></td>
             <!-- <td class="not-req"></td> -->
           </tr>
           <tr>
@@ -200,19 +200,19 @@
               <small>(with Complication MUAC &leq; 11.5cm)</small>
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm comp_boys" name="sam_with_comp_boys_623" id="sam_with_comp_boys_623">
+              <input type="number" required class="form-control form-control-sm comp_boys clr tbb" name="sam_with_comp_boys_623" id="sam_with_comp_boys_623">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm comp_girls" name="sam_with_comp_girls_623" id="sam_with_comp_girls_623">
+              <input type="number" required class="form-control form-control-sm comp_girls clr tgg" name="sam_with_comp_girls_623" id="sam_with_comp_girls_623">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm comp_boys" name="sam_with_comp_boys_2459" id="sam_with_comp_boys_2459">
+              <input type="number" required class="form-control form-control-sm comp_boys clr tbb" name="sam_with_comp_boys_2459" id="sam_with_comp_boys_2459">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm comp_girls" name="sam_with_comp_girls_2459" id="sam_with_comp_girls_2459">
+              <input type="number" required class="form-control form-control-sm comp_girls clr tgg" name="sam_with_comp_girls_2459" id="sam_with_comp_girls_2459">
             </td>
-            <td><input type="number" class="form-control form-control-sm" id="total_comp_boys" readonly></td>
-            <td><input type="number" class="form-control form-control-sm" id="total_comp_girls" readonly></td>
+            <td><input type="number" class="form-control form-control-sm clr" id="total_comp_boys" readonly></td>
+            <td><input type="number" class="form-control form-control-sm clr" id="total_comp_girls" readonly></td>
           </tr>
           <!-- <tr>
             <td>Oedema
@@ -238,10 +238,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="plus12_oedema_boys" id="plus12_oedema_boys">
+              <input type="number" required class="form-control form-control-sm clr" name="plus12_oedema_boys" id="plus12_oedema_boys">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="plus12_oedema_girls" id="plus12_oedema_girls">
+              <input type="number" required class="form-control form-control-sm clr" name="plus12_oedema_girls" id="plus12_oedema_girls">
             </td>
           </tr>
           <tr>
@@ -253,10 +253,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="plus3_oedema_boys" id="plus3_oedema_boys">
+              <input type="number" required class="form-control form-control-sm clr" name="plus3_oedema_boys" id="plus3_oedema_boys">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="plus3_oedema_girls" id="plus3_oedema_girls">
+              <input type="number" required class="form-control form-control-sm clr" name="plus3_oedema_girls" id="plus3_oedema_girls">
             </td>
           </tr>
           <tr>
@@ -266,10 +266,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="reffer_tsfp_boys" id="reffer_tsfp_boys">
+              <input type="number" required class="form-control form-control-sm clr" name="reffer_tsfp_boys" id="reffer_tsfp_boys">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="reffer_tsfp_girls" id="reffer_tsfp_girls">
+              <input type="number" required class="form-control form-control-sm clr" name="reffer_tsfp_girls" id="reffer_tsfp_girls">
             </td>
           </tr>
           <tr>
@@ -279,10 +279,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="reffer_otp_boys" id="reffer_otp_boys">
+              <input type="number" required class="form-control form-control-sm clr" name="reffer_otp_boys" id="reffer_otp_boys">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="reffer_otp_girls" id="reffer_otp_girls">
+              <input type="number" required class="form-control form-control-sm clr" name="reffer_otp_girls" id="reffer_otp_girls">
             </td>
           </tr>
           <tr class="bg-warning">
@@ -293,10 +293,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="first_mnp_30_boys" id="first_mnp_30_boys">
+              <input type="number" required class="form-control form-control-sm clr" name="first_mnp_30_boys" id="first_mnp_30_boys">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="first_mnp_30_girls" id="first_mnp_30_girls">
+              <input type="number" required class="form-control form-control-sm clr" name="first_mnp_30_girls" id="first_mnp_30_girls">
             </td>
           </tr>
           <tr class="bg-warning">
@@ -308,10 +308,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="second_mnp_30_boys" id="second_mnp_30_boys">
+              <input type="number" required class="form-control form-control-sm clr" name="second_mnp_30_boys" id="second_mnp_30_boys">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="second_mnp_30_girls" id="second_mnp_30_girls">
+              <input type="number" required class="form-control form-control-sm clr" name="second_mnp_30_girls" id="second_mnp_30_girls">
             </td>
           </tr>
           <tr class="bg-warning">
@@ -323,10 +323,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="third_mnp_30_boys" id="third_mnp_30_boys">
+              <input type="number" required class="form-control form-control-sm clr" name="third_mnp_30_boys" id="third_mnp_30_boys">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="third_mnp_30_girls" id="third_mnp_30_girls">
+              <input type="number" required class="form-control form-control-sm clr" name="third_mnp_30_girls" id="third_mnp_30_girls">
             </td>
           </tr>
           <tr class="bg-warning">
@@ -338,10 +338,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="fourth_mnp_30_boys" id="fourth_mnp_30_boys">
+              <input type="number" required class="form-control form-control-sm clr" name="fourth_mnp_30_boys" id="fourth_mnp_30_boys">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="fourth_mnp_30_girls" id="fourth_mnp_30_girls">
+              <input type="number" required class="form-control form-control-sm clr" name="fourth_mnp_30_girls" id="fourth_mnp_30_girls">
             </td>
           </tr>
           <tr class="bg-warning">
@@ -353,10 +353,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="fifth_mnp_30_boys" id="fifth_mnp_30_boys">
+              <input type="number" required class="form-control form-control-sm clr" name="fifth_mnp_30_boys" id="fifth_mnp_30_boys">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="fifth_mnp_30_girls" id="fifth_mnp_30_girls">
+              <input type="number" required class="form-control form-control-sm clr" name="fifth_mnp_30_girls" id="fifth_mnp_30_girls">
             </td>
           </tr>
           <tr class="bg-warning">
@@ -368,10 +368,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="sixth_mnp_30_boys" id="sixth_mnp_30_boys">
+              <input type="number" required class="form-control form-control-sm clr" name="sixth_mnp_30_boys" id="sixth_mnp_30_boys">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="sixth_mnp_30_girls" id="sixth_mnp_30_girls">
+              <input type="number" required class="form-control form-control-sm clr" name="sixth_mnp_30_girls" id="sixth_mnp_30_girls">
             </td>
           </tr>
           <tr>
@@ -381,10 +381,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="deworming_boys" id="deworming_boys">
+              <input type="number" required class="form-control form-control-sm clr" name="deworming_boys" id="deworming_boys">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm" name="deworming_girls" id="deworming_girls">
+              <input type="number" required class="form-control form-control-sm clr" name="deworming_girls" id="deworming_girls">
             </td>
           </tr>
         </table>

@@ -32,12 +32,12 @@
   <link rel="import" href="otpReportsv2.html">
   <link rel="import" href="defaulterv2.html">
   <!-- <link rel="import" href="scrChUpdv2.html"> -->
-  <link rel="import" href="scrPlwNewUpd.html">
+  <link rel="import" href="scrPlwNewUpdv1.html">
   <!-- <link rel="import" href="scrPlUpdv2.html"> -->
-  <link rel="import" href="otpAddUpdv3.html">
-  <link rel="import" href="otpExitEditv2.html">
+  <link rel="import" href="otpAddUpdv4.html">
+  <link rel="import" href="otpExitEditv3.html">
   <link rel="import" href="scrChildren.html">
-  <link rel="import" href="scrChildrenUpd.html">
+  <link rel="import" href="scrChildrenUpdv1.html">
   <link rel="import" href="scrChildReportNew.html">
   <link rel="import" href="scrPlwReportNew.html">
   <link rel="import" href="stockEntry.html">
@@ -46,6 +46,7 @@
   <link rel="import" href="supList.html">
   <link rel="import" href="staffList.html">
   <link rel="import" href="villageList.html">
+  <link rel="import" href="sessionsReport.html">
 </head>
 
 
@@ -59,68 +60,73 @@
         <!-- <div class="list-group-item">Imran</div> -->
         <div class="list-group panel">
 
-          <a href="#menu1" class="list-group-item collapsed" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
+          <a href="#menu1" class="list-group-item collapsed _mn" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
             <i class="fas fa-tachometer-alt"></i>
             <span class="hidden-sm-down">Data Entry</span>
           </a>
           <div class="collapse" id="menu1">
             <a href="#menu1sub1" class="list-group-item" data-toggle="collapse" aria-expanded="false">Screening</a>
             <div class="collapse" id="menu1sub1">
-              <a href="#" class="list-group-item" data-parent="#menu1sub1" id="childScr">Children</a>
-              <a href="#" class="list-group-item" data-parent="#menu1sub1" id="plwScr">PLW</a>
-              <a href="#" class="list-group-item" data-parent="#menu1sub1" id="scrStock">Stocks</a>
+              <a href="#" class="list-group-item _sb" data-parent="#menu1sub1" id="childScr">Children</a>
+              <a href="#" class="list-group-item _sb" data-parent="#menu1sub1" id="plwScr">PLW</a>
+              <a href="#" class="list-group-item _sb" data-parent="#menu1sub1" id="scrStock">Stocks</a>
             </div>
-            <a href="#" class="list-group-item" data-parent="#menu1" id="otpAdd">Admission</a>
-            <a href="#" class="list-group-item" data-parent="#menu1" id="addFollowupOtp">Follow Up</a>
-            <a href="#" class="list-group-item" data-parent="#menu1" id="otpExit">Exits</a>
-            <a href="#" class="list-group-item" data-parent="#menu1" id="sessions">Sessions</a>
-            <a href="#" class="list-group-item" data-parent="#menu1" id="stockEntry">Stock Entry</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="otpAdd">Admission</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="addFollowupOtp">Follow Up</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="otpExit">Exits</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="sessions">Sessions</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="stockEntry">Stock Entry</a>
           </div>
-          <a href="#menu3" class="list-group-item collapsed" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
+          <a href="#menu3" class="list-group-item collapsed _mn" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
             <i class="fa fa-book"></i>
             <span class="hidden-sm-down">Edit</span>
           </a>
           <div class="collapse" id="menu3">
             <a href="#menu3sub1" class="list-group-item" data-toggle="collapse" aria-expanded="false">Screening</a>
             <div class="collapse" id="menu3sub1">
-              <a href="#" class="list-group-item" data-parent="#menu3sub1" id="scrChUpd">Children</a>
-              <a href="#" class="list-group-item" data-parent="#menu3sub1" id="scrPlUpd">PLW</a>
+              <a href="#" class="list-group-item _sb" data-parent="#menu3sub1" id="scrChUpd">Children</a>
+              <a href="#" class="list-group-item _sb" data-parent="#menu3sub1" id="scrPlUpd">PLW</a>
             </div>
-            <a href="#" class="list-group-item" data-parent="#menu3" id="otpAddUpdate">Admissions</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu3" id="otpAddUpdate">Admissions</a>
             <!-- <a href="#" class="list-group-item" data-parent="#menu3">FollowUp</a> -->
-            <a href="#" class="list-group-item" data-parent="#menu3" id="otpExitEdit">Exits</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu3" id="otpExitEdit">Exits</a>
           </div>
-          <a href="#menu4" class="list-group-item collapsed" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
+          <a href="#menu4" class="list-group-item collapsed _mn" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
             <i class="fa fa-book"></i>
             <span class="hidden-sm-down">Reports</span>
           </a>
           <div class="collapse" id="menu4">
               <a href="#menu4sub1" class="list-group-item" data-toggle="collapse" aria-expanded="false">Screening</a>
               <div class="collapse" id="menu4sub1">
-                <a href="#" class="list-group-item" data-parent="#menu4sub1" id="scrChdNewReport">Children</a>
-                <a href="#" class="list-group-item" data-parent="#menu4sub1" id="scrPlwNewReport">PLW</a>
+                <a href="#" class="list-group-item _sb" data-parent="#menu4sub1" id="scrChdNewReport">Children</a>
+                <a href="#" class="list-group-item _sb" data-parent="#menu4sub1" id="scrPlwNewReport">PLW</a>
               </div>                      
             <!-- <a href="#" class="list-group-item" data-parent="#menu4" id="scrReport">Screening</a> -->
 
             <!-- <a href="#" class="list-group-item" data-parent="#menu3">FollowUp</a> -->
-            <a href="#" class="list-group-item" data-parent="#menu4" id="otpReport">Admission & Exit</a>
-            <a href="#" class="list-group-item" data-parent="#menu4" id="defReport">Defaulter</a>
-            <a href="#" class="list-group-item" data-parent="#menu4" id="autoStock">Stock</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu4" id="otpReport">Admission & Exit</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu4" id="defReport">Defaulter</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu4" id="autoStock">Stock</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu4" id="sessionsReport">Sessions</a>
           </div>
-          <a href="#menu5" class="list-group-item collapsed" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
+          <a href="#menu5" class="list-group-item collapsed _mn" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
             <i class="fa fa-book"></i>
             <span class="hidden-sm-down">Admin Tools</span>
           </a>
           <div class="collapse" id="menu5">
-            <a href="#" class="list-group-item" data-parent="#menu5" id="supList">Supervisor List</a>
-            <a href="#" class="list-group-item" data-parent="#menu5" id="staffList">CHW/LHW List</a>
-            <a href="#" class="list-group-item" data-parent="#menu5" id="villageList">Village List</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu5" id="supList">Supervisor List</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu5" id="staffList">CHW/LHW List</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu5" id="villageList">Village List</a>
           </div>
           
         </div>
       </div>
       <main class="col-md-10 col-xs-11 p-l-2 p-t-2">
-        <div id="messages"></div>
+        <!-- <div> -->
+          
+
+        <!-- </div> -->
+        
         <div id="jsContent" class="container-fluid">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 ">
             <div class="card bg-light mb-6">
@@ -135,7 +141,17 @@
         </div>
       </main>
     </div>
+  
   </div>
+  <!-- Messages -->
+  <!-- <div class="row"> -->
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="MessageModal">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content" id="messages">
+        </div>
+      </div>
+    </div>
+  <!-- </div> -->
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -245,6 +261,13 @@
             }
             ipc.removeAllListeners('hhType');
           }
+          $(function(){
+            $('._sb').on('click', function(){
+              $('._sb').removeClass('bg-secondary');
+              $(this).addClass('bg-secondary');
+            })
+
+          })
     
   </script>
   
@@ -256,7 +279,9 @@
   <script src="../js/dataTables.checkboxes.min.js"></script>
   <script src="../js/jszip.min.js"></script>
   <script src="../js/buttons.flash.min.js"></script>
-  <script src="../js/buttons.html5.min.js"></script>
+  <script src="../js/buttons.html5.min.js"></script>  
+  <script src="../js/jquery.inputmask.bundle.min.js"></script>  
+  <!-- <script src="../js/jsGrid_custom_fields.js"></script> -->
   <script>
     // var InitGrid = require('./scrChildv2').initGrid;
     var InitGrid = require('./scrChildren').initGrid;
@@ -267,14 +292,14 @@
     // var InitScrPlUpdv2 = require('./scrPlUpdv2').initScrPlUpdv2;
     var InitOtpAdd = require('./otpAddv2').initOtpAdd;
     var InitOtpFollowUp = require('./otpFollowUpv2').initOtpFollowUp;
-    var InitOtpAddUpdV2 = require('./otpAddUpdv2').initOtpAddUpdV2;
+    var InitOtpAddUpdV2 = require('./otpAddUpdv4').initOtpAddUpdV2;
     var InitOtpExit = require('./otpExitv2').initOtpExit;
-    var InitOtpExitEditV2 = require('./otpExitEditv2').initOtpExitEditV2;
+    var InitOtpExitEditV2 = require('./otpExitEditv3').initOtpExitEditV2;
     var InitSessionsV2 = require('./sessionsv2').initSessionsV2;
     var InitOtpReportsV2 = require('./otpReportsv2').initOtpReportsV2;
     var InitDefaulterv2 = require('./def2').initDefaulterv2;
-    var InitScrChildrenUpd = require('./scrChildrenUpd').initScrChildrenUpd;
-    var InitScrPlwNewUpd = require('./scrPlwNewUpd').initScrPlwNewUpd;
+    var InitScrChildrenUpd = require('./scrChildrenUpdv1').initScrChildrenUpd;
+    var InitScrPlwNewUpd = require('./scrPlwNewUpdv1').initScrPlwNewUpd;
     var InitScrChildrenReport = require('./scrChildrenReport').initScrChildrenReport;
     var InitScrPlwNewReport = require('./scrPlwNewReport').initScrPlwNewReport;
     var InitStockEntry = require('./stockEntry').stockEntry;
@@ -283,7 +308,17 @@
     var InitSupList = require('./supList').SupList;
     var InitStaffList = require('./staffList').StaffList;
     var InitVillageList = require('./villageList').VillageList;
+    var InitSessionsReport = require('./sessionsReport').sessionsReport;
     // var InitDefaulterv2 = require('./defaulterv2').initDefaulterv2;
+
+    function sessionReportTemplate() {
+        var content = document.querySelector('link[href="sessionsReport.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitSessionsReport();
+      }
 
     function supListTemplate() {
         var content = document.querySelector('link[href="supList.html"]');
@@ -355,7 +390,7 @@
     }
 
     function otpExitEditTemplate() {
-      var content = document.querySelector('link[href="otpExitEditv2.html"]');
+      var content = document.querySelector('link[href="otpExitEditv3.html"]');
       var template = content.import.querySelector('template');
       var clone = document.importNode(template.content, true);
       $('#jsContent').empty();
@@ -373,7 +408,7 @@
     }
 
     function otpAddUpdateTemplate() {
-      var content = document.querySelector('link[href="otpAddUpdv3.html"]');
+      var content = document.querySelector('link[href="otpAddUpdv4.html"]');
       var template = content.import.querySelector('template');
       var clone = document.importNode(template.content, true);
       $('#jsContent').empty();
@@ -400,7 +435,7 @@
     }
 
     function scrPlUpdTemplate() {
-      var content = document.querySelector('link[href="scrPlwNewUpd.html"]');
+      var content = document.querySelector('link[href="scrPlwNewUpdv1.html"]');
       var template = content.import.querySelector('template');
       var clone = document.importNode(template.content, true);
       $('#jsContent').empty();
@@ -417,7 +452,7 @@
       InitScrChUpdv2();
     }
     function scrChUpdTemplate1() {
-      var content = document.querySelector('link[href="scrChildrenUpd.html"]');
+      var content = document.querySelector('link[href="scrChildrenUpdv1.html"]');
       var template = content.import.querySelector('template');
       var clone = document.importNode(template.content, true);
       $('#jsContent').empty();
@@ -566,34 +601,50 @@
     $('#stockEntry').on('click',function(){
       stockEntryTemplate();
     })
+    $('#sessionsReport').on('click',function(){
+      sessionReportTemplate();
+    })
   </script>
   <script>
     ipc.on('success', function (evt, result) {
       $('#messages').append(
-        `<div class="alert alert-success alert-dismissible fade show" role="alert">${result.msg}</div>`)
-      $('.alert').alert()
-      $(".alert").fadeTo(3000, 1000).slideUp(500, function () {
-        $(".alert").alert('close');
-        $().alert('dispose')
-        $('#messages').empty()
-        console.log(ipc.listeners());
-        ipc.removeListener('success',ipc.listeners()[0]);
-        // console.log(ipc.listeners()[0]);
+        `<div class="modal-header"> <h5 class="modal-title" >Success</h5> </div><div class="modal-body"><div class="alert alert-success alert-dismissible fade show" role="alert">${result.msg}</div></div>`)
+        $('#MessageModal').modal('show');
+        setTimeout(function(){
+        $('#MessageModal').modal('hide');
+          $('#messages').empty();
+          ipc.removeListener('success', ipc.listeners()[0]);
+        },1000);
+        // $('#MessageModal').modal('show');
+      // $('.alert').alert()
+      // $(".alert").fadeTo(3000, 1000).slideUp(500, function () {
+      //   $(".alert").alert('close');
+      //   $().alert('dispose')
+      //   $('#messages').empty()
+      //   console.log(ipc.listeners());
+      //   ipc.removeListener('success',ipc.listeners()[0]);
+      //   // console.log(ipc.listeners()[0]);
 
-      })
+      // })
     });
     ipc.on('error', function (evt, result) {
       $('#messages').append(
-        `<div class="alert alert-warning alert-dismissible fade show" role="alert">${result.msg}</div>`)
-      $('.alert').alert()
-      $(".alert").fadeTo(3000, 1000).slideUp(500, function () {
-        $(".alert").alert('close');
-        $().alert('dispose')
-        $('#messages').empty()
-        console.log(ipc.listeners());
-        ipc.removeListener('error',ipc.listeners()[0]);
-        // console.log(ipc.listeners()[0]);
-      })
+        ` < div class= "modal-header" > <h5 class="modal-title" >Error</h5> </div > <div class="modal-body"><div class="alert alert-success alert-dismissible fade show" role="alert">${result.msg}</div></div>`)
+        $('#MessageModal').modal('show');
+      setTimeout(function () {
+        $('#MessageModal').modal('hide');
+        $('#messages').empty();
+        ipc.removeListener('success', ipc.listeners()[0]);
+      }, 1000);
+      // $('.alert').alert()
+      // $(".alert").fadeTo(3000, 1000).slideUp(500, function () {
+      //   $(".alert").alert('close');
+      //   $().alert('dispose')
+      //   $('#messages').empty()
+      //   console.log(ipc.listeners());
+      //   ipc.removeListener('error',ipc.listeners()[0]);
+      //   // console.log(ipc.listeners()[0]);
+      // })
     });
     ipc.on('updateNote', (e, index)=>{
       if(index === 1){

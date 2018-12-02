@@ -149,6 +149,8 @@ function followupAddData(event, item) {
     ration3: item.ration3,
     quantity3: item.quantity3,
     curr_date: item.followup_date,
+    other_com_name: item.other_com_name,
+    other_com_qty: item.other_com_qty,
     next_followup: function () {
       var myDate = new Date(item.followup_date);
       myDate.setDate(myDate.getDate() + 15)
@@ -169,6 +171,8 @@ function followupAddData(event, item) {
     ration3: item.ration3,
     quantity3: item.quantity3,
     curr_date: item.followup_date,
+    other_com_name: item.other_com_name,
+    other_com_qty: item.other_com_qty,
     next_followup: function () {
       var myDate = new Date(item.followup_date);
       myDate.setDate(myDate.getDate() + 15)
@@ -263,6 +267,8 @@ function otpExitAddDataSave(event, data, client) {
     quantity2: (data.exit_quantity2) ? data.exit_quantity2 : '',
     ration3: (data.exit_ration3) ? data.exit_ration3 : '',
     quantity3: (data.exit_quantity3) ? data.exit_quantity3 : '',
+    other_com_name: (data.exit_other_com_name) ? data.exit_other_com_name : '',
+    other_com_qty: (data.exit_other_com_qty) ? data.exit_other_com_qty : '',
     muac: data.exit_muac,
     status: data.exit_reason,
     curr_date: data.exit_date
@@ -299,22 +305,22 @@ function otpExitAddDataSave(event, data, client) {
     })
 }
 
-// sending all session of site 
-function allSessionsData(event, data) {
-  console.log(data);
-  knex('tblSessions')
-    .where('site_id', data)
-    .then(result => {
-      event.sender.send('getSessionsAll', ({
-        result: result
-      }))
-    })
-    .catch(e => {
-      event.sender.send('getSessionsAll', ({
-        err: e
-      }))
-    })
-}
+// // sending all session of site 
+// function allSessionsData(event, data) {
+//   console.log(data);
+//   knex('tblSessions')
+//     .where('site_id', data)
+//     .then(result => {
+//       event.sender.send('getSessionsAll', ({
+//         result: result
+//       }))
+//     })
+//     .catch(e => {
+//       event.sender.send('getSessionsAll', ({
+//         err: e
+//       }))
+//     })
+// }
 // adding session data 
 function sessionsDataSave(event, item, config, client) {
 
@@ -354,28 +360,28 @@ function sessionsDataSave(event, item, config, client) {
       }))
     })
 }
-// updatinf session data
-function sessionUpdateSave(event, item) {
-  item.upload_status = 2;
-  item.updated_at = localDate();
-  knex('tblSessions')
-    .update(item)
-    .where('session_id', item.session_id)
-    .then(result => {
-      return knex('tblSessions')
-        .where('session_id', item.session_id)
-    })
-    .then(result => {
-      event.sender.send('updateSessionsSingle', ({
-        result: result
-      }))
-    })
-    .catch(e => {
-      event.sender.send('updateSessionsSingle', ({
-        err: e
-      }))
-    })
-}
+// // updating session data
+// function sessionUpdateSave(event, item) {
+//   item.upload_status = 2;
+//   item.updated_at = localDate();
+//   knex('tblSessions')
+//     .update(item)
+//     .where('session_id', item.session_id)
+//     .then(result => {
+//       return knex('tblSessions')
+//         .where('session_id', item.session_id)
+//     })
+//     .then(result => {
+//       event.sender.send('updateSessionsSingle', ({
+//         result: result
+//       }))
+//     })
+//     .catch(e => {
+//       event.sender.send('updateSessionsSingle', ({
+//         err: e
+//       }))
+//     })
+// }
 ipcMain.on('stocks', (e, data) => {
   stockMovement(e);
 })
@@ -612,73 +618,73 @@ function allOtpAddUpdData(event, site_id) {
     })
 
 }
-// Admission Update: Edit (update) one record
-function otpAddUpdDataSave(event, item) {
-  console.log(item);
-  item.upload_status = 2;
-  knex('tblOtpAdd')
-    .update(item)
-    .where('otp_id', item.otp_id)
-    .then(result => {
-      sucMsg(event, '', 'Record successfully updated')
-      console.log(result);
-    })
-    .catch(e => {
-      console.log(e)
-      errMsg(event, '', 'Record no updated, plz try again or contact admin')
-    })
-}
+// // Admission Update: Edit (update) one record
+// function otpAddUpdDataSave(event, item) {
+//   console.log(item);
+//   item.upload_status = 2;
+//   knex('tblOtpAdd')
+//     .update(item)
+//     .where('otp_id', item.otp_id)
+//     .then(result => {
+//       sucMsg(event, '', 'Record successfully updated')
+//       console.log(result);
+//     })
+//     .catch(e => {
+//       console.log(e)
+//       errMsg(event, '', 'Record no updated, plz try again or contact admin')
+//     })
+// }
 
 // Exit Update: sending all data
-function allExitData(event, site_id) {
+// function allExitData(event, site_id) {
 
-  knex.from('tblOtpExit')
-    .innerJoin('tblOtpAdd', 'tblOtpAdd.otp_id', 'tblOtpExit.otp_id')
-    .where({
-      site_id: site_id,
-    })
-    .then(result => {
-      console.log(result)
-      event.sender.send('have', ({
-        result: result
-      }))
-    })
-    .catch(e => {
-      event.sender.send('have', ({
-        err: e
-      }))
-    })
-}
-// Exit Update: Edit (update) one record
-function exitUpdDataSave(event, data, client) {
-  data.client_id = client;
-  data.upload_status = 2;
-  const otpExitAddData = data;
-  console.log(otpExitAddData);
+//   knex.from('tblOtpExit')
+//     .innerJoin('tblOtpAdd', 'tblOtpAdd.otp_id', 'tblOtpExit.otp_id')
+//     .where({
+//       site_id: site_id,
+//     })
+//     .then(result => {
+//       console.log(result)
+//       event.sender.send('have', ({
+//         result: result
+//       }))
+//     })
+//     .catch(e => {
+//       event.sender.send('have', ({
+//         err: e
+//       }))
+//     })
+// }
+// // Exit Update: Edit (update) one record
+// function exitUpdDataSave(event, data, client) {
+//   data.client_id = client;
+//   data.upload_status = 2;
+//   const otpExitAddData = data;
+//   console.log(otpExitAddData);
 
-  knex('tblOtpExit')
-    .where('otp_id', otpExitAddData.otp_id)
-    .update(otpExitAddData)
-    .then(result => {
-      console.log(result);
-      sucMsg(event, '', 'Record updated Successfully')
-      return knex('tblInterimOtp')
-        .where('otp_id', otpExitAddData.otp_id)
-        .update({
-          status: otpExitAddData.exit_reason
-        })
-    })
-    .then(result => {
-      console.log({
-        msg: 'interm table updated',
-        data: result
-      })
-    })
-    .catch(e => {
-      console.log(e);
-      errMsg(event, '', 'Record not updated, plz try again or contact admin')
-    })
-}
+//   knex('tblOtpExit')
+//     .where('otp_id', otpExitAddData.otp_id)
+//     .update(otpExitAddData)
+//     .then(result => {
+//       console.log(result);
+//       sucMsg(event, '', 'Record updated Successfully')
+//       return knex('tblInterimOtp')
+//         .where('otp_id', otpExitAddData.otp_id)
+//         .update({
+//           status: otpExitAddData.exit_reason
+//         })
+//     })
+//     .then(result => {
+//       console.log({
+//         msg: 'interm table updated',
+//         data: result
+//       })
+//     })
+//     .catch(e => {
+//       console.log(e);
+//       errMsg(event, '', 'Record not updated, plz try again or contact admin')
+//     })
+// }
 
 // Screening Children Add 
 function childrenScrAddSave(event, data, client, username, project) {
@@ -696,7 +702,7 @@ function childrenScrAddSave(event, data, client, username, project) {
       console.log('func childrenScrAddSave error', e)
     })
 }
-// Screening Children Add 
+// Screening PLW Add 
 function plwNewScrAddSave(event, data, client, username, project) {
   data.client_id = client;
   data.username = username;
@@ -713,34 +719,34 @@ function plwNewScrAddSave(event, data, client, username, project) {
     })
 }
 
-// Screening Children update 
-function childrenScrUpdSave(event, data) {
-  data.upload_status = 2;
-  knex('tblScrChildren')
-    .update(data)
-    .where('ch_scr_id', data.ch_scr_id)
-    .then(result => {
-      sucMsg(event, '', 'Record updated successfully')
-      console.log('func childrenScrUpdSave success', result)
-    }).catch(e => {
-      errMsg(event, '', 'Record not updated, plz try again or contact admin')
-      console.log('func childrenScrUpdSave error', e)
-    })
-}
-// Screening PLW NEW update 
-function plwNewScrUpdSave(event, data) {
-  data.upload_status = 2;
-  knex('tblScrPlw')
-    .update(data)
-    .where('plw_scr_id', data.plw_scr_id)
-    .then(result => {
-      sucMsg(event, '', 'Record updated successfully')
-      console.log('func plwNewScrUpdSave success', result)
-    }).catch(e => {
-      errMsg(event, '', 'Record not updated, plz try again or contact admin')
-      console.log('func plwNewScrUpdSave error', e)
-    })
-}
+// // Screening Children update 
+// function childrenScrUpdSave(event, data) {
+//   data.upload_status = 2;
+//   knex('tblScrChildren')
+//     .update(data)
+//     .where('ch_scr_id', data.ch_scr_id)
+//     .then(result => {
+//       sucMsg(event, '', 'Record updated successfully')
+//       console.log('func childrenScrUpdSave success', result)
+//     }).catch(e => {
+//       errMsg(event, '', 'Record not updated, plz try again or contact admin')
+//       console.log('func childrenScrUpdSave error', e)
+//     })
+// }
+// // Screening PLW NEW update 
+// function plwNewScrUpdSave(event, data) {
+//   data.upload_status = 2;
+//   knex('tblScrPlw')
+//     .update(data)
+//     .where('plw_scr_id', data.plw_scr_id)
+//     .then(result => {
+//       sucMsg(event, '', 'Record updated successfully')
+//       console.log('func plwNewScrUpdSave success', result)
+//     }).catch(e => {
+//       errMsg(event, '', 'Record not updated, plz try again or contact admin')
+//       console.log('func plwNewScrUpdSave error', e)
+//     })
+// }
 var db = require('./dbTest');
 const request = require('request');
 
@@ -969,6 +975,323 @@ function creatWindow() {
       console.log('error');
     }
   })
+///////////////TEST PORTION
+ 
+  // ipcMain.on('allOtpExit', (event, filter) => {
+  //   console.log(filter);
+  //   var _limit = (filter.pageSize) ? filter.pageSize : 10;
+  //   var _offset = (filter.pageIndex == 1) ? 0 : (filter.pageIndex - 1) * _limit;
+  //   console.log({ _limit, _offset })
+  //   // console.log(`%${filter.site_village}%`);
+  //   async.series({
+  //     data: cb => {
+  //       knex("v_otpExitFullForUpdate")
+  //         .where("p_name", "like", `%${filter.p_name}%`)
+  //         .where("site_village", "like", `%${filter.site_village}%`)
+  //         .where("reg_id", "like", `%${filter.reg_id}%`)
+  //         .where("province", "like", `%${filter.province}%`)
+  //         .where("district_name", "like", `%${filter.district_name}%`)
+  //         .where("uc_name", "like", `%${filter.uc_name}%`)
+  //         .where("tehsil_name", "like", `%${filter.tehsil_name}%`)
+  //         .where("prog_type", "like", `%${filter.prog_type}%`)
+  //         // .where('report_month', 'like', `%${filter.report_month}%`)
+
+  //         .where({ is_deleted: 0 })
+  //         .limit(_limit)
+  //         .offset(_offset)
+  //         .then(result => cb(null, result))
+  //         .catch(e => cb(e));
+  //     },
+  //     itemsCount: cb => {
+  //       knex("v_otpExitFullForUpdate")
+  //         .where("p_name", "like", `%${filter.p_name}%`)
+  //         .where("site_village", "like", `%${filter.site_village}%`)
+  //         .where("reg_id", "like", `%${filter.reg_id}%`)
+  //         .where("province", "like", `%${filter.province}%`)
+  //         .where("district_name", "like", `%${filter.district_name}%`)
+  //         .where("uc_name", "like", `%${filter.uc_name}%`)
+  //         .where("tehsil_name", "like", `%${filter.tehsil_name}%`)
+  //         .where("prog_type", "like", `%${filter.prog_type}%`)
+  //         .where({ is_deleted: 0 })
+  //         .count("exit_id as total")
+  //         .then(result => cb(null, result))
+  //         .catch(e => cb(e));
+
+  //     }
+  //   }, (e, result) => {
+  //     if (e) {
+  //       event.sender.send("allOtpExit", { err: e });
+  //       console.log(e)
+  //     } else {
+  //       event.sender.send("allOtpExit", { result });
+  //       console.log(result);
+
+  //     }
+  //   })
+  // })
+  // ipcMain.on("deleteOtpExit", (event, item) => {
+  //   console.log(item);
+  //   async.series({
+  //     delSOtpExit: cb => {
+  //       knex("tblOtpExit")
+  //         .where({ exit_id: item.exit_id })
+  //         .update({ is_deleted: 1 })
+  //         .then(result => {
+  //           if (result) {
+  //             knex("tblInterimOtp")
+  //               .where({ otp_id: item.otp_id })
+  //               .update({status: 'open'})
+  //               .then(result => {
+  //                 cb(null, result)
+  //               });
+  //           }
+  //         }).catch(e=>cb(e))
+  //     }
+  //   }, (err, result) => {
+  //     if (err) {
+  //       console.log(err);
+  //       errMsg(event, "", "Unable to delte record");
+  //       event.sender.send("deleteOtpExit", { err });
+  //     } else {
+  //       sucMsg(event, "", `Patient with id: ${item.exit_id} is sucessfully delted`);
+  //       console.log(result)
+  //       event.sender.send("deleteOtpExit", { result });
+  //     }
+  //   });
+  // });
+  // ipcMain.on('allScrPlw', (event, filter) => {
+  //   console.log(filter);
+  //   var _limit = (filter.pageSize) ? filter.pageSize : 10;
+  //   var _offset = (filter.pageIndex == 1) ? 0 : (filter.pageIndex - 1) * _limit;
+  //   console.log({ _limit, _offset })
+  //   // console.log(`%${filter.site_village}%`);
+  //   async.series({
+  //     data: cb => {
+  //       knex("v_tblScrPlwFull")
+  //         .where('province', 'like', `%${filter.province}%`)
+  //         .where('district_name', 'like', `%${filter.district_name}%`)
+  //         .where('tehsil_name', 'like', `%${filter.tehsil_name}%`)
+  //         .where('uc_name', 'like', `%${filter.uc_name}%`)
+  //         .where('report_month', 'like', `%${filter.report_month}%`)
+  //         .where('sup_name', 'like', `%${filter.sup_name}%`)
+  //         .where('staff_name', 'like', `%${filter.staff_name}%`)
+  //         // .where('report_month', 'like', `%${filter.report_month}%`)
+          
+  //         .where({ is_deleted: 0 })
+  //         .limit(_limit)
+  //         .offset(_offset)
+  //         .then(result => cb(null, result))
+  //         .catch(e => cb(e));
+  //     },
+  //     itemsCount: cb => {
+  //       knex("v_tblScrPlwFull")
+  //         .where("province", "like", `%${filter.province}%`)
+  //         .where("district_name", "like", `%${filter.district_name}%`)
+  //         .where("tehsil_name", "like", `%${filter.tehsil_name}%`)
+  //         .where("uc_name", "like", `%${filter.uc_name}%`)
+  //         .where("report_month", "like", `%${filter.report_month}%`)
+  //         .where("sup_name", "like", `%${filter.sup_name}%`)
+  //         .where("staff_name", "like", `%${filter.staff_name}%`)
+  //         .where({ is_deleted: 0 })
+  //         .count("plw_scr_id as total")
+  //         .then(result => cb(null, result))
+  //         .catch(e => cb(e));
+
+  //     }
+  //   }, (e, result) => {
+  //     if (e) {
+  //       event.sender.send("allScrPlw", { err: e });
+  //       console.log(e)
+  //     } else {
+  //       event.sender.send("allScrPlw", { result });
+  //       console.log(result);
+
+  //     }
+  //   })
+  // })
+  // ipcMain.on("deleteScrPlw", (event, plw_scr_id) => {
+  //   async.series({
+  //     delScrPlw: cb => {
+  //       knex("tblScrPlw")
+  //         .where({ plw_scr_id: plw_scr_id })
+  //         .update({ is_deleted: 1 })
+  //         .then(result => cb(null, result))
+  //         .catch(e => cb(e));
+  //     }
+  //   }, (err, result) => {
+  //     if (err) {
+  //       console.log(err);
+  //       errMsg(event, "", "Unable to delte record");
+  //       event.sender.send("deleteScrPlw", { err });
+  //     } else {
+  //       sucMsg(event, "", `PLW Screening with id: ${plw_scr_id} is sucessfully delted`);
+  //       event.sender.send("deleteScrPlw", { result });
+  //     }
+  //   });
+  // });
+  // ipcMain.on('allScrChildren', (event, filter) => {
+  //   console.log(filter);
+  //   var _limit = (filter.pageSize) ? filter.pageSize : 10;
+  //   var _offset = (filter.pageIndex == 1) ? 0 : (filter.pageIndex - 1) * _limit;
+  //   console.log({ _limit, _offset })
+  //   // console.log(`%${filter.site_village}%`);
+  //   async.series({
+  //     data: cb => {
+  //       knex("v_scrChildFull")
+  //         .where('province', 'like', `%${filter.province}%`)
+  //         .where('district_name', 'like', `%${filter.district_name}%`)
+  //         .where('tehsil_name', 'like', `%${filter.tehsil_name}%`)
+  //         .where('uc_name', 'like', `%${filter.uc_name}%`)
+  //         .where('report_month', 'like', `%${filter.report_month}%`)
+  //         .where('sup_name', 'like', `%${filter.sup_name}%`)
+  //         .where('staff_name', 'like', `%${filter.staff_name}%`)
+  //         // .where('report_month', 'like', `%${filter.report_month}%`)
+          
+  //         .where({ is_deleted: 0 })
+  //         .limit(_limit)
+  //         .offset(_offset)
+  //         .then(result => cb(null, result))
+  //         .catch(e => cb(e));
+  //     },
+  //     itemsCount: cb => {
+  //       knex("v_scrChildFull")
+  //         .where("province", "like", `%${filter.province}%`)
+  //         .where("district_name", "like", `%${filter.district_name}%`)
+  //         .where("tehsil_name", "like", `%${filter.tehsil_name}%`)
+  //         .where("uc_name", "like", `%${filter.uc_name}%`)
+  //         .where("report_month", "like", `%${filter.report_month}%`)
+  //         .where("sup_name", "like", `%${filter.sup_name}%`)
+  //         .where("staff_name", "like", `%${filter.staff_name}%`)
+  //         .where({ is_deleted: 0 })
+  //         .count("ch_scr_id as total")
+  //         .then(result => cb(null, result))
+  //         .catch(e => cb(e));
+
+  //     }
+  //   }, (e, result) => {
+  //     if (e) {
+  //       event.sender.send("allScrChildren", { err: e });
+  //       console.log(e)
+  //     } else {
+  //       event.sender.send("allScrChildren", { result });
+  //       console.log(result);
+
+  //     }
+  //   })
+  // })
+  // ipcMain.on("deleteScrChildren", (event, ch_scr_id) => {
+  //   async.series({
+  //     delScrCh: cb => {
+  //       knex("tblScrChildren")
+  //         .where({ ch_scr_id: ch_scr_id })
+  //         .update({ is_deleted: 1 })
+  //         .then(result => cb(null, result))
+  //         .catch(e => cb(e));
+  //     }
+  //   }, (err, result) => {
+  //     if (err) {
+  //       console.log(err);
+  //       errMsg(event, "", "Unable to delte record");
+  //       event.sender.send("deleteScrChildren", { err });
+  //     } else {
+  //       sucMsg(event, "", `Screening with id: ${ch_scr_id} is sucessfully delted`);
+  //       event.sender.send("deleteScrChildren", { result });
+  //     }
+  //   });
+  // });
+  
+  // ipcMain.on('allOtpTest', (event, filter) => {
+  //   console.log(filter);
+  //   var _limit = (filter.pageSize) ? filter.pageSize : 10;
+  //   var _offset = (filter.pageIndex == 1) ? 0 : (filter.pageIndex - 1) * _limit; 
+  //   console.log({_limit,_offset})
+  //   // console.log(`%${filter.site_village}%`);
+  //   async.series({
+  //     data: cb => {
+  //       knex("v_otpAddmision1")
+  //         .where("p_name", "like", `%${filter.p_name}%`)
+  //         .where("site_village", "like", `%${filter.site_village}%`)
+  //         .where("reg_id", "like", `%${filter.reg_id}%`)
+  //         .where("province", "like", `%${filter.province}%`)
+  //         .where("district_name", "like", `%${filter.district_name}%`)
+  //         .where("uc_name", "like", `%${filter.uc_name}%`)
+  //         .where("tehsil_name", "like", `%${filter.tehsil_name}%`)
+  //         .where("prog_type", "like", `%${filter.prog_type}%`)
+  //         .where({ is_deleted: 0 })
+  //         .limit(_limit)
+  //         .offset(_offset)
+  //         .then(result => cb(null, result))
+  //         .catch(e => cb(e));
+  //     },
+  //     itemsCount: cb => {
+  //       knex("v_otpAddmision1")
+  //         .where("p_name", "like", `%${filter.p_name}%`)
+  //         .where("site_village", "like", `%${filter.site_village}%`)
+  //         .where("reg_id", "like", `%${filter.reg_id}%`)
+  //         .where("province", "like", `%${filter.province}%`)
+  //         .where("district_name", "like", `%${filter.district_name}%`)
+  //         .where("uc_name", "like", `%${filter.uc_name}%`)
+  //         .where("tehsil_name", "like", `%${filter.tehsil_name}%`)
+  //         .where("prog_type", "like", `%${filter.prog_type}%`)
+  //         .where({ is_deleted: 0 })
+  //         .count("otp_id as total")
+  //         .then(result => cb(null, result))
+  //         .catch(e => cb(e));       
+      
+  //     }
+  //   }, (e, result) => {
+  //     if (e) {
+  //       event.sender.send("allOtpTest", { err: e });
+  //     } else {
+  //       event.sender.send('allOtpTest', { result })
+  //     }
+  //   })
+  // });
+
+  // ipcMain.on('deleteOtpAdd', (event, otp_id) => {
+  //   knex('tblOtpExit')
+  //     .where({ otp_id })
+  //     .then(result => {
+  //       if (result.length > 0) {
+  //         errMsg(event, "", `Patient with id: ${otp_id} couldn't be delted as patient is exited. To delete first delete it from exit `);
+  //       } else {
+  //         async.series({
+  //           delFollowup: cb => {
+  //             knex('tblOtpFollowup')
+  //               .where({ otp_id: otp_id })
+  //               .update({ is_deleted: 1 })
+  //               .then(result => cb(null, result))
+  //               .catch(e => cb(e));
+  //           },
+  //           delInterim: cb => {
+  //             knex("tblInterimOtp")
+  //               .where({ otp_id: otp_id })
+  //               .update({ is_deleted: 1 })
+  //               .then(result => cb(null, result))
+  //               .catch(e => cb(e));
+  //           },
+  //           delAddmision: cb => {
+  //             knex('tblOtpAdd')
+  //               .where({ otp_id: otp_id })
+  //               .update({ is_deleted: 1 })
+  //               .then(result => cb(null, result))
+  //               .catch(e => cb(e));
+  //           }
+  //         }, (err, result) => {
+  //           if (err) {
+  //             console.log(err);
+  //             errMsg(event, '', 'Unable to delte record');
+  //             event.sender.send("deleteOtpAdd", { err });
+  //           } else {
+  //             sucMsg(event, '', `Addmision with id: ${otp_id} is sucessfully delted`);
+  //             event.sender.send("deleteOtpAdd", { result });
+  //           }
+  //         })
+  //       }
+  //     })
+
+  // })
+
   //Adding Screening - Child
   ipcMain.on('scrChildAdd', (evt, data) => {
     console.log(data);
@@ -1032,17 +1355,17 @@ function creatWindow() {
     otpExitAddDataSave(e, data, imran.client);
   })
   // sending all sessions 
-  ipcMain.on('getSessionsAll', (e, data) => {
-    allSessionsData(e, data);
-  });
+  // ipcMain.on('getSessionsAll', (e, data) => {
+  //   allSessionsData(e, data);
+  // });
   // adding (inserting) one session 
   ipcMain.on('insertSessionsSingle', (e, item) => {
     sessionsDataSave(e, item, config, imran.client);
   })
   // editing (updating) one session
-  ipcMain.on('updateSessionsSingle', (e, item) => {
-    sessionUpdateSave(e, item);
-  });
+  // ipcMain.on('updateSessionsSingle', (e, item) => {
+  //   sessionUpdateSave(e, item);
+  // });
 
   // Screening Update: Children sending data 
   ipcMain.on('getScrChAll', function (e, qry) {
@@ -1066,20 +1389,20 @@ function creatWindow() {
   ipcMain.on('allOtp', (e, site_id) => {
     allOtpAddUpdData(e, site_id);
   })
-  // Admission Update: Edit (update) one record
-  ipcMain.on('submitOtpAddUpd', (e, otpAddFormData) => {
-    console.log(otpAddFormData);
-    otpAddUpdDataSave(e, otpAddFormData);
-  });
+  // // Admission Update: Edit (update) one record
+  // ipcMain.on('submitOtpAddUpd', (e, otpAddFormData) => {
+  //   console.log(otpAddFormData);
+  //   otpAddUpdDataSave(e, otpAddFormData);
+  // });
 
   // Exit Update: sending all data
   ipcMain.on('get', (e, site_id) => {
     allExitData(e, site_id);
   })
-  //Exit Update: Edit (update) one record
-  ipcMain.on('otpExitUpdate', (e, data) => {
-    exitUpdDataSave(e, data, imran.client);
-  })
+  // //Exit Update: Edit (update) one record
+  // ipcMain.on('otpExitUpdate', (e, data) => {
+  //   exitUpdDataSave(e, data, imran.client);
+  // })
   // Stock Entry:
   ipcMain.on('stockEntry', (e, data) => {
     stockSave(e, data);
@@ -1108,17 +1431,17 @@ function creatWindow() {
     allScrPlwNewUpdData(e, data)
   })
 
-  // children Screening updat Data 
-  ipcMain.on('scrChildrenUpd', (e, data) => {
-    console.log(data);
-    childrenScrUpdSave(e, data);
-    // (e,data);
-  })
+  // // children Screening updat Data 
+  // ipcMain.on('scrChildrenUpd', (e, data) => {
+  //   console.log(data);
+  //   childrenScrUpdSave(e, data);
+  //   // (e,data);
+  // })
 
-  // PLW New Screening update data
-  ipcMain.on('scrPlwNewUpd', (e, data) => {
-    plwNewScrUpdSave(e, data);
-  })
+  // // PLW New Screening update data
+  // ipcMain.on('scrPlwNewUpd', (e, data) => {
+  //   plwNewScrUpdSave(e, data);
+  // })
 
   ipcMain.on('scrChildReport', (e, qry) => {
     async.parallel({
@@ -3011,7 +3334,7 @@ function runDemo() {
     demo = null;
   })
 }
-
+/*
 // Creating Admin : sync Refference
 // function createSyncWindow() {
 //   var surl = imran.server;
@@ -3630,6 +3953,7 @@ function runDemo() {
 //     syncData = null;
 //   })
 // }
+*/
 const mac = '01:02:03:0a:0b:0c';
 const appKey = 'A4C74FBD-2375-496E-97BA-C4C3E4D3F868';
 // Creating Admin : sync Refference
@@ -4733,3 +5057,15 @@ var clientMessages = {
 require("./mainfunc/supervisors")(ipcMain, knex, fs, clientMessages);
 require("./mainfunc/stafflist")(ipcMain, knex, fs, clientMessages);
 require("./mainfunc/villagelist")(ipcMain, knex, fs, clientMessages);
+// Managing OTP EXIT Update and Delete
+require("./mainfunc/otpExitUpd")(ipcMain, knex, fs, clientMessages, async);
+// Managing OTP Addmision Update and delete
+require("./mainfunc/otpAddUpd")(ipcMain, knex, fs, clientMessages, async);
+// Managing PLW Screening  Update and delete
+require("./mainfunc/scrPlwUpd")(ipcMain, knex, fs, clientMessages, async);
+// Managing Children Screening  Update and delete
+require("./mainfunc/scrChUpd")(ipcMain, knex, fs, clientMessages, async);
+// Managing Sessions Add, Update and delete
+require("./mainfunc/sessions")(ipcMain, knex, fs, clientMessages, async, imran.client, localDate);
+// Managing Sessions Report
+require("./mainfunc/sessionReport")(ipcMain, knex, fs, clientMessages, async, imran.client, localDate);

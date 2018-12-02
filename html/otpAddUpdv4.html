@@ -1,101 +1,73 @@
 <template>
-  <div>
-    <form id="otpAddForm">
+  <div class="container-fluid">
+    <div class="row">
+      <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">Admission</p>
+
+
+    </div>
+    <div class="row">
+
+      <div id="jsGrid" class="col col-sm-12" ></div>
+    </div>
+    <!-- <div class="row"> -->
+      
       <div class="row">
-        <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">Admission</p>
-
-        <div class="form-group col-sm-3 ">
-          <label for="province">Province</label>
-          <select name="province" id="ddProvince" class="form-control form-control-sm" required>
-            <option selected value="">Choose</option>
-
-          </select>
-        </div>
-        <div class="form-group col-sm-3 ">
-
-          <label for="district">District</label>
-          <select name="district" id="ddDistrict" class="form-control form-control-sm" required>
-            <option selected value="">Choose</option>
-          </select>
-        </div>
-        <div class="form-group col-sm-3 ">
-
-          <label for="Tehsil">Tehsil</label>
-          <select name="Tehsil" id="ddTehsil" class="form-control form-control-sm" required>
-            <option selected value="">Choose</option>
-
-          </select>
-        </div>
-        <div class="form-group col-sm-3 ">
-          <label for="uc">UC</label>
-          <select name="uc" id="ddUC" class="form-control form-control-sm" required>
-            <option selected value="">Choose</option>
-          </select>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-sm-3">
-
-          <label for="site_id" class="form-label">Site Name:</label>
-
-          <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm" required>
-            <option value="">Select One</option>
-          </select>
-        </div>
-        <div class="form-group col-sm-2">
-
-          <label for="prog_type" class="form-label">Program Type:</label>
-
-          <select name="prog_type" id="ddProgramType" class="form-control form-control-sm" required>
-            <option selected value="">Select One</option>
-            <option value="sfp">TSFP</option>
-            <option value="sfp_Plw">TSFP-PLW</option>
-            <option value="otp">OTP</option>
-            <option value="sc">NSC</option>
-          </select>
-
-        </div>
-        <div class="form-group col-sm-3">
-
-          <label for="site_village" class="form-label">Village:</label>
-
-          <select name="site_village" id="ddVillageName" class="form-control form-control-sm" required>
-            <option value="">Select One</option>
-          </select>
-        </div>
-        <div class="form-group col-sm-2">
-
-          <label for="reg_date" class="form-label">Addmision Date:</label>
-          <input type="date" name="reg_date" id="reg_date" class="form-control form-control-sm clr" required>
-        </div>
-        <div class="form-group col-sm-2">
-
-          <label for="reg_id" class="form-label">Registration ID:</label>
-          <input type="text" name="reg_id" id="reg_id" class="form-control form-control-sm clr" maxlength="7" required>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12">
+        <form action="#!" id="otpAddUpdForm">
           <div class="card">
             <div class="card-header"> Addmision Form
             </div>
+            <input type="number" name="otp_id" id="otp_id" hidden>
             <div class="card-body">
               <div id="demo" class="border border-info rounded-top">
                 <p class="list-group-item bg-info text-white">Basic Demography</p>
                 <div class="row">
+                        <div class="form-group col-sm-3 ">
+                          <label for="ddProvince">Province</label>
+                          <select  id="ddProvince" class="form-control form-control-sm" required>
+                            <option selected value="">Choose</option>
+                        
+                          </select>
+                        </div>
+                        <div class="form-group col-sm-3 ">
+                        
+                          <label for="ddDistrict">District</label>
+                          <select  id="ddDistrict" class="form-control form-control-sm" required>
+                            <option selected value="">Choose</option>
+                          </select>
+                        </div>
+                        <div class="form-group col-sm-2 ">
+                        
+                          <label for="ddTehsil">Tehsil</label>
+                          <select  id="ddTehsil" class="form-control form-control-sm" required>
+                            <option selected value="">Choose</option>
+                        
+                          </select>
+                        </div>
+                        <div class="form-group col-sm-2 ">
+                          <label for="ddUC">UC</label>
+                          <select  id="ddUC" class="form-control form-control-sm" required>
+                            <option selected value="">Choose</option>
+                          </select>
+                        </div>
+                        <div class="form-group col-sm-2">
+                          <label for="site_id" class="form-label">Site Name:</label>
+                          <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm">
+                            <option value="">Select One</option>
+                          </select>
+                        </div>
                   <div class="form-group col-sm-2">
                     <label for="p_name" class="form-label">Patient Name</label>
-                    <input type="text" name="p_name" id="p_name" minlength="2" maxlength="25" class="form-control form-control-sm clr" required>
+                    <input type="text" name="p_name" id="p_name" minlength="2" maxlength="25" class="form-control form-control-sm"
+                      required>
                   </div>
-                  <div class="form-group col-sm-2">
+                  <div class="form-group col-sm-3">
                     <label for="f_or_h_name" class="form-label">Father/Husband Name</label>
-                    <input type="text" name="f_or_h_name" id="f_or_h_name" minlength="2" maxlength="25" class="form-control form-control-sm clr"
+                    <input type="text" name="f_or_h_name" id="f_or_h_name" minlength="2" maxlength="25" class="form-control form-control-sm"
                       required>
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="cnic" class="form-label">CNIC Number</label>
-                    <input type="text" name="cnic" id="cnic" class="form-control form-control-sm clr" 
-                    data-inputmask="'mask': '99999-9999999-9'">
+                    <input type="text" name="cnic" id="cnic" class="form-control form-control-sm clr" data-inputmask="'mask': '99999-9999999-9'">
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="address" class="form-label">Address</label>
@@ -103,27 +75,26 @@
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="cnt_number" class="form-label">Contact Number</label>
-                    <input type="text" name="cnt_number" id="cnt_number"  class="form-control form-control-sm clr" 
-                   data-inputmask="'mask': '0999-9999999'">
-                  </div>
-                  <div class="form-group col-sm-2">
-                    <label for="age" class="form-label">Age <small id="labAge">(in months)</small></label>
-                    <input type="number" name="age" id="age" class="form-control form-control-sm clr" required>
+                    <input type="text" name="cnt_number" id="cnt_number" class="form-control form-control-sm clr" data-inputmask="'mask': '0999-9999999'">
                   </div>
                 </div>
                 <div class="row">
                   <div class="form-group col-sm-2">
+                    <label for="age" class="form-label">Age</label>
+                    <input type="number" name="age" id="age" class="form-control form-control-sm" required>
+                  </div>
+                  <div class="form-group col-sm-2">
                     <label for="gender" class="form-label">Gender</label>
-                    <select name="gender" id="gender" class="form-control form-control-sm cld" required>
-                      <option selected value="">Choose</option>
+                    <select name="gender" id="gender" class="form-control form-control-sm" required>
+                      <option value="">Choose</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                     </select>
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="plw_type" class="form-label">PLW Type</label>
-                    <select name="plw_type " id="plw_type" class="form-control form-control-sm cld" required>
-                      <option selected value="">Choose</option>
+                    <select name="plw_type " id="plw_type" class="form-control form-control-sm" required>
+                      <option value="">Choose</option>
                       <option value="p">Pragnent</option>
                       <option value="l">Lactating</option>
                     </select>
@@ -151,21 +122,21 @@
                     </label>
                     <input type="number" name="nsc_old_otp_id" id="nsc_old_otp_id" class="form-control form-control-sm" value="0" hidden>
                   </div>
+
                   <div class="form-group col-sm-2">
                     <label for="ref_type">Refferal Type</label>
-                    <select name="ref_type" id="ref_type" class="form-control form-control-sm cld" required>
-                      <option selected value="">Choose</option>
+                    <select name="ref_type" id="ref_type" class="form-control form-control-sm" required>
+                      <option value="">Choose</option>
                       <option value="self">Self</option>
-                      <option value="peer">Peer to Peer</option>
+                      <option value="peer">Peer</option>
                       <option value="chw">CHW</option>
                       <option value="lhw">LHW</option>
                       <option value="doh_staff">DOH Staff</option>
-                      <!-- <option value="parents">Parents</option> -->
+                      <option value="parents">Parents</option>
                       <option value="com_org">Community Org</option>
                       <option value="by_sc_care">By SC Care</option>
                       <option value="by_otp">By OTP</option>
-                      <option value="from_opd">From OPD</option>
-                      <!-- <option value="by_sfp">By SFP</option> -->
+                      <option value="by_sfp">By SFP</option>
                       <option value="by_tsfp">By TSFP</option>
                       <option value="other">Other</option>
                     </select>
@@ -179,18 +150,20 @@
                     <label for="weight" class="form-label">Weight
                       <small>(KG)</small>
                     </label>
-                    <input type="number" name="weight" id="weight" class="form-control form-control-sm clr" min="0" required>
+                    <input type="number" name="weight" id="weight" class="form-control form-control-sm" min="0"
+                      required>
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="height" class="form-label">Height
                       <small>(CM)</small>
                     </label>
-                    <input type="number" name="height" id="height" class="form-control form-control-sm clr" min="0" required>
+                    <input type="number" name="height" id="height" class="form-control form-control-sm" min="0"
+                      required>
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="oedema" class="form-label">Oedema</label>
-                    <select name="oedema " id="oedema" class="form-control form-control-sm cld" required>
-                      <option selected value="">Choose</option>
+                    <select name="oedema " id="oedema" class="form-control form-control-sm" required>
+                      <option value="">Choose</option>
                       <option value="absent">absent</option>
                       <option value="plus_1">&plus;(1)</option>
                       <option value="plus_2">&plus;&plus;(2)</option>
@@ -201,7 +174,7 @@
                     <label for="muac">MUAC
                       <small>(CM)</small>
                     </label>
-                    <input type="number" name="muac" id="muac" class="form-control form-control-sm clr" required>
+                    <input type="number" name="muac" id="muac" class="form-control form-control-sm" required>
                   </div>
                 </div>
               </div>
@@ -210,8 +183,8 @@
                 <div class="row">
                   <div class="form-group col-sm-2">
                     <label for="diarrhoea">Diarrhoea</label>
-                    <select name="diarrhoea" id="diarrhoea" class="form-control form-control-sm cld" required>
-                      <option selected value="">Choose</option>
+                    <select name="diarrhoea" id="diarrhoea" class="form-control form-control-sm" required>
+                      <option value="">Choose</option>
                       <option value="1">Yes</option>
                       <option value="0">No</option>
                     </select>
@@ -219,8 +192,8 @@
                   <div class="form-group col-sm-2">
 
                     <label for="vomiting">Vomiting</label>
-                    <select name="vomiting" id="vomiting" class="form-control form-control-sm cld" required>
-                      <option selected value="">Choose</option>
+                    <select name="vomiting" id="vomiting" class="form-control form-control-sm" required>
+                      <option value="">Choose</option>
                       <option value="1">Yes</option>
                       <option value="0">No</option>
                     </select>
@@ -228,8 +201,8 @@
                   <div class="form-group col-sm-2">
 
                     <label for="cough">Cough</label>
-                    <select name="cough" id="cough" class="form-control form-control-sm cld" required>
-                      <option selected value="">Choose</option>
+                    <select name="cough" id="cough" class="form-control form-control-sm" required>
+                      <option value="">Choose</option>
                       <option value="1">Yes</option>
                       <option value="0">No</option>
                     </select>
@@ -237,8 +210,8 @@
                   <div class="form-group col-sm-2">
 
                     <label for="appetite">Appetite</label>
-                    <select name="appetite" id="appetite" class="form-control form-control-sm cld" required>
-                      <option selected value="">Choose</option>
+                    <select name="appetite" id="appetite" class="form-control form-control-sm" required>
+                      <option value="">Choose</option>
                       <option value="good">Good</option>
                       <option value="poor">Poor</option>
                       <option value="none">None</option>
@@ -247,8 +220,8 @@
                   <div class="form-group col-sm-2">
 
                     <label for="daily_stool">Stools&#047;Day</label>
-                    <select name="daily_stool" id="daily_stool" class="form-control form-control-sm cld" required>
-                      <option selected value="">Choose</option>
+                    <select name="daily_stool" id="daily_stool" class="form-control form-control-sm" required>
+                      <option value="">Choose</option>
                       <option value="bet1_3">1 to 3</option>
                       <option value="bet4_5">4 to 5</option>
                       <option value="gt5">&gt; 5</option>
@@ -257,8 +230,8 @@
                   <div class="form-group col-sm-2">
 
                     <label for="pass_urine">Passing Urine</label>
-                    <select name="pass_urine" id="pass_urine" class="form-control form-control-sm cld" required>
-                      <option selected value="">Choose</option>
+                    <select name="pass_urine" id="pass_urine" class="form-control form-control-sm" required>
+                      <option value="">Choose</option>
                       <option value="1">Yes</option>
                       <option value="0">No</option>
                     </select>
@@ -266,8 +239,8 @@
                   <div class="form-group col-sm-2">
 
                     <label for="b_feeding">Breast Feeding</label>
-                    <select name="b_feeding" id="b_feeding" class="form-control form-control-sm cld" required>
-                      <option selected value="">Choose</option>
+                    <select name="b_feeding" id="b_feeding" class="form-control form-control-sm" required>
+                      <option value="">Choose</option>
                       <option value="1">Yes</option>
                       <option value="0">No</option>
                     </select>
@@ -275,12 +248,12 @@
                 </div>
               </div>
               <div id="anthro" class="border border-info rounded-top">
-                <p class="list-group-item bg-info text-white sm">Ration Supplies</p>
+                <p class="list-group-item bg-info text-white sm">Commodity Supplies</p>
                 <div class="row">
                   <div class="form-group col-sm-2">
                     <label for="ration1">Commodity 1:</label>
-                    <select name="ration1" class="form-control form-control-sm cld" id="ration1" required>
-                      <option selected value="">Choose</option>
+                    <select name="ration1" class="form-control form-control-sm" id="ration1" required>
+                      <option value="">Choose</option>
                       <option value="RUTF Sachets">RUTF Sachets</option>
                       <option value="RUSF_Children">RUSF Children</option>
                       <option value="LNS_Plw">LNS PLW</option>
@@ -300,12 +273,13 @@
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="quantity1">Quantity:</label>
-                    <input type="number" name="quantity1" id="quantity1" class="form-control form-control-sm cld" min="0" required>
+                    <input type="number" name="quantity1" id="quantity1" class="form-control form-control-sm" min="0"
+                      required>
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="ration2">Commodity 2:</label>
-                    <select name="ration2" class="form-control form-control-sm cld" id="ration2">
-                      <option selected value="">Choose</option>
+                    <select name="ration2" class="form-control form-control-sm" id="ration2">
+                      <option value="">Choose</option>
 
                       <option value="RUTF Sachets">RUTF Sachets</option>
                       <option value="Amoxicillin">Amoxicillin</option>
@@ -324,12 +298,12 @@
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="quantity2">Quantity:</label>
-                    <input type="number" name="quantity2" id="quantity2" class="form-control form-control-sm clr" min="0">
+                    <input type="number" name="quantity2" id="quantity2" class="form-control form-control-sm" min="0">
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="ration3">Commodity 3:</label>
-                    <select name="ration3" class="form-control form-control-sm cld" id="ration3">
-                      <option selected value="">Choose</option>
+                    <select name="ration3" class="form-control form-control-sm" id="ration3">
+                      <option value="">Choose</option>
                       <option value="RUTF Sachets">RUTF Sachets</option>
                       <option value="Amoxicillin">Amoxicillin</option>
                       <option value="Folic Acid">Folic Acid</option>
@@ -347,23 +321,24 @@
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="quantity3">Quantity:</label>
-                    <input type="number" name="quantity3" id="quantity3" class="form-control form-control-sm clr" min="0">
+                    <input type="number" name="quantity3" id="quantity3" class="form-control form-control-sm" min="0">
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="other_com_name" class="form-label">Other Commodity Name</label>
-                    <input type="text" name="other_com_name" id="other_com_name" class="form-control form-control-sm clr" >
+                    <input type="text" name="other_com_name" id="other_com_name" class="form-control form-control-sm clr">
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="other_com_qty" class="form-label">Other Commodity Qunatity</label>
                     <input type="number" name="other_com_qty" id="other_com_qty" class="form-control form-control-sm clr" >
                   </div>
-
                 </div>
               </div>
-              <button type="submit" class="btn btn-info btn-block float-right" id="otpAddSubmit">Save</button>
+              <button type="submit" class="btn btn-info btn-block float-right" id="otpAddUpdSubmit">Save</button>
             </div>
           </div>
-        </div>
+
       </div>
+    <!-- </div> -->
+    </form>
   </div>
 </template>

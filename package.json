@@ -1,7 +1,7 @@
 {
   "name": "acf_mis_local",
   "productName": "ACF MIS Local app",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "description": "ACF MIS FOR PINS",
   "main": "main.js",
   "scripts": {
@@ -34,7 +34,7 @@
     "async": "^2.6.1",
     "body-parser": "^1.18.2",
     "electron-log": "^2.2.16",
-    "electron-updater": "^3.0.3",
+    "electron-updater": "^3.2.3",
     "getmac": "^1.4.6",
     "jquery": "^3.3.1",
     "jquery-ui": "^1.12.1",
@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "electron": "^2.0.13",
-    "electron-builder": "^20.26.0",
+    "electron-builder": "^20.34.0",
     "electron-packager": "^12.1.0"
   }
 }

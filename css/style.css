@@ -51,10 +51,17 @@ input[type=number]::-webkit-inner-spin-button {
     color: red;
     font-weight: bolder;
   }
+  .jsgrid-cell {     
+    word-wrap: break-word;
+}
 
   #sidebar {
     height: 100vh;
     background-color: #333;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
     /* background-color: #4C9CB8; */
     /* color: white !important; */
   }

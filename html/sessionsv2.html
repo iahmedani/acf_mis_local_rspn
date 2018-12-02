@@ -6,37 +6,38 @@
 
           <div class="form-group col-sm-2 ">
             <label for="province">Province</label>
-            <select name="province" id="ddProvince" class="form-control form-control-sm">
-              <option selected disabled>Choose</option>
+            <select id="ddProvince" class="form-control form-control-sm myFilter">
+              <option selected value="">Choose</option>
     
             </select>
           </div>
           <div class="form-group col-sm-2 ">
     
             <label for="district">District</label>
-            <select name="district" id="ddDistrict" class="form-control form-control-sm">
-              <option selected disabled>Choose</option>
+            <select id="ddDistrict" class="form-control form-control-sm myFilter" >
+              <option selected value="">Choose</option>
             </select>
           </div>
           <div class="form-group col-sm-2 ">
     
             <label for="Tehsil">Tehsil</label>
-            <select name="Tehsil" id="ddTehsil" class="form-control form-control-sm">
-              <option selected disabled>Choose</option>
+            <select  id="ddTehsil" class="form-control form-control-sm myFilter">
+              <option selected value="">Choose</option>
     
             </select>
           </div>
           <div class="form-group col-sm-2 ">
             <label for="uc">UC</label>
-            <select name="uc" id="ddUC" class="form-control form-control-sm">
-              <option selected disabled>Choose</option>
+            <select  id="ddUC" class="form-control form-control-sm myFilter">
+              <option selected value="">Choose</option>
             </select>
           </div>
           <div class="form-group col-sm-4">
     
             <label for="site_id" class="form-label">Site Name:</label>
+            <small id="site_must" style="color:red" hidden>Please select one Site</small>
     
-            <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm">
+            <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm myFilter" required>
               <option value="">Select One</option>
             </select>
           </div>

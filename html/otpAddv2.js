@@ -1,4 +1,6 @@
 module.exports.initOtpAdd = function (){
+  $(":input").inputmask();
+  // $("#phone").inputmask({ "mask": "(999) 999-9999" });
 $(function () {
     var datePickerId = document.getElementById('reg_date');
     datePickerId.max = new Date().toISOString().split("T")[0];
@@ -160,8 +162,10 @@ $('#otpAddSubmit').on('click', (e)=>{
   if($('#otpAddForm').valid()){
     var otpAddFormData = $('#otpAddForm').serializeFormJSON();
     ipc.send('submitOtpAdd', otpAddFormData);
-    ipc.removeAllListeners('submitOtpAdd')
-    setTimeout(otpAddTemplate, 3000);
+    ipc.removeAllListeners('submitOtpAdd');
+    $('.clr').val("");
+    $('.cld').val("");
+    // setTimeout(otpAddTemplate, 3000);
   }
 
     // addScrChildTemplate()
@@ -233,4 +237,14 @@ $('#otpAddSubmit').on('click', (e)=>{
       muacEl.attr('min', false);
     }
   });
+  $('#ent_reason').on('change', function () {
+    if ($(this).val() == "transfer_in_from_nsc") {
+      $("#nsc_old_otp_id_div").css('display', '');
+      $("#nsc_old_otp_id").attr("hidden", false);
+    } else {
+      $("#nsc_old_otp_id_div").css("display", "none");
+
+      $("#nsc_old_otp_id").attr("hidden", true);
+    }
+  })
 }

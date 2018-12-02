@@ -1,0 +1,53 @@
+<template>
+  <div class="container-fluid">
+
+    <div class="row">
+      <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">Exit
+        Edit</p>
+
+      <div class="form-group col-sm-2 ">
+        <label for="province">Province</label>
+        <select name="province" id="ddProvince" class="form-control form-control-sm">
+          <option selected disabled>Choose</option>
+
+        </select>
+      </div>
+      <div class="form-group col-sm-2 ">
+
+        <label for="district">District</label>
+        <select name="district" id="ddDistrict" class="form-control form-control-sm">
+          <option selected disabled>Choose</option>
+        </select>
+      </div>
+      <div class="form-group col-sm-2 ">
+
+        <label for="Tehsil">Tehsil</label>
+        <select name="Tehsil" id="ddTehsil" class="form-control form-control-sm">
+          <option selected disabled>Choose</option>
+
+        </select>
+      </div>
+      <div class="form-group col-sm-2 ">
+        <label for="uc">UC</label>
+        <select name="uc" id="ddUC" class="form-control form-control-sm">
+          <option selected disabled>Choose</option>
+        </select>
+      </div>
+      <div class="form-group col-sm-4">
+
+        <label for="site_id" class="form-label">Site Name:</label>
+
+        <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm">
+          <option value="">Select One</option>
+        </select>
+      </div>
+
+    </div>
+    <div class="row">
+
+      <div id="jsGrid" class="table-responsive col col-sm-12"></div>
+
+
+    </div>
+  </div>
+</template>

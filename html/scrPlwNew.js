@@ -93,7 +93,9 @@ module.exports.initScrPlwNew = function (){
       console.log(scrPlwNewData);
       ipc.send('scrPlwNewAdd', scrPlwNewData);
       ipc.removeAllListeners('scrPlwNewAdd');
-      $('#scrPlwNewForm').get(0).reset();
+      // $('#scrPlwNewForm').get(0).reset();
+      $('.clr').val("");
+      $('.cld').val("");
     $('input[type="number"]').attr('min',0);
     } 
     e.preventDefault();

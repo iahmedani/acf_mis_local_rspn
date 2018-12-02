@@ -1,0 +1,79 @@
+<template>
+  <div class="container-fluid">  
+
+    <div class="row">
+      <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">Session</p>
+
+      <div class="form-group col-sm-2 ">
+        <label for="province">Province</label>
+        <select id="ddProvince" class="form-control form-control-sm sReportFilter">
+          <option selected value="">Choose</option>
+
+        </select>
+      </div>
+      <div class="form-group col-sm-2 ">
+
+        <label for="district">District</label>
+        <select id="ddDistrict" class="form-control form-control-sm sReportFilter">
+          <option selected value="">Choose</option>
+        </select>
+      </div>
+      <div class="form-group col-sm-2 ">
+
+        <label for="Tehsil">Tehsil</label>
+        <select id="ddTehsil" class="form-control form-control-sm sReportFilter">
+          <option selected value="">Choose</option>
+
+        </select>
+      </div>
+      <div class="form-group col-sm-2 ">
+        <label for="uc">UC</label>
+        <select id="ddUC" class="form-control form-control-sm sReportFilter">
+          <option selected value="">Choose</option>
+        </select>
+      </div>
+      <div class="form-group col-sm-4">
+
+        <label for="site_id" class="form-label">Site Name:</label>
+        <small id="site_must" style="color:red" hidden>Please select one Site</small>
+
+        <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm sReportFilter" required>
+          <option value="">Select One</option>
+        </select>
+      </div>
+      
+    </div>
+    <!-- <div class="row"> -->
+      <form action="#!" id="filterDateSession">
+        <div class="form-group row">
+          <div class="col-sm-2">
+            <label for="interval" class="col-form-label">Inverval</label>
+            <select name="internval" id="ddInterval" class="form-control form-control-sm">
+              <option value="0" selected>No</option>
+              <option value="1">Yes</option>
+            </select>
+          </div>
+          <div class="col-sm-3" id="picYear">
+            <label for="start_date" class="col-form-label">Start Date:</label>
+            <input type="date" name="start_date" id="start_date" class="form-control form-control-sm" disabled required>
+          </div>
+          <div class="col-sm-3" id="picQuarter">
+            <label for="end_date" class="col-form-label">End Date:</label>
+            <input type="date" name="end_date" id="end_date" disabled class="form-control form-control-sm" required>
+          </div>
+          <div class="col-sm-2 align-self-end">
+            <button type="submit" class="btn btn-info btn-sm btn-block form-control shadow-sm" id="showSessionReport"
+              disabled>
+              <i class="fas fa-filter"></i> Show Data</button>
+          </div>
+      </form>
+      <!-- </div> -->
+    </div>
+   <br>
+   <hr>
+    <div class="row">
+      <table id="tblSessionReport" class="display" width="100%"></table>
+    </div>
+
+  </div>
+</template>

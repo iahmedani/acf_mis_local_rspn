@@ -145,7 +145,9 @@ module.exports.initGrid = function (){
       console.log(scrChildrenData);
       ipc.send('scrChildren', scrChildrenData);
       ipc.removeAllListeners('scrChildren');
-      $('#scrChildrenForm').get(0).reset();
+      // $('#scrChildrenForm').get(0).reset();
+      $('.clr').val("");
+      $('.cld').val("");
     $('input[type="number"]').attr('min',0);
     } 
     e.preventDefault();
@@ -153,5 +155,29 @@ module.exports.initGrid = function (){
   $('#resetScrChildForm').on('click',()=>{
     $('#scrChildrenForm').get(0).reset();
   })
-  
+  $('.tb').on('change', function () {
+    console.log($(this))
+  })
+  $(".tg").on("change", function() {
+    console.log($(this));
+  });
+
+  $('.tbb').on('change', function () {
+    var total = 0;
+    $('.tbb').each(function (i, el) {
+      total = total + (($(el).val()) ? parseInt($(el).val()) : 0);
+    })
+    $("#total_scr_boys").empty();
+    $("#total_scr_boys").val(total);
+  })
+  $(".tgg").on("change", function() {
+    var total = 0;
+    $(".tgg").each(function(i, el) {
+      total = total + ($(el).val() ? parseInt($(el).val()) : 0);
+    });
+    $("#total_scr_girls").empty();
+    $("#total_scr_girls").val(total);
+  });
+
+
 }

@@ -60,134 +60,204 @@ module.exports.initSessionsV2 = function (){
         })
       })
     });
-  $(function(){
+  $(function () {
+    $('.myFilter').on('change', function () {
+      console.log($(this).val())
+      var x = {};
+      x.province_id = ($("#ddProvince").val()) ? $("#ddProvince").val() : '';
+      x.district_id = ($("#ddDistrict").val()) ? $("#ddDistrict").val() : '';
+      x.tehsil_id = ($("#ddTehsil").val()) ? $("#ddTehsil").val() : '';
+      x.uc_id = ($("#ddUC").val()) ? $("#ddUC").val() : '';
+      x.site_id = ($("#ddHealthHouse").val()) ? $("#ddHealthHouse").val() : '';
+
+      $("#jsGrid")
+        .jsGrid("loadData", x)
+        .done(function() {
+          console.log("data loaded");
+        });
+    })
+    $("#jsGrid").jsGrid({
+      height: "500px",
+      width: "100%",
+      filtering: true,
+      inserting: true,
+      editing: true,
+      sorting: true,
+      // deleting: true,
+      paging: true,
+      autoload: true,
+      pageLoading: true, // this is the clue
+      pageSize: 20,
+      pageButtonCount: 5,
+      deleteConfirm: "Do you really want to delete Session?",
+      controller: {
+        loadData: function (filter) {
+          filter.province_id = ($("#ddProvince").val())?  $("#ddProvince").val() : ''  ;
+          filter.district_id = ($("#ddDistrict").val())?  $("#ddDistrict").val() : ''  ;
+          filter.tehsil_id = ($("#ddTehsil").val())?  $("#ddTehsil").val() : ''  ;
+          filter.uc_id = ($("#ddUC").val())?  $("#ddUC").val() : ''  ;
+          filter.site_id = ($("#ddHealthHouse").val())?  $("#ddHealthHouse").val() : ''  ;
+          return loadData(filter);
+        },
+        updateItem: function (item) {
+          // console.log('update')
+          // console.log(item);
+          delete item.province;
+          delete item.province_id;
+          delete item.district_name;
+          delete item.district_id;
+          delete item.tehsil_name;
+          delete item.tehsil_id;
+          delete item.uc_name;
+          delete item.uc_id;
+          delete item.site_name;
+          // delete item.district_id;
+          return updateData(item);
+        },
+        insertItem: function (item) {
+          console.log(item);
+          item.site_id = ($("#ddHealthHouse").val()) ? $("#ddHealthHouse").val() : '';
+          if (item.site_id != '') {
+            $("#site_must").attr("hidden", true);
+            return insertData(item)
+          } else {
+            $("#site_must").attr('hidden', false);
+          }
+        },
+        deleteItem: function (item) {
+          console.log(item)
+          deleteData(item);
+        }
+
+      },
+      fields: [{
+        name: 'session_date',
+        title: 'Date',
+        filtering: false,
+        type: 'date',
+        validate: 'required'
+      }, {
+        name: "session_type",
+        title: "Session Type",
+        type: "select",
+        items: [
+          { Name: '', value: '' },
+          { Name: 'Hygene', value: 'hygene' },
+          { Name: 'IYCF', value: 'iycf' },
+          { Name: 'Breast Feeding Counseling', value: 'breastFeeding' },
+          { Name: 'Cooking Demonstration', value: 'cooking' },
+          { Name: 'Other', value: 'other' },
+        ],
+        valueField: "value",
+        textField: "Name",
+        validate: 'required'
+      }, {
+        name: 'session_location',
+        title: 'Session Location',
+        type: 'select',
+        items: [
+          { Name: '', value: '' },
+          { Name: 'In CMAM Site', value: 'cmam_site' },
+          { Name: 'In Community', value: 'community' }
+        ], valueField: "value",
+        textField: "Name",
+        validate: 'required'
+      },
+      {
+        name: "new_male_participants",
+        title: "New Male Part:",
+        type: "number",
+        filtering: false,
+        validate: {
+          validator: 'min',
+          param: 0
+        }
+      },
+      {
+        name: "new_female_participants",
+        title: "New Female Part:",
+        type: "number",
+        validate: {
+          validator: 'min',
+          param: 0
+        },
+        filtering: false,
+      },
+      {
+        name: "old_male_participants",
+        title: "Old Male Part:",
+        type: "number",
+        validate: {
+          validator: 'min',
+          param: 0
+        },
+        filtering: false,
+      },
+      {
+        name: "old_female_participants",
+        title: "Old Female Part:",
+        type: "number",
+        validate: {
+          validator: 'min',
+          param: 0
+        },
+        filtering: false
+      },
+      {
+        name: "pragnent",
+        title: "Pragnent",
+        type: "number",
+        validate: {
+          validator: 'min',
+          param: 0
+        },
+        filtering: false
+      },
+      {
+        name: "lactating",
+        title: "Lactating",
+        type: "number",
+        validate: {
+          validator: 'min',
+          param: 0
+        },
+        filtering: false
+      },
+      {
+        name: 'upload_status',
+        title: 'Upload Status',
+        type: 'select',
+        valueType: 'number',
+        items: [{ Name: '', value: '' }, { Name: 'Uploaded', value: 1 }, { Name: 'Not Uploaded', value: 0 }, { Name: 'Edited', value: 2 }],
+        readOnly: true,
+        valueField: "value",
+        textField: "Name",
+        editing: false,
+        inserting: false,
+        filtering: false,
+
+      }, {
+        type: 'control',
+        modeSwitchButton: false,
+
+        // deleteButton: false,
+      }]
+      // ,
+      // onDataLoaded: function (data) {
+      //   console.log(data);
+      // },
+      // onItemUpdating: function (args) {
+      //   console.log('on Updating', args)
+      // }, // before controller.updateItem
+      // onItemUpdated: function (args) {
+      //   console.log('on Updated', args)
+
+      // }, // on done of controller.updateItem
+    });
       $('#ddHealthHouse').on('change', function () {
         var site_id = $(this).val();
         // 
-        $("#jsGrid").jsGrid({
-          height: "500px",
-          width: "100%",
-          // filtering: true,
-          inserting: true,
-          editing: true,
-          sorting: true,
-          // paging: true,
-          autoload: true,
-          pageLoading: true, // this is the clue
-          // pageSize: 10,
-          // pageButtonCount: 5,
-          deleteConfirm: "Do you really want to delete client?",
-          controller: {
-            loadData: function (filter) {
-              console.log(filter)
-              console.log('loaddata', site_id)
-              return loadData(site_id);
-            },
-            updateItem: function (item) {
-              console.log('update')
-              console.log(item);
-              return updateData(item);
-            },
-            insertItem: function (item) {
-              console.log(item);
-              item.site_id = site_id
-              return insertData(item)
-            }
-          },
-          fields: [ {
-            name:'session_date',
-            title:'Date',
-            type:'date',
-              validate: 'required'
-          },{
-            name: "session_type",
-            title: "Session Type",
-            type: "select",
-            items: [
-              {Name:'',value:''},
-              {Name:'Hygene',value:'hygene'},
-              {Name:'IYCF',value:'iycf'},
-              {Name:'Breast Feeding Counseling',value:'breastFeeding'},
-              {Name:'Cooking Demonstration',value:'cooking'},
-              {Name:'Other',value:'other'},
-              ],
-              valueField: "value",
-              textField: "Name",
-              validate: 'required'
-          },{
-            name:'session_location',
-            title: 'Session Location',
-            type:'select',
-            items: [
-              {Name:'',value:''},
-              {Name:'In CMAM Site',value:'cmam_site'},
-              {Name:'In Community',value:'community'}
-            ],valueField: "value",
-              textField: "Name",
-              validate: 'required'
-          }, {
-            name: "male_participants",
-            title: "Male Participants",
-            type: "number",
-            validate:{
-              validator: 'min',
-              param: 0
-            }
-          },
-           {
-            name: "female_participants",
-            title: "Female Participants",
-            type: "number",
-            validate:{
-              validator: 'min',
-              param: 0
-            }
-            },
-            {
-              name: "pragnent",
-              title: "Pragnent",
-              type: "number",
-              validate: {
-                validator: 'min',
-                param: 0
-              }
-            },
-            {
-              name: "lactating",
-              title: "Lactating",
-              type: "number",
-              validate: {
-                validator: 'min',
-                param: 0
-              }
-            },
-            {
-            name:'upload_status',
-            title:'Upload Status',
-            type:'select',
-            valueType: 'number',
-            items:[{Name:'',value:''},{Name:'Uploaded',value:1},{Name:'Not Uploaded',value:0},{Name:'Edited',value:2}],
-            readOnly: true,
-            valueField: "value",
-    textField: "Name",
-    editing: false,
-    inserting: false
-          },{
-            type: 'control',
-            deleteButton: false,
-          }]
-          // ,
-          // onDataLoaded: function (data) {
-          //   console.log(data);
-          // },
-          // onItemUpdating: function (args) {
-          //   console.log('on Updating', args)
-          // }, // before controller.updateItem
-          // onItemUpdated: function (args) {
-          //   console.log('on Updated', args)
-    
-          // }, // on done of controller.updateItem
-        });
+        
       })
     })
 
@@ -226,16 +296,14 @@ module.exports.initSessionsV2 = function (){
     }
     });
     jsGrid.fields.date = MyDateField;
-    
+  
     
   let loadData = (data) => {
     return new Promise((resolve, reject) => {
       ipc.send('getSessionsAll', data);
       ipc.on('getSessionsAll', (e, result) => {
-        var s = {
-          data: result.result,
-          itemsCount: result.result.length
-        }
+        console.log(result);
+        var s = { data: result.result.data, itemsCount: result.result.itemsCount[0].total };
         if (result.err) {
           reject(result.err)
           ipc.removeAllListeners('getSessionsAll')
@@ -256,7 +324,13 @@ module.exports.initSessionsV2 = function (){
           ipc.removeAllListeners('insertSessionsSingle');
         } else {
           resolve(result.result[0])
+          console.log(result)
           ipc.removeAllListeners('insertSessionsSingle');
+          $("#jsGrid")
+            .jsGrid("render")
+            .done(function () {
+              console.log("rendering completed and data loaded");
+            });
         }
       })
     })
@@ -272,11 +346,36 @@ module.exports.initSessionsV2 = function (){
         } else {
           resolve(result.result[0])
           ipc.removeAllListeners('updateSessionsSingle')
+          $("#jsGrid")
+            .jsGrid("render")
+            .done(function () {
+              console.log("rendering completed and data loaded");
+            });
         }
       })
     })
   }
   
+  let deleteData = (item) => {
+    return new Promise((resolve, reject) => {
+      ipc.send("deleteSessionsSingle", item.session_id);
+      ipc.on('deleteSessionsSingle', (e, result) => {
+        console.log(result)
+        if (result.err) {
+          reject(result.err)
+          ipc.removeAllListeners("deleteSessionsSingle");
+        } else {
+          resolve(result.result)
+          ipc.removeAllListeners("deleteSessionsSingle");
+          $("#jsGrid")
+            .jsGrid("render")
+            .done(function () {
+              console.log("rendering completed and data loaded");
+            });
+        }
+      })
+    })
+  }
 
 }
 

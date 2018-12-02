@@ -1,0 +1,197 @@
+<template>
+  <div class="container">
+    <div class="row">
+
+      <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">Saved Records</p>
+    </div>
+    <div class="row">
+      <div id="jsGrid" class="table-responsive col-sm-12"></div>
+    </div>
+    <div class="row">
+
+      <form id="scrPlwNewUpdForm">
+  
+        <div class="form-group row border border-primary rounded">
+          <div class="form-group row">
+            <div class="form-group  col-sm-2">
+              <label for="ddProvince" class="col-form-label">Province:</label>
+              <select id="ddProvince" class="form-control form-control-sm">
+                <option  selected value="">Select One</option>
+              </select>
+            </div>
+            <div class=" form-group col-sm-2">
+              <label for="ddDistrict" class="col-form-label">District:</label>
+              <select id="ddDistrict" class="form-control form-control-sm">
+                <option selected value="">Select One</option>
+              </select>
+            </div>
+            <div class="form-group  col-sm-2">
+              <label for="ddTehsil" class="col-form-label">Tehsil:</label>
+              <select id="ddTehsil" class="form-control form-control-sm">
+                <option selected value="">Select One</option>
+              </select>
+            </div>
+            <div class="form-group  col-sm-2">
+              <label for="ddUC" class="col-form-label">UC:</label>
+              <select id="ddUC" class="form-control form-control-sm">
+                <option selected  value="">Select One</option>
+              </select>
+            </div>
+            <!-- </div> -->
+            <!-- <div class="form-group row"> -->
+            <div class="form-group  col-sm-2">
+              <label for="site_id" class="col-form-label">Site Name:</label>
+              <select id="ddHealthHouse" name="site_id" class="form-control form-control-sm" required>
+                <option selected value="">Select One</option>
+              </select>
+            </div>
+          <!-- </div> -->
+                  <div class="col-sm-2">
+                    <label for="staff_code" class="col-form-label">Staff Code:</label>
+                    <select id="ddStaff_code" name="staff_code" class="form-control form-control-sm">
+                      <option selected value="">Select One</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-2">
+                    <label for="staff_name" class="col-form-label">Staff Name:</label>
+                    <select id="ddStaff_name" name="staff_name" class="form-control form-control-sm">
+                      <option selected value="">Select One</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-2">
+                    <label for="sup_code" class=" col-form-label">Supervisor Code:</label>
+                    <select id="ddSup_code" name="sup_code" class="form-control form-control-sm">
+                      <option seected value="">Select One</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-2">
+                    <label for="sup_name" class=" col-form-label">Supervisor Name:</label>
+                    <select id="ddSup_name" name="sup_name" class="form-control form-control-sm">
+                      <option selected value="">Select One</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-2">
+                    <label for="village" class="col-form-label">No. of Villages:</label>
+                    <input type="number" name="village" id="village" class="form-control form-control-sm" required>
+                  </div>
+                  <div class="col-sm-2">
+                    <label for="screening_date" class=" col-form-label">Entry Date:</label>
+                    <input type="date" name="screening_date" id="txtScrChildDate" class="form-control form-control-sm" required>
+                  </div>
+                  <div class="col-sm-2">
+                    <label for="report_month" class=" col-form-label">Report Month</label>
+                    <input type="month" name="report_month" class="form-control form-control-sm" required>
+                  </div>
+          </div>
+  
+          
+            <table class="table table-sm table-bordered rounded text-center">
+              <tr>
+                <th class="bg-info text-white align-middle" rowspan="2">Category</th>
+                <th class="bg-info text-white align-middle" rowspan="2">Total Screened Women</th>
+                <th class="bg-info text-white align-middle" rowspan="2">Newly Screened Women</th>
+                <th class="bg-info text-white align-middle" rowspan="2">Re-Screened Women</th>
+                <th class="bg-info text-white align-middle" rowspan="1" colspan="6">Women Received IFA Tablets</th>
+                <th class="bg-info text-white align-middle" rowspan="2">MUAC &lt; 21 CM</th>
+                <th class="bg-info text-white align-middle" rowspan="2">MUAC &geq; 21 CM</th>
+              </tr>
+              <tr>
+                <th class="bg-info text-white align-middle">1st Time/Visit</th>
+                <th class="bg-info text-white align-middle">2nd Time/Visit</th>
+                <th class="bg-info text-white align-middle">3rd Time/Visit</th>
+                <th class="bg-info text-white align-middle">4th Time/Visit</th>
+                <th class="bg-info text-white align-middle">5th Time/Visit</th>
+                <th class="bg-info text-white align-middle">6th Time/Visit</th>
+              </tr>
+              <tr>
+                <th class="align-middle">Pragnent</th>
+                <td class="align-middle">
+                  <input required min="0" type="number" class="form-control form-control-sm" name="total_scr_pragnent" id="total_scr_pragnent">
+                </td>
+                <td class="align-middle">
+                  <input required min="0" type="number" class="form-control form-control-sm" name="new_scr_pragnent" id="new_scr_pragnent">
+                </td>
+                <td class="align-middle">
+                  <input required min="0" type="number" class="form-control form-control-sm" name="reScreened_scr_pragnent" id="reScreened_scr_pragnent">
+                </td>
+                <td class="align-middle">
+                  <input required min="0" type="number" class="form-control form-control-sm" name="first_ifa_tabs_rec_pragnent" id="first_ifa_tabs_rec_pragnent">
+                </td>
+                <td class="align-middle">
+                  <input required min="0" type="number" class="form-control form-control-sm" name="second_ifa_tabs_rec_pragnent" id="second_ifa_tabs_rec_pragnent">
+                </td>
+                <td class="align-middle">
+                  <input required min="0" type="number" class="form-control form-control-sm" name="third_ifa_tabs_rec_pragnent" id="third_ifa_tabs_rec_pragnent">
+                </td>
+                <td class="align-middle">
+                  <input required min="0" type="number" class="form-control form-control-sm" name="fourth_ifa_tabs_rec_pragnent" id="fourth_ifa_tabs_rec_pragnent">
+                </td>
+                <td class="align-middle">
+                  <input required min="0" type="number" class="form-control form-control-sm" name="fifth_ifa_tabs_rec_pragnent" id="fifth_ifa_tabs_rec_pragnent">
+                </td>
+                <td class="align-middle">
+                  <input required min="0" type="number" class="form-control form-control-sm" name="sixth_ifa_tabs_rec_pragnent" id="sixth_ifa_tabs_rec_pragnent">
+                </td>
+                <td class="align-middle">
+                  <input required min="0" type="number" class="form-control form-control-sm" name="muac_le_21_pragnent" id="muac_le_21_pragnent">
+                </td>
+                <td class="align-middle">
+                  <input required min="0" type="number" class="form-control form-control-sm" name="muac_gt_21_pragnent" id="muac_gt_21_pragnent">
+                </td>
+              </tr>
+              <th class="align-middle">Lactating</th>
+              <td class="align-middle">
+                <input required min="0" type="number" class="form-control form-control-sm" name="total_scr_lactating" id="total_scr_lactating">
+              </td>
+              <td class="align-middle">
+                <input required min="0" type="number" class="form-control form-control-sm" name="new_scr_lactating" id="new_scr_lactating">
+              </td>
+              <td class="align-middle">
+                <input required min="0" type="number" class="form-control form-control-sm" name="reScreened_scr_lactating" id="reScreened_scr_lactating">
+              </td>
+              <td class="align-middle">
+                <input required min="0" type="number" class="form-control form-control-sm" name="first_ifa_tabs_rec_lactating" id="first_ifa_tabs_rec_lactating">
+              </td>
+              <td class="align-middle">
+                <input required min="0" type="number" class="form-control form-control-sm" name="second_ifa_tabs_rec_lactating" id="second_ifa_tabs_rec_lactating">
+              </td>
+              <td class="align-middle">
+                <input required min="0" type="number" class="form-control form-control-sm" name="third_ifa_tabs_rec_lactating" id="third_ifa_tabs_rec_lactating">
+              </td>
+              <td class="align-middle">
+                <input required min="0" type="number" class="form-control form-control-sm" name="fourth_ifa_tabs_rec_lactating" id="fourth_ifa_tabs_rec_lactating">
+              </td>
+              <td class="align-middle">
+                <input required min="0" type="number" class="form-control form-control-sm" name="fifth_ifa_tabs_rec_lactating" id="fifth_ifa_tabs_rec_lactating">
+              </td>
+              <td class="align-middle">
+                <input required min="0" type="number" class="form-control form-control-sm" name="sixth_ifa_tabs_rec_lactating" id="sixth_ifa_tabs_rec_lactating">
+              </td>
+              <td class="align-middle">
+                <input required min="0" type="number" class="form-control form-control-sm" name="muac_le_21_lactating" id="muac_le_21_lactating">
+              </td>
+              <td class="align-middle">
+                <input required min="0" type="number" class="form-control form-control-sm" name="muac_gt_21_lactating" id="muac_gt_21_lactating">
+              </td>
+              <tr>
+                <td colspan="10" class="not-req"></td>
+                <td>
+                  <input type="submit" id="submitScrPlwNewUpd" value="Save" class=" form-cntrol form-control-sm btn btn-info btn-sm btn-block shadow-sm">
+                </td>
+                <td>
+                  <button id="resetScrPlwNew" class="btn btn-warning btn-sm shadow-sm  form-cntrol form-control-sm btn-block">Reset</button>
+                </td>
+                <!-- <td colspan="3"></td> -->
+              </tr>
+            </table>
+            <!-- <div class="row">
+
+            </div> -->
+        </div>
+        <input type="number" name="plw_scr_id" id="plw_scr_id" hidden required>
+      </form>
+    </div>
+    
+  </div>
+
+</template>
