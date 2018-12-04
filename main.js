@@ -4948,7 +4948,7 @@ function newSync() {
 // console.log({
 //   node_env : process.env
 // })
-process.env.NODE_ENV = 'production';
+// process.env.NODE_ENV = 'production';
 // Create menu template
 const mainMenuTemplate = [
   // Each object is a dropdown
@@ -5018,9 +5018,6 @@ const mainMenuTemplate = [
       },
        { role: 'toggledevtools'}
       ,
-      // {
-      //   role: (process.env.NODE_ENV == 'production') ? '' :'toggledevtools'
-      // },
       {
         type: 'separator'
       },
