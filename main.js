@@ -4945,8 +4945,10 @@ function newSync() {
   })
 }
 
-
-
+// console.log({
+//   node_env : process.env
+// })
+process.env.NODE_ENV = 'production';
 // Create menu template
 const mainMenuTemplate = [
   // Each object is a dropdown
@@ -5005,7 +5007,8 @@ const mainMenuTemplate = [
         }
       }
     ]
-  }, {
+  },
+  {
     label: 'View',
     submenu: [{
         role: 'reload'
@@ -5013,9 +5016,11 @@ const mainMenuTemplate = [
       {
         role: 'forcereload'
       },
-      {
-        role: 'toggledevtools'
-      },
+       { role: 'toggledevtools'}
+      ,
+      // {
+      //   role: (process.env.NODE_ENV == 'production') ? '' :'toggledevtools'
+      // },
       {
         type: 'separator'
       },

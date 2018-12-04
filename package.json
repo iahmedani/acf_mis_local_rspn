@@ -1,7 +1,7 @@
 {
   "name": "acf_mis_local",
   "productName": "ACF MIS Local app",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "ACF MIS FOR PINS",
   "main": "main.js",
   "scripts": {

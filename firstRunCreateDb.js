@@ -67,26 +67,77 @@ module.exports.firstCreateDb = function (knex) {
   `
   createNewTable(knex, 'tblGeoUC', qryUc);
   var qryInterm = `CREATE TABLE [tblInterimOtp](
-    [interim_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
-    [otp_id] integer, 
-    [client_id] integer, 
-    [muac] integer, 
-    [weight] integer, 
-    [height] integer, 
-    [ration1] varchar(255), 
-    [quantity1] integer, 
-    [ration2] varchar(255), 
-    [quantity2] integer, 
-    [ration3] varchar(255), 
-    [quantity3] integer, 
-    [prog_type] varchar(255), 
-    [curr_date] date, 
-    [status] varchar(255), 
-    [next_followup] date, 
-    [created_at] datetime, 
-    [updated_at] datetime);
-  `
+  [interim_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+  [otp_id] integer, 
+  [client_id] integer, 
+  [muac] integer, 
+  [weight] integer, 
+  [height] integer, 
+  [ration1] varchar(255), 
+  [quantity1] integer, 
+  [ration2] varchar(255), 
+  [quantity2] integer, 
+  [ration3] varchar(255), 
+  [quantity3] integer, 
+  [prog_type] varchar(255), 
+  [curr_date] date, 
+  [status] varchar(255), 
+  [next_followup] date, 
+  [created_at] datetime, 
+  [updated_at] datetime, 
+  [is_deleted] INT(1) NOT NULL DEFAULT 0, 
+  [other_com_name] VARCHAR(20), 
+  [other_com_qty] DECIMAL DEFAULT 0);
+  `;
   createNewTable(knex, 'tblInterimOtp', qryInterm);
+
+  var tblLhwQry = `CREATE TABLE [tblLhw](
+  [site] INT NOT NULL, 
+  [uc] INT NOT NULL, 
+  [tehsil] INT NOT NULL, 
+  [district] INT NOT NULL, 
+  [staff_name] VARCHAR(50) NOT NULL, 
+  [staff_code] VARCHAR(10) NOT NULL UNIQUE, 
+  [province] INT NOT NULL, 
+  [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+  [client_id] VARCHAR NOT NULL, 
+  [upload_status] INT NOT NULL DEFAULT 0, 
+  [created_at] DATE);
+`;
+  createNewTable(knex, "tblLhw", tblLhwQry);
+
+  var tblScrStockDistQry = `CREATE TABLE [tblScrStockDist](
+  [siteName] VARCHAR NOT NULL, 
+  [ucName] VARCHAR NOT NULL, 
+  [tehsilName] VARCHAR NOT NULL, 
+  [districtName] VARCHAR NOT NULL, 
+  [village_count] int NOT NULL, 
+  [provinceName] VARCHAR NOT NULL, 
+  [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+  [staff_code] varchar NOT NULL, 
+  [staff_name] varchar NOT NULL, 
+  [sup_code] varchar NOT NULL, 
+  [sup_name] varchar NOT NULL, 
+  [entry_date] varchar NOT NULL, 
+  [report_month] varchar NOT NULL, 
+  [mnp_opening] int NOT NULL, 
+  [mnp_rec] int NOT NULL, 
+  [mnp_dist] int NOT NULL, 
+  [mnp_rem] int NOT NULL, 
+  [mnp_lost] int, 
+  [ifa_opening] int NOT NULL, 
+  [ifa_rec] int NOT NULL, 
+  [ifa_dist] int NOT NULL, 
+  [ifa_rem] int NOT NULL, 
+  [ifa_lost] int, 
+  [deworming_opening] int NOT NULL, 
+  [deworming_rec] int NOT NULL, 
+  [deworming_dist] int NOT NULL, 
+  [deworming_rem] int NOT NULL, 
+  [deworming_lost] int, 
+  [upload_status] INT NOT NULL DEFAULT 0);
+`;
+  createNewTable(knex, "tblScrStockDist", tblScrStockDistQry);
   var qryAdmission = `CREATE TABLE [tblOtpAdd](
   [otp_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
   [client_id] integer, 
@@ -214,6 +265,21 @@ module.exports.firstCreateDb = function (knex) {
   CREATE UNIQUE INDEX "tblvillage_vill_id_unique" on "tblVillage" ("vill_id");
   `
   createNewTable(knex, 'tblVillage', qryVillage);
+  var tblVillagesQry = `CREATE TABLE [tblVillages](
+  [site] INT NOT NULL, 
+  [uc] INT NOT NULL, 
+  [tehsil] INT NOT NULL, 
+  [district] INT NOT NULL, 
+  [villageName] VARCHAR(50) NOT NULL, 
+  [province] INT NOT NULL, 
+  [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+  [client_id] VARCHAR NOT NULL, 
+  [upload_status] INT NOT NULL DEFAULT 0, 
+  [created_at] DATE);
+`;
+  createNewTable(knex, 'tblVillages', tblVillagesQry);
+  
+  
   var qryScrReportFinal = `CREATE VIEW scr_report_final as
   SELECT        province_id, district_id, tehsil_id, uc_id, site_id, screening_date, COUNT(CASE WHEN is_plw = 0 AND gender = 1 AND screening_type = 1 THEN 1 ELSE NULL END) AS tChildScrActive_M, COUNT(CASE WHEN is_plw = 0 AND 
                            gender = 2 AND screening_type = 1 THEN 1 ELSE NULL END) AS tChildScrActive_F, COUNT(CASE WHEN is_plw = 1 AND screening_type = 1 AND plw_type = 1 THEN 1 ELSE NULL END) AS tPlwScrActive_P, 
@@ -390,7 +456,7 @@ WHERE  [main].[tblOtpAdd].[is_deleted] = 0;
 `;
   createNewTable(knex, "v_otpAddmision1", v_otpAddmision1Qry);
 
-  var v_otpAddNewReport = `CREATE VIEW [v_otpAddNewReport]
+  var v_otpAddNewReportQry = `CREATE VIEW [v_otpAddNewReport]
 AS
 SELECT 
        [main].[v_geo].[province_id], 
@@ -415,7 +481,7 @@ SELECT
 FROM   [main].[v_geo]
        INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo].[site_id] = [main].[tblOtpAdd].[site_id];
 `;
-  createNewTable(knex, "v_otpAddNewReport", v_otpAddmision1Qry);
+  createNewTable(knex, "v_otpAddNewReport", v_otpAddNewReportQry);
   
   var qryOtpAddFullNonReport = `CREATE VIEW [v_otpAdd_full]
 AS
@@ -783,6 +849,16 @@ group by ration, month, year;
   
   createNewTable(knex, "v_stockDist", v_stockDistQry);
 
+  var v_stockInQry = `CREATE VIEW v_stockIn as
+SELECT 
+       [main].[tblStock].[item_name], 
+       sum([main].[tblStock].[rec_qty]) as rec_qty, 
+       STRFTIME('%m',[main].[tblStock].[dn_date]) as [month],
+       STRFTIME('%Y',[main].[tblStock].[dn_date]) as [Year]
+FROM   [main].[tblStock]
+group by [main].[tblStock].[item_name], [month], [Year];
+`;
+createNewTable(knex, "v_stockIn", v_stockInQry);
   var v_StockMovementQry = `CREATE VIEW v_StockMovement as
 select ifnull(item_name,ration) as item, ifnull(rec_qty,0) as recQty, ifnull(month,dist_month) as month, ifnull(year, dist_year) as year, ifnull(ration,item_name) as ration, ifnull(dist_month,month) as dist_month,  ifnull(dist_year,year) as dist_year, ifnull(tQuantity, 0) dist_qty from (SELECT 
        [main].[v_stockIn].[item_name], 
@@ -865,11 +941,13 @@ INNER JOIN [main].[tblScrPlw] ON [main].[tblScrPlw].[site_id] = [main].[v_geo].[
   createNewTable(knex, 'tblStock', qryStockEntryTable);
 
   var qryCommodityTable = `CREATE TABLE [tblCommodity](
-  [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL,  
-  [item_name] VARCHAR,
-  [item_desc] VARCHAR,
-  [item_unit] VARCHAR,
-  [item_sub_unit] VARCHAR);`
+  [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+  [item_name] VARCHAR, 
+  [item_desc] VARCHAR, 
+  [item_unit] VARCHAR, 
+  [item_sub_unit] VARCHAR, 
+  [prog_type] varchar(10));
+`;
   createNewTable(knex, 'tblCommodity', qryCommodityTable);
   // createNewTable(knex, 'tblStock', qryStockEntryTable);
 
@@ -880,11 +958,26 @@ INNER JOIN [main].[tblScrPlw] ON [main].[tblScrPlw].[site_id] = [main].[v_geo].[
   [req_email] VARCHAR NOT NULL, 
   [req_sender] VARCHAR NOT NULL, 
   [req_data] TEXT NOT NULL, 
-  [req_id] VARCHAR NOT NULL,
-  [client_id] VARCHAR,
-  [upload_status] INT);
-`
+  [req_id] VARCHAR NOT NULL, 
+  [client_id] VARCHAR, 
+  [upload_status] INT DEFAULT 0);
+`;
   createNewTable(knex, 'tblStockRequest', qrytblStockRequest);
+
+  var tblSupervisorsQry = `CREATE TABLE [tblSupervisors](
+  [site] INT NOT NULL, 
+  [uc] INT NOT NULL, 
+  [tehsil] INT NOT NULL, 
+  [district] INT NOT NULL, 
+  [sup_name] varchar(50) NOT NULL, 
+  [sup_code] VARCHAR(10) NOT NULL UNIQUE, 
+  [province] INT NOT NULL, 
+  [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+  [client_id] VARCHAR NOT NULL, 
+  [upload_status] VARCHAR NOT NULL DEFAULT 0, 
+  [created_at] DATE NOT NULL);
+`;
+  createNewTable(knex, "tblSupervisors", tblSupervisorsQry);
 
   var qryv_stockDist = `create view v_stockDist as 
 select ration, month, year, sum(quantity) as tQuantity from (select ration1 as ration, quantity1 as quantity, STRFTIME('%m',[main].[tblOtpAdd].[reg_date]) AS [month], STRFTIME('%Y',[main].[tblOtpAdd].[reg_date]) AS [year] from tblOtpAdd WHERE ration1 <> ''
@@ -907,4 +1000,30 @@ select ration3 as ration, quantity3 as quantity, STRFTIME('%m',[main].[tblOtpFol
 where ration is not null  and quantity > 0
 group by ration, month, year;`
   createNewTable(knex, 'v_stockDist', qryv_stockDist);
+
+  var v_otpAddNewReportQry = `CREATE VIEW [v_otpAddNewReport]
+AS
+SELECT 
+       [main].[v_geo].[province_id], 
+       [main].[v_geo].[province], 
+       [main].[v_geo].[district_id], 
+       [main].[v_geo].[district_name], 
+       [main].[v_geo].[tehsil_id], 
+       [main].[v_geo].[tehsil_name], 
+       [main].[v_geo].[uc_id], 
+       [main].[v_geo].[uc_name], 
+       [main].[v_geo].[site_name], 
+       [main].[v_geo].[site_id], 
+       [main].[tblOtpAdd].[age], 
+       [main].[tblOtpAdd].[gender], 
+       [main].[tblOtpAdd].[plw_type], 
+       [main].[tblOtpAdd].[ent_reason], 
+       [main].[tblOtpAdd].[is_deleted], 
+       [main].[tblOtpAdd].[prog_type], 
+       [main].[tblOtpAdd].[reg_date], 
+       [main].[tblOtpAdd].[reg_id], 
+       [main].[tblOtpAdd].[otp_id]
+FROM   [main].[v_geo]
+       INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo].[site_id] = [main].[tblOtpAdd].[site_id];
+`;
 }

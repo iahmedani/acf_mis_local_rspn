@@ -58,7 +58,7 @@
           <img src="../img/acf-logo.svg" style="height: 50px;" alt="" >
         </a>
         <!-- <div class="list-group-item">Imran</div> -->
-        <div class="list-group panel">
+        <div class="list-group panel accordion">
 
           <a href="#menu1" class="list-group-item collapsed _mn" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
             <i class="fas fa-tachometer-alt"></i>
@@ -282,6 +282,24 @@
   <script src="../js/buttons.html5.min.js"></script>  
   <script src="../js/jquery.inputmask.bundle.min.js"></script>  
   <!-- <script src="../js/jsGrid_custom_fields.js"></script> -->
+  <script>
+  $(function(){
+    // $('._mn').on('click', function(){
+    //   console.log($(this));
+    //   $(this).on('show.bs.collapse')
+    //   // $('._mn').each(function(i, el){
+    //   //  if(!$(el).hasClass('collapsed')){
+    //   //  }
+    //   // })
+    // })
+    $('._mn').on('show.bs.collapse', function(){
+      console.log('done');
+    })
+    
+    
+  })
+  
+  </script>
   <script>
     // var InitGrid = require('./scrChildv2').initGrid;
     var InitGrid = require('./scrChildren').initGrid;
@@ -629,7 +647,7 @@
     });
     ipc.on('error', function (evt, result) {
       $('#messages').append(
-        ` < div class= "modal-header" > <h5 class="modal-title" >Error</h5> </div > <div class="modal-body"><div class="alert alert-success alert-dismissible fade show" role="alert">${result.msg}</div></div>`)
+        ` <div class= "modal-header" > <h5 class="modal-title" >Error</h5> </div> <div class="modal-body"><div class="alert alert-danger alert-dismissible fade show" role="alert">${result.msg}</div></div>`)
         $('#MessageModal').modal('show');
       setTimeout(function () {
         $('#MessageModal').modal('hide');
