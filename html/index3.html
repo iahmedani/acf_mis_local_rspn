@@ -23,6 +23,7 @@
   </script>
   <!-- <link rel="import" href="scrChildv2.html"> -->
   <!-- <link rel="import" href="scrPlwv2.html"> -->
+  <link rel="import" href="dashboard.html">
   <link rel="import" href="scrPlwNew.html">
   <link rel="import" href="otpAddv2.html">
   <link rel="import" href="otpFollowUpv2.html">
@@ -42,11 +43,16 @@
   <link rel="import" href="scrPlwReportNew.html">
   <link rel="import" href="stockEntry.html">
   <link rel="import" href="autoStock.html">
-  <link rel="import" href="scrStock.html">
+  <!-- <link rel="import" href="scrStock.html"> -->
+  <link rel="import" href="stockDist.html">
+  <link rel="import" href="stockDistReport.html">
+  <link rel="import" href="stockDistUpd.html">
   <link rel="import" href="supList.html">
   <link rel="import" href="staffList.html">
   <link rel="import" href="villageList.html">
   <link rel="import" href="sessionsReport.html">
+  <link rel="import" href="stockOutEntry.html">
+  <link rel="import" href="stockOutUpdate.html">
 </head>
 
 
@@ -54,7 +60,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-2 col-xs-1 p-l-0 p-r-0" id="sidebar">
-        <a class="navbar-brand"  href="#">
+        <a class="navbar-brand"  href="#" id="homeDashboard">
           <img src="../img/acf-logo.svg" style="height: 50px;" alt="" >
         </a>
         <!-- <div class="list-group-item">Imran</div> -->
@@ -69,13 +75,14 @@
             <div class="collapse" id="menu1sub1">
               <a href="#" class="list-group-item _sb" data-parent="#menu1sub1" id="childScr">Children</a>
               <a href="#" class="list-group-item _sb" data-parent="#menu1sub1" id="plwScr">PLW</a>
-              <a href="#" class="list-group-item _sb" data-parent="#menu1sub1" id="scrStock">Stocks</a>
             </div>
+            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="scrStock">Stock Distribution</a>
             <a href="#" class="list-group-item _sb" data-parent="#menu1" id="otpAdd">Admission</a>
             <a href="#" class="list-group-item _sb" data-parent="#menu1" id="addFollowupOtp">Follow Up</a>
             <a href="#" class="list-group-item _sb" data-parent="#menu1" id="otpExit">Exits</a>
             <a href="#" class="list-group-item _sb" data-parent="#menu1" id="sessions">Sessions</a>
             <a href="#" class="list-group-item _sb" data-parent="#menu1" id="stockEntry">Stock Entry</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="stockOutEntry">Stock Out Entry</a>
           </div>
           <a href="#menu3" class="list-group-item collapsed _mn" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
             <i class="fa fa-book"></i>
@@ -87,6 +94,8 @@
               <a href="#" class="list-group-item _sb" data-parent="#menu3sub1" id="scrChUpd">Children</a>
               <a href="#" class="list-group-item _sb" data-parent="#menu3sub1" id="scrPlUpd">PLW</a>
             </div>
+            <a href="#" class="list-group-item _sb" data-parent="#menu3" id="stockDistUpd">Stock Distribution</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu3" id="stockOutUpdate">Stock Out</a>
             <a href="#" class="list-group-item _sb" data-parent="#menu3" id="otpAddUpdate">Admissions</a>
             <!-- <a href="#" class="list-group-item" data-parent="#menu3">FollowUp</a> -->
             <a href="#" class="list-group-item _sb" data-parent="#menu3" id="otpExitEdit">Exits</a>
@@ -107,6 +116,7 @@
             <a href="#" class="list-group-item _sb" data-parent="#menu4" id="otpReport">Admission & Exit</a>
             <a href="#" class="list-group-item _sb" data-parent="#menu4" id="defReport">Defaulter</a>
             <a href="#" class="list-group-item _sb" data-parent="#menu4" id="autoStock">Stock</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu4" id="stockDistReport">Stock Distribution Report</a>
             <a href="#" class="list-group-item _sb" data-parent="#menu4" id="sessionsReport">Sessions</a>
           </div>
           <a href="#menu5" class="list-group-item collapsed _mn" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
@@ -128,16 +138,7 @@
         <!-- </div> -->
         
         <div id="jsContent" class="container-fluid">
-          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 ">
-            <div class="card bg-light mb-6">
-              <div class="card-header">Help End Deadly Hunger: Make a Life-Saving Donation Today </div>
-              <div class="card-body">
-                <h5 class="card-title">Action Against Hunger </h5>
-                <p class="card-text">ACF International is an international humanitarian organization committed to saving the lives of malnourished
-                  children while providing communities with sustainable access to safe water and long-term solutions to hunger.</p>
-              </div>
-            </div>
-          </div>
+          
         </div>
       </main>
     </div>
@@ -160,6 +161,10 @@
   <script>
     window.$ = window.jQuery = require('jquery');
     require('jquery-validation');
+    var Highcharts = require('highcharts');
+    require('highcharts/modules/exporting')(Highcharts);
+    require('highcharts/modules/export-data')(Highcharts);
+    
     // adding functionality to jquery for serializing form;
     (function ($) {
       $.fn.serializeFormJSON = function () {
@@ -268,7 +273,57 @@
             })
 
           })
-    
+     const provUpd = async (province) => {
+        await asyncForEach(province.province, async (el) => {
+          $('#ddProvince-upd').append(`<option value="${el.id}">${el.provinceName}</option>`);
+        })
+        ipc.removeAllListeners('province')
+      }
+      const commodityUpd = async (com, id) => {
+        await asyncForEach(com.commodity, async (el) => {
+          $('#' + id).append(`<option value="${el.item_name}">${el.item_name}</option>`);
+        })
+        ipc.removeAllListeners('commodity')
+      }
+      const distUpd = async (district) => {
+        await asyncForEach(district.district, async (el) => {
+          $('#ddDistrict-upd').append(`<option value="${el.id}">${el.districtName}</option>`);
+        })
+        ipc.removeAllListeners('district')
+      }
+      const tehUpd = async (tehsil) => {
+        await asyncForEach(tehsil.tehsil, async (el) => {
+          $('#ddTehsil-upd').append(`<option value="${el.id}">${el.tehsilName}</option>`);
+        })
+        ipc.removeAllListeners('tehsil')
+      }
+      const ucListenerUpd = async (uc) => {
+        await asyncForEach(uc.uc, async (el) => {
+          $('#ddUC-upd').append(`<option value="${el.id}">${el.ucName}</option>`);
+        })
+        ipc.removeAllListeners('uc')
+      }
+      const hhListenerUpd = async (hh) => {
+        await asyncForEach(hh.hh, async (el) => {
+          $('#ddHealthHouse-upd').append(`<option value="${el.id}">${el.siteName}</option>`);
+        })
+        ipc.removeAllListeners('hh');
+      }
+      const staffListenerUpd = async (staffs) => {
+        await asyncForEach(staffs, async (el) => {
+          $('#ddStaff_code-upd').append(`<option value="${el.staff_code}">${el.staff_code}</option>`);
+          $('#ddStaff_name-upd').append(`<option value="${el.staff_code}">${el.staff_name}</option>`);
+        })
+        ipc.removeAllListeners('haveStaff');
+      }
+      const supListenerUpd = async (_sups) => {
+        await asyncForEach(_sups, async (el) => {
+          $('#ddSup_code-upd').append(`<option value="${el.sup_code}">${el.sup_code}</option>`);
+          $('#ddSup_name-upd').append(`<option value="${el.sup_code}">${el.sup_name}</option>`);
+        })
+        ipc.removeAllListeners('haveSups');
+      }
+
   </script>
   
   <script src="../js/bootstrap.bundle.js"></script>
@@ -280,7 +335,7 @@
   <script src="../js/jszip.min.js"></script>
   <script src="../js/buttons.flash.min.js"></script>
   <script src="../js/buttons.html5.min.js"></script>  
-  <script src="../js/jquery.inputmask.bundle.min.js"></script>  
+  <script src="../js/jquery.inputmask.bundle.min.js"></script>
   <!-- <script src="../js/jsGrid_custom_fields.js"></script> -->
   <script>
   $(function(){
@@ -297,7 +352,70 @@
     })
     
     
-  })
+  });
+  function DecimalField(config) {
+      jsGrid.fields.number.call(this, config);
+    }
+
+    DecimalField.prototype = new jsGrid.fields.number({
+
+      filterValue: function () {
+        return this.filterControl.val()
+          ? parseFloat(this.filterControl.val() || 0, 10)
+          : undefined;
+      },
+
+      insertValue: function () {
+        return this.insertControl.val()
+          ? parseFloat(this.insertControl.val() || 0, 10)
+          : undefined;
+      },
+
+      editValue: function () {
+        return this.editControl.val()
+          ? parseFloat(this.editControl.val() || 0, 10)
+          : undefined;
+      }
+    });
+
+    jsGrid.fields.decimal = jsGrid.DecimalField = DecimalField;
+    var MyDateField = function (config) {
+        jsGrid.Field.call(this, config);
+      };
+
+      MyDateField.prototype = new jsGrid.Field({
+
+        css: "date-field", // redefine general property 'css'
+        align: "center", // redefine general property 'align'
+
+
+        sorter: function (date1, date2) {
+          return new Date(date1) - new Date(date2);
+        },
+
+        itemTemplate: function (value) {
+          return new Date(value).toDateString();
+        },
+
+        insertTemplate: function (value) {
+          return this._insertPicker = $("<input>").datepicker({
+            defaultDate: new Date()
+          });
+        },
+
+        editTemplate: function (value) {
+          return this._editPicker = $("<input>").datepicker().datepicker("setDate", new Date(value));
+        },
+
+        insertValue: function () {
+          return this._insertPicker.datepicker("getDate").toISOString();
+        },
+
+        editValue: function () {
+          return this._editPicker.datepicker("getDate").toISOString();
+        }
+      });
+      jsGrid.fields.date = MyDateField;
   
   </script>
   <script>
@@ -322,12 +440,59 @@
     var InitScrPlwNewReport = require('./scrPlwNewReport').initScrPlwNewReport;
     var InitStockEntry = require('./stockEntry').stockEntry;
     var InitAutoStock = require('./autoStock').autoStock;
-    var InitScrStock = require('./scrStock').scrStock;
+    var InitStockDist = require('./scrStock').stockDist;
     var InitSupList = require('./supList').SupList;
     var InitStaffList = require('./staffList').StaffList;
     var InitVillageList = require('./villageList').VillageList;
     var InitSessionsReport = require('./sessionsReport').sessionsReport;
+    var InitstockOutEntry = require('./stockOutEntry').stockOutEntry;
+    var InitstockOutUpdate = require('./stockOutUpdate').stockOutUpdate;
+    var InitStockDist = require('./stockDist').stockDist;
+    var InitStockDistReport = require('./stockDistReport').stockDistReport;
+    var InitStockDistUpd = require('./stockDistUpd').stockDistUpd;
+    var InitDashboard =require('./dashboard').initDashboard;
     // var InitDefaulterv2 = require('./defaulterv2').initDefaulterv2;
+
+     function stockOutUpdateTemplate() {
+        var content = document.querySelector('link[href="stockOutUpdate.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitstockOutUpdate();
+      }
+     function dashboardTemplate() {
+        var content = document.querySelector('link[href="dashboard.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitDashboard();
+      }
+     function stockDistUpdTemplate() {
+        var content = document.querySelector('link[href="stockDistUpd.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitStockDistUpd();
+      }
+     function stockDistReportTemplate() {
+        var content = document.querySelector('link[href="stockDistReport.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitStockDistReport();
+      }
+     function stockDistTemplate() {
+        var content = document.querySelector('link[href="stockDist.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitStockDist();
+      }
 
     function sessionReportTemplate() {
         var content = document.querySelector('link[href="sessionsReport.html"]');
@@ -336,6 +501,14 @@
         $('#jsContent').empty();
         document.querySelector('#jsContent').appendChild(clone)
         InitSessionsReport();
+      }
+    function stockOutEntryTemplate() {
+        var content = document.querySelector('link[href="stockOutEntry.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitstockOutEntry();
       }
 
     function supListTemplate() {
@@ -369,7 +542,7 @@
         var clone = document.importNode(template.content, true);
         $('#jsContent').empty();
         document.querySelector('#jsContent').appendChild(clone)
-        InitScrStock();
+        InitStockDist();
       }
 
     function autoStockTemplate() {
@@ -537,7 +710,9 @@
       document.querySelector('#jsContent').appendChild(clone)
       InitStockEntry();
     }
-    
+    $(()=>{
+      dashboardTemplate();
+    })
     $('#autoStock').on('click', function () {
       autoStockTemplate()
     })
@@ -551,7 +726,8 @@
       villageListTemplate();
     })
     $('#scrStock').on('click', function () {
-      scrStockTemplate()
+      // scrStockTemplate()
+      stockDistTemplate();
     })
     $('#childScr').on('click', function () {
       addScrChildTemplate1()
@@ -621,6 +797,21 @@
     })
     $('#sessionsReport').on('click',function(){
       sessionReportTemplate();
+    })
+    $('#stockOutEntry').on('click',function(){
+      stockOutEntryTemplate();
+    })
+    $('#stockDistUpd').on('click',function(){
+      stockDistUpdTemplate();
+    })
+    $('#stockDistReport').on('click',function(){
+      stockDistReportTemplate();
+    })
+    $('#homeDashboard').on('click', function(){
+      dashboardTemplate();
+    })
+    $('#stockOutUpdate').on('click', function(){
+      stockOutUpdateTemplate();
     })
   </script>
   <script>

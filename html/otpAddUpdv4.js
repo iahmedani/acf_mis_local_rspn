@@ -33,15 +33,15 @@ module.exports.initOtpAddUpdV2 = function () {
   //   };
   // })(jQuery);
   $(function () {
-    ipc.send('getCommodity');
-    ipc.on('commodity', function (evt, com) {
-      $('#ration1').children('option:not(:first)').remove();
-      $('#ration2').children('option:not(:first)').remove();
-      $('#ration3').children('option:not(:first)').remove();
-      commodity(com, 'ration1');
-      commodity(com, 'ration2');
-      commodity(com, 'ration3');
-    })
+    // ipc.send('getCommodity');
+    // ipc.on('commodity', function (evt, com) {
+    //   $('#ration1').children('option:not(:first)').remove();
+    //   $('#ration2').children('option:not(:first)').remove();
+    //   $('#ration3').children('option:not(:first)').remove();
+    //   commodity(com, 'ration1');
+    //   commodity(com, 'ration2');
+    //   commodity(com, 'ration3');
+    // })
     
     updateProvinceDD();
     $("#ddProvince").on("change", function () {
@@ -299,6 +299,20 @@ module.exports.initOtpAddUpdV2 = function () {
       rowClick: function(args) {
         this.editItem(args.item);
         var data = args.item;
+        ipc.send("getCommodity", data.prog_type);
+        ipc.on('commodity', function (evt, com) {
+          $('#ration1').children('option:not(:first)').remove();
+          $('#ration2').children('option:not(:first)').remove();
+          $('#ration3').children('option:not(:first)').remove();
+
+          //   district.district.forEach(el=>{
+          // $('#ddDistrict').append(`<option value="${el.id}">${el.districtName}</option>`);              
+          //   })
+          // dist(district);
+          commodity(com, 'ration1');
+          commodity(com, 'ration2');
+          commodity(com, 'ration3');
+        })
         $("#ddProgramType").val(data.prog_type);
         $("#site_village").val(data.site_village);
         $("#reg_date").val(data.reg_date);

@@ -1,0 +1,129 @@
+<template>
+  <div class="container-fluid">
+    <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">Screening Stock Distribution</p>
+    <form id="scrChildrenForm">
+      <div class="form-group col-sm-2">      
+        <label for="prog_type" class="form-label">Program Type:</label>      
+        <select name="prog_type" id="ddProgramType" class="form-control form-control-sm" required>
+          <option selected value="">Select One</option>
+          <option value="sfp">TSFP</option>
+          <option value="sfp_Plw">TSFP-PLW</option>
+          <option value="otp">OTP</option>
+          <option value="sc">NSC</option>
+          <option value="outreach">Out Reach</option>
+        </select>      
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-2">
+          <label for="ddProvince" class="col-form-label">Province:</label>
+          <select id="ddProvince" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="ddDistrict" class="col-form-label">District:</label>
+          <select id="ddDistrict" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="ddTehsil" class="col-form-label">Tehsil:</label>
+          <select id="ddTehsil" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="ddUC" class="col-form-label">UC:</label>
+          <select id="ddUC" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <!-- </div> -->
+        <!-- <div class="form-group row"> -->
+        <div class="col-sm-2">
+          <label for="site_id" class="col-form-label">Site Name:</label>
+          <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm" required>
+            <option selected disabled>Select One</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="village" class="col-form-label">Number of Villages</label>
+          <input type="number" name="village" id="village" class="form-control form-control-sm" required>
+        </div>
+        <div class="col-sm-2">
+          <label for="staff_name" class="col-form-label">Staff Name:</label>
+          <input type="text" name="staff_name" id="staff_name" class="form-control form-control-sm" required>
+        </div>
+        <div class="col-sm-2">
+          <label for="staff_code" class="col-form-label">Staff Code:</label>
+          <input type="text" name="staff_code" id="staff_code" class="form-control form-control-sm" required>
+        </div>
+        <div class="col-sm-2">
+          <label for="sup_name" class=" col-form-label">Supervisor Name:</label>
+          <input type="text" name="sup_name" id="sup_name" class="form-control form-control-sm" required>
+        </div>
+        <div class="col-sm-2">
+          <label for="sup_code" class=" col-form-label">Supervisor Code:</label>
+          <input type="text" name="sup_code" id="sup_code" class="form-control form-control-sm" required>
+        </div>
+        <div class="col-sm-2">
+          <label for="screening_date" class=" col-form-label">Entry Date:</label>
+          <input type="date" name="entry_date" id="txtEntryDate" class="form-control form-control-sm" required>
+        </div>
+        <div class="col-sm-2">
+          <label for="screening_date" class=" col-form-label">Report Month</label>
+          <input type="month" name="report_month" id="txtReportMonth" class="form-control form-control-sm" required>
+        </div>
+        
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+
+          <table class="table-sm table-bordered rounded align-middle col-sm-12">
+            <tr>
+              <th>Item</th>
+              <th>Unit</th>
+              <th>Opening</th>
+              <th>Recieved</th>
+              <th>Consumed</th>
+              <th>Remaining</th>
+            </tr>
+            <tr>
+              <td>MNP</td>
+              <td>Sachet</td>
+              <td><input type="number" name="" id="" required class="form-control form-control-sm"></td>
+              <td><input type="number" name="" id="" required class="form-control form-control-sm"></td>
+              <td><input type="number" name="" id="" required class="form-control form-control-sm"></td>
+              <td><input type="number" name="" id="" required class="form-control form-control-sm"></td>
+            </tr> 
+            <tr> 
+              <td>IFA</td> 
+              <td>Tablets</td> 
+              <td><input type="number" name="" id="" required class="form-control form-control-sm"></td>
+              <td><input type="number" name="" id="" required class="form-control form-control-sm"></td>
+              <td><input type="number" name="" id="" required class="form-control form-control-sm"></td>
+              <td><input type="number" name="" id="" required class="form-control form-control-sm"></td>
+            </tr> 
+            <tr> 
+              <td>Deworming</td> 
+              <td>Botels</td> 
+              <td><input type="number" name="" id="" required class="form-control form-control-sm"></td>
+              <td><input type="number" name="" id="" required class="form-control form-control-sm"></td>
+              <td><input type="number" name="" id="" required class="form-control form-control-sm"></td>
+              <td><input type="number" name="" id="" required class="form-control form-control-sm"></td>
+            </tr> 
+          </table> 
+        </div>
+        <div class="col-sm-1">
+          <label for="" class="text-white col-form-label">Save</label>
+          <button type="submit" id="submitScrChildForm" class="btn btn-sm btn-block btn-info">Save</button>
+        </div>
+        <div class="col-sm-1">
+          <label for="" class="text-white col-form-label">Reset</label>
+          <button id="resetScrChildForm" class="btn btn-sm btn-block btn-warning">Reset</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+</template>

@@ -913,8 +913,9 @@ function creatWindow() {
 
     // console.log(ipcMain.getMaxListeners())
   })
-  ipcMain.on('getCommodity', (evt) => {
-    geo.commodity(evt)
+  ipcMain.on('getCommodity', (evt, prog_type) => {
+    // geo.commodity(evt)
+    geo.commodityv2(evt, prog_type);
     // console.log(ipcMain.getMaxListeners())
   })
   ipcMain.on('getDistrict', function (event, prov) {
@@ -5071,3 +5072,10 @@ require("./mainfunc/scrChUpd")(ipcMain, knex, fs, clientMessages, async);
 require("./mainfunc/sessions")(ipcMain, knex, fs, clientMessages, async, imran.client, localDate);
 // Managing Sessions Report
 require("./mainfunc/sessionReport")(ipcMain, knex, fs, clientMessages, async, imran.client, localDate);
+// Managing Site Stock out
+require("./mainfunc/siteStockOut")(ipcMain, knex, fs, clientMessages, async);
+// Managing Stock Distribution
+require("./mainfunc/stockDist")(ipcMain, knex, fs, clientMessages, async);
+// Managing Dashboard
+// require("./mainfunc/dashboard")(ipcMain, knex, fs, clientMessages, async);
+require("./mainfunc/dashboard")(ipcMain, knex, fs, clientMessages, async);

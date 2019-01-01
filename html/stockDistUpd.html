@@ -1,0 +1,216 @@
+<template>
+<style>
+  .item_id-insert, .item_id-update{
+    display: none !important;
+  }
+</style>
+  <div id="stockDidt">
+    <div class="row">
+      <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">Stock Distribution Update </p>
+      <form action="#" id="stockDist" class="col-sm-12">
+        <div class="form-group row">
+          <div class="form-group col-sm-2">
+            <label for="prog_type" class="form-label">Program Type:</label>
+            <select name="prog_type" id="ddProgramType" class="form-control form-control-sm myFilter" required>
+              <option selected value="">Select One</option>
+                <option value="sfp">TSFP</option>
+                <option value="sfp_Plw">TSFP-PLW</option>
+                <option value="otp">OTP</option>
+                <option value="sc">NSC</option>
+                <option value="outreach">Out Reach</option>
+            </select>
+          </div>
+          <div class="form-group col-sm-2 ">
+            <label for="province">Province</label>
+            <select id="ddProvince" class="form-control form-control-sm" required>
+              <option selected value="">Choose</option>
+
+            </select>
+          </div>
+          <div class="form-group col-sm-2 ">
+
+            <label for="district">District</label>
+            <select name="district" id="ddDistrict" class="form-control form-control-sm myFilter" required>
+              <option selected value="">Choose</option>
+            </select>
+          </div>
+          <div class="form-group col-sm-2 ">
+
+            <label for="Tehsil">Tehsil</label>
+            <select name="Tehsil" id="ddTehsil" class="form-control form-control-sm myFilter" required>
+              <option selected value="">Choose</option>
+
+            </select>
+          </div>
+          <div class="form-group col-sm-2  nsc">
+            <label for="uc">UC</label>
+            <select id="ddUC" class="form-control form-control-sm" required>
+              <option selected value="">Choose</option>
+            </select>
+          </div>
+          <div class=" form-group col-sm-2 nsc">
+            <label for="site_id" class="col-form-label">Site Name:</label>
+            <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm myFilter" required>
+              <option selected value="">Select One</option>
+            </select>
+          </div>
+          <!-- </div> -->
+          <!-- <div class="form-group row"> -->
+          <div class="form-group col-sm-2 outreach">
+            <label for="staff_code" class="col-form-label">Staff Code:</label>
+            <select id="ddStaff_code" name="staff_code" class="form-control form-control-sm cld myFilter">
+              <option value="">Select One</option>
+            </select>
+          </div>
+          <div class="form-group col-sm-2 outreach">
+            <label for="staff_name" class="col-form-label">Staff Name:</label>
+            <select id="ddStaff_name" name="staff_name" class="form-control form-control-sm cld">
+              <option value="">Select One</option>
+            </select>
+          </div>
+          <div class="form-group col-sm-2 outreach">
+            <label for="sup_code" class=" col-form-label">Supervisor Code:</label>
+            <select id="ddSup_code" name="sup_code" class="form-control form-control-sm cld myFilter">
+              <option value="">Select One</option>
+            </select>
+          </div>
+          <div class="form-group col-sm-2 outreach">
+            <label for="sup_name" class=" col-form-label">Supervisor Name:</label>
+            <select id="ddSup_name" name="sup_name" class="form-control form-control-sm cld">
+              <option value="">Select One</option>
+            </select>
+          </div>
+          <!-- </div> -->
+          <!-- <div class="form-group row"> -->
+          <!-- <label for="dn_number" class="col-sm-2 col-form-label">Delivery Note #:</label>
+                <div class="col-sm-4">
+                  <input type="text" name="dn_number" id="dn_number" class="form-control form-control-sm" required>
+                </div> -->
+          <div class="col-sm-2">
+            <label for="distMonth" class="col-form-label">Distribution Month</label>
+            <input type="month" name="distMonth" id="distMonth" class="form-control form-control-sm myFilter"
+              required>
+          </div>
+         
+        </div>
+        <!-- <div class="row">
+          <div class="col col-sm-4"> -->
+           
+          <!-- </div> -->
+          <!-- <div class="col col-sm-8"> -->
+            <div class="card shadow">
+              <div class="card-header">
+                Distribution Report List
+              </div>
+              <div class="table-responsive">
+                <div id="stockDistListGrid"></div>
+              </div>           
+            </div>
+          <!-- </div> -->
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        ...
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal -->
+  <div class="modal fade bd-example-modal-lg" id="updateStockDistModalId" tabindex="-1" role="dialog" aria-labelledby="updateStockDistModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header pt-1" style="height:35px">
+          <h6 class="modal-title" id="updateStockDistModal">Stock Distribution Update</h6>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row" hidden>
+            <div class="form-group col-sm-2 ">
+              <label for="province">Province</label>
+              <select id="ddProvince-upd" class="form-control form-control-sm" required>
+                <option selected value="">Choose</option>
+            
+              </select>
+            </div>
+            <div class="form-group col-sm-2 ">
+              <label for="district">District</label>
+              <select name="district" id="ddDistrict-upd" class="form-control form-control-sm myFilter" required>
+                <option selected value="">Choose</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-2 ">
+            
+              <label for="Tehsil">Tehsil</label>
+              <select name="Tehsil" id="ddTehsil-upd" class="form-control form-control-sm myFilter" required>
+                <option selected value="">Choose</option>
+            
+              </select>
+            </div>
+            <div class="form-group col-sm-2  nsc-upd">
+              <label for="uc">UC</label>
+              <select id="ddUC-upd" class="form-control form-control-sm" required>
+                <option selected value="">Choose</option>
+              </select>
+            </div>
+            <div class=" form-group col-sm-2 nsc-upd">
+              <label for="site_id" class="col-form-label">Site Name:</label>
+              <select name="site_id" id="ddHealthHouse-upd" class="form-control form-control-sm myFilter" required>
+                <option selected value="">Select One</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-2 outreach-upd">
+              <label for="staff_code" class="col-form-label">Staff Code:</label>
+              <select id="ddStaff_code-upd" name="staff_code" class="form-control form-control-sm cld myFilter">
+                <option value="">Select One</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-2 outreach-upd">
+              <label for="staff_name" class="col-form-label">Staff Name:</label>
+              <select id="ddStaff_name-upd" name="staff_name" class="form-control form-control-sm cld">
+                <option value="">Select One</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-2 outreach-upd">
+              <label for="sup_code" class=" col-form-label">Supervisor Code:</label>
+              <select id="ddSup_code-upd" name="sup_code" class="form-control form-control-sm cld myFilter">
+                <option value="">Select One</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-2 outreach-upd">
+              <label for="sup_name" class=" col-form-label">Supervisor Name:</label>
+              <select id="ddSup_name-upd" name="sup_name" class="form-control form-control-sm cld">
+                <option value="">Select One</option>
+              </select>
+            </div>
+            <div class="form-group col-sm-2">
+              <label for="distMonth" class="col-form-label">Distribution Month</label>
+              <input type="month" name="distMonth" id="distMonth" class="form-control form-control-sm myFilter" required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="table-responsive">
+              <div id="stockDistUpdateGrid"></div>
+            </div>
+          </div>
+
+          
+        </div>
+         
+        <div class="modal-footer pt-1 pb-1"  style="height:45px">
+          <button type="button" class="btn btn-secondary btn-sm myclose" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary btn-sm">Save changes</button>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

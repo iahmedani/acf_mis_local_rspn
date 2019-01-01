@@ -21,6 +21,20 @@ module.exports.provincev2 = (event)=>{
     console.log(err);
   })
 }
+module.exports.commodityv2 = (event, prog_type) => {
+  knex('tblCommodity')
+    .where({prog_type})
+    .then(result => {
+      event.sender.send('commodity', ({
+        commodity: result
+      }));
+      // console.log(event)
+      // event.removeAllListeners('province');
+    })
+    .catch(err => {
+      console.log(err);
+    })
+}
 module.exports.commodity = (event)=>{
   knex('tblCommodity')
   .then(result => {

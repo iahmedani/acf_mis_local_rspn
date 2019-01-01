@@ -928,7 +928,7 @@ INNER JOIN [main].[tblScrPlw] ON [main].[tblScrPlw].[site_id] = [main].[v_geo].[
   createNewTable(knex, 'v_tblScrPlwFull', qryScrPlwNewFull);
 
   var qryStockEntryTable = `CREATE TABLE [tblStock](
-  [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL,  
+  [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
   [dn_number] VARCHAR, 
   [dn_date] DATE, 
   [item_name] VARCHAR, 
@@ -937,7 +937,9 @@ INNER JOIN [main].[tblScrPlw] ON [main].[tblScrPlw].[site_id] = [main].[v_geo].[
   [disp_unit] VARCHAR, 
   [disp_sub_unit] VARCHAR, 
   [rec_qty] INTEGER, 
-  [rec_obs] VARCHAR);`
+  [rec_obs] VARCHAR, 
+  [lost_and_damage] DECIMAL NOT NULL DEFAULT 0, 
+  [expiry_date] DATE);`;
   createNewTable(knex, 'tblStock', qryStockEntryTable);
 
   var qryCommodityTable = `CREATE TABLE [tblCommodity](
@@ -1026,4 +1028,24 @@ SELECT
 FROM   [main].[v_geo]
        INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo].[site_id] = [main].[tblOtpAdd].[site_id];
 `;
+  
+  var tblSiteStockQry = `create table tblSiteStock (
+stock_out_id integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+program_type varchar(10),
+item_id integer not null,
+stock_release_date date not null,
+quantity_released decimal not null,
+district_id integer not null,
+tehsil_id integer not null,
+site_id integer not null,
+CHW_id integer not null default 0,
+CHS_id integer not null default 0,
+is_deleted INT NOT NULL DEFAULT 0,
+upload_status INT NOT NULL DEFAULT 0,
+created_at datetime,
+updated_at datetime
+);`;
+  
+  createNewTable(knex, "tblSiteStock", tblSiteStockQry);
+  
 }

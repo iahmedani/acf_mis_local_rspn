@@ -6,15 +6,15 @@ $(function () {
     datePickerId.max = new Date().toISOString().split("T")[0];
   });
   $(function () {
-    ipc.send('getCommodity');
-    ipc.on('commodity', function (evt, com) {
-      $('#ration1').children('option:not(:first)').remove(); 
-      $('#ration2').children('option:not(:first)').remove(); 
-      $('#ration3').children('option:not(:first)').remove();
-      commodity(com, 'ration1');
-      commodity(com, 'ration2');
-      commodity(com, 'ration3');
-    })
+    // ipc.send('getCommodity');
+    // ipc.on('commodity', function (evt, com) {
+    //   $('#ration1').children('option:not(:first)').remove(); 
+    //   $('#ration2').children('option:not(:first)').remove(); 
+    //   $('#ration3').children('option:not(:first)').remove();
+    //   commodity(com, 'ration1');
+    //   commodity(com, 'ration2');
+    //   commodity(com, 'ration3');
+    // })
   ipc.send('getProvince');
   ipc.on('province', function(evt, province){
     $('#ddProvince').children('option:not(:first)').remove();   
@@ -112,8 +112,22 @@ $(function () {
     })
   }); 
 $(function(){
-  $('#ddProgramType').on('change', ()=>{
-     var prog = $('#ddProgramType').val();
+  $('#ddProgramType').on('change', function(){
+    var prog = $(this).val();    
+    ipc.send('getCommodity', prog)
+    ipc.on('commodity', function (evt, com) {
+        $('#ration1').children('option:not(:first)').remove();
+        $('#ration2').children('option:not(:first)').remove();
+        $('#ration3').children('option:not(:first)').remove();
+
+        //   district.district.forEach(el=>{
+        // $('#ddDistrict').append(`<option value="${el.id}">${el.districtName}</option>`);              
+        //   })
+      // dist(district);
+      commodity(com, 'ration1');
+      commodity(com, 'ration2');
+      commodity(com, 'ration3');
+    })
      console.log(prog)
      if(prog === 'otp'){
        $('#age option[value="above59"]').attr('disabled', true)

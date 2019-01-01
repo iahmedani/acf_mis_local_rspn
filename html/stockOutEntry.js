@@ -1,19 +1,134 @@
-module.exports.stockEntry = function () {
+module.exports.stockOutEntry = function () {
+  $(function () {
+    ipc.send('getProvince');
+    ipc.on('province', function (evt, province) {
+      $('#ddProvince').children('option:not(:first)').remove();
+      prov(province);
+    })
+    $('#ddProvince').on('change', function () {
+      var prov = $(this).val();
+      ipc.send('getDistrict', prov)
+      ipc.on('district', function (evt, district) {
+        $('#ddDistrict').children('option:not(:first)').remove();
+
+        dist(district);
+      })
+    })
+    $('#ddDistrict').on('change', function () {
+      var dist = $(this).val();
+      ipc.send('getTehsil', dist)
+      ipc.on('tehsil', function (evt, tehsil) {
+        $('#ddTehsil').children('option:not(:first)').remove();
+
+        teh(tehsil);
+      })
+    })
+    $('#ddTehsil').on('change', function () {
+      var tehs = $(this).val();
+      ipc.send('getUC', tehs)
+      ipc.on('uc', function (evt, uc) {
+        $('#ddUC').children('option:not(:first)').remove();
+
+        ucListener(uc);
+      })
+    })
+    var ucForHH;
+    $('#ddUC').on('change', function () {
+      var ucs = $(this).val();
+      ucForHH = ucs
+      ipc.send('getHealthHouse', ucs)
+      ipc.on('hh', function (evt, hh) {
+        $('#ddHealthHouse').children('option:not(:first)').remove();
+        hhListener(hh);
+      })
+    })
+    $("#ddHealthHouse").on("change", function () {
+      var siteId = $(this).val();
+      // ucForHH = ucs;
+      ipc.send("getStaff", siteId);
+      ipc.send("getSups", siteId);
+
+      ipc.on("haveStaff", function (evt, staffs) {
+        $("#ddStaff_code")
+          .children("option:not(:first)")
+          .remove();
+        staffListener(staffs);
+      });
+      ipc.on("haveSups", function (evt, _sups) {
+        $("#ddSup_code")
+          .children("option:not(:first)")
+          .remove();
+        supListener(_sups);
+      });
+    });
+    $("#ddStaff_code").on("change", function () {
+      var staff_code = $(this).val();
+      $("#ddStaff_name").val(staff_code);
+    });
+    $("#ddStaff_name").on("change", function () {
+      var staff_code = $(this).val();
+      $("#ddStaff_code").val(staff_code);
+    });
+    $("#ddSup_code").on("change", function () {
+      var sup_code = $(this).val();
+      $("#ddSup_name").val(sup_code);
+    });
+    $("#ddSup_name").on("change", function () {
+      var sup_code = $(this).val();
+      $("#ddSup_code").val(sup_code);
+    });
+  })
+  $(() => {
+    // $('.outreach').hide();
+    $('#ddProgramType').on('change', function () {
+      var val = $(this).val();
+      console.log(val)
+      if (val == 'outreach') {
+        $('.outreach').show();
+        $('.outreach input').attr('required', true);
+        $('.nsc').show();
+        $('.nsc input').attr('required', true);
+      } else if (val == 'sc') {
+        $('.nsc').hide();
+        $('.nsc input').attr('required', false);
+        $('.outreach').hide();
+        $('.outreach input').attr('required', false);
+      } else {
+        $('.outreach').hide();
+        $('.nsc').show();
+        $('.nsc input').attr('required', true);
+        $('.outreach input').attr('required', false);
+
+      }
+    })
+  })
   var data = [];
   let myInsert = (item) => {
     return new Promise((resolve, reject) => {
       var length = data.length + 1;
       item.id = data.length + 1;
-      item.dn_number = $('#dn_number').val();
-      item.dn_date = $('#dn_date').val();
-      $('#stockEntryForm').validate();
-      if ($('#stockEntryForm').valid()) {
-        data.push(item);
-        // console.log(data);
+      item.prog_type = $("#ddProgramType").val();
+      item.stock_release_date = $("#stock_release_date").val();
+      item.district_id = $("#ddDistrict").val();
+      item.tehsil_id = $("#ddTehsil").val();
+      item.site_id = $("#ddHealthHouse").val() || 0;
+      item.CHW_id = $("#ddStaff_code").val() || 0;
+      item.CHS_id = $("#ddStaff_code").val() || 0;
+      item.upload_status = 0;
+      $("#stockOutEntryForm").validate();
+      if (data.filter(el => el.item_name == item.item_name).length > 0) {
+        alert('Same item is not allowed to enter multiple time, if you want to change quantity release please click to edit the line/same item');
+      } else {
+        
+        if ($("#stockOutEntryForm").valid()) {
+          data.push(item);
+          // console.log(data);
+        }
       }
+
       // data.push(item);
       // console.log(data);
-      if (length == data.length && $('#stockEntryForm').valid()) {
+      if (length == data.length && $('#stockOutEntryForm').valid()) {
         resolve(data[data.length]);
       } else {
         reject()
@@ -63,34 +178,36 @@ module.exports.stockEntry = function () {
       // console.log(xx)
       return xx;
     }
-    ipc.send('getCommodity');
-    ipc.on('commodity', (evt, com) => {
-      var Description  = [{ Name: '', Id: 0, item: '' }];
-      var Unit  = [{ Name: '', Id: 0, item: '' }];
-      var SubUnit  = [{ Name: '', Id: 0, item: '' }];
-      var items = [{ Name: "", Id: 0, }];
+    ipc.send('getAvailableCommodity');
+    ipc.on('availableCommodity', (evt, com) => {
+      var Description  = [{ Name: '', item:''}];
+      var Unit  = [{ Name: '', item:''}];
+      var SubUnit  = [{ Name: '', item:''}];
+      var items = [{ Name: ""}];
+      var availStock = [{ Name: "", item:''}];
       com.commodity.forEach((el, i) => {
         Description.push({
           Name: el.item_desc,
-          Id: el.id,
-          item: el.item_name
+          item: el.item_name,
         })
         Unit.push({
           Name: el.item_unit,
-          Id: el.id,
-          item: el.item_name
+          item: el.item_name,
         })
         SubUnit.push({
           Name: el.item_sub_unit,
-          Id: el.id,
-          item: el.item_name
+          item: el.item_name,
         })
         items.push({
           Name: el.item_name,
-          Id: el.id,
+          item: el.item_name,
+        })
+        availStock.push({
+          Name: el.remaining,
+           item: el.item_name,
         })
         if (com.commodity.length - 1 == i) {
-          stockGrid(Description, Unit, items, SubUnit);
+          stockGrid(Description, Unit, items, SubUnit, availStock);
         }
       })
     })
@@ -125,16 +242,14 @@ module.exports.stockEntry = function () {
     // ]
     // // var itemId = '';
     
-    function stockGrid(Description, Unit, items, SubUnit) {
-      $("#jsGrid").jsGrid({
+    function stockGrid(Description, Unit, items, SubUnit, availStock) {
+      $("#stockOutGrid").jsGrid({
         width: "100%",
         height: "400px",
-
         inserting: true,
         editing: true,
         sorting: true,
         paging: true,
-
         controller: {
           loadData: (filter) => {
             return data;
@@ -164,6 +279,7 @@ module.exports.stockEntry = function () {
               var descField = this._grid.fields[1];
               var unitField = this._grid.fields[2];
               var subUnitField = this._grid.fields[3];
+              var avalable_stockField = this._grid.fields[4];
               var $inertControl = jsGrid.fields.select.prototype.insertTemplate.call(this);
               $inertControl.on('change', function () {
                 var itemId = $(this).val();
@@ -173,6 +289,8 @@ module.exports.stockEntry = function () {
                 $(".disp_unit-insert").empty().append(unitField.insertTemplate());
                 subUnitField.items = sendValue(SubUnit, itemId);
                 $(".disp_sub_unit-insert").empty().append(subUnitField.insertTemplate());
+                avalable_stockField.items = sendValue(availStock, itemId);
+                $(".avalable_stock-insert").empty().append(avalable_stockField.insertTemplate());
 
               })
               return $inertControl;
@@ -181,6 +299,7 @@ module.exports.stockEntry = function () {
               var descField = this._grid.fields[1];
               var unitField = this._grid.fields[2];
               var subUnitField = this._grid.fields[3];
+              var avalable_stockField = this._grid.fields[4];
               var $editControl = jsGrid.fields.select.prototype.editTemplate.call(this, value);
 
               var changeItem = function () {
@@ -192,6 +311,8 @@ module.exports.stockEntry = function () {
                 $(".disp_unit-update").empty().append(unitField.editTemplate());
                 subUnitField.items = sendValue(SubUnit, editVal);
                 $(".disp_sub_unit-update").empty().append(subUnitField.editTemplate());
+                avalable_stockField.items = sendValue(availStock, editVal);
+                $(".avalable_stock-update").empty().append(avalable_stockField.editTemplate());
               };
               $editControl.on('change', changeItem);
               changeItem();
@@ -217,11 +338,24 @@ module.exports.stockEntry = function () {
               return disp_sub_unit;
             }
           },
-          { name: 'disp_qty', title: 'Quantity Dispatched', type: 'decimal' },
-          { name: 'rec_qty', title: 'Received  Quantity (*)', type: 'decimal' },
-          { name: 'rec_obs', title: 'Quality, observations', type: 'text' },
-          { name: 'lost_and_damage', title: 'Lost and Damage Qty', type: 'decimal' },
-          { name: 'expiry_date', title: 'Expiry Date', type: 'date' },
+          {
+            name: 'avalable_stock', title: 'Avalable Stock', type: 'select', items: availStock, valueField: "Name", valueType: 'decimal',
+            textField: "Name", insertcss: 'avalable_stock-insert', updatecss: 'avalable_stock-update', itemTemplate: function (avalable_stock) {
+              return avalable_stock;
+            }
+          },
+          // { name: 'avalable_stock', title: 'Avalable Stock', type: 'decimal', default:availabeStock },
+          {
+            name: 'quantity_released', title: 'Quantity Released', type: 'decimal', validate: ["required", {
+              validator: function (value, item) {
+                return value > 0 && value <= item.avalable_stock
+              }, message: function (value, item) {
+                if (value == 0) {
+                  return 'Quantity released must be greater than 0'
+                } else if (value > item.avalable_stock) {
+                  return 'Quantity release cannot be more than available stock';
+                } 
+              }}] },
           {
             type: "control",
             editButton: false, modeSwitchButton: false
@@ -233,21 +367,21 @@ module.exports.stockEntry = function () {
     
   });
   $(function () {
-    var datePickerId = document.getElementById('dn_date');
+    var datePickerId = document.getElementById('stock_release_date');
     datePickerId.max = new Date().toISOString().split("T")[0];
   });
-  $('#stockEntrySubmit').on('click', (e) => {
+  $("#stockOutEntrySubmit").on("click", e => {
     console.log(data);
     // if(data.length>0){
 
     var stockEntryArr = [];
     data.forEach(el => {
       delete el.id;
-      stockEntryArr.push(el)
-    })
-    console.log(stockEntryArr)
-    ipc.send('stockEntry', (stockEntryArr))
-    ipc.removeAllListeners('stockEntry')
+      stockEntryArr.push(el);
+    });
+    console.log(stockEntryArr);
+    ipc.send("stockOutEntry", stockEntryArr);
+    ipc.removeAllListeners("stockOutEntry");
     // data = [];
     // $('#jsGrid').jsGrid("loadData");
     // $('#scrPlwForm').get(0).reset();
@@ -257,5 +391,5 @@ module.exports.stockEntry = function () {
     //   $('#scrPlwForm').validate();
     // }
     e.preventDefault();
-  })
+  });
 }
