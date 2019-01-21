@@ -1,65 +1,176 @@
-module.exports.initSessionsV2 = function (){
-  $(function(){
-    ipc.send('getProvince');
-    ipc.on('province', function(evt, province){
-      $('#ddProvince').children('option:not(:first)').remove();   
-      
-      // province.province.forEach(el=>{
-        // $('#ddProvince').append(`<option value="${el.id}">${el.provinceName}</option>`);
-
-      // })
+module.exports.initSessionsV2 = function () {
+  $(function() {
+    ipc.send("getProvince");
+    ipc.on("province", function(evt, province) {
+      $("#ddProvince")
+        .children("option:not(:first)")
+        .remove();
       prov(province);
-      })
-      $('#ddProvince').on('change', function(){
-        var prov = $(this).val();
-        ipc.send('getDistrict', prov )
-        ipc.on('district', function(evt, district){
-          $('#ddDistrict').children('option:not(:first)').remove();
-          
-        //   district.district.forEach(el=>{
-        // $('#ddDistrict').append(`<option value="${el.id}">${el.districtName}</option>`);              
-        //   })
-        dist(district);
-        })
-      })
-      $('#ddDistrict').on('change', function(){
-        var dist = $(this).val();
-        ipc.send('getTehsil', dist )
-        ipc.on('tehsil', function(evt, tehsil){
-          $('#ddTehsil').children('option:not(:first)').remove();
-          
-        //   tehsil.tehsil.forEach(el=>{
-        // $('#ddTehsil').append(`<option value="${el.id}">${el.tehsilName}</option>`);              
-        //   })
-        teh(tehsil);
-        })
-      })
-      $('#ddTehsil').on('change', function(){
-        var tehs = $(this).val();
-        ipc.send('getUC', tehs )
-        ipc.on('uc', function(evt, uc){
-          $('#ddUC').children('option:not(:first)').remove();
-        
-        //   uc.uc.forEach(el=>{
-        // $('#ddUC').append(`<option value="${el.id}">${el.ucName}</option>`);              
-        //   })
-        ucListener(uc);
-        })
-      })
-      var ucForHH;
-      $('#ddUC').on('change', function(){
-        var ucs = $(this).val();
-        ucForHH = ucs
-        ipc.send('getHealthHouse', ucs )
-        ipc.on('hh', function(evt, hh){
-          $('#ddHealthHouse').children('option:not(:first)').remove();
-        //   hh.hh.forEach(el=>{
-        // $('#ddHealthHouse').append(`<option value="${el.id}">${el.siteName}</option>`);              
-        //   })
-        hhListener(hh);
-        })
-      })
     });
+    $("#ddProvince").on("change", function() {
+      var prov = $(this).val();
+      ipc.send("getDistrict", prov);
+      ipc.on("district", function(evt, district) {
+        $("#ddDistrict")
+          .children("option:not(:first)")
+          .remove();
+        dist(district);
+      });
+    });
+    $("#ddDistrict").on("change", function() {
+      var dist = $(this).val();
+      ipc.send("getTehsil", dist);
+      ipc.on("tehsil", function(evt, tehsil) {
+        $("#ddTehsil")
+          .children("option:not(:first)")
+          .remove();
+
+        teh(tehsil);
+      });
+    });
+    $("#ddTehsil").on("change", function() {
+      var tehs = $(this).val();
+      ipc.send("getUC", tehs);
+      ipc.on("uc", function(evt, uc) {
+        $("#ddUC")
+          .children("option:not(:first)")
+          .remove();
+        ucListener(uc);
+      });
+    });
+    var ucForHH;
+    $("#ddUC").on("change", function() {
+      var ucs = $(this).val();
+      ucForHH = ucs;
+      ipc.send("getHealthHouse", ucs);
+      ipc.on("hh", function(evt, hh) {
+        $("#ddHealthHouse")
+          .children("option:not(:first)")
+          .remove();
+        hhListener(hh);
+      });
+    });
+    $("#ddHealthHouse").on("change", function() {
+      var siteId = $(this).val();
+      // ucForHH = ucs;
+      ipc.send("getStaff", siteId);
+      ipc.send("getSups", siteId);
+
+      ipc.on("haveStaff", function(evt, staffs) {
+        $("#ddStaff_code")
+          .children("option:not(:first)")
+          .remove();
+        staffListener(staffs);
+      });
+      ipc.on("haveSups", function(evt, _sups) {
+        $("#ddSup_code")
+          .children("option:not(:first)")
+          .remove();
+        supListener(_sups);
+      });
+    });
+    $("#ddStaff_code").on("change", function() {
+      var staff_code = $(this).val();
+      $("#ddStaff_name").val(staff_code);
+    });
+    $("#ddStaff_name").on("change", function() {
+      var staff_code = $(this).val();
+      $("#ddStaff_code").val(staff_code);
+    });
+    $("#ddSup_code").on("change", function() {
+      var sup_code = $(this).val();
+      $("#ddSup_name").val(sup_code);
+    });
+    $("#ddSup_name").on("change", function() {
+      var sup_code = $(this).val();
+      $("#ddSup_code").val(sup_code);
+    });
+  });
+
+
+  $(() => {
+    // $('.outreach').hide();
+    $('#ddProgramType').on('change', function () {
+      var val = $(this).val();
+      // if (data.length > 0) {
+      //   data = [];
+      // }
+      console.log(val)
+      if (val == 'outreach') {
+        $('.outreach').show();
+        $('.outreach input').attr('required', true);
+        $('.nsc').show();
+        $('.nsc input').attr('required', true);
+      }  else {
+        $('.outreach').hide();
+        $('.nsc').show();
+        $('.nsc input').attr('required', true);
+        $('.outreach input').attr('required', false);
+
+      }
+    })
+  })
+  // $(function(){
+  //   ipc.send('getProvince');
+  //   ipc.on('province', function(evt, province){
+  //     $('#ddProvince').children('option:not(:first)').remove();   
+      
+  //     // province.province.forEach(el=>{
+  //       // $('#ddProvince').append(`<option value="${el.id}">${el.provinceName}</option>`);
+
+  //     // })
+  //     prov(province);
+  //     })
+  //     $('#ddProvince').on('change', function(){
+  //       var prov = $(this).val();
+  //       ipc.send('getDistrict', prov )
+  //       ipc.on('district', function(evt, district){
+  //         $('#ddDistrict').children('option:not(:first)').remove();
+          
+  //       //   district.district.forEach(el=>{
+  //       // $('#ddDistrict').append(`<option value="${el.id}">${el.districtName}</option>`);              
+  //       //   })
+  //       dist(district);
+  //       })
+  //     })
+  //     $('#ddDistrict').on('change', function(){
+  //       var dist = $(this).val();
+  //       ipc.send('getTehsil', dist )
+  //       ipc.on('tehsil', function(evt, tehsil){
+  //         $('#ddTehsil').children('option:not(:first)').remove();
+          
+  //       //   tehsil.tehsil.forEach(el=>{
+  //       // $('#ddTehsil').append(`<option value="${el.id}">${el.tehsilName}</option>`);              
+  //       //   })
+  //       teh(tehsil);
+  //       })
+  //     })
+  //     $('#ddTehsil').on('change', function(){
+  //       var tehs = $(this).val();
+  //       ipc.send('getUC', tehs )
+  //       ipc.on('uc', function(evt, uc){
+  //         $('#ddUC').children('option:not(:first)').remove();
+        
+  //       //   uc.uc.forEach(el=>{
+  //       // $('#ddUC').append(`<option value="${el.id}">${el.ucName}</option>`);              
+  //       //   })
+  //       ucListener(uc);
+  //       })
+  //     })
+  //     var ucForHH;
+  //     $('#ddUC').on('change', function(){
+  //       var ucs = $(this).val();
+  //       ucForHH = ucs
+  //       ipc.send('getHealthHouse', ucs )
+  //       ipc.on('hh', function(evt, hh){
+  //         $('#ddHealthHouse').children('option:not(:first)').remove();
+  //       //   hh.hh.forEach(el=>{
+  //       // $('#ddHealthHouse').append(`<option value="${el.id}">${el.siteName}</option>`);              
+  //       //   })
+  //       hhListener(hh);
+  //       })
+  //     })
+  //   });
   $(function () {
     $('.myFilter').on('change', function () {
       console.log($(this).val())
@@ -69,6 +180,8 @@ module.exports.initSessionsV2 = function (){
       x.tehsil_id = ($("#ddTehsil").val()) ? $("#ddTehsil").val() : '';
       x.uc_id = ($("#ddUC").val()) ? $("#ddUC").val() : '';
       x.site_id = ($("#ddHealthHouse").val()) ? $("#ddHealthHouse").val() : '';
+      x.CHW_id = ($("#ddStaff_code").val()) ? $("#ddStaff_code").val() : '';
+      x.CHS_id = ($("#ddSup_code").val()) ? $("#ddSup_code").val() : '';
 
       $("#jsGrid")
         .jsGrid("loadData", x)
@@ -96,7 +209,9 @@ module.exports.initSessionsV2 = function (){
           filter.district_id = ($("#ddDistrict").val())?  $("#ddDistrict").val() : ''  ;
           filter.tehsil_id = ($("#ddTehsil").val())?  $("#ddTehsil").val() : ''  ;
           filter.uc_id = ($("#ddUC").val())?  $("#ddUC").val() : ''  ;
-          filter.site_id = ($("#ddHealthHouse").val())?  $("#ddHealthHouse").val() : ''  ;
+          filter.site_id = ($("#ddHealthHouse").val()) ? $("#ddHealthHouse").val() : '';
+          filter.CHW_id = ($("#ddStaff_code").val()) ? $("#ddStaff_code").val() : '';
+          filter.CHS_id = ($("#ddSup_code").val()) ? $("#ddSup_code").val() : '';
           return loadData(filter);
         },
         updateItem: function (item) {
@@ -117,12 +232,14 @@ module.exports.initSessionsV2 = function (){
         insertItem: function (item) {
           console.log(item);
           item.site_id = ($("#ddHealthHouse").val()) ? $("#ddHealthHouse").val() : '';
-          if (item.site_id != '') {
-            $("#site_must").attr("hidden", true);
-            return insertData(item)
-          } else {
-            $("#site_must").attr('hidden', false);
-          }
+          item.CHW_id = $("#ddStaff_code").val() ? $("#ddStaff_code").val() : "";
+          item.CHS_id = $("#ddSup_code").val() ? $("#ddSup_code").val() : "";
+          return insertData(item)
+          // if (item.site_id != '') {
+          //   $("#site_must").attr("hidden", true);
+          // } else {
+          //   $("#site_must").attr('hidden', false);
+          // }
         },
         deleteItem: function (item) {
           console.log(item)
@@ -135,16 +252,18 @@ module.exports.initSessionsV2 = function (){
         title: 'Date',
         filtering: false,
         type: 'date',
-        validate: 'required'
+        validate: 'required',
+        width:50,
       }, {
         name: "session_type",
         title: "Session Type",
+        width:100,
         type: "select",
         items: [
           { Name: '', value: '' },
-          { Name: 'Hygene', value: 'hygene' },
+          { Name: 'Nutrition, Health and Hygene', value: 'nut_health_hygene' },
           { Name: 'IYCF', value: 'iycf' },
-          { Name: 'Breast Feeding Counseling', value: 'breastFeeding' },
+          // { Name: 'Breast Feeding Counseling', value: 'breastFeeding' },
           { Name: 'Cooking Demonstration', value: 'cooking' },
           { Name: 'Other', value: 'other' },
         ],
@@ -153,7 +272,8 @@ module.exports.initSessionsV2 = function (){
         validate: 'required'
       }, {
         name: 'session_location',
-        title: 'Session Location',
+          title: 'Session Location',
+        width:80,
         type: 'select',
         items: [
           { Name: '', value: '' },
@@ -164,8 +284,9 @@ module.exports.initSessionsV2 = function (){
         validate: 'required'
       },
       {
-        name: "new_male_participants",
-        title: "New Male Part:",
+        name: "male_participants",
+        width:50,
+        title: "Male Part:",
         type: "number",
         filtering: false,
         validate: {
@@ -174,8 +295,9 @@ module.exports.initSessionsV2 = function (){
         }
       },
       {
-        name: "new_female_participants",
-        title: "New Female Part:",
+        name: "female_participants",
+        title: "Female Part:",
+        width: 50,
         type: "number",
         validate: {
           validator: 'min',
@@ -184,8 +306,9 @@ module.exports.initSessionsV2 = function (){
         filtering: false,
       },
       {
-        name: "old_male_participants",
-        title: "Old Male Part:",
+        name: "new_participants",
+        title: "New Part:",
+        width: 50,
         type: "number",
         validate: {
           validator: 'min',
@@ -194,8 +317,9 @@ module.exports.initSessionsV2 = function (){
         filtering: false,
       },
       {
-        name: "old_female_participants",
-        title: "Old Female Part:",
+        name: "old_participants",
+        title: "Old Part:",
+        width: 50,
         type: "number",
         validate: {
           validator: 'min',
@@ -205,6 +329,7 @@ module.exports.initSessionsV2 = function (){
       },
       {
         name: "pragnent",
+        width: 50,
         title: "Pragnent",
         type: "number",
         validate: {
@@ -216,6 +341,7 @@ module.exports.initSessionsV2 = function (){
       {
         name: "lactating",
         title: "Lactating",
+        width: 50,
         type: "number",
         validate: {
           validator: 'min',
@@ -226,6 +352,7 @@ module.exports.initSessionsV2 = function (){
       {
         name: 'upload_status',
         title: 'Upload Status',
+        width: 50,
         type: 'select',
         valueType: 'number',
         items: [{ Name: '', value: '' }, { Name: 'Uploaded', value: 1 }, { Name: 'Not Uploaded', value: 0 }, { Name: 'Edited', value: 2 }],
@@ -236,9 +363,15 @@ module.exports.initSessionsV2 = function (){
         inserting: false,
         filtering: false,
 
+        }, {
+        name: 'remarks',
+        width: 50,        
+        title: 'Remarks',
+        type: 'text',
+        filtering:false,
       }, {
         type: 'control',
-        modeSwitchButton: false,
+        // modeSwitchButton: false,
 
         // deleteButton: false,
       }]
@@ -261,41 +394,41 @@ module.exports.initSessionsV2 = function (){
       })
     })
 
-    var MyDateField = function(config) {
-      jsGrid.Field.call(this, config);
-      };
+    // var MyDateField = function(config) {
+    //   jsGrid.Field.call(this, config);
+    //   };
     
-    MyDateField.prototype = new jsGrid.Field({
+    // MyDateField.prototype = new jsGrid.Field({
     
-    css: "date-field",            // redefine general property 'css'
-    align: "center",              // redefine general property 'align'
+    // css: "date-field",            // redefine general property 'css'
+    // align: "center",              // redefine general property 'align'
     
      
-    sorter: function(date1, date2) {
-        return new Date(date1) - new Date(date2);
-    },
+    // sorter: function(date1, date2) {
+    //     return new Date(date1) - new Date(date2);
+    // },
     
-    itemTemplate: function(value) {
-        return new Date(value).toDateString();
-    },
+    // itemTemplate: function(value) {
+    //     return new Date(value).toDateString();
+    // },
     
-    insertTemplate: function(value) {
-        return this._insertPicker = $("<input>").datepicker({ defaultDate: new Date() });
-    },
+    // insertTemplate: function(value) {
+    //     return this._insertPicker = $("<input>").datepicker({ defaultDate: new Date() });
+    // },
     
-    editTemplate: function(value) {
-        return this._editPicker = $("<input>").datepicker().datepicker("setDate", new Date(value));
-    },
+    // editTemplate: function(value) {
+    //     return this._editPicker = $("<input>").datepicker().datepicker("setDate", new Date(value));
+    // },
     
-    insertValue: function() {
-        return this._insertPicker.datepicker("getDate").toISOString();
-    },
+    // insertValue: function() {
+    //     return this._insertPicker.datepicker("getDate").toISOString();
+    // },
     
-    editValue: function() {
-        return this._editPicker.datepicker("getDate").toISOString();
-    }
-    });
-    jsGrid.fields.date = MyDateField;
+    // editValue: function() {
+    //     return this._editPicker.datepicker("getDate").toISOString();
+    // }
+    // });
+    // jsGrid.fields.date = MyDateField;
   
     
   let loadData = (data) => {
@@ -316,23 +449,28 @@ module.exports.initSessionsV2 = function (){
   }
 
   let insertData = (item)=>{
-    return new Promise((resolve, reject)=>{
-      ipc.send('insertSessionsSingle', item);
-      ipc.on('insertSessionsSingle', (e, result)=>{
-        if(result.err){
-          reject(result.err)
-          ipc.removeAllListeners('insertSessionsSingle');
-        } else {
-          resolve(result.result[0])
-          console.log(result)
-          ipc.removeAllListeners('insertSessionsSingle');
-          $("#jsGrid")
-            .jsGrid("render")
-            .done(function () {
-              console.log("rendering completed and data loaded");
-            });
-        }
-      })
+    return new Promise((resolve, reject) => {
+      $("#sessionForm").validate();
+      if ($("#sessionForm").valid()) {
+        ipc.send("insertSessionsSingle", item);
+        ipc.on("insertSessionsSingle", (e, result) => {
+          if (result.err) {
+            reject(result.err);
+            ipc.removeAllListeners("insertSessionsSingle");
+          } else {
+            resolve(result.result[0]);
+            console.log(result);
+            ipc.removeAllListeners("insertSessionsSingle");
+            $("#jsGrid")
+              .jsGrid("render")
+              .done(function() {
+                console.log("rendering completed and data loaded");
+              });
+          }
+        });
+      } else {
+        reject()
+      }
     })
   }
 

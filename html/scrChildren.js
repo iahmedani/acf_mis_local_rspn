@@ -140,7 +140,12 @@ module.exports.initGrid = function (){
   $('#submitScrChildForm').on('click', (e)=>{
     // console.log(data);
     $('#scrChildrenForm').validate();
-    if($('#scrChildrenForm').valid()){
+    // var totalScrB = parseInt($("#total_scr_boys").val());
+    // var totalScrG = parseInt($("#total_scr_girls").val());
+    // totalCheck(totalScrB, totalScrG);
+    // console.log(totalCheck(totalScrB, totalScrG))
+    totalCheck();
+    if ($('#scrChildrenForm').valid() && $('.highlightInput').length == 0){
       var scrChildrenData = $('#scrChildrenForm').serializeFormJSON();
       console.log(scrChildrenData);
       ipc.send('scrChildren', scrChildrenData);
@@ -156,28 +161,109 @@ module.exports.initGrid = function (){
     $('#scrChildrenForm').get(0).reset();
   })
   $('.tb').on('change', function () {
-    console.log($(this))
+    // console.log($(this))
   })
   $(".tg").on("change", function() {
-    console.log($(this));
+    // console.log($(this));
   });
 
-  $('.tbb').on('change', function () {
+  // $('.tbb').on('change', function () {
+  //   var total = 0;
+  //   $('.tbb').each(function (i, el) {
+  //     total = total + (($(el).val()) ? parseInt($(el).val()) : 0);
+  //   })
+  //   $("#total_scr_boys").empty();
+  //   $("#total_scr_boys").val(total);
+  // })
+  // $(".tgg").on("change", function() {
+  //   var total = 0;
+  //   $(".tgg").each(function(i, el) {
+  //     total = total + ($(el).val() ? parseInt($(el).val()) : 0);
+  //   });
+  //   $("#total_scr_girls").empty();
+  //   $("#total_scr_girls").val(total);
+  // });
+
+  $('.tnew').on('change', function () {
     var total = 0;
-    $('.tbb').each(function (i, el) {
-      total = total + (($(el).val()) ? parseInt($(el).val()) : 0);
+    $('.tnew').each(function (i, el) {
+      total = total + ($(el).val() ? parseInt($(el).val()) : 0);
     })
     $("#total_scr_boys").empty();
     $("#total_scr_boys").val(total);
   })
-  $(".tgg").on("change", function() {
+  $('.tgnew').on('change', function () {
     var total = 0;
-    $(".tgg").each(function(i, el) {
+    $('.tgnew').each(function (i, el) {
       total = total + ($(el).val() ? parseInt($(el).val()) : 0);
-    });
+    })
     $("#total_scr_girls").empty();
     $("#total_scr_girls").val(total);
-  });
+  })
+  
+  let totalCheck = () => {
+    var totalScrB = parseInt($("#total_scr_boys").val());
+    var x = 0;
+    $(".tchkb").each(function (i, el) {
+      x = x + ($(el).val() ? parseInt($(el).val()) : 0);
+      if ($(".tchkb").length - 1 == i) {
+        if (x != totalScrB) {
+          $(".tchkb").addClass("highlightInput");
+          // alert('Value not allowed')
+        } else {
+          $(".tchkb").removeClass("highlightInput");
+        }
+      }
+    });
+    var totalScrG = parseInt($("#total_scr_girls").val());
+    var y = 0;
+    $(".tchkg").each(function (i, el) {
+      y = y + ($(el).val() ? parseInt($(el).val()) : 0);
+      if ($(".tchkg").length - 1 == i) {
+        if (y != totalScrG) {
+          $(".tchkg").addClass('highlightInput');
+          // alert('Value not allowed')
+        } else {
+          $(".tchkg").removeClass('highlightInput');
+        }
+      }
+    });
 
+  }
+
+  // $('.tchkb').on('change', function () {
+  //   var totalScrB = parseInt($("#total_scr_boys").val());
+  //   // var totalScrG = parseInt($("#total_scr_girls").val());
+  //   var x = 0;
+  //   $(".tchkb").each(function(i, el) {
+  //     x = x + ($(el).val() ? parseInt($(el).val()) : 0);
+  //     if ($(".tchkb").length - 1 == i) {
+  //       if (x != totalScrB) {
+  //         $(".tchkb").addClass("highlightInput");
+  //         // alert('Value not allowed')
+  //       } else {
+  //         $(".tchkb").removeClass("highlightInput");
+  //       }
+  //     }
+  //   });
+  // })
+  // $('.tchkg').on('change', function () {
+  //   // var totalScrB = parseInt($("#total_scr_boys").val());
+  //   var totalScrG = parseInt($("#total_scr_girls").val());
+  //   var x = 0;
+  //   $(".tchkg").each(function(i, el) {
+  //     x = x + ($(el).val() ? parseInt($(el).val()) : 0);
+  //     if ($(".tchkg").length - 1 == i) {
+  //       if (x != totalScrG) {
+  //         $(".tchkg").addClass('highlightInput');
+  //         // alert('Value not allowed')
+  //       } else {
+  //         $(".tchkg").removeClass('highlightInput');
+  //       }
+  //     }
+  //   });
+  // })
+
+  
 
 }

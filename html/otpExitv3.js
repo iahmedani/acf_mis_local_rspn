@@ -25,15 +25,21 @@ module.exports.initOtpExit = function (){
       $('#weight_gain').empty();
       $('#weight_gain').val(gKgDay);
     })
-    ipc.send('getCommodity');
-    ipc.on('commodity', function (evt, com) {
-      $('#exit_ration1').children('option:not(:first)').remove();
-      $('#exit_ration2').children('option:not(:first)').remove();
-      $('#exit_ration3').children('option:not(:first)').remove();
-      commodity(com, 'exit_ration1');
-      commodity(com, 'exit_ration2');
-      commodity(com, 'exit_ration3');
-    })
+    ipc.send("getCommodityAll");
+    ipc.on("commodityAll", function(evt, com) {
+      $("#exit_ration1")
+        .children("option:not(:first)")
+        .remove();
+      $("#exit_ration2")
+        .children("option:not(:first)")
+        .remove();
+      $("#exit_ration3")
+        .children("option:not(:first)")
+        .remove();
+      commodity(com, "exit_ration1");
+      commodity(com, "exit_ration2");
+      commodity(com, "exit_ration3");
+    });
     ipc.send('getProvince');
     ipc.on('province', function(evt, province){
       $('#ddProvince').children('option:not(:first)').remove();   

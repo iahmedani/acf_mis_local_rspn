@@ -210,6 +210,7 @@ module.exports.stockOutEntry = function () {
           stockGrid(Description, Unit, items, SubUnit, availStock);
         }
       })
+      ipc.removeAllListeners("availableCommodity");
     })
     // var items = [
     //   { Name: "", Id: 0, },

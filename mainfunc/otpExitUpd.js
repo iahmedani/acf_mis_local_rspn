@@ -88,38 +88,5 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
       }
     );
   });
-  // Exit Update: Edit (update) one record
-  function exitUpdDataSave(event, data, client) {
-    data.client_id = client;
-    data.upload_status = 2;
-    const otpExitAddData = data;
-    console.log(otpExitAddData);
-
-    knex('tblOtpExit')
-      .where('otp_id', otpExitAddData.otp_id)
-      .update(otpExitAddData)
-      .then(result => {
-        console.log(result);
-        sndMsg.sucMsg(event, "", "Record updated Successfully");
-        return knex('tblInterimOtp')
-          .where('otp_id', otpExitAddData.otp_id)
-          .update({
-            status: otpExitAddData.exit_reason
-          })
-      })
-      .then(result => {
-        console.log({
-          msg: 'interm table updated',
-          data: result
-        })
-      })
-      .catch(e => {
-        console.log(e);
-        sndMsg.errMsg(event, "", "Record not updated, plz try again or contact admin");
-      })
-  }
-  //Exit Update: Edit (update) one record
-  ipcMain.on('otpExitUpdate', (e, data) => {
-    exitUpdDataSave(e, data, imran.client);
-  })
+ 
 };

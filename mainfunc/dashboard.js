@@ -22,7 +22,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
           .sum({ mam_boys_2459:"mam_boys_2459"})
           .where({ is_deleted: 0 })
           .then(result => {
-            console.log(result);
+            // console.log(result);
             cb(null, result);
           })
           .catch(e => {
@@ -80,10 +80,10 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
       }
     }, (err, result) => {
         if (err) {
-          console.log(err)
+          // console.log(err)
           sndMsg.errMsg(event,'', 'Unable to fech data' )
         } else {
-          console.log(result)
+          // console.log(result)
           event.sender.send("newDashboard", {result});
         }
     })

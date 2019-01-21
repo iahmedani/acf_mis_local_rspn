@@ -1,61 +1,72 @@
 <template>
-  <div>
+  <style>
+    
+    .myScrol{
+      overflow-y: scroll;
+      height: 450px;
+      width: 100%;
+      overflow-x: hidden;
+      }
+    
+  </style>
+  <div class="container-fluid">
     <form id="otpAddForm">
       <div class="row">
         <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">Admission</p>
+<div class="form-group col-sm-2">
 
-        <div class="form-group col-sm-3 ">
+  <label for="prog_type" class="form-label">Program Type:</label>
+
+  <select name="prog_type" id="ddProgramType" class="form-control form-control-sm ptype" required>
+    <option selected value="">Select One</option>
+    <option value="sfp">TSFP</option>
+    <option value="sfp_Plw">TSFP-PLW</option>
+    <option value="otp">OTP</option>
+    <option value="sc">NSC</option>
+  </select>
+
+</div>
+        <div class="form-group col-sm-2 ">
           <label for="province">Province</label>
-          <select name="province" id="ddProvince" class="form-control form-control-sm" required>
+          <select  id="ddProvince" class="form-control form-control-sm" required>
             <option selected value="">Choose</option>
 
           </select>
         </div>
-        <div class="form-group col-sm-3 ">
+        <div class="form-group col-sm-2 ">
 
           <label for="district">District</label>
-          <select name="district" id="ddDistrict" class="form-control form-control-sm" required>
+          <select id="ddDistrict" class="form-control form-control-sm" required>
             <option selected value="">Choose</option>
           </select>
         </div>
-        <div class="form-group col-sm-3 ">
+        <div class="form-group col-sm-2 ">
 
           <label for="Tehsil">Tehsil</label>
-          <select name="Tehsil" id="ddTehsil" class="form-control form-control-sm" required>
+          <select name="tehsil_id" id="ddTehsil" class="form-control form-control-sm" required>
             <option selected value="">Choose</option>
 
           </select>
         </div>
-        <div class="form-group col-sm-3 ">
+        <div class="form-group col-sm-2 ">
           <label for="uc">UC</label>
-          <select name="uc" id="ddUC" class="form-control form-control-sm" required>
+          <select  id="ddUC" class="form-control form-control-sm" required>
             <option selected value="">Choose</option>
           </select>
         </div>
-      </div>
-      <div class="row">
-        <div class="form-group col-sm-3">
-
+        <div class="form-group col-sm-2">
+        
           <label for="site_id" class="form-label">Site Name:</label>
-
+        
           <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm" required>
             <option value="">Select One</option>
           </select>
         </div>
+      </div>
+      <div class="row">
+        
+        
         <div class="form-group col-sm-2">
-
-          <label for="prog_type" class="form-label">Program Type:</label>
-
-          <select name="prog_type" id="ddProgramType" class="form-control form-control-sm" required>
-            <option selected value="">Select One</option>
-            <option value="sfp">TSFP</option>
-            <option value="sfp_Plw">TSFP-PLW</option>
-            <option value="otp">OTP</option>
-            <option value="sc">NSC</option>
-          </select>
-
-        </div>
-        <div class="form-group col-sm-3">
 
           <label for="site_village" class="form-label">Village:</label>
 
@@ -76,10 +87,10 @@
       </div>
       <div class="row">
         <div class="col-sm-12">
-          <div class="card">
+          <div class="card ">
             <div class="card-header"> Addmision Form
             </div>
-            <div class="card-body">
+            <div class="myScrol">
               <div id="demo" class="border border-info rounded-top">
                 <p class="list-group-item bg-info text-white">Basic Demography</p>
                 <div class="row">
@@ -107,11 +118,22 @@
                    data-inputmask="'mask': '0999-9999999'">
                   </div>
                   <div class="form-group col-sm-2">
-                    <label for="age" class="form-label">Age <small id="labAge">(in months)</small></label>
-                    <input type="number" name="age" id="age" class="form-control form-control-sm clr" required>
+                    <label for="travel_time_minutes" class="form-label">Time to Trevel OTP Site<small>(Min)</small></label>
+                    <input type="text" name="travel_time_minutes" id="travel_time_minutes" class="form-control form-control-sm clr" required>
                   </div>
                 </div>
                 <div class="row">
+                  <div class="form-group col-sm-2">
+                    <label for="is_mother_alive" class="form-label">Mother Alive</label>
+                    <select type="text" name="is_mother_alive" id="is_mother_alive" class="form-control form-control-sm clr" required>
+                      <option value="yes" selected>Yes</option>
+                      <option value="no">No</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-sm-2">
+                    <label for="age" class="form-label">Age <small id="labAge">(in months)</small></label>
+                    <input type="number" name="age" id="age" class="form-control form-control-sm clr" required>
+                  </div>
                   <div class="form-group col-sm-2">
                     <label for="gender" class="form-label">Gender</label>
                     <select name="gender" id="gender" class="form-control form-control-sm cld" required>
@@ -134,7 +156,8 @@
                       <option selected value="">Choose</option>
                       <option value="no_prv_pro">New Admission</option>
                       <option value="relapse">Relapse</option>
-                      <option value="return_def">Defaulter</option>
+                      <option value="return_def">Return After Defaulter</option>
+                      <option value="in-patient_refusal">In-patient Refusal</option>
                       <!-- <option value="abb_inp">Abbondon INP</option> -->
                       <option value="transfer_in_from_nsc">Transfer in from NSC</option>
                       <option value="tranfer_in_other_otp">Transfer in
@@ -146,10 +169,18 @@
                       <option value="other">Other</option>
                     </select>
                   </div>
+                  <div class="form-group col-sm-2" id="entry_reason_other_div" style="display:none">
+                    <label for="entry_reason_other" class="form-label">Specify Other </label>
+                    <input type="text" name="entry_reason_other" id="entry_reason_other" class="form-control form-control-sm clr">
+                  </div>
+                  <div class="form-group col-sm-2" id="nsc_tranfer_from_otp_div" style="display:none">
+                    <label for="nsc_otp_id" class="form-label">OTP Registratio ID </label>
+                    <input type="text" name="nsc_otp_id" id="nsc_otp_id" class="form-control form-control-sm clr">
+                  </div>
                   <div class="form-group col-sm-2" style="display:none;" id="nsc_old_otp_id_div">
                     <label for="nsc_old_otp_id">OLD OTP Reg: ID
                     </label>
-                    <input type="number" name="nsc_old_otp_id" id="nsc_old_otp_id" class="form-control form-control-sm" value="0" hidden>
+                    <input type="text" name="nsc_old_otp_id" id="nsc_old_otp_id" class="form-control form-control-sm" value="0" hidden>
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="ref_type">Refferal Type</label>
@@ -170,6 +201,12 @@
                       <option value="other">Other</option>
                     </select>
                   </div>
+                  <div class="form-group col-sm-2" id="ref_type_other_div" style="display:none">
+                    <label for="ref_type_other" class="form-label">Specify Other</label>
+                    <input type="text" name="ref_type_other" id="ref_type_other" class="form-control form-control-sm clr">
+                  </div>
+                  
+                  
                 </div>
               </div>
               <div id="anthro" class="border border-info rounded-top">
@@ -360,7 +397,16 @@
 
                 </div>
               </div>
-              <button type="submit" class="btn btn-info btn-block float-right" id="otpAddSubmit">Save</button>
+              <div class="row">
+                <div class="offset-sm-8 col-sm-2">
+                  <button type="submit" class="btn btn-success btn-block " id="otpAddSubmit">Save</button>                  
+                </div>
+                <div class="col-sm-2">
+                  <!-- <button type="submit" class="btn btn-success btn-block " id="otpAddSubmit">Save</button>                   -->
+                  <button type="reset" class="btn btn-danger btn-block" id="otpAddReset">Reset</button>
+                </div>
+
+              </div>
             </div>
           </div>
         </div>

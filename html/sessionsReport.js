@@ -103,7 +103,8 @@ module.exports.sessionsReport = () => {
         $("#tblSessionReport").DataTable({
           data: data.result.data,
           dom: "Bfrtip",
-          buttons: ["copy", "csv", "excel"],
+          buttons: ["copy", { extend: "csv", title: 'Sessions Report_' + new Date().toDateString() }, {
+            extend: "excel", title: 'Sessions Report_' + new Date().toDateString() }],
           retrieve: true,
           paging: true,
           columns: [
@@ -121,7 +122,7 @@ module.exports.sessionsReport = () => {
             {
               title: "Session", data: "session_type", render: function (data, type, row) {
                 var x = {
-                  hygene: 'Hygene',
+                  nut_health_hygene: 'Nutrition, Health and Hygene',
                   iycf: 'IYCF',
                   breastFeeding: 'Breast Feeding Counseling',
                   cooking: 'Cooking Demonstration',
@@ -134,12 +135,14 @@ module.exports.sessionsReport = () => {
               title: "Location", data: "session_location", render: function (data, type, row) {
                 return data.replace('_', ' ').toUpperCase();
             } },
-            { title: "New Females", data: "new_female_participants" },
-            { title: "Old Females", data: "old_female_participants" },
-            { title: "New Males", data: "new_male_participants" },
-            { title: "Old Males", data: "old_male_participants" },
+            { title: "Females", data: "female_participants" },
+            { title: "Males", data: "male_participants" },
+            { title: "New Participants", data: "new_participants" },
+            { title: "Old Participants", data: "old_participants" },
             { title: "Pragnent", data: "pragnent" },
-            { title: "Lactating", data: "lactating" }
+            { title: "Lactating", data: "lactating" },
+            { title: "Remarks", data: "remarks" }
+
           ]
         });
       });

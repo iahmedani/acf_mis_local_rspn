@@ -110,7 +110,42 @@ $(function () {
         
       })
     })
-  }); 
+  });
+  $("#ent_reason").change(function () {
+    var entReason = $("#ent_reason").val();
+    console.log(entReason)
+    var prog = $("#ddProgramType").val();
+    if (prog == "sc" && entReason == "transfer_in_from_otp") {
+      $("#ddUC")
+        .attr("disabled", false)
+        .attr("required", true);
+      $("#ddVillageName")
+        .attr("disabled", false)
+        .attr("required", true);
+      $("#ddHealthHouse")
+        .attr("disabled", false)
+        .attr("required", true);
+      $("#nsc_tranfer_from_otp_div").css("display", "");
+      $('#nsc_otp_id').attr("required", true);
+      // $('#ddUC').attr('disabled', false).attr('required', true);
+    } else if (prog == "sc" && entReason != "transfer_in_from_otp"){
+      $("#ddUC")
+        .attr("disabled", true)
+        .attr("required", false);
+      $("#ddVillageName")
+        .attr("disabled", true)
+        .attr("required", false);
+      $("#ddHealthHouse")
+        .attr("disabled", true)
+        .attr("required", false);
+      $("#nsc_tranfer_from_otp_div").css("display", "none");
+      $("#nsc_otp_id").attr("required", false);
+    } else if (prog != "sc") {
+      $("#nsc_tranfer_from_otp_div").css("display", "none");
+      $("#nsc_otp_id").attr("required", false);
+    }
+  });
+
 $(function(){
   $('#ddProgramType').on('change', function(){
     var prog = $(this).val();    
@@ -119,17 +154,45 @@ $(function(){
         $('#ration1').children('option:not(:first)').remove();
         $('#ration2').children('option:not(:first)').remove();
         $('#ration3').children('option:not(:first)').remove();
-
-        //   district.district.forEach(el=>{
-        // $('#ddDistrict').append(`<option value="${el.id}">${el.districtName}</option>`);              
-        //   })
-      // dist(district);
       commodity(com, 'ration1');
       commodity(com, 'ration2');
       commodity(com, 'ration3');
     })
-     console.log(prog)
-     if(prog === 'otp'){
+    if (prog !== 'sc') {
+      $("#ent_reason").children('option:not(:first)').remove();
+      $("#ent_reason").append(`
+        <option value="no_prv_pro">New Admission</option>
+                      <option value="relapse">Relapse</option>
+                      <option value="return_def">Return After Defaulter</option>
+                      <option value="in-patient_refusal">In-patient Refusal</option>
+                      <!-- <option value="abb_inp">Abbondon INP</option> -->
+                      <option value="transfer_in_from_nsc">Transfer in from NSC</option>
+                      <option value="tranfer_in_other_otp">Transfer in
+                        <small>From other OTP</small>
+                      </option>
+                      <option value="tranfer_in_from_sfp">Transfer in
+                        <small>From TSFP</small>
+                      </option>
+                      <option value="other">Other</option>
+        `);
+      $("#ref_type")
+        .children("option:not(:first)")
+        .remove();
+      $("#ref_type").append(`
+        <option value="self">Self</option>
+                      <option value="peer">Peer to Peer</option>
+                      <option value="chw">CHW</option>
+                      <option value="lhw">LHW</option>
+                      <option value="doh_staff">DOH Staff</option>
+                      <option value="com_org">Community Org</option>
+                      <option value="by_sc_care">By SC Care</option>
+                      <option value="by_otp">By OTP</option>
+                      <option value="from_opd">From OPD</option>
+                      <option value="by_tsfp">By TSFP</option>
+                      <option value="other">Other</option>
+        `);
+    }
+    if (prog === 'otp' || prog === 'sc'){
        $('#age option[value="above59"]').attr('disabled', true)
       $('#age option[value="below_6"]').attr('disabled', false)
 
@@ -142,6 +205,27 @@ $(function(){
                     <option value="plus_1">&plus;(1)</option>
                     <option value="plus_2">&plus;&plus;(2)</option>
                     <option value="plus_3">&plus;&plus;&plus;(3)</option>`)
+      $("#nsc_tranfer_from_otp_div").css("display", "none");
+      $("#nsc_otp_id").attr("required", false);
+      if (prog == 'sc') {
+        $("#ent_reason").children('option:not(:first)').remove();
+        $("#ent_reason").append(`
+        <option value="new_add"> New Admission</option>
+        <option value="transfer_in"> Transfer In</option>
+        <option value="transfer_in_from_otp"> Transfer In From OTP </option>
+        <option value="readnission"> Readmission</option>
+        <option value="defaulted"> Defaulted</option> 
+        `);
+        $("#ref_type").children('option:not(:first)').remove();
+        $("#ref_type").append(`
+        <option value="ref_by_otp">OTP</option>
+        <option value="opd">OPD</option>
+        <option value="ped_wards">Pediatric Wards</option>
+        <option value="other">Other</option>
+        `);
+      }
+       
+      
 
      } else if(prog === 'sfp'){
       $('#age option[value="above59"]').attr('disabled', true)
@@ -261,4 +345,36 @@ $('#otpAddSubmit').on('click', (e)=>{
       $("#nsc_old_otp_id").attr("hidden", true);
     }
   })
+
+  $("#ent_reason").on('change', function() {
+    if ($(this).val() == 'other') {
+      $("#entry_reason_other_div").css('display', '');
+      $("#entry_reason_other").attr('required', true);
+    } else {
+      $("#entry_reason_other_div").css("display", "none");
+      $("#entry_reason_other").css("required", false);
+    }
+  });
+  $("#ref_type").on("change", function() {
+    if ($(this).val() == "other") {
+      $("#ref_type_other_div").css("display", "");
+      $("#ref_type_other").attr("required", true);
+    } else {
+      $("#ref_type_other_div").css("display", "none");
+      $("#ref_type_other").css("required", false);
+    }
+  });
+  $("#ddProgramType").on("change", function () {
+    console.log($(this).val())
+    if ($(this).val() == "sc") {
+      $("#ddHealthHouse").attr("disabled", true);
+      $("#ddUC").attr("disabled", true);
+      $("#ddVillageName").attr('disabled', true);
+    } else {
+      $("#ddHealthHouse").attr("disabled", false);
+      $("#ddUC").attr("disabled", false);
+      $("#ddVillageName").attr("disabled", false);
+
+    }
+  });
 }

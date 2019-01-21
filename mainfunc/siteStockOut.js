@@ -2,7 +2,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
 
   ipcMain.on("getAvailableCommodity", (event) => {
     knex("v_availableCom")
-      .where("reamining", '>', 0)
+      .where("remaining", '>', 0)
       .then(result => {
         event.sender.send("availableCommodity", { commodity: result });
       })

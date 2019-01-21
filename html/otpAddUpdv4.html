@@ -17,7 +17,7 @@
             <div class="card-header"> Addmision Form
             </div>
             <input type="number" name="otp_id" id="otp_id" hidden>
-            <div class="card-body">
+            <!-- <div class="card-body"> -->
               <div id="demo" class="border border-info rounded-top">
                 <p class="list-group-item bg-info text-white">Basic Demography</p>
                 <div class="row">
@@ -38,7 +38,7 @@
                         <div class="form-group col-sm-2 ">
                         
                           <label for="ddTehsil">Tehsil</label>
-                          <select  id="ddTehsil" class="form-control form-control-sm" required>
+                          <select  name="tehsil_id" id="ddTehsil" class="form-control form-control-sm" required>
                             <option selected value="">Choose</option>
                         
                           </select>
@@ -60,7 +60,7 @@
                     <input type="text" name="p_name" id="p_name" minlength="2" maxlength="25" class="form-control form-control-sm"
                       required>
                   </div>
-                  <div class="form-group col-sm-3">
+                  <div class="form-group col-sm-2">
                     <label for="f_or_h_name" class="form-label">Father/Husband Name</label>
                     <input type="text" name="f_or_h_name" id="f_or_h_name" minlength="2" maxlength="25" class="form-control form-control-sm"
                       required>
@@ -77,8 +77,21 @@
                     <label for="cnt_number" class="form-label">Contact Number</label>
                     <input type="text" name="cnt_number" id="cnt_number" class="form-control form-control-sm clr" data-inputmask="'mask': '0999-9999999'">
                   </div>
+                  <div class="form-group col-sm-2">
+                    <label for="travel_time_minutes" class="form-label">Time to Trevel OTP Site<small>(Min)</small></label>
+                    <input type="text" name="travel_time_minutes" id="travel_time_minutes" class="form-control form-control-sm clr"
+                      required>
+                  </div>
                 </div>
                 <div class="row">
+                 
+                  <div class="form-group col-sm-2">
+                    <label for="is_mother_alive" class="form-label">Mother Alive</label>
+                    <select type="text" name="is_mother_alive" id="is_mother_alive" class="form-control form-control-sm clr" required>
+                      <option value="yes" selected>Yes</option>
+                      <option value="no">No</option>
+                    </select>
+                  </div>
                   <div class="form-group col-sm-2">
                     <label for="age" class="form-label">Age</label>
                     <input type="number" name="age" id="age" class="form-control form-control-sm" required>
@@ -105,7 +118,8 @@
                       <option selected value="">Choose</option>
                       <option value="no_prv_pro">New Admission</option>
                       <option value="relapse">Relapse</option>
-                      <option value="return_def">Defaulter</option>
+                      <option value="return_def">Return After Defaulter</option>
+                      <option value="in-patient_refusal">In-patient Refusal</option>
                       <!-- <option value="abb_inp">Abbondon INP</option> -->
                       <option value="transfer_in_from_nsc">Transfer in from NSC</option>
                       <option value="tranfer_in_other_otp">Transfer in
@@ -116,6 +130,14 @@
                       </option>
                       <option value="other">Other</option>
                     </select>
+                  </div>
+                  <div class="form-group col-sm-2" id="entry_reason_other_div" style="display:none">
+                    <label for="entry_reason_other" class="form-label">Specify Other </label>
+                    <input type="text" name="entry_reason_other" id="entry_reason_other" class="form-control form-control-sm clr">
+                  </div>
+                  <div class="form-group col-sm-2" id="nsc_tranfer_from_otp_div" style="display:none">
+                    <label for="nsc_otp_id" class="form-label">OTP Registratio ID </label>
+                    <input type="text" name="nsc_otp_id" id="nsc_otp_id" class="form-control form-control-sm clr">
                   </div>
                   <div class="form-group col-sm-2" style="display:none;" id="nsc_old_otp_id_div">
                     <label for="nsc_old_otp_id">OLD OTP Reg: ID
@@ -140,6 +162,10 @@
                       <option value="by_tsfp">By TSFP</option>
                       <option value="other">Other</option>
                     </select>
+                  </div>
+                  <div class="form-group col-sm-2" id="ref_type_other_div" style="display:none">
+                    <label for="ref_type_other" class="form-label">Specify Other</label>
+                    <input type="text" name="ref_type_other" id="entryref_type_other" class="form-control form-control-sm clr">
                   </div>
                 </div>
               </div>
@@ -334,7 +360,7 @@
                 </div>
               </div>
               <button type="submit" class="btn btn-info btn-block float-right" id="otpAddUpdSubmit">Save</button>
-            </div>
+            <!-- </div> -->
           </div>
 
       </div>

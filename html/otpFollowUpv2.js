@@ -166,9 +166,9 @@ module.exports.initOtpFollowUp = function () {
     $('#ddHealthHouse').on('change', function () {
       var site_id = $(this).val();
       console.log('site_id', site_id);
-      ipc.send('getCommodity');
+      ipc.send("getCommodityAll");
 
-      ipc.on('commodity', (evt, com) => {
+      ipc.on('commodityAll', (evt, com) => {
         var commodities = [{Name:'Choose', value:'none'}]
         com.commodity.forEach((el, i) => {
           commodities.push({ Name: el.item_name, value: el.item_name });

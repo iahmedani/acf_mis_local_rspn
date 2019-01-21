@@ -1,0 +1,290 @@
+<template>
+  <div>
+    <div id="filter" class="rounded">
+      <div class="form-group row">
+        <div class="col-sm-2">
+          <label for="ddProvince" class="col-form-label">Province:</label>
+          <select id="ddProvince" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="ddDistrict" class="col-form-label">District:</label>
+          <select id="ddDistrict" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="ddTehsil" class="col-form-label">Tehsil:</label>
+          <select id="ddTehsil" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="ddUC" class="col-form-label">UC:</label>
+          <select id="ddUC" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <!-- </div> -->
+        <!-- <div class="form-group row"> -->
+        <div class="col-sm-2">
+          <label for="site_id" class="col-form-label">Site Name:</label>
+          <select id="ddHealthHouse" class="form-control form-control-sm">
+            <option selected disabled>Select One</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="prog_type" class="col-form-label">Program Type:</label>
+          <select name="prog_type" id="ddProgramType" class="form-control form-control-sm" required>
+            <option selected disabled>Select One</option>
+            <option value="sfp">SFP</option>
+            <option value="sfp_Plw">SFP-PLW</option>
+            <option value="otp">OTP</option>
+            <option value="sc">SC</option>
+          </select>
+
+        </div>
+        <!-- <div class="form-group col-sm-2">
+                <label for="interval" class="col-form-label">Inverval</label>
+                <select name="internval" id="ddInterval" class="form-control form-control-sm" >
+                  <option value="0" selected>No</option>
+                  <option value="1">Yes</option>
+                </select>
+              </div> -->
+      </div>
+      <form action="#!" id="filterDate">
+        <div class="form-group row">
+          <div class="col-sm-2">
+            <label for="interval" class="col-form-label">Inverval</label>
+            <select name="internval" id="ddInterval" class="form-control form-control-sm">
+              <option value="0" selected>No</option>
+              <option value="1">Yes</option>
+            </select>
+          </div>
+          <div class="col-sm-3" id="picYear">
+            <label for="start_date" class="col-form-label">Start Date:</label>
+            <input type="date" name="start_date" id="start_date" class="form-control form-control-sm" disabled required>
+          </div>
+          <div class="col-sm-3" id="picQuarter">
+            <label for="end_date" class="col-form-label">End Date:</label>
+            <input type="date" name="end_date" id="end_date" disabled class="form-control form-control-sm" required>
+          </div>
+          <div class="col-sm-2 align-self-end">
+            <button type="submit" class="btn btn-info btn-sm btn-block form-control shadow-sm" id="showAddExitReport">
+              <i class="fas fa-filter"></i> Show Data</button>
+          </div>
+      </form>
+      <div class="col-sm-2 align-self-end">
+        <button class="btn btn-success btn-sm btn-block form-control shadow-sm" type="button" id="exportScrChReport">
+          <i class="fas fa-file-excel"></i> Export</button>
+      </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <table class="table-bordered text-center" style="font-size: 10px;" id="addExitSummary">
+          <tr>
+            <th rowspan="3">Category</th>
+            <th colspan="9">Admission</th>
+            <th colspan="8">Exit</th>
+          </tr>
+          <tr>
+            <th rowspan="2">New Admission</th>
+            <th rowspan="2">Relapse</th>
+            <th rowspan="2">Return after Def</th>
+            <th rowspan="2">Abondonded</th>
+            <th colspan="3">Transfer In</th>
+            <th rowspan="2">Other</th>
+            <th rowspan="2">Total Admissions</th>
+            <th rowspan="2">Cured</th>
+            <th rowspan="2">Deaths</th>
+            <th rowspan="2">Defaulter</th>
+            <th rowspan="2">Non Respondents</th>
+            <th colspan="2">Transfer Out</th>
+            <th rowspan="2">Other</th>
+            <th rowspan="2">Total Discharged</th>
+          </tr>
+          <tr>
+            <th>Promotion From SC</th>
+            <th>FROM OTP</th>
+            <th>FROM SFP</th>
+            <th>Medical Transfer/ to SC</th>
+            <th>To OTP</th>
+          </tr>
+          <!-- <tr>
+                <td id="total">Total</td>
+                <td id="tAddNew"></td>
+                <td id="tAddRelapse"></td>
+                <td id="tAddReturnDef"></td>
+                <td id="tAddAbonded"></td>
+                <td id="tAddProSc"></td>
+                <td id="tTransferOtp"></td>
+                <td id="tTransferSfp"></td>
+                <td id="tAddOther"></td>
+                <td id="tTotalAdd"></td>
+                <td id="exit_cured"></td>
+                <td id="exit_death"></td>
+                <td id="exit_defaulter"></td>
+                <td id="exit_nonResponder"></td>
+                <td id="exit_medicalToSc"></td>
+                <td id="exit_toOtp"></td>
+                <td id="exit_other"></td>
+                <td id="exit_total"></td>
+              </tr> -->
+          <tr>
+            <td colspan="19" style="font-size: 11px; font-weight: bold; background-color: grey">Childern 6-23 Months</td>
+          </tr>
+          <tr id="ch_623_boys">
+            <td>Boys</td>
+            <td id="623_boys_add_newAdmision"></td>
+            <td id="623_boys_add_Relapse"></td>
+            <td id="623_boys_add_default"></td>
+            <td id="623_boys_add_Abbondon"></td>
+            <td id="623_boys_add_Pro_in_from_SC"></td>
+            <td id="623_boys_add_Trasfer_in_from_other_OTP"></td>
+            <td id="623_boys_add_Transfer_in_from_SFP"></td>
+            <td id="623_boys_add_Other"></td>
+            <td id="623_boys_add_totalAd"></td>
+            <td id="623_boys_exit_cured"></td>
+            <td id="623_boys_exit_death"></td>
+            <td id="623_boys_exit_defaulter"></td>
+            <td id="623_boys_exit_non_responder"></td>
+            <td id="623_boys_exit_medical_transfer_SC"></td>
+            <td id="623_boys_exit_transfer_out_other_OTP"></td>
+            <td id="623_boys_exit_Other"></td>
+            <td id="623_boys_exit_totalExit"></td>
+          </tr>
+          <tr id="ch_623_girls">
+            <td>Girls</td>
+            <td id="623_girls_add_newAdmision"></td>
+            <td id="623_girls_add_Relapse"></td>
+            <td id="623_girls_add_default"></td>
+            <td id="623_girls_add_Abbondon"></td>
+            <td id="623_girls_add_Pro_in_from_SC"></td>
+            <td id="623_girls_add_Trasfer_in_from_other_OTP"></td>
+            <td id="623_girls_add_Transfer_in_from_SFP"></td>
+            <td id="623_girls_add_Other"></td>
+            <td id="623_girls_add_totalAd"></td>
+            <td id="623_girls_exit_cured"></td>
+            <td id="623_girls_exit_death"></td>
+            <td id="623_girls_exit_defaulter"></td>
+            <td id="623_girls_exit_non_responder"></td>
+            <td id="623_girls_exit_medical_transfer_SC"></td>
+            <td id="623_girls_exit_transfer_out_other_OTP"></td>
+            <td id="623_girls_exit_Other"></td>
+            <td id="623_girls_exit_totalExit"></td>
+          </tr>
+          <tr>
+            <td colspan="19" style="font-size: 11px; font-weight: bold; background-color: grey">Childern 24-59 Months</td>
+          </tr>
+          <tr id="ch_2459_boys">
+            <td>Boys</td>
+            <td id="2459_boys_add_newAdmision"></td>
+            <td id="2459_boys_add_Relapse"></td>
+            <td id="2459_boys_add_default"></td>
+            <td id="2459_boys_add_Abbondon"></td>
+            <td id="2459_boys_add_Pro_in_from_SC"></td>
+            <td id="2459_boys_add_Trasfer_in_from_other_OTP"></td>
+            <td id="2459_boys_add_Transfer_in_from_SFP"></td>
+            <td id="2459_boys_add_Other"></td>
+            <td id="2459_boys_add_totalAd"></td>
+            <td id="2459_boys_exit_cured"></td>
+            <td id="2459_boys_exit_death"></td>
+            <td id="2459_boys_exit_defaulter"></td>
+            <td id="2459_boys_exit_non_responder"></td>
+            <td id="2459_boys_exit_medical_transfer_SC"></td>
+            <td id="2459_boys_exit_transfer_out_other_OTP"></td>
+            <td id="2459_boys_exit_Other"></td>
+            <td id="2459_boys_exit_totalExit"></td>
+          </tr>
+          <tr id="ch_2459_boys">
+            <td>Girls</td>
+            <td id="2459_girls_add_newAdmision"></td>
+            <td id="2459_girls_add_Relapse"></td>
+            <td id="2459_girls_add_default"></td>
+            <td id="2459_girls_add_Abbondon"></td>
+            <td id="2459_girls_add_Pro_in_from_SC"></td>
+            <td id="2459_girls_add_Trasfer_in_from_other_OTP"></td>
+            <td id="2459_girls_add_Transfer_in_from_SFP"></td>
+            <td id="2459_girls_add_Other"></td>
+            <td id="2459_girls_add_totalAd"></td>
+            <td id="2459_girls_exit_cured"></td>
+            <td id="2459_girls_exit_death"></td>
+            <td id="2459_girls_exit_defaulter"></td>
+            <td id="2459_girls_exit_non_responder"></td>
+            <td id="2459_girls_exit_medical_transfer_SC"></td>
+            <td id="2459_girls_exit_transfer_out_other_OTP"></td>
+            <td id="2459_girls_exit_Other"></td>
+            <td id="2459_girls_exit_totalExit"></td>
+          </tr>
+        </table>
+        <table id="tblAdd" class="table table-bordered " hidden></table>
+        <table id="tblExit" class="table table-bordered " hidden></table>
+      </div>
+      <div class="col-sm-12" id="addExitReport"></div>
+    </div>
+
+    <!-- <div class="row">
+        <div id="report" class="col col-sm-12 rounded table-responsive-sm"> -->
+    <!-- <ul class="list-group"> -->
+    <!-- <p class="list-group-item align-center text-center h5" style="background-color: lightgray">Screening Summary</p> -->
+    <!-- </ul> -->
+    <!-- <table id="customers" class="table table-bordered rounded table-sm">
+                  <tr>
+                    <th colspan="2">Children</th>
+                    <th>Screening</th>
+                    <th>MUAC
+                      <11.5 cm</th>
+                        <th>MUAC 11.5 - 12.4 cm</th>
+                        <th>PLW</th>
+                        <th>Screening</th>
+                        <th>MUAC
+                          <21 cm</th>
+                  </tr>
+                  <tr rowspan="2">
+                    <th rowspan="2" >Active</th>
+                    <th>Male</th>
+                    <td id="tChildScrActive_M"></td>
+                    <td id="ChildScrActive_M115"></td>
+                    <td id="ChildScrActive_M115124"></td>
+                    <th>Pregnant</th>
+                    <td id="tPlwScrActive_P"></td>
+                    <td id="PlwScrActive_P21"></td>
+                  </tr>
+                  <tr>
+                    <th>Female</th>
+                    <td id="tChildScrActive_F"></td>
+                    <td id="ChildScrActive_F115"></td>
+                    <td id="ChildScrActive_F115124"></td>
+                    <th>Lactating</th>
+                    <td id="tPlwScrActive_L"></td>
+                    <td id="PlwScrActive_L21"></td>
+                  </tr>
+                  <tr rowspan="2">
+                    <th rowspan="2" >Passive</th>
+                    <th>Male</th>
+                    <td id="tChildScrPassive_M"></td>
+                    <td id="ChildScrPassive_M115"></td>
+                    <td id="ChildScrPassive_M115124"></td>
+                    <th>Pregnant</th>
+                    <td id="tPlwScrPassive_P"></td>
+                    <td id="PlwScrPassive_P21"></td>
+                  </tr>
+                  <tr>
+                    <th>Female</th>
+                    <td id="tChildScrPassive_F"></td>
+                    <td id="ChildScrPassive_F115"></td>
+                    <td id="ChildScrPassive_F115124"></td>
+                    <th>Lactating</th>
+                    <td id="tPlwScrPassive_L"></td>
+                    <td id="PlwScrPassive_L21"></td>
+                  </tr>
+                </table>
+                <table id="tblChild" class="table table-bordered " hidden></table>
+                <table id="tblPlw" class="table table-bordered " hidden></table>
+          </div>
+        </div> -->
+  </div>
+</template>

@@ -25,15 +25,15 @@ module.exports.initOtpExit = function (){
       $('#weight_gain').empty();
       $('#weight_gain').val(gKgDay);
     })
-    ipc.send('getCommodity');
-    ipc.on('commodity', function (evt, com) {
-      $('#exit_ration1').children('option:not(:first)').remove();
-      $('#exit_ration2').children('option:not(:first)').remove();
-      $('#exit_ration3').children('option:not(:first)').remove();
-      commodity(com, 'exit_ration1');
-      commodity(com, 'exit_ration2');
-      commodity(com, 'exit_ration3');
-    })
+    // ipc.send("getCommodityAll");
+    // ipc.on('commodityAll', function (evt, com) {
+    //   $('#exit_ration1').children('option:not(:first)').remove();
+    //   $('#exit_ration2').children('option:not(:first)').remove();
+    //   $('#exit_ration3').children('option:not(:first)').remove();
+    //   commodity(com, 'exit_ration1');
+    //   commodity(com, 'exit_ration2');
+    //   commodity(com, 'exit_ration3');
+    // })
     ipc.send('getProvince');
     ipc.on('province', function(evt, province){
       $('#ddProvince').children('option:not(:first)').remove();   
@@ -116,8 +116,9 @@ module.exports.initOtpExit = function (){
           controller: {
             loadData: function (filter) {
               console.log(filter)
+              filter.site_id = site_id;
               console.log('loaddata', site_id)
-              return xx(site_id);
+              return xx(filter);
             },
             updateItem: function (item) {
               console.log('update')
@@ -154,6 +155,7 @@ module.exports.initOtpExit = function (){
           rowClick: function(args){
             this.editItem(args.item);
             var data = args.item;
+            $("#exitAddForm").trigger('reset');
             $('#p_name').val(data.p_name);
             $('#gender').val(data.gender);
             $('#village').val(data.site_village);
@@ -161,6 +163,15 @@ module.exports.initOtpExit = function (){
             $('#add_weight').val(data.weight);
             $('#add_date').val(data.reg_date); 
             console.log(args.item);
+            ipc.send("getCommodity", data.prog_type);
+            ipc.on('commodity', function (evt, com) {
+              $('#exit_ration1').children('option:not(:first)').remove();
+              $('#exit_ration2').children('option:not(:first)').remove();
+              $('#exit_ration3').children('option:not(:first)').remove();
+              commodity(com, 'exit_ration1');
+              commodity(com, 'exit_ration2');
+              commodity(com, 'exit_ration3');
+            })
           }
           // ,
           // onDataLoaded: function (data) {

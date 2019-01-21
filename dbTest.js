@@ -949,86 +949,33 @@ module.exports.scrChildReport = function(cond, callback) {
 module.exports.scrPlwNewReport = function(cond, callback) {
   if (!cond) {
     knex
-      .select(
-        knex.raw(`SUM(total_scr_pragnent + total_scr_lactating) as total_scr,
+      .select(knex.raw(`SUM(total_scr_pragnent + total_scr_lactating) as total_scr,
       Sum(new_scr_pragnent + new_scr_lactating) as total_new,
       Sum(reScreened_scr_pragnent + reScreened_scr_lactating) as total_reScreened,
       sum(muac_le_21_pragnent + muac_le_21_lactating) as total_muac_le_21,
       sum(muac_gt_21_pragnent + muac_gt_21_lactating) as total_muac_gt_21,
-      sum(first_ifa_tabs_rec_pragnent + first_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_first,
-      sum(second_ifa_tabs_rec_pragnent + second_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_second,
-      sum(third_ifa_tabs_rec_pragnent + third_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_third,
-      sum(fourth_ifa_tabs_rec_pragnent + fourth_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_fourth,
-      sum(fifth_ifa_tabs_rec_pragnent + fifth_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_fifth,
-      sum(sixth_ifa_tabs_rec_pragnent + sixth_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_sixth`)
-      )
+      sum(ifa_first_time_pragnent + ifa_first_time_lactating ) as total_ifa_first_time,
+      sum(followup_pragnent + followup_lactating ) as total_followup,
+      sum(exits_pragnent + exit_lactating ) as total_exits`))
       .from("v_tblScrPlwFull")
+      .sum({ total_scr_pragnent: "total_scr_pragnent" })
+      .sum({ total_scr_lactating: "total_scr_lactating" })
+      .sum({ new_scr_pragnent: "new_scr_pragnent" })
+      .sum({ reScreened_scr_pragnent: "reScreened_scr_pragnent" })
+      .sum({ new_scr_lactating: "new_scr_lactating" })
+      .sum({ reScreened_scr_lactating: "reScreened_scr_lactating" })
+      .sum({ ifa_first_time_pragnent: "ifa_first_time_pragnent" })
+      .sum({ ifa_first_time_lactating: "ifa_first_time_lactating" })
+      .sum({ followup_pragnent: "followup_pragnent" })
       .sum({
-        total_scr_pragnent: "total_scr_pragnent"
+        followup_lactating: "followup_lactating"
       })
-      .sum({
-        total_scr_lactating: "total_scr_lactating"
-      })
-      .sum({
-        new_scr_pragnent: "new_scr_pragnent"
-      })
-      .sum({
-        reScreened_scr_pragnent: "reScreened_scr_pragnent"
-      })
-      .sum({
-        new_scr_lactating: "new_scr_lactating"
-      })
-      .sum({
-        reScreened_scr_lactating: "reScreened_scr_lactating"
-      })
-      .sum({
-        first_ifa_tabs_rec_pragnent: "first_ifa_tabs_rec_pragnent"
-      })
-      .sum({
-        first_ifa_tabs_rec_lactating: "first_ifa_tabs_rec_lactating"
-      })
-      .sum({
-        second_ifa_tabs_rec_pragnent: "second_ifa_tabs_rec_pragnent"
-      })
-      .sum({
-        second_ifa_tabs_rec_lactating: "second_ifa_tabs_rec_lactating"
-      })
-      .sum({
-        third_ifa_tabs_rec_pragnent: "third_ifa_tabs_rec_pragnent"
-      })
-      .sum({
-        third_ifa_tabs_rec_lactating: "third_ifa_tabs_rec_lactating"
-      })
-      .sum({
-        fourth_ifa_tabs_rec_pragnent: "fourth_ifa_tabs_rec_pragnent"
-      })
-      .sum({
-        fourth_ifa_tabs_rec_lactating: "fourth_ifa_tabs_rec_lactating"
-      })
-      .sum({
-        fifth_ifa_tabs_rec_pragnent: "fifth_ifa_tabs_rec_pragnent"
-      })
-      .sum({
-        fifth_ifa_tabs_rec_lactating: "fifth_ifa_tabs_rec_lactating"
-      })
-      .sum({
-        sixth_ifa_tabs_rec_pragnent: "sixth_ifa_tabs_rec_pragnent"
-      })
-      .sum({
-        sixth_ifa_tabs_rec_lactating: "sixth_ifa_tabs_rec_lactating"
-      })
-      .sum({
-        muac_gt_21_pragnent: "muac_gt_21_pragnent"
-      })
-      .sum({
-        muac_gt_21_lactating: "muac_gt_21_lactating"
-      })
-      .sum({
-        muac_le_21_pragnent: "muac_le_21_pragnent"
-      })
-      .sum({
-        muac_le_21_lactating: "muac_le_21_lactating"
-      })
+      .sum({ exits_pragnent: "exits_pragnent" })
+      .sum({ exit_lactating: "exit_lactating" })
+      .sum({ muac_gt_21_pragnent: "muac_gt_21_pragnent" })
+      .sum({ muac_gt_21_lactating: "muac_gt_21_lactating" })
+      .sum({ muac_le_21_pragnent: "muac_le_21_pragnent" })
+      .sum({ muac_le_21_lactating: "muac_le_21_lactating" })
       .then(result => {
         callback(null, result);
       })
@@ -1037,86 +984,31 @@ module.exports.scrPlwNewReport = function(cond, callback) {
       });
   } else {
     knex
-      .select(
-        knex.raw(`SUM(total_scr_pragnent + total_scr_lactating) as total_scr,
+      .select(knex.raw(`SUM(total_scr_pragnent + total_scr_lactating) as total_scr,
       Sum(new_scr_pragnent + new_scr_lactating) as total_new,
       Sum(reScreened_scr_pragnent + reScreened_scr_lactating) as total_reScreened,
       sum(muac_le_21_pragnent + muac_le_21_lactating) as total_muac_le_21,
       sum(muac_gt_21_pragnent + muac_gt_21_lactating) as total_muac_gt_21,
-      sum(first_ifa_tabs_rec_pragnent + first_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_first,
-      sum(second_ifa_tabs_rec_pragnent + second_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_second,
-      sum(third_ifa_tabs_rec_pragnent + third_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_third,
-      sum(fourth_ifa_tabs_rec_pragnent + fourth_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_fourth,
-      sum(fifth_ifa_tabs_rec_pragnent + fifth_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_fifth,
-      sum(sixth_ifa_tabs_rec_pragnent + sixth_ifa_tabs_rec_lactating ) as total_ifa_tabs_rec_sixth`)
-      )
+      sum(ifa_first_time_pragnent + ifa_first_time_lactating ) as total_ifa_first_time,
+      sum(followup_pragnent + followup_lactating ) as total_followup,
+      sum(exits_pragnent + exit_lactating ) as total_exits`))
       .from("v_tblScrPlwFull")
-      .sum({
-        total_scr_pragnent: "total_scr_pragnent"
-      })
-      .sum({
-        total_scr_lactating: "total_scr_lactating"
-      })
-      .sum({
-        new_scr_pragnent: "new_scr_pragnent"
-      })
-      .sum({
-        reScreened_scr_pragnent: "reScreened_scr_pragnent"
-      })
-      .sum({
-        new_scr_lactating: "new_scr_lactating"
-      })
-      .sum({
-        reScreened_scr_lactating: "reScreened_scr_lactating"
-      })
-      .sum({
-        first_ifa_tabs_rec_pragnent: "first_ifa_tabs_rec_pragnent"
-      })
-      .sum({
-        first_ifa_tabs_rec_lactating: "first_ifa_tabs_rec_lactating"
-      })
-      .sum({
-        second_ifa_tabs_rec_pragnent: "second_ifa_tabs_rec_pragnent"
-      })
-      .sum({
-        second_ifa_tabs_rec_lactating: "second_ifa_tabs_rec_lactating"
-      })
-      .sum({
-        third_ifa_tabs_rec_pragnent: "third_ifa_tabs_rec_pragnent"
-      })
-      .sum({
-        third_ifa_tabs_rec_lactating: "third_ifa_tabs_rec_lactating"
-      })
-      .sum({
-        fourth_ifa_tabs_rec_pragnent: "fourth_ifa_tabs_rec_pragnent"
-      })
-      .sum({
-        fourth_ifa_tabs_rec_lactating: "fourth_ifa_tabs_rec_lactating"
-      })
-      .sum({
-        fifth_ifa_tabs_rec_pragnent: "fifth_ifa_tabs_rec_pragnent"
-      })
-      .sum({
-        fifth_ifa_tabs_rec_lactating: "fifth_ifa_tabs_rec_lactating"
-      })
-      .sum({
-        sixth_ifa_tabs_rec_pragnent: "sixth_ifa_tabs_rec_pragnent"
-      })
-      .sum({
-        sixth_ifa_tabs_rec_lactating: "sixth_ifa_tabs_rec_lactating"
-      })
-      .sum({
-        muac_gt_21_pragnent: "muac_gt_21_pragnent"
-      })
-      .sum({
-        muac_gt_21_lactating: "muac_gt_21_lactating"
-      })
-      .sum({
-        muac_le_21_pragnent: "muac_le_21_pragnent"
-      })
-      .sum({
-        muac_le_21_lactating: "muac_le_21_lactating"
-      })
+      .sum({ total_scr_pragnent: "total_scr_pragnent" })
+      .sum({ total_scr_lactating: "total_scr_lactating" })
+      .sum({ new_scr_pragnent: "new_scr_pragnent" })
+      .sum({ reScreened_scr_pragnent: "reScreened_scr_pragnent" })
+      .sum({ new_scr_lactating: "new_scr_lactating" })
+      .sum({ reScreened_scr_lactating: "reScreened_scr_lactating" })
+      .sum({ ifa_first_time_pragnent: "ifa_first_time_pragnent" })
+      .sum({ ifa_first_time_lactating: "ifa_first_time_lactating" })
+      .sum({ followup_pragnent: "followup_pragnent" })
+      .sum({followup_lactating: "followup_lactating"})
+      .sum({ exits_pragnent: "exits_pragnent" })
+      .sum({ exit_lactating: "exit_lactating" })
+      .sum({ muac_gt_21_pragnent: "muac_gt_21_pragnent" })
+      .sum({ muac_gt_21_lactating: "muac_gt_21_lactating" })
+      .sum({ muac_le_21_pragnent: "muac_le_21_pragnent" })
+      .sum({ muac_le_21_lactating: "muac_le_21_lactating" })
       .where(builder => {
         if (!cond.date) {
           builder.where(cond);

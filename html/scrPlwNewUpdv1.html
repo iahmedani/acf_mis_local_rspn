@@ -86,95 +86,74 @@
   
           
             <table class="table table-sm table-bordered rounded text-center">
+ <tr>
+            <th class="bg-info text-white align-middle" colspan="1">Category</th>
+            <th class="bg-info text-white align-middle" colspan="1">Total Screened PLW</th>
+            <th class="bg-info text-white align-middle" colspan="1">Newly Screened PLW</th>
+            <th class="bg-info text-white align-middle" colspan="1">Re-Screened PLW</th>
+            <th class="bg-info text-white align-middle" colspan="1">MUAC &lt; 21 CM</th>
+            <th class="bg-info text-white align-middle" colspan="1">MUAC &geq; 21 CM</th>
+            <th class="bg-info text-white align-middle" colspan="1">PLW Received IFA Tablets First time</th>
+            <th class="bg-info text-white align-middle" colspan="1">PLW Followed-up</th>
+            <th class="bg-info text-white align-middle" colspan="1">Exit From Criteria</th>
+          </tr>
+          <tr>
+            <th class="align-middle">Pragnent</th>
+            <td class="align-middle">
+              <input required min="0" type="number" class="form-control form-control-sm clr" name="total_scr_pragnent" id="total_scr_pragnent">
+            </td>
+            <td class="align-middle">
+              <input required min="0" type="number" class="form-control form-control-sm clr" name="new_scr_pragnent" id="new_scr_pragnent">
+            </td>
+            <td class="align-middle">
+              <input required min="0" type="number" class="form-control form-control-sm clr" name="reScreened_scr_pragnent" id="reScreened_scr_pragnent">
+            </td>
+            <td class="align-middle">
+              <input required min="0" type="number" class="form-control form-control-sm clr" name="muac_le_21_pragnent" id="muac_le_21_pragnent">
+            </td>
+            <td class="align-middle">
+              <input required min="0" type="number" class="form-control form-control-sm clr" name="muac_gt_21_pragnent" id="muac_gt_21_pragnent">
+            </td>
+            <td class="align-middle">
+              <input required min="0" type="number" class="form-control form-control-sm clr" name="ifa_first_time_pragnent" id="ifa_first_time_pragnent">
+            </td>
+            <td class="align-middle">
+              <input required min="0" type="number" class="form-control form-control-sm clr" name="followup_pragnent" id="followup_pragnent">
+            </td>
+            <td class="align-middle">
+              <input required min="0" type="number" class="form-control form-control-sm clr" name="exits_pragnent" id="exits_pragnent">
+            </td>
+          </tr>
+          <tr>
+          <th class="align-middle">Lactating</th>
+          <td class="align-middle">
+            <input required min="0" type="number" class="form-control form-control-sm clr" name="total_scr_lactating" id="total_scr_lactating">
+          </td>
+          <td class="align-middle">
+            <input required min="0" type="number" class="form-control form-control-sm clr" name="new_scr_lactating" id="new_scr_lactating">
+          </td>
+          <td class="align-middle">
+            <input required min="0" type="number" class="form-control form-control-sm clr" name="reScreened_scr_lactating" id="reScreened_scr_lactating">
+          </td>
+          
+          <td class="align-middle">
+            <input required min="0" type="number" class="form-control form-control-sm clr" name="muac_le_21_lactating" id="muac_le_21_lactating">
+          </td>
+          <td class="align-middle">
+            <input required min="0" type="number" class="form-control form-control-sm clr" name="muac_gt_21_lactating" id="muac_gt_21_lactating">
+          </td>
+          <td class="align-middle">
+            <input required min="0" type="number" class="form-control form-control-sm clr" name="ifa_first_time_lactating" id="ifa_first_time_lactating">
+          </td>
+          <td class="align-middle">
+            <input required min="0" type="number" class="form-control form-control-sm clr" name="followup_lactating" id="followup_lactating">
+          </td>
+          <td class="align-middle">
+            <input required min="0" type="number" class="form-control form-control-sm clr" name="exit_lactating" id="exit_lactating">
+          </td>
+        </tr>
               <tr>
-                <th class="bg-info text-white align-middle" rowspan="2">Category</th>
-                <th class="bg-info text-white align-middle" rowspan="2">Total Screened Women</th>
-                <th class="bg-info text-white align-middle" rowspan="2">Newly Screened Women</th>
-                <th class="bg-info text-white align-middle" rowspan="2">Re-Screened Women</th>
-                <th class="bg-info text-white align-middle" rowspan="1" colspan="6">Women Received IFA Tablets</th>
-                <th class="bg-info text-white align-middle" rowspan="2">MUAC &lt; 21 CM</th>
-                <th class="bg-info text-white align-middle" rowspan="2">MUAC &geq; 21 CM</th>
-              </tr>
-              <tr>
-                <th class="bg-info text-white align-middle">1st Time/Visit</th>
-                <th class="bg-info text-white align-middle">2nd Time/Visit</th>
-                <th class="bg-info text-white align-middle">3rd Time/Visit</th>
-                <th class="bg-info text-white align-middle">4th Time/Visit</th>
-                <th class="bg-info text-white align-middle">5th Time/Visit</th>
-                <th class="bg-info text-white align-middle">6th Time/Visit</th>
-              </tr>
-              <tr>
-                <th class="align-middle">Pragnent</th>
-                <td class="align-middle">
-                  <input required min="0" type="number" class="form-control form-control-sm" name="total_scr_pragnent" id="total_scr_pragnent">
-                </td>
-                <td class="align-middle">
-                  <input required min="0" type="number" class="form-control form-control-sm" name="new_scr_pragnent" id="new_scr_pragnent">
-                </td>
-                <td class="align-middle">
-                  <input required min="0" type="number" class="form-control form-control-sm" name="reScreened_scr_pragnent" id="reScreened_scr_pragnent">
-                </td>
-                <td class="align-middle">
-                  <input required min="0" type="number" class="form-control form-control-sm" name="first_ifa_tabs_rec_pragnent" id="first_ifa_tabs_rec_pragnent">
-                </td>
-                <td class="align-middle">
-                  <input required min="0" type="number" class="form-control form-control-sm" name="second_ifa_tabs_rec_pragnent" id="second_ifa_tabs_rec_pragnent">
-                </td>
-                <td class="align-middle">
-                  <input required min="0" type="number" class="form-control form-control-sm" name="third_ifa_tabs_rec_pragnent" id="third_ifa_tabs_rec_pragnent">
-                </td>
-                <td class="align-middle">
-                  <input required min="0" type="number" class="form-control form-control-sm" name="fourth_ifa_tabs_rec_pragnent" id="fourth_ifa_tabs_rec_pragnent">
-                </td>
-                <td class="align-middle">
-                  <input required min="0" type="number" class="form-control form-control-sm" name="fifth_ifa_tabs_rec_pragnent" id="fifth_ifa_tabs_rec_pragnent">
-                </td>
-                <td class="align-middle">
-                  <input required min="0" type="number" class="form-control form-control-sm" name="sixth_ifa_tabs_rec_pragnent" id="sixth_ifa_tabs_rec_pragnent">
-                </td>
-                <td class="align-middle">
-                  <input required min="0" type="number" class="form-control form-control-sm" name="muac_le_21_pragnent" id="muac_le_21_pragnent">
-                </td>
-                <td class="align-middle">
-                  <input required min="0" type="number" class="form-control form-control-sm" name="muac_gt_21_pragnent" id="muac_gt_21_pragnent">
-                </td>
-              </tr>
-              <th class="align-middle">Lactating</th>
-              <td class="align-middle">
-                <input required min="0" type="number" class="form-control form-control-sm" name="total_scr_lactating" id="total_scr_lactating">
-              </td>
-              <td class="align-middle">
-                <input required min="0" type="number" class="form-control form-control-sm" name="new_scr_lactating" id="new_scr_lactating">
-              </td>
-              <td class="align-middle">
-                <input required min="0" type="number" class="form-control form-control-sm" name="reScreened_scr_lactating" id="reScreened_scr_lactating">
-              </td>
-              <td class="align-middle">
-                <input required min="0" type="number" class="form-control form-control-sm" name="first_ifa_tabs_rec_lactating" id="first_ifa_tabs_rec_lactating">
-              </td>
-              <td class="align-middle">
-                <input required min="0" type="number" class="form-control form-control-sm" name="second_ifa_tabs_rec_lactating" id="second_ifa_tabs_rec_lactating">
-              </td>
-              <td class="align-middle">
-                <input required min="0" type="number" class="form-control form-control-sm" name="third_ifa_tabs_rec_lactating" id="third_ifa_tabs_rec_lactating">
-              </td>
-              <td class="align-middle">
-                <input required min="0" type="number" class="form-control form-control-sm" name="fourth_ifa_tabs_rec_lactating" id="fourth_ifa_tabs_rec_lactating">
-              </td>
-              <td class="align-middle">
-                <input required min="0" type="number" class="form-control form-control-sm" name="fifth_ifa_tabs_rec_lactating" id="fifth_ifa_tabs_rec_lactating">
-              </td>
-              <td class="align-middle">
-                <input required min="0" type="number" class="form-control form-control-sm" name="sixth_ifa_tabs_rec_lactating" id="sixth_ifa_tabs_rec_lactating">
-              </td>
-              <td class="align-middle">
-                <input required min="0" type="number" class="form-control form-control-sm" name="muac_le_21_lactating" id="muac_le_21_lactating">
-              </td>
-              <td class="align-middle">
-                <input required min="0" type="number" class="form-control form-control-sm" name="muac_gt_21_lactating" id="muac_gt_21_lactating">
-              </td>
-              <tr>
-                <td colspan="10" class="not-req"></td>
+                <td colspan="7" class="not-req"></td>
                 <td>
                   <input type="submit" id="submitScrPlwNewUpd" value="Save" class=" form-cntrol form-control-sm btn btn-info btn-sm btn-block shadow-sm">
                 </td>

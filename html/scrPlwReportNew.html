@@ -62,26 +62,22 @@
     <div class="row">
       <table class="table table-sm table-bordered rounded text-center" id="scrPlwNewSum">
         <tr>
-          <th class="bg-info text-white align-middle" rowspan="2">Category</th>
-          <th class="bg-info text-white align-middle" rowspan="2">Total Screened Women</th>
-          <th class="bg-info text-white align-middle" rowspan="2">Newly Screened Women</th>
-          <th class="bg-info text-white align-middle" rowspan="2">Re-Screened Women</th>
-          <th class="bg-info text-white align-middle" rowspan="2">MUAC
+          <th class="bg-info text-white align-middle" >Category</th>
+          <th class="bg-info text-white align-middle" >Total Screened Women</th>
+          <th class="bg-info text-white align-middle" >Newly Screened Women</th>
+          <th class="bg-info text-white align-middle" >Re-Screened Women</th>
+          <th class="bg-info text-white align-middle" >MUAC
             <small>(&lt; 21cm)</small>
           </th>
-          <th class="bg-info text-white align-middle" rowspan="2">MUAC
+          <th class="bg-info text-white align-middle" >MUAC
             <small>(&geq; 21cm)</small>
           </th>
-          <th class="bg-info text-white align-middle" colspan="6">Women Received IFA Tablets</th>
+          <th class="bg-info text-white align-middle">PLW Received IFA Tablets First Time</th>
+          <th class="bg-info text-white align-middle">PLW Followed up</th>
+          <th class="bg-info text-white align-middle">Exit from criteria</th>
         </tr>
-        <tr>
-          <th class="bg-info text-white align-middle">1st Time/Visit</th>
-          <th class="bg-info text-white align-middle">2nd Time/Visit</th>
-          <th class="bg-info text-white align-middle">3rd Time/Visit</th>
-          <th class="bg-info text-white align-middle">4th Time/Visit</th>
-          <th class="bg-info text-white align-middle">5th Time/Visit</th>
-          <th class="bg-info text-white align-middle">6th Time/Visit</th>
-        </tr>
+
+        
         <tr>
           <th class="align-middle">Total</th>
           <td class="align-middle" id="total_scr"></td>
@@ -89,12 +85,9 @@
           <td class="align-middle" id="total_reScreened"></td>
           <td class="align-middle" id="total_muac_le_21"></td>
           <td class="align-middle" id="total_muac_gt_21"></td>
-          <td class="align-middle" id="total_ifa_tabs_rec_first"></td>
-          <td class="align-middle" id="total_ifa_tabs_rec_second"></td>
-          <td class="align-middle" id="total_ifa_tabs_rec_third"></td>
-          <td class="align-middle" id="total_ifa_tabs_rec_fourth"></td>
-          <td class="align-middle" id="total_ifa_tabs_rec_fifth"></td>
-          <td class="align-middle" id="total_ifa_tabs_rec_sixth"></td>
+          <td class="align-middle" id="total_ifa_first_time"></td>
+          <td class="align-middle" id="total_followup"></td>
+          <td class="align-middle" id="total_exits"></td>
         </tr>
         <tr>
           <th class="align-middle">Pragnent</th>
@@ -103,12 +96,9 @@
           <td class="align-middle" id="reScreened_scr_pragnent"></td>
           <td class="align-middle" id="muac_le_21_pragnent"></td>
           <td class="align-middle" id="muac_gt_21_pragnent"></td>
-          <td class="align-middle" id="first_ifa_tabs_rec_pragnent"></td>
-          <td class="align-middle" id="second_ifa_tabs_rec_pragnent"></td>
-          <td class="align-middle" id="third_ifa_tabs_rec_pragnent"></td>
-          <td class="align-middle" id="fourth_ifa_tabs_rec_pragnent"></td>
-          <td class="align-middle" id="fifth_ifa_tabs_rec_pragnent"></td>
-          <td class="align-middle" id="sixth_ifa_tabs_rec_pragnent"></td>
+          <td class="align-middle" id="ifa_first_time_pragnent"></td>
+          <td class="align-middle" id="followup_pragnent"></td>
+          <td class="align-middle" id="exits_pragnent"></td>
         </tr>
         <tr>
           <th class="align-middle">Lactating</th>
@@ -117,12 +107,9 @@
           <td class="align-middle" id="reScreened_scr_lactating"></td>
           <td class="align-middle" id="muac_le_21_lactating"></td>
           <td class="align-middle" id="muac_gt_21_lactating"></td>
-          <td class="align-middle" id="first_ifa_tabs_rec_lactating"></td>
-          <td class="align-middle" id="second_ifa_tabs_rec_lactating"></td>
-          <td class="align-middle" id="third_ifa_tabs_rec_lactating"></td>
-          <td class="align-middle" id="fourth_ifa_tabs_rec_lactating"></td>
-          <td class="align-middle" id="fifth_ifa_tabs_rec_lactating"></td>
-          <td class="align-middle" id="sixth_ifa_tabs_rec_lactating"></td>
+          <td class="align-middle" id="ifa_first_time_lactating"></td>
+          <td class="align-middle" id="followup_lactating"></td>
+          <td class="align-middle" id="exit_lactating"></td>
         </tr>
       </table>
     </div>

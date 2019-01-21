@@ -6,6 +6,8 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
     var _offset = (filter.pageIndex == 1) ? 0 : (filter.pageIndex - 1) * _limit;
     (filter.session_type) ? filter.session_type = filter.session_type : filter.session_type = '';
     (filter.session_location) ? filter.session_location = filter.session_location : filter.session_location = '';
+    (filter.CHW_id) ? filter.CHW_id = filter.CHW_id : filter.CHW_id = '';
+    (filter.CHS_id) ? filter.CHS_id = filter.CHS_id : filter.CHS_id = '';
     console.log(filter);
     async.series(
       {
@@ -19,6 +21,8 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
             .where('site_id', 'like', `%${filter.site_id}%`)
             .where("session_type", "like", `%${filter.session_type}%`)
             .where("session_location", "like", `%${filter.session_location}%`)
+            .where("CHW_id", "like", `%${filter.CHW_id}%`)
+            .where("CHS_id", "like", `%${filter.CHS_id}%`)
             .offset(_offset)
             .limit(_limit)
             .then(result => {

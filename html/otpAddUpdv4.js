@@ -313,7 +313,45 @@ module.exports.initOtpAddUpdV2 = function () {
           commodity(com, 'ration2');
           commodity(com, 'ration3');
         })
+        $("#travel_time_minutes").val(data.travel_time_minutes);
+        $("#is_mother_alive").val(data.is_mother_alive);
         $("#ddProgramType").val(data.prog_type);
+        if (data.prog_type == 'sc') {          
+          $("#ddHealthHouse").attr("disabled", true);
+          $("#ddUC").attr("disabled", true);
+          $("#ddVillageName").attr('disabled', true);
+          $("#ddVillageName").val(site_village);
+          $("#ddHealthHouse").val(data.site_id);
+          $("#ddUC").val(data.uc_id);
+          $("#ent_reason").children('option:not(:first)').remove();
+          $("#ent_reason").append(`
+        <option value="new_add"> New Admission</option>
+        <option value="transfer_in"> Transfer In</option>
+        <option value="transfer_in_from_otp"> Transfer In From OTP </option>
+        <option value="readnission"> Readmission</option>
+        <option value="defaulted"> Defaulted</option> 
+        `);
+          $("#ref_type").children('option:not(:first)').remove();
+          $("#ref_type").append(`
+        <option value="ref_by_otp">OTP</option>
+        <option value="opd">OPD</option>
+        <option value="ped_wards">Pediatric Wards</option>
+        <option value="other">Other</option>
+        `);
+          if (data.ent_reason == "transfer_in_from_otp") {
+            $("#nsc_tranfer_from_otp_div").css("display", "");
+            $('#nsc_otp_id').attr("required", true);
+          } 
+        } else {
+          $("#ddHealthHouse").attr("disabled", false);
+          $("#ddUC").attr("disabled", false);
+          $("#ddHealthHouse").empty()
+          $("#ddUC").empty()
+          $("#ddVillageName").empty();
+          $("#ddVillageName").attr('disabled', true);
+
+          
+        };
         $("#site_village").val(data.site_village);
         $("#reg_date").val(data.reg_date);
         $("#reg_id").val(data.reg_id);
@@ -330,7 +368,28 @@ module.exports.initOtpAddUpdV2 = function () {
           : $("#plw_type").val(data.plw_type);
         // $('#plw_type').val(data.plw_type)
         $("#ent_reason").val(data.ent_reason);
+        if (data.ent_reason == 'other') {
+            $("#entry_reason_other_div").css('display', '');
+          $("#entry_reason_other").attr('required', true);
+          $("#entry_reason_other").val(data.entry_reason_other);
+          } else {
+            $("#entry_reason_other_div").css("display", "none");
+          $("#entry_reason_other").css("required", false);
+          $("#entry_reason_other").empty();
+          
+          }
+        
         $("#ref_type").val(data.ref_type);
+        if (data.ref_type == "other") {
+            $("#ref_type_other_div").css("display", "");
+            $("#ref_type_other").attr("required", true);
+          $("#ref_type_other").val(data.ref_type_other);
+          } else {
+            $("#ref_type_other_div").css("display", "none");
+          $("#ref_type_other").css("required", false);
+          $("#ref_type_other").empty();
+          
+          }
         $("#weight").val(data.weight);
         $("#height").val(data.height);
         $("#oedema").val(data.oedema);
@@ -472,5 +531,40 @@ module.exports.initOtpAddUpdV2 = function () {
   $('#weight').on('change', function (e) {
     var _weight = $(this).val();
     rusfOnWeigth(_weight);
-  })
+  });
+  $("#ent_reason").on('change', function () {
+    if ($(this).val() == 'other') {
+      $("#entry_reason_other_div").css('display', '');
+      $("#entry_reason_other").attr('required', true);
+    } else if ($(this).val() == "transfer_in_from_otp" ) {
+      $("#nsc_tranfer_from_otp_div").css("display", "");
+      $("#nsc_otp_id").attr("required", true);
+    
+    } else if ($(this).val() != "transfer_in_from_otp" ) {
+      $("#nsc_tranfer_from_otp_div").css("display", "none");
+      $("#nsc_otp_id").attr("required", false);
+    }  else {
+      $("#entry_reason_other_div").css("display", "none");
+      $("#entry_reason_other").css("required", false);
+    }
+  });
+  $("#ref_type").on("change", function () {
+    if ($(this).val() == "other") {
+      $("#ref_type_other_div").css("display", "");
+      $("#ref_type_other").attr("required", true);
+    } else {
+      $("#ref_type_other_div").css("display", "none");
+      $("#ref_type_other").css("required", false);
+    }
+  });
+  $("#ddProgramType").on("change", function() {
+    console.log($(this).val());
+    if ($(this).val() == "sc") {
+      $("#ddHealthHouse").attr("disabled", true);
+      $("#ddUC").attr("disabled", true);
+    } else {
+      $("#ddHealthHouse").attr("disabled", false);
+      $("#ddUC").attr("disabled", false);
+    }
+  });
 };

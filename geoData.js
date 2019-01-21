@@ -38,7 +38,7 @@ module.exports.commodityv2 = (event, prog_type) => {
 module.exports.commodity = (event)=>{
   knex('tblCommodity')
   .then(result => {
-    event.sender.send('commodity', ({
+    event.sender.send('commodityAll', ({
       commodity: result
     }));
     // console.log(event)

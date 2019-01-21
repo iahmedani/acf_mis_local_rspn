@@ -49,15 +49,15 @@ module.exports.initOtpExitEditV2 = function(){
       $('#weight_gain').empty();
       $('#weight_gain').val(gKgDay);
     })
-    ipc.send('getCommodity');
-    ipc.on('commodity', function (evt, com) {
-      $('#exit_ration1').children('option:not(:first)').remove();
-      $('#exit_ration2').children('option:not(:first)').remove();
-      $('#exit_ration3').children('option:not(:first)').remove();
-      commodity(com, 'exit_ration1');
-      commodity(com, 'exit_ration2');
-      commodity(com, 'exit_ration3');
-    })
+    // ipc.send('getCommodity');
+    // ipc.on('commodity', function (evt, com) {
+    //   $('#exit_ration1').children('option:not(:first)').remove();
+    //   $('#exit_ration2').children('option:not(:first)').remove();
+    //   $('#exit_ration3').children('option:not(:first)').remove();
+    //   commodity(com, 'exit_ration1');
+    //   commodity(com, 'exit_ration2');
+    //   commodity(com, 'exit_ration3');
+    // })
       ipc.send('getProvince');
       ipc.on('province', function(evt, province){
         $('#ddProvince').children('option:not(:first)').remove();   
@@ -315,6 +315,21 @@ module.exports.initOtpExitEditV2 = function(){
     rowClick: function(args) {
       this.editItem(args.item);
       var data = args.item;
+      ipc.send("getCommodity", data.prog_type);
+      ipc.on("commodity", function(evt, com) {
+        $("#exit_ration1")
+          .children("option:not(:first)")
+          .remove();
+        $("#exit_ration2")
+          .children("option:not(:first)")
+          .remove();
+        $("#exit_ration3")
+          .children("option:not(:first)")
+          .remove();
+        commodity(com, "exit_ration1");
+        commodity(com, "exit_ration2");
+        commodity(com, "exit_ration3");
+      });
       $("#p_name").val(data.p_name);
       $("#gender").val(data.gender);
       $("#village").val(data.site_village);
@@ -322,20 +337,25 @@ module.exports.initOtpExitEditV2 = function(){
       $("#exit_date").val(data.exit_date);
       $("#exit_weight").val(data.exit_weight);
       $("#exit_muac").val(data.exit_muac);
-      $("#exit_ration1").val(data.exit_ration1);
-      $("#exit_ration2").val(data.exit_ration2);
-      $("#exit_ration3").val(data.exit_ration3);
+      
       $("#exit_other_com_name").val(data.exit_other_com_name);
       $("#exit_other_com_qty").val(data.exit_other_com_qty);
-      $("#exit_quantity1").val(data.exit_quantity1);
-      $("#exit_quantity2").val(data.exit_quantity2);
-      $("#exit_quantity3").val(data.exit_quantity3);
+      function ration() {
+        $("#exit_ration1").val(data.exit_ration1);
+        $("#exit_ration2").val(data.exit_ration2);
+        $("#exit_ration3").val(data.exit_ration3);
+        $("#exit_quantity1").val(data.exit_quantity1);
+        $("#exit_quantity2").val(data.exit_quantity2);
+        $("#exit_quantity3").val(data.exit_quantity3);        
+      }
+      setTimeout(ration, 200);
       $("#exit_reason").val(data.exit_reason);
       $("#weight_gain").val(data.weight_gain);
       $("#days_in_program").val(data.days_in_program);
       $("#add_weight").val(data.weight);
       $("#add_date").val(data.reg_date);
       $("#ddProvince").val(data.province_id);
+      
 
       $("#ddDistrict")
         .children("option:not(:first)")

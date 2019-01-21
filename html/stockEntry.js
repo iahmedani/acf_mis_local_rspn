@@ -1,4 +1,9 @@
 module.exports.stockEntry = function () {
+  $(function () {
+    var datePickerId = document.getElementById('dn_date');
+    datePickerId.max = new Date().toISOString().split("T")[0];
+  });
+  console.log('stock Entry')
   var data = [];
   let myInsert = (item) => {
     return new Promise((resolve, reject) => {
@@ -63,8 +68,8 @@ module.exports.stockEntry = function () {
       // console.log(xx)
       return xx;
     }
-    ipc.send('getCommodity');
-    ipc.on('commodity', (evt, com) => {
+    ipc.send("getCommodityAll",);
+    ipc.on('commodityAll', (evt, com) => {
       var Description  = [{ Name: '', Id: 0, item: '' }];
       var Unit  = [{ Name: '', Id: 0, item: '' }];
       var SubUnit  = [{ Name: '', Id: 0, item: '' }];
@@ -93,6 +98,7 @@ module.exports.stockEntry = function () {
           stockGrid(Description, Unit, items, SubUnit);
         }
       })
+      ipc.removeAllListeners("commodityAll");
     })
     // var items = [
     //   { Name: "", Id: 0, },
@@ -232,10 +238,7 @@ module.exports.stockEntry = function () {
     }
     
   });
-  $(function () {
-    var datePickerId = document.getElementById('dn_date');
-    datePickerId.max = new Date().toISOString().split("T")[0];
-  });
+
   $('#stockEntrySubmit').on('click', (e) => {
     console.log(data);
     // if(data.length>0){

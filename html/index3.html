@@ -9,11 +9,12 @@
   <link type="text/css" rel="stylesheet" href="../css/jsgrid.min.css" />
   <link type="text/css" rel="stylesheet" href="../css/jsgrid-theme.min.css" />
   <link rel="stylesheet" href="../css/jsgrid-theme-followup.css">
-  <link rel="stylesheet" href="../css/jquery-ui.css">
+  <link rel="stylesheet" href="../css/jquery-ui.min.css">
   <link rel="stylesheet" href="../css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="../css/buttons.dataTables.min.css">
   <link rel="stylesheet" href="../css/dataTables.checkboxes.css">
   <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/sideNav.css">
   
   <title>ACF MIS FOR PINS</title>
   <script>
@@ -42,6 +43,7 @@
   <link rel="import" href="scrChildReportNew.html">
   <link rel="import" href="scrPlwReportNew.html">
   <link rel="import" href="stockEntry.html">
+  <link rel="import" href="stockEntryUpdate.html">
   <link rel="import" href="autoStock.html">
   <!-- <link rel="import" href="scrStock.html"> -->
   <link rel="import" href="stockDist.html">
@@ -59,78 +61,57 @@
 <body>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-2 col-xs-1 p-l-0 p-r-0" id="sidebar">
-        <a class="navbar-brand"  href="#" id="homeDashboard">
-          <img src="../img/acf-logo.svg" style="height: 50px;" alt="" >
+      <div class="col-md-2 col-xs-1 p-l-0 p-r-0" style="padding-left:0;padding-right:0" id="sidebar">
+        <a class="navbar-brand" href="#" id="homeDashboard">
+          <img src="../img/acf-logo.svg" style="height: 50px;" alt="">
         </a>
-        <!-- <div class="list-group-item">Imran</div> -->
-        <div class="list-group panel accordion">
+        <ul id="nav" class="list-unstyled">
+          <li><a href="#"><strong class="display-6"><i class="fas fa-clipboard-list "></i> Data Entry</strong></a>
+            <ul class="list-unstyled">
+              <li><a href="#" id="childScr">Children Screening</a></li>
+              <li><a href="#" id="plwScr">PLW Screening</a></li>
+              <li><a href="#" id="otpAdd">Admission</a></li>
+              <li><a href="#" id="addFollowupOtp">Follow Up</a></li>
+              <li><a href="#" id="otpExit">Exits</a></li>
+              <li><a href="#" id="sessions">Sessions</a></li>
+              <li><a href="#" id="stockEntry">Stock In</a></li>
+              <li><a href="#" id="stockOutEntry">Stock Out </a></li>
+              <li><a href="#" id="scrStock">Stock Distribution</a></li>
+            </ul>
+          </li>
+          <li><a href="#"><strong class="display-6"><i class="fas fa-edit"></i> Edit</strong></a>
+            <ul class="list-unstyled">
+              <li><a href="#"  id="scrChUpd">Children Screening</a></li>
+              <li><a href="#"  id="scrPlUpd">PLW Screening</a></li>
+              <li><a href="#" id="otpAddUpdate">Admissions</a></li>
+              <li><a href="#" id="otpExitEdit">Exits</a></li>
+              <li><a href="#" id="stockEntryUpdate">Stock In</a></li>
+              <li><a href="#" id="stockOutUpdate">Stock Out</a></li>
+              <li><a href="#" id="stockDistUpd">Stock Distribution</a></li>
+            </ul>
+          </li>
+          <li><a href="#"><strong class="display-6"><i class="fas fa-print"></i> Reports</strong></a>
+            <ul class="list-unstyled">
+              <li><a href="#" id="scrChdNewReport">Children Screening</a></li>
+              <li><a href="#" id="scrPlwNewReport">PLW Screening</a></li>
+              <li><a href="#" id="otpReport">Admission & Exit</a></li>
+              <li><a href="#" id="defReport">Defaulter</a></li>
+              <li><a href="#" id="sessionsReport">Sessions</a></li>
+              <li><a href="#" id="autoStock">Stock In</a></li>
+              <li><a href="#" id="stockDistReport">Stock Distribution </a></li>
+            </ul>
+          </li>
+          <li><a href="#"><strong class="display-6"><i class="fas fa-cogs"></i> Admin Tools</strong></a>
+            <ul class="list-unstyled">
+              <li><a href="#" id="supList">Supervisor List</a></li>
+              <li><a href="#" id="staffList">CHW/LHW List</a></li>
+              <li><a href="#" id="villageList">Village List</a></li>
+            </ul>
+          </li>
+        </ul>
 
-          <a href="#menu1" class="list-group-item collapsed _mn" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
-            <i class="fas fa-tachometer-alt"></i>
-            <span class="hidden-sm-down">Data Entry</span>
-          </a>
-          <div class="collapse" id="menu1">
-            <a href="#menu1sub1" class="list-group-item" data-toggle="collapse" aria-expanded="false">Screening</a>
-            <div class="collapse" id="menu1sub1">
-              <a href="#" class="list-group-item _sb" data-parent="#menu1sub1" id="childScr">Children</a>
-              <a href="#" class="list-group-item _sb" data-parent="#menu1sub1" id="plwScr">PLW</a>
-            </div>
-            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="scrStock">Stock Distribution</a>
-            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="otpAdd">Admission</a>
-            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="addFollowupOtp">Follow Up</a>
-            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="otpExit">Exits</a>
-            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="sessions">Sessions</a>
-            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="stockEntry">Stock Entry</a>
-            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="stockOutEntry">Stock Out Entry</a>
-          </div>
-          <a href="#menu3" class="list-group-item collapsed _mn" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
-            <i class="fa fa-book"></i>
-            <span class="hidden-sm-down">Edit</span>
-          </a>
-          <div class="collapse" id="menu3">
-            <a href="#menu3sub1" class="list-group-item" data-toggle="collapse" aria-expanded="false">Screening</a>
-            <div class="collapse" id="menu3sub1">
-              <a href="#" class="list-group-item _sb" data-parent="#menu3sub1" id="scrChUpd">Children</a>
-              <a href="#" class="list-group-item _sb" data-parent="#menu3sub1" id="scrPlUpd">PLW</a>
-            </div>
-            <a href="#" class="list-group-item _sb" data-parent="#menu3" id="stockDistUpd">Stock Distribution</a>
-            <a href="#" class="list-group-item _sb" data-parent="#menu3" id="stockOutUpdate">Stock Out</a>
-            <a href="#" class="list-group-item _sb" data-parent="#menu3" id="otpAddUpdate">Admissions</a>
-            <!-- <a href="#" class="list-group-item" data-parent="#menu3">FollowUp</a> -->
-            <a href="#" class="list-group-item _sb" data-parent="#menu3" id="otpExitEdit">Exits</a>
-          </div>
-          <a href="#menu4" class="list-group-item collapsed _mn" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
-            <i class="fa fa-book"></i>
-            <span class="hidden-sm-down">Reports</span>
-          </a>
-          <div class="collapse" id="menu4">
-              <a href="#menu4sub1" class="list-group-item" data-toggle="collapse" aria-expanded="false">Screening</a>
-              <div class="collapse" id="menu4sub1">
-                <a href="#" class="list-group-item _sb" data-parent="#menu4sub1" id="scrChdNewReport">Children</a>
-                <a href="#" class="list-group-item _sb" data-parent="#menu4sub1" id="scrPlwNewReport">PLW</a>
-              </div>                      
-            <!-- <a href="#" class="list-group-item" data-parent="#menu4" id="scrReport">Screening</a> -->
-
-            <!-- <a href="#" class="list-group-item" data-parent="#menu3">FollowUp</a> -->
-            <a href="#" class="list-group-item _sb" data-parent="#menu4" id="otpReport">Admission & Exit</a>
-            <a href="#" class="list-group-item _sb" data-parent="#menu4" id="defReport">Defaulter</a>
-            <a href="#" class="list-group-item _sb" data-parent="#menu4" id="autoStock">Stock</a>
-            <a href="#" class="list-group-item _sb" data-parent="#menu4" id="stockDistReport">Stock Distribution Report</a>
-            <a href="#" class="list-group-item _sb" data-parent="#menu4" id="sessionsReport">Sessions</a>
-          </div>
-          <a href="#menu5" class="list-group-item collapsed _mn" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
-            <i class="fa fa-book"></i>
-            <span class="hidden-sm-down">Admin Tools</span>
-          </a>
-          <div class="collapse" id="menu5">
-            <a href="#" class="list-group-item _sb" data-parent="#menu5" id="supList">Supervisor List</a>
-            <a href="#" class="list-group-item _sb" data-parent="#menu5" id="staffList">CHW/LHW List</a>
-            <a href="#" class="list-group-item _sb" data-parent="#menu5" id="villageList">Village List</a>
-          </div>
-          
-        </div>
       </div>
+
       <main class="col-md-10 col-xs-11 p-l-2 p-t-2">
         <!-- <div> -->
           
@@ -188,6 +169,21 @@
     for (let index = 0; index < array.length; index++) {
       await callback(array[index], index, array)
     }}
+    $(document).ready(function () {
+        $('#nav li').first().addClass("active").find('ul').show();
+        $('#nav > li > a').click(function () {
+          if ($(this).attr('class') != 'active') {
+            $('#nav li ul').slideUp();
+            $(this).next().slideToggle();
+            $('#nav li a').removeClass('active');
+            $(this).addClass('active');
+          }
+        });
+        $('#nav > li > ul > li > a').click(function(){
+          $('#nav > li > ul > li > a').removeClass('active');
+          $(this).addClass('active');
+        })
+      });
     const prov = async (province)=>{
         await asyncForEach(province.province, async(el)=>{
           $('#ddProvince').append(`<option value="${el.id}">${el.provinceName}</option>`);
@@ -439,6 +435,7 @@
     var InitScrChildrenReport = require('./scrChildrenReport').initScrChildrenReport;
     var InitScrPlwNewReport = require('./scrPlwNewReport').initScrPlwNewReport;
     var InitStockEntry = require('./stockEntry').stockEntry;
+    var InitStockEntryUpdate = require('./stockEntryUpdate').stockEntryUpdate;
     var InitAutoStock = require('./autoStock').autoStock;
     var InitStockDist = require('./scrStock').stockDist;
     var InitSupList = require('./supList').SupList;
@@ -710,6 +707,14 @@
       document.querySelector('#jsContent').appendChild(clone)
       InitStockEntry();
     }
+    function stockEntryUpdateTemplate() {
+      var content = document.querySelector('link[href="stockEntryUpdate.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitStockEntryUpdate();
+    }
     $(()=>{
       dashboardTemplate();
     })
@@ -795,6 +800,9 @@
     $('#stockEntry').on('click',function(){
       stockEntryTemplate();
     })
+    $('#stockEntryUpdate').on('click',function(){
+      stockEntryUpdateTemplate();
+    })
     $('#sessionsReport').on('click',function(){
       sessionReportTemplate();
     })
@@ -822,8 +830,9 @@
         setTimeout(function(){
         $('#MessageModal').modal('hide');
           $('#messages').empty();
-          ipc.removeListener('success', ipc.listeners()[0]);
-        },1000);
+        },900);
+        setTimeout(ipc.removeListener('success', function () { return ipc.listeners('success')[0] }), 1000);
+        // ipc.removeListener('success', function(){return ipc.listeners('success')[0]});
         // $('#MessageModal').modal('show');
       // $('.alert').alert()
       // $(".alert").fadeTo(3000, 1000).slideUp(500, function () {
@@ -843,15 +852,19 @@
       setTimeout(function () {
         $('#MessageModal').modal('hide');
         $('#messages').empty();
-        ipc.removeListener('success', ipc.listeners()[0]);
-      }, 1000);
+       
+        // ipc.removeAllListeners('error');
+      }, 900);
+      setTimeout(ipc.removeListener('error', function () {
+        return ipc.listeners('error')[0]
+      }),1000)
       // $('.alert').alert()
       // $(".alert").fadeTo(3000, 1000).slideUp(500, function () {
       //   $(".alert").alert('close');
       //   $().alert('dispose')
       //   $('#messages').empty()
       //   console.log(ipc.listeners());
-      //   ipc.removeListener('error',ipc.listeners()[0]);
+        // ipc.removeListener('error',ipc.listeners()[0]);
       //   // console.log(ipc.listeners()[0]);
       // })
     });

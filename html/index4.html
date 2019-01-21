@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="../css/bootstrap.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="../fa5/css/fontawesome-all.min.css">
+  <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous"> -->
+  <!-- <link rel="stylesheet" href="../fa5/css/fontawesome-all.min.css"> -->
+  <link type="text/css" rel="stylesheet" href="../css/jsgrid.min.css" />
+  <link type="text/css" rel="stylesheet" href="../css/jsgrid-theme.min.css" />
+  <link rel="stylesheet" href="../css/jsgrid-theme-followup.css">
+  <link rel="stylesheet" href="../css/jquery-ui.css">
+  <link rel="stylesheet" href="../css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="../css/buttons.dataTables.min.css">
+  <link rel="stylesheet" href="../css/dataTables.checkboxes.css">
+  <link rel="stylesheet" href="../css/style.css">
+  
+  <title>ACF MIS FOR PINS</title>
+  <script>
+    const electron = require('electron');
+    const ipc = electron.ipcRenderer;
+    const remote = electron.remote;
+  </script>
+  <!-- <link rel="import" href="scrChildv2.html"> -->
+  <!-- <link rel="import" href="scrPlwv2.html"> -->
+  <link rel="import" href="dashboard.html">
+  <link rel="import" href="scrPlwNew.html">
+  <link rel="import" href="otpAddv2.html">
+  <link rel="import" href="otpFollowUpv2.html">
+  <link rel="import" href="otpExitv2.html">
+  <link rel="import" href="sessionsv2.html">
+  <link rel="import" href="scrReportsv2.html">
+  <link rel="import" href="otpReportsv2.html">
+  <link rel="import" href="defaulterv2.html">
+  <!-- <link rel="import" href="scrChUpdv2.html"> -->
+  <link rel="import" href="scrPlwNewUpdv1.html">
+  <!-- <link rel="import" href="scrPlUpdv2.html"> -->
+  <link rel="import" href="otpAddUpdv4.html">
+  <link rel="import" href="otpExitEditv3.html">
+  <link rel="import" href="scrChildren.html">
+  <link rel="import" href="scrChildrenUpdv1.html">
+  <link rel="import" href="scrChildReportNew.html">
+  <link rel="import" href="scrPlwReportNew.html">
+  <link rel="import" href="stockEntry.html">
+  <link rel="import" href="autoStock.html">
+  <!-- <link rel="import" href="scrStock.html"> -->
+  <link rel="import" href="stockDist.html">
+  <link rel="import" href="stockDistReport.html">
+  <link rel="import" href="stockDistUpd.html">
+  <link rel="import" href="supList.html">
+  <link rel="import" href="staffList.html">
+  <link rel="import" href="villageList.html">
+  <link rel="import" href="sessionsReport.html">
+  <link rel="import" href="stockOutEntry.html">
+  <link rel="import" href="stockOutUpdate.html">
+</head>
+
+
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2 col-xs-1 p-l-0 p-r-0" id="sidebar">
+        <a class="navbar-brand"  href="#" id="homeDashboard">
+          <img src="../img/acf-logo.svg" style="height: 50px;" alt="" >
+        </a>
+        <!-- <div class="list-group-item">Imran</div> -->
+        <div class="list-group panel accordion">
+
+          <a href="#menu1" class="list-group-item collapsed _mn" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
+            <i class="fas fa-tachometer-alt"></i>
+            <span class="hidden-sm-down">Data Entry</span>
+          </a>
+          <div class="collapse" id="menu1">
+            <a href="#menu1sub1" class="list-group-item" data-toggle="collapse" aria-expanded="false">Screening</a>
+            <div class="collapse" id="menu1sub1">
+              <a href="#" class="list-group-item _sb" data-parent="#menu1sub1" id="childScr">Children</a>
+              <a href="#" class="list-group-item _sb" data-parent="#menu1sub1" id="plwScr">PLW</a>
+            </div>
+            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="scrStock">Stock Distribution</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="otpAdd">Admission</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="addFollowupOtp">Follow Up</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="otpExit">Exits</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="sessions">Sessions</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="stockEntry">Stock Entry</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu1" id="stockOutEntry">Stock Out Entry</a>
+          </div>
+          <a href="#menu3" class="list-group-item collapsed _mn" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
+            <i class="fa fa-book"></i>
+            <span class="hidden-sm-down">Edit</span>
+          </a>
+          <div class="collapse" id="menu3">
+            <a href="#menu3sub1" class="list-group-item" data-toggle="collapse" aria-expanded="false">Screening</a>
+            <div class="collapse" id="menu3sub1">
+              <a href="#" class="list-group-item _sb" data-parent="#menu3sub1" id="scrChUpd">Children</a>
+              <a href="#" class="list-group-item _sb" data-parent="#menu3sub1" id="scrPlUpd">PLW</a>
+            </div>
+            <a href="#" class="list-group-item _sb" data-parent="#menu3" id="stockDistUpd">Stock Distribution</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu3" id="stockOutUpdate">Stock Out</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu3" id="otpAddUpdate">Admissions</a>
+            <!-- <a href="#" class="list-group-item" data-parent="#menu3">FollowUp</a> -->
+            <a href="#" class="list-group-item _sb" data-parent="#menu3" id="otpExitEdit">Exits</a>
+          </div>
+          <a href="#menu4" class="list-group-item collapsed _mn" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
+            <i class="fa fa-book"></i>
+            <span class="hidden-sm-down">Reports</span>
+          </a>
+          <div class="collapse" id="menu4">
+              <a href="#menu4sub1" class="list-group-item" data-toggle="collapse" aria-expanded="false">Screening</a>
+              <div class="collapse" id="menu4sub1">
+                <a href="#" class="list-group-item _sb" data-parent="#menu4sub1" id="scrChdNewReport">Children</a>
+                <a href="#" class="list-group-item _sb" data-parent="#menu4sub1" id="scrPlwNewReport">PLW</a>
+              </div>                      
+            <!-- <a href="#" class="list-group-item" data-parent="#menu4" id="scrReport">Screening</a> -->
+
+            <!-- <a href="#" class="list-group-item" data-parent="#menu3">FollowUp</a> -->
+            <a href="#" class="list-group-item _sb" data-parent="#menu4" id="otpReport">Admission & Exit</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu4" id="defReport">Defaulter</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu4" id="autoStock">Stock</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu4" id="stockDistReport">Stock Distribution Report</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu4" id="sessionsReport">Sessions</a>
+          </div>
+          <a href="#menu5" class="list-group-item collapsed _mn" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false">
+            <i class="fa fa-book"></i>
+            <span class="hidden-sm-down">Admin Tools</span>
+          </a>
+          <div class="collapse" id="menu5">
+            <a href="#" class="list-group-item _sb" data-parent="#menu5" id="supList">Supervisor List</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu5" id="staffList">CHW/LHW List</a>
+            <a href="#" class="list-group-item _sb" data-parent="#menu5" id="villageList">Village List</a>
+          </div>
+          
+        </div>
+      </div>
+      <main class="col-md-10 col-xs-11 p-l-2 p-t-2">
+        <!-- <div> -->
+          
+
+        <!-- </div> -->
+        
+        <div id="jsContent" class="container-fluid">
+          
+        </div>
+      </main>
+    </div>
+  
+  </div>
+  <!-- Messages -->
+  <!-- <div class="row"> -->
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="MessageModal">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content" id="messages">
+        </div>
+      </div>
+    </div>
+  <!-- </div> -->
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+
+  <script>
+    window.$ = window.jQuery = require('jquery');
+    require('jquery-validation');
+    var Highcharts = require('highcharts');
+    require('highcharts/modules/exporting')(Highcharts);
+    require('highcharts/modules/export-data')(Highcharts);
+    
+    // adding functionality to jquery for serializing form;
+    (function ($) {
+      $.fn.serializeFormJSON = function () {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function () {
+          if (o[this.name]) {
+            if (!o[this.name].push) {
+              o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+          } else {
+            o[this.name] = this.value || '';
+          }
+        });
+        return o;
+      };
+    })(jQuery);
+    // var async = require('async');
+    async function asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+      await callback(array[index], index, array)
+    }}
+    const prov = async (province)=>{
+        await asyncForEach(province.province, async(el)=>{
+          $('#ddProvince').append(`<option value="${el.id}">${el.provinceName}</option>`);
+        })
+        ipc.removeAllListeners('province')
+      }
+    const commodity = async (com, id)=>{
+        await asyncForEach(com.commodity, async(el)=>{
+          $('#'+id).append(`<option value="${el.item_name}">${el.item_name}</option>`);
+        })
+        ipc.removeAllListeners('commodity')
+      }
+    const dist = async (district)=>{
+        await asyncForEach(district.district, async(el)=>{
+          $('#ddDistrict').append(`<option value="${el.id}">${el.districtName}</option>`);           
+        })
+        ipc.removeAllListeners('district')
+    }
+    const teh = async (tehsil)=> {
+        await asyncForEach(tehsil.tehsil, async(el)=>{
+          $('#ddTehsil').append(`<option value="${el.id}">${el.tehsilName}</option>`);        
+        })
+        ipc.removeAllListeners('tehsil')
+    }
+    const ucListener = async (uc)=>{
+        await asyncForEach(uc.uc, async(el)=>{
+          $('#ddUC').append(`<option value="${el.id}">${el.ucName}</option>`);              
+        })
+        ipc.removeAllListeners('uc')
+    }
+    const hhListener = async (hh)=>{
+        await asyncForEach(hh.hh, async(el)=>{
+        $('#ddHealthHouse').append(`<option value="${el.id}">${el.siteName}</option>`);              
+        })
+        ipc.removeAllListeners('hh');
+    }
+    const staffListener = async (staffs) => {
+        await asyncForEach(staffs, async (el) => {
+          $('#ddStaff_code').append(`<option value="${el.staff_code}">${el.staff_code}</option>`);
+          $('#ddStaff_name').append(`<option value="${el.staff_code}">${el.staff_name}</option>`);
+        })
+        ipc.removeAllListeners('haveStaff');
+      }
+    const supListener = async (_sups) => {
+        await asyncForEach(_sups, async (el) => {
+          $('#ddSup_code').append(`<option value="${el.sup_code}">${el.sup_code}</option>`);
+          $('#ddSup_name').append(`<option value="${el.sup_code}">${el.sup_name}</option>`);
+        })
+        ipc.removeAllListeners('haveSups');
+      }
+    const villListener = async (_villages) => {
+        await asyncForEach(_villages, async (el) => {
+          $('#ddVillageName').append(`<option value="${el.villageName}">${el.villageName}</option>`);
+          // $('#ddSup_name').append(`<option value="${el.sup_code}">${el.sup_name}</option>`);
+        })
+        ipc.removeAllListeners('haveVillage');
+      }
+    const hhTypeListener= async(h_id,hh)=>{
+            if(h_id === ""){
+              $('#txtSiteType').val().empty();  
+            } else{
+    
+              $('#txtSiteType').val(function(){
+                var site = [];
+                if(hh.hh[0].OTP === 1){
+                  site.push('OTP')
+                }
+                if(hh.hh[0].SFP === 1){
+                  site.push('SFP')                
+                }
+                if(hh.hh[0].SC === 1){
+                  site.push('SC')                
+                }
+                return site;
+              })  
+            }
+            ipc.removeAllListeners('hhType');
+          }
+          $(function(){
+            $('._sb').on('click', function(){
+              $('._sb').removeClass('bg-secondary');
+              $(this).addClass('bg-secondary');
+            })
+
+          })
+     const provUpd = async (province) => {
+        await asyncForEach(province.province, async (el) => {
+          $('#ddProvince-upd').append(`<option value="${el.id}">${el.provinceName}</option>`);
+        })
+        ipc.removeAllListeners('province')
+      }
+      const commodityUpd = async (com, id) => {
+        await asyncForEach(com.commodity, async (el) => {
+          $('#' + id).append(`<option value="${el.item_name}">${el.item_name}</option>`);
+        })
+        ipc.removeAllListeners('commodity')
+      }
+      const distUpd = async (district) => {
+        await asyncForEach(district.district, async (el) => {
+          $('#ddDistrict-upd').append(`<option value="${el.id}">${el.districtName}</option>`);
+        })
+        ipc.removeAllListeners('district')
+      }
+      const tehUpd = async (tehsil) => {
+        await asyncForEach(tehsil.tehsil, async (el) => {
+          $('#ddTehsil-upd').append(`<option value="${el.id}">${el.tehsilName}</option>`);
+        })
+        ipc.removeAllListeners('tehsil')
+      }
+      const ucListenerUpd = async (uc) => {
+        await asyncForEach(uc.uc, async (el) => {
+          $('#ddUC-upd').append(`<option value="${el.id}">${el.ucName}</option>`);
+        })
+        ipc.removeAllListeners('uc')
+      }
+      const hhListenerUpd = async (hh) => {
+        await asyncForEach(hh.hh, async (el) => {
+          $('#ddHealthHouse-upd').append(`<option value="${el.id}">${el.siteName}</option>`);
+        })
+        ipc.removeAllListeners('hh');
+      }
+      const staffListenerUpd = async (staffs) => {
+        await asyncForEach(staffs, async (el) => {
+          $('#ddStaff_code-upd').append(`<option value="${el.staff_code}">${el.staff_code}</option>`);
+          $('#ddStaff_name-upd').append(`<option value="${el.staff_code}">${el.staff_name}</option>`);
+        })
+        ipc.removeAllListeners('haveStaff');
+      }
+      const supListenerUpd = async (_sups) => {
+        await asyncForEach(_sups, async (el) => {
+          $('#ddSup_code-upd').append(`<option value="${el.sup_code}">${el.sup_code}</option>`);
+          $('#ddSup_name-upd').append(`<option value="${el.sup_code}">${el.sup_name}</option>`);
+        })
+        ipc.removeAllListeners('haveSups');
+      }
+
+  </script>
+  
+  <script src="../js/bootstrap.bundle.js"></script>
+  <script src="../js/jsgrid.min.js"></script>
+  <script src="../js/jquery-ui.min.js"></script>
+  <script src="../js/jquery.dataTables.min.js"></script>
+  <script src="../js/dataTables.buttons.min.js"></script>
+  <script src="../js/dataTables.checkboxes.min.js"></script>
+  <script src="../js/jszip.min.js"></script>
+  <script src="../js/buttons.flash.min.js"></script>
+  <script src="../js/buttons.html5.min.js"></script>  
+  <script src="../js/jquery.inputmask.bundle.min.js"></script>
+  <!-- <script src="../js/jsGrid_custom_fields.js"></script> -->
+  <script>
+  $(function(){
+    // $('._mn').on('click', function(){
+    //   console.log($(this));
+    //   $(this).on('show.bs.collapse')
+    //   // $('._mn').each(function(i, el){
+    //   //  if(!$(el).hasClass('collapsed')){
+    //   //  }
+    //   // })
+    // })
+    $('._mn').on('show.bs.collapse', function(){
+      console.log('done');
+    })
+    
+    
+  });
+  function DecimalField(config) {
+      jsGrid.fields.number.call(this, config);
+    }
+
+    DecimalField.prototype = new jsGrid.fields.number({
+
+      filterValue: function () {
+        return this.filterControl.val()
+          ? parseFloat(this.filterControl.val() || 0, 10)
+          : undefined;
+      },
+
+      insertValue: function () {
+        return this.insertControl.val()
+          ? parseFloat(this.insertControl.val() || 0, 10)
+          : undefined;
+      },
+
+      editValue: function () {
+        return this.editControl.val()
+          ? parseFloat(this.editControl.val() || 0, 10)
+          : undefined;
+      }
+    });
+
+    jsGrid.fields.decimal = jsGrid.DecimalField = DecimalField;
+    var MyDateField = function (config) {
+        jsGrid.Field.call(this, config);
+      };
+
+      MyDateField.prototype = new jsGrid.Field({
+
+        css: "date-field", // redefine general property 'css'
+        align: "center", // redefine general property 'align'
+
+
+        sorter: function (date1, date2) {
+          return new Date(date1) - new Date(date2);
+        },
+
+        itemTemplate: function (value) {
+          return new Date(value).toDateString();
+        },
+
+        insertTemplate: function (value) {
+          return this._insertPicker = $("<input>").datepicker({
+            defaultDate: new Date()
+          });
+        },
+
+        editTemplate: function (value) {
+          return this._editPicker = $("<input>").datepicker().datepicker("setDate", new Date(value));
+        },
+
+        insertValue: function () {
+          return this._insertPicker.datepicker("getDate").toISOString();
+        },
+
+        editValue: function () {
+          return this._editPicker.datepicker("getDate").toISOString();
+        }
+      });
+      jsGrid.fields.date = MyDateField;
+  
+  </script>
+  <script>
+    // var InitGrid = require('./scrChildv2').initGrid;
+    var InitGrid = require('./scrChildren').initGrid;
+    // var InitScrPlw = require('./scrPlwv2').initScrPlw;
+    var InitScrPlwNew = require('./scrPlwNew').initScrPlwNew;
+    var InitScrReportsV2 = require('./scrReportsv2').initScrReportsV2;
+    // var InitScrChUpdv2 = require('./scrChUpdv2').initScrChUpdv2;
+    // var InitScrPlUpdv2 = require('./scrPlUpdv2').initScrPlUpdv2;
+    var InitOtpAdd = require('./otpAddv2').initOtpAdd;
+    var InitOtpFollowUp = require('./otpFollowUpv2').initOtpFollowUp;
+    var InitOtpAddUpdV2 = require('./otpAddUpdv4').initOtpAddUpdV2;
+    var InitOtpExit = require('./otpExitv2').initOtpExit;
+    var InitOtpExitEditV2 = require('./otpExitEditv3').initOtpExitEditV2;
+    var InitSessionsV2 = require('./sessionsv2').initSessionsV2;
+    var InitOtpReportsV2 = require('./otpReportsv2').initOtpReportsV2;
+    var InitDefaulterv2 = require('./def2').initDefaulterv2;
+    var InitScrChildrenUpd = require('./scrChildrenUpdv1').initScrChildrenUpd;
+    var InitScrPlwNewUpd = require('./scrPlwNewUpdv1').initScrPlwNewUpd;
+    var InitScrChildrenReport = require('./scrChildrenReport').initScrChildrenReport;
+    var InitScrPlwNewReport = require('./scrPlwNewReport').initScrPlwNewReport;
+    var InitStockEntry = require('./stockEntry').stockEntry;
+    var InitAutoStock = require('./autoStock').autoStock;
+    var InitStockDist = require('./scrStock').stockDist;
+    var InitSupList = require('./supList').SupList;
+    var InitStaffList = require('./staffList').StaffList;
+    var InitVillageList = require('./villageList').VillageList;
+    var InitSessionsReport = require('./sessionsReport').sessionsReport;
+    var InitstockOutEntry = require('./stockOutEntry').stockOutEntry;
+    var InitstockOutUpdate = require('./stockOutUpdate').stockOutUpdate;
+    var InitStockDist = require('./stockDist').stockDist;
+    var InitStockDistReport = require('./stockDistReport').stockDistReport;
+    var InitStockDistUpd = require('./stockDistUpd').stockDistUpd;
+    var InitDashboard =require('./dashboard').initDashboard;
+    // var InitDefaulterv2 = require('./defaulterv2').initDefaulterv2;
+
+     function stockOutUpdateTemplate() {
+        var content = document.querySelector('link[href="stockOutUpdate.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitstockOutUpdate();
+      }
+     function dashboardTemplate() {
+        var content = document.querySelector('link[href="dashboard.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitDashboard();
+      }
+     function stockDistUpdTemplate() {
+        var content = document.querySelector('link[href="stockDistUpd.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitStockDistUpd();
+      }
+     function stockDistReportTemplate() {
+        var content = document.querySelector('link[href="stockDistReport.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitStockDistReport();
+      }
+     function stockDistTemplate() {
+        var content = document.querySelector('link[href="stockDist.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitStockDist();
+      }
+
+    function sessionReportTemplate() {
+        var content = document.querySelector('link[href="sessionsReport.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitSessionsReport();
+      }
+    function stockOutEntryTemplate() {
+        var content = document.querySelector('link[href="stockOutEntry.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitstockOutEntry();
+      }
+
+    function supListTemplate() {
+        var content = document.querySelector('link[href="supList.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitSupList();
+      }
+    function staffListTemplate() {
+        var content = document.querySelector('link[href="staffList.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitStaffList();
+      }
+    function villageListTemplate() {
+        var content = document.querySelector('link[href="villageList.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitVillageList();
+      }
+
+    function scrStockTemplate() {
+        var content = document.querySelector('link[href="scrStock.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitStockDist();
+      }
+
+    function autoStockTemplate() {
+      var content = document.querySelector('link[href="autoStock.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitAutoStock();
+    }
+    function defReportTemplate() {
+      var content = document.querySelector('link[href="defaulterv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitDefaulterv2();
+    }
+
+    function otpReportTemplate() {
+      var content = document.querySelector('link[href="otpReportsv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitOtpReportsV2();
+    }
+
+    function sessionsTemplate() {
+      var content = document.querySelector('link[href="sessionsv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitSessionsV2();
+    }
+
+    function otpExitEditTemplate() {
+      var content = document.querySelector('link[href="otpExitEditv3.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitOtpExitEditV2();
+    }
+
+    function otpExitTemplate() {
+      var content = document.querySelector('link[href="otpExitv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitOtpExit();
+    }
+
+    function otpAddUpdateTemplate() {
+      var content = document.querySelector('link[href="otpAddUpdv4.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitOtpAddUpdV2();
+    }
+
+    function addFollowupOtpTemplate() {
+      var content = document.querySelector('link[href="otpFollowUpv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitOtpFollowUp();
+    }
+
+    function otpAddTemplate() {
+      var content = document.querySelector('link[href="otpAddv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitOtpAdd();
+    }
+
+    function scrPlUpdTemplate() {
+      var content = document.querySelector('link[href="scrPlwNewUpdv1.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitScrPlwNewUpd();
+    }
+
+    function scrChUpdTemplate() {
+      var content = document.querySelector('link[href="scrChUpdv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitScrChUpdv2();
+    }
+    function scrChUpdTemplate1() {
+      var content = document.querySelector('link[href="scrChildrenUpdv1.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitScrChildrenUpd();
+    }
+
+    function scrReportTemplate() {
+      var content = document.querySelector('link[href="scrReportsv2.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitScrReportsV2();
+    }
+    function scrReportTemplateNew() {
+      var content = document.querySelector('link[href="scrChildReportNew.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitScrChildrenReport();
+    }
+    function scrReportTemplatePlwNew() {
+      var content = document.querySelector('link[href="scrPlwReportNew.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitScrPlwNewReport();
+    }
+
+    function addScrChildTemplate() {
+      var content = document.querySelector('link[href="scrChildv2.html"]')
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone);
+      InitGrid();
+    }
+    function addScrChildTemplate1() {
+      var content = document.querySelector('link[href="scrChildren.html"]')
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone);
+      InitGrid();
+    }
+
+    function addScrPlwTemplate() {
+      var content = document.querySelector('link[href="scrPlwNew.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitScrPlwNew();
+    }
+    
+    function stockEntryTemplate() {
+      var content = document.querySelector('link[href="stockEntry.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitStockEntry();
+    }
+    $(()=>{
+      dashboardTemplate();
+    })
+    $('#autoStock').on('click', function () {
+      autoStockTemplate()
+    })
+    $('#supList').on('click', function () {
+      supListTemplate();
+    })
+    $('#staffList').on('click', function () {
+      staffListTemplate();
+    })
+    $('#villageList').on('click', function () {
+      villageListTemplate();
+    })
+    $('#scrStock').on('click', function () {
+      // scrStockTemplate()
+      stockDistTemplate();
+    })
+    $('#childScr').on('click', function () {
+      addScrChildTemplate1()
+    })
+    $('#plwScr').on('click', function () {
+      addScrPlwTemplate();
+      // ipc.send('nav', 'plw');
+    })
+    $('#scrReport').on('click', function () {
+      scrReportTemplate();
+      // ipc.send('nav', 'report');
+    })
+    $('#scrChUpd').on('click', function () {
+      scrChUpdTemplate1();
+      // ipc.send('nav', 'scrChUpd');
+    })
+    $('#scrPlUpd').on('click', function () {
+      scrPlUpdTemplate();
+      // ipc.send('nav', 'scrPlUpd');
+    })
+    $('#otpAdd').on('click', function () {
+      otpAddTemplate();
+      // ipc.send('nav', 'plw');
+      // ipc.send('nav', 'otpAdd');
+    })
+    $('#addVill').on('click', function () {
+      ipc.send('nav', 'addVill');
+    })
+    $('#addFollowupOtp').on('click', function () {
+      addFollowupOtpTemplate();
+      // ipc.send('nav', 'addFollowupOtp');
+    })
+    $('#otpAddUpdate').on('click', function () {
+      otpAddUpdateTemplate();
+      // ipc.send('nav', 'otpAddUpdate');
+    })
+    $('#otpExit').on('click', function () {
+      otpExitTemplate();
+      // ipc.send('nav', 'otpExit');
+    })
+    $('#otpExitEdit').on('click', function () {
+      otpExitEditTemplate();
+
+      // ipc.send('nav', 'otpExitEdit');
+    })
+    $('#sessions').on('click', function () {
+      sessionsTemplate();
+      // ipc.send('nav', 'otpExit');
+      // ipc.send('nav', 'sessions');
+    })
+    $('#otpReport').on('click', function () {
+      otpReportTemplate();
+      // ipc.send('nav', 'otpReport');
+    })
+    $('#defReport').on('click', function () {
+      defReportTemplate();
+      // ipc.send('nav', 'defReport');
+    })
+    $('#scrChdNewReport').on('click',function(){
+      scrReportTemplateNew();
+    })
+    $('#scrPlwNewReport').on('click',function(){
+      scrReportTemplatePlwNew();
+    })
+    $('#stockEntry').on('click',function(){
+      stockEntryTemplate();
+    })
+    $('#sessionsReport').on('click',function(){
+      sessionReportTemplate();
+    })
+    $('#stockOutEntry').on('click',function(){
+      stockOutEntryTemplate();
+    })
+    $('#stockDistUpd').on('click',function(){
+      stockDistUpdTemplate();
+    })
+    $('#stockDistReport').on('click',function(){
+      stockDistReportTemplate();
+    })
+    $('#homeDashboard').on('click', function(){
+      dashboardTemplate();
+    })
+    $('#stockOutUpdate').on('click', function(){
+      stockOutUpdateTemplate();
+    })
+  </script>
+  <script>
+    ipc.once('success', function (evt, result) {
+      $('#messages').append(
+        `<div class="modal-header"> <h5 class="modal-title" >Success</h5> </div><div class="modal-body"><div class="alert alert-success alert-dismissible fade show" role="alert">${result.msg}</div></div>`)
+        $('#MessageModal').modal('show');
+        setTimeout(function(){
+        $('#MessageModal').modal('hide');
+          $('#messages').empty();
+          ipc.removeListener('success', function(){return ipc.listeners()[0]});
+        },1000);
+        // $('#MessageModal').modal('show');
+      // $('.alert').alert()
+      // $(".alert").fadeTo(3000, 1000).slideUp(500, function () {
+      //   $(".alert").alert('close');
+      //   $().alert('dispose')
+      //   $('#messages').empty()
+      //   console.log(ipc.listeners());
+      //   ipc.removeListener('success',ipc.listeners()[0]);
+      //   // console.log(ipc.listeners()[0]);
+
+      // })
+    });
+    ipc.on('error', function (evt, result) {
+      $('#messages').append(
+        ` <div class= "modal-header" > <h5 class="modal-title" >Error</h5> </div> <div class="modal-body"><div class="alert alert-danger alert-dismissible fade show" role="alert">${result.msg}</div></div>`)
+        $('#MessageModal').modal('show');
+      setTimeout(function () {
+        $('#MessageModal').modal('hide');
+        $('#messages').empty();
+        ipc.removeListener('error', function(){
+          return ipc.listeners()[0]
+        });
+        // ipc.removeAllListeners('error');
+      }, 1000);
+      // $('.alert').alert()
+      // $(".alert").fadeTo(3000, 1000).slideUp(500, function () {
+      //   $(".alert").alert('close');
+      //   $().alert('dispose')
+      //   $('#messages').empty()
+      //   console.log(ipc.listeners());
+        // ipc.removeListener('error',ipc.listeners()[0]);
+      //   // console.log(ipc.listeners()[0]);
+      // })
+    });
+    ipc.on('updateNote', (e, index)=>{
+      if(index === 1){
+        console.log('Update Cancel')
+      } else if (index === 0){
+        ipc.send('updateSoftware')
+      }
+    })
+  </script>
+</body>
+
+</html>

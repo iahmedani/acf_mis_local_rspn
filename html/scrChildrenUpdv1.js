@@ -156,7 +156,7 @@ module.exports.initScrChildrenUpd = function () {
       return new Promise((resolve, reject) => {
         ipc.send("allScrChildren", filter);
         ipc.on("allScrChildren", (e, result) => {
-          // console.log(result.data);
+          // console.log(result);
           var s = { data: result.result.data, itemsCount: result.result.itemsCount[0].total };
           if (result.err) {
             reject(result.err);
@@ -477,8 +477,9 @@ module.exports.initScrChildrenUpd = function () {
   })
   $('#submitScrChildUpdForm').on('click', (e) => {
     // console.log(data);
+    // totalCheck();
     $('#scrChildrenUpdForm').validate();
-    if ($('#scrChildrenUpdForm').valid()) {
+    if ($('#scrChildrenUpdForm').valid() ) {
       var scrChildrenUpdData = $('#scrChildrenUpdForm').serializeFormJSON();
       console.log(scrChildrenUpdData);
       ipc.send('scrChildrenUpd', scrChildrenUpdData);
@@ -492,20 +493,23 @@ module.exports.initScrChildrenUpd = function () {
     }
     e.preventDefault();
   })
-  $('.tbb').on('change', function () {
-    var total = 0;
-    $('.tbb').each(function (i, el) {
-      total = total + (($(el).val()) ? parseInt($(el).val()) : 0);
-    })
-    $("#total_scr_boys").empty();
-    $("#total_scr_boys").val(total);
-  })
-  $(".tgg").on("change", function () {
-    var total = 0;
-    $(".tgg").each(function (i, el) {
-      total = total + ($(el).val() ? parseInt($(el).val()) : 0);
-    });
-    $("#total_scr_girls").empty();
-    $("#total_scr_girls").val(total);
-  });
+  // $('.tbb').on('change', function () {
+  //   var total = 0;
+  //   $('.tbb').each(function (i, el) {
+  //     total = total + (($(el).val()) ? parseInt($(el).val()) : 0);
+  //   })
+  //   $("#total_scr_boys").empty();
+  //   $("#total_scr_boys").val(total);
+  // })
+  // $(".tgg").on("change", function () {
+  //   var total = 0;
+  //   $(".tgg").each(function (i, el) {
+  //     total = total + ($(el).val() ? parseInt($(el).val()) : 0);
+  //   });
+  //   $("#total_scr_girls").empty();
+  //   $("#total_scr_girls").val(total);
+  // });
+
+
+
 }
