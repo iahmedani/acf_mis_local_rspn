@@ -321,14 +321,40 @@ module.exports.initOtpFollowUp = function () {
               name: "next_followup",
               type: "date",
               title: "Next Follow Up",
-              editing: false,
+              // editing: false,
               align: "right"
             },
+            {
+              width: 80,
+              align:'center',
+              headerTemplate: function() {
+                return "<th class='jsgrid-header-cell'>Last Followup in days</th>";
+              },
+              itemTemplate: function(value, item) {
+                console.log(item)
+                var date1 = new Date(item.curr_date);
+                  var date2 = new Date();
+                  var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+                  var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+                  // alert(diffDays);
+                return diffDays;
+              }
+            },
+
             {
               type: "control",
               deleteButton: false
             }
-          ]
+          ],
+          rowClass: function(item, itemIndex) {
+            var date1 = new Date(item.curr_date);
+                  var date2 = new Date();
+                  var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+                  var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+                  console.log(diffDays)
+            return diffDays > 21 ? 'bg-red': '';
+            // itemIndex%2==0 ? 'bg-red' : 'bg-green';
+        },
         });
       }
 

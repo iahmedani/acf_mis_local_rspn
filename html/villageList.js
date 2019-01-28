@@ -57,11 +57,11 @@ module.exports.VillageList = function() {
     // return new Promise((resolve, reject) => {
     ipc.send("villagelist");
     ipc.on("villagelist", (evt, villages) => {
-      console.log(villages);
+      // console.log(villages);
       // supervisors = data;
       ipc.send("geoList");
       ipc.on("geoList", (evt, data) => {
-        console.log(data);
+        // console.log(data);
         var _village = villages;
         var province = data.province;
         var district = data.district;
@@ -76,15 +76,17 @@ module.exports.VillageList = function() {
           uc,
           site
         });
+        ipc.removeAllListeners('geoList')
       });
+      ipc.removeAllListeners('villagelist')
     });
     // })
   }
   function initVillageListGrid() {
     
     _villageList((x, result) => {
-      console.log(result);
-      console.log(result);
+      // console.log(result);
+      // console.log(result);
       var _supData = {
         loadData: function(filter) {
           return $.grep(result._village, function(client) {
@@ -218,7 +220,7 @@ module.exports.VillageList = function() {
     $("#villageForm").validate();
     if ($("#villageForm").valid()) {
       var villData = $("#villageForm").serializeFormJSON();
-      console.log(villData);
+      // console.log(villData);
       ipc.send("addVillage", villData);
       ipc.removeAllListeners("addVillage");
       $("#villageForm")

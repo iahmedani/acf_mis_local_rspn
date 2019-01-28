@@ -38,6 +38,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
       })
   })
   ipcMain.on('updateStockInItem', (event, data)=>{
+    data.upload_status = 2;
     knex('tblStock')
       .where('id', data.id)
       .update(data)

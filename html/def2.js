@@ -1,71 +1,122 @@
+const {knex} = require('../dbTest')
 module.exports.initDefaulterv2 = function(){
-    ipc.send('data', 0);
-      ipc.on('data',(e,data)=>{
-        console.log(data);
-        createTblCh(data.result, 'defaulter');
-      })
-    //   $('#addFilter').on('click', function(e){
-    //     ipc.send('data', prepareQry());
-    //     ipc.on('data',(e,data)=>{
-    //     pushData(data.data);
-    //   })
-    // })
+  ipc.send("getProvince");
+  ipc.on("province", function(evt, province) {
+    $("#ddProvince")
+      .children("option:not(:first)")
+      .remove();
+    prov(province);
+  });
+  $("#ddProvince").on("change", function() {
+    var prov = $(this).val();
+    ipc.send("getDistrict", prov);
+    ipc.on("district", function(evt, district) {
+      $("#ddDistrict")
+        .children("option:not(:first)")
+        .remove();
 
-  function createTblCh(data, table){
-      var header = Object.keys(data[0]);
-      var html = '<tr>';
-        header.forEach(el=>{
-          html+= '<th>'+el+'</th>'
-        })
-        html+='</tr>'      
- 
-      data.forEach(el=>{
-        html+= '<tr>'
-        header.forEach(key=>{
-            html+= '<td>'+el[key]+'</td>'          
-          }
-        )
-        html +='</tr>'
-      })
-      console.log(html);
-      $('#'+table).empty();
-      $('#'+table).append(html);
+      dist(district);
+    });
+  });
+  $("#ddDistrict").on("change", function() {
+    var dist = $(this).val();
+    ipc.send("getTehsil", dist);
+    ipc.on("tehsil", function(evt, tehsil) {
+      $("#ddTehsil")
+        .children("option:not(:first)")
+        .remove();
+
+      teh(tehsil);
+    });
+  });
+  $("#ddTehsil").on("change", function() {
+    var tehs = $(this).val();
+    ipc.send("getUC", tehs);
+    ipc.on("uc", function(evt, uc) {
+      $("#ddUC")
+        .children("option:not(:first)")
+        .remove();
+
+      ucListener(uc);
+    });
+  });
+  var ucForHH;
+  $("#ddUC").on("change", function() {
+    var ucs = $(this).val();
+    ucForHH = ucs;
+    ipc.send("getHealthHouse", ucs);
+    ipc.on("hh", function(evt, hh) {
+      $("#ddHealthHouse")
+        .children("option:not(:first)")
+        .remove();
+      hhListener(hh);
+    });
+  });
+
+  function prepareQry() {
+    var qry = {};
+    $("#ddProvince").val() ? (qry.province = $("#ddProvince option:selected").text()) : qry.province= "";
+    $("#ddDistrict").val() ? (qry.district = $("#ddDistrict option:selected").text()) : qry.district = "";
+    $("#ddTehsil").val() ? (qry.tehsil = $("#ddTehsil option:selected").text()) : qry.tehsil = "";
+    $("#ddUc").val() ? (qry.uc = $("#ddTehsil option:selected").text()) : qry.uc = "";
+    $("#ddHealthHouse").val() ? (qry.site = $("#ddHealthHouse option:selected").text()) : qry.site= "";
+    // $("#report_month").val() ? (qry.report_month = $("#report_month").val())  : qry.report_month ="";
+    // $("#prog_type").val() ? (qry.prog_type = $("#ddProgramType").val()) : "";
+    // console.log(qry);
+    return qry;
   }
-  
-  /* xlsx.js (C) 2013-present SheetJS -- http://sheetjs.com */
-/*global Uint8Array, console */
-/* exported export_xlsx */
-/* eslint no-use-before-define:0 */
-var XLSX = require('xlsx');
-var electron = require('electron').remote;
+  async function retiveData (qry){
+    var data = await knex('v_defaulter')
+                          .where('province', 'like', `%${qry.province}%`)
+                          .where('district_name', 'like', `%${qry.district}%`)
+                          .where('tehsil_name', 'like', `%${qry.tehsil}%`)
+                          .where('uc_name', 'like', `%${qry.uc}%`)
+                          .where('site_name', 'like', `%${qry.site}%`)
+    // console.log(data)
+    return data;
+  }
 
-var export_xlsx = (function() {
-	// var HTMLOUT = document.getElementById('htmlout');
-	var XTENSION = "xls|xlsx|xlsm|xlsb|xml|csv|txt|dif|sylk|slk|prn|ods|fods|htm|html".split("|")
-	return function() {
-    var workbook = XLSX.utils.book_new();
-    var ws1 = XLSX.utils.table_to_sheet(document.getElementById('defaulter'));
-XLSX.utils.book_append_sheet(workbook, ws1, "defaulter");
+  async function makeTable(){
+    var data = await retiveData(prepareQry())
+    // console.log(data);
+    if ( $.fn.DataTable.isDataTable('#defaulter') ) {
+      $('#defaulter').DataTable().destroy();
+    }
+    $('#defaulter tbody').empty();
+    $('#defaulter').DataTable( {
+      data:data,
+      dom: 'Bfrtip',
+            buttons: [
+              'copy', { extend:'csv', title:`Defaulter List_${Date.now()}`}, {extend:'excel', title:`Defaulter List_${Date.now()}`}
+            ],
+            "scrollY": 380,
+    "scrollX": true,
+      columns:[
+        {title:'Province', data:'province'},
+        {title:'District', data:'district_name'},
+        {title:'Tehsil', data:'tehsil_name'},
+        {title:'UC', data:'uc_name'},
+        {title:'Site', data:'site_name'},
+        {title:'Village', data:'site_village'},
+        {title:'Reg Date', data:'reg_date'},
+        {title:'Patient Name', data:'Patient Name'},
+        {title:'Age', data:'age'},
+        {title:'Gender', data:'gender'},
+        {title:'MUAC', data:'MUAC'},
+        {title:'Father/Husband Name', data:'Father/Husband Name'},
+        {title:'Father/Husband CNIC', data:'cnic'},
+        {title:'Address', data:'address'},
+        {title:'Contact Number', data:'Contact number'},
+        {title:'Last Followup Date', data:'Last followup date'},
+        {title:'Number of days since last followup', data:'Days since last follow up'},
+        
+      ]
+  } );
+  }
 
-/* convert table 'table2' to worksheet named "Sheet2" */
-// var ws2 = XLSX.utils.table_to_sheet(document.getElementById('tblChild'));
-// XLSX.utils.book_append_sheet(workbook, ws2, "Child");
-// var ws3 = XLSX.utils.table_to_sheet(document.getElementById('tblPlw'));
-// XLSX.utils.book_append_sheet(workbook, ws3, "PLW");
-		// var wb = XLSX.utils.table_to_book(HTMLOUT);
-		var o = electron.dialog.showSaveDialog({
-			title: 'Save file as',
-			filters: [{
-				name: "Spreadsheets",
-				extensions: XTENSION
-			}]
-		});
-		console.log(o);
-		XLSX.writeFile(workbook, o);
-		electron.dialog.showMessageBox({ message: "Exported data to " + o, buttons: ["OK"] });
-	};
-})();
-void export_xlsx;
-
-
+    // $('#makeDefTable').click(makeTable())
+  $('#makeDefTable').on('click', (e)=>{
+    makeTable();
+  })
+  makeTable();
 }

@@ -156,13 +156,13 @@ module.exports.initScrChildrenUpd = function () {
       return new Promise((resolve, reject) => {
         ipc.send("allScrChildren", filter);
         ipc.on("allScrChildren", (e, result) => {
-          // console.log(result);
-          var s = { data: result.result.data, itemsCount: result.result.itemsCount[0].total };
+          console.log(result);
           if (result.err) {
             reject(result.err);
             ipc.removeAllListeners("allScrChildren");
           } else {
-            console.log(s);
+            var s = { data: result.result.data, itemsCount: result.result.itemsCount[0].total };
+            // console.log(s);
             resolve(s);
             ipc.removeAllListeners("allScrChildren");
           }
@@ -181,7 +181,7 @@ module.exports.initScrChildrenUpd = function () {
             $("#jsGrid")
               .jsGrid("render")
               .done(function() {
-                console.log("rendering completed and data loaded");
+                // console.log("rendering completed and data loaded");
               });
             $("#scrChildrenUpdForm")
               .get(0)
@@ -192,41 +192,41 @@ module.exports.initScrChildrenUpd = function () {
         });
       });
     }
-    var MyDateField = function (config) {
-      jsGrid.Field.call(this, config);
-    };
+    // var MyDateField = function (config) {
+    //   jsGrid.Field.call(this, config);
+    // };
 
-    MyDateField.prototype = new jsGrid.Field({
+    // MyDateField.prototype = new jsGrid.Field({
 
-      css: "date-field",            // redefine general property 'css'
-      align: "center",              // redefine general property 'align'
+    //   css: "date-field",            // redefine general property 'css'
+    //   align: "center",              // redefine general property 'align'
 
 
-      sorter: function (date1, date2) {
-        return new Date(date1) - new Date(date2);
-      },
+    //   sorter: function (date1, date2) {
+    //     return new Date(date1) - new Date(date2);
+    //   },
 
-      itemTemplate: function (value) {
-        return new Date(value).toDateString();
-      },
+    //   itemTemplate: function (value) {
+    //     return new Date(value).toDateString();
+    //   },
 
-      insertTemplate: function (value) {
-        return this._insertPicker = $("<input>").datepicker({ defaultDate: new Date() });
-      },
+    //   insertTemplate: function (value) {
+    //     return this._insertPicker = $("<input>").datepicker({ defaultDate: new Date() });
+    //   },
 
-      editTemplate: function (value) {
-        return this._editPicker = $("<input>").datepicker().datepicker("setDate", new Date(value));
-      },
+    //   editTemplate: function (value) {
+    //     return this._editPicker = $("<input>").datepicker().datepicker("setDate", new Date(value));
+    //   },
 
-      insertValue: function () {
-        return this._insertPicker.datepicker("getDate").toISOString();
-      },
+    //   insertValue: function () {
+    //     return this._insertPicker.datepicker("getDate").toISOString();
+    //   },
 
-      editValue: function () {
-        return this._editPicker.datepicker("getDate").toISOString();
-      }
-    });
-    jsGrid.fields.date = MyDateField;
+    //   editValue: function () {
+    //     return this._editPicker.datepicker("getDate").toISOString();
+    //   }
+    // });
+    // jsGrid.fields.date = MyDateField;
     $("#jsGrid").jsGrid({
       width: "100%",
       height: "300px",
@@ -324,7 +324,7 @@ module.exports.initScrChildrenUpd = function () {
         this.editItem(args.item);
         var data = args.item;
         var dataKeys = Object.keys(data);
-        console.log(dataKeys);
+        // console.log(dataKeys);
         dataKeys.forEach(el => {
           $(`input[name="${el}"]`).val(data[el]);
           $(`select[name="${el}"]`).val(data[el]);
@@ -435,13 +435,13 @@ module.exports.initScrChildrenUpd = function () {
         // $('#gender').val(data.gender);
         // $('#village').val(data.site_village);
         // $('#otp_id').val(data.otp_id);
-        console.log(args.item);
+        // console.log(args.item);
       }
     });
     $(function () {
       $('#ddInterval').on('change', function () {
         var value = $(this).val();
-        console.log(value);
+        // console.log(value);
         if (value == 1) {
           $('#start_date').attr('disabled', false);
           $('#end_date').attr('disabled', false);
@@ -464,6 +464,7 @@ module.exports.initScrChildrenUpd = function () {
             ipc.removeAllListeners('allScrChildren')
           } else {
             resolve(s);
+            ipc.removeAllListeners('allScrChildren')
           }
         })
       })
@@ -471,7 +472,7 @@ module.exports.initScrChildrenUpd = function () {
     };
     // var allData = scrChilrenData(prepareQry());
     $('#showDataScrChildren').on('click', (e) => {
-      console.log(prepareQry())
+      // console.log(prepareQry())
       
     })
   })
@@ -481,14 +482,14 @@ module.exports.initScrChildrenUpd = function () {
     $('#scrChildrenUpdForm').validate();
     if ($('#scrChildrenUpdForm').valid() ) {
       var scrChildrenUpdData = $('#scrChildrenUpdForm').serializeFormJSON();
-      console.log(scrChildrenUpdData);
+      // console.log(scrChildrenUpdData);
       ipc.send('scrChildrenUpd', scrChildrenUpdData);
       ipc.removeAllListeners('scrChildrenUpd');
       $('#scrChildrenUpdForm').get(0).reset();
       $("#scrChildrenUpdForm select").val('');
       $('input[type="number"]').attr('min', 0);
       $('#jsGrid').jsGrid("render").done(() => {
-        console.log('js grid rendered')
+        // console.log('js grid rendered')
       })
     }
     e.preventDefault();

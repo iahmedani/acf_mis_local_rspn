@@ -55,11 +55,11 @@ module.exports.SupList = function () {
       // return new Promise((resolve, reject) => {
         ipc.send("supervisorlist");
         ipc.on("supervisorlist", (evt, sups) => {
-          console.log(sups)
+          // console.log(sups)
           // supervisors = data;
           ipc.send("geoList");
           ipc.on("geoList", (evt, data) => {
-            console.log(data);
+            // console.log(data);
             var supervisors = sups;
             var province = data.province;
             var district = data.district;
@@ -74,7 +74,10 @@ module.exports.SupList = function () {
               uc,
               site
             })
+            ipc.removeAllListeners('geoList')
           });
+          
+          ipc.removeAllListeners('supervisorlist')
         });
       // })
   }
@@ -215,7 +218,7 @@ module.exports.SupList = function () {
     $("#supForm").validate();
     if ($("#supForm").valid()) {
       var supData = $("#supForm").serializeFormJSON();
-      console.log(supData);
+      // console.log(supData);
       ipc.send("addSup", supData);
       ipc.removeAllListeners("addSup");
       $("#supForm")

@@ -95,7 +95,7 @@ module.exports.initSessionsV2 = function () {
       // if (data.length > 0) {
       //   data = [];
       // }
-      console.log(val)
+      // console.log(val)
       if (val == 'outreach') {
         $('.outreach').show();
         $('.outreach input').attr('required', true);
@@ -435,7 +435,7 @@ module.exports.initSessionsV2 = function () {
     return new Promise((resolve, reject) => {
       ipc.send('getSessionsAll', data);
       ipc.on('getSessionsAll', (e, result) => {
-        console.log(result);
+        // console.log(result);
         var s = { data: result.result.data, itemsCount: result.result.itemsCount[0].total };
         if (result.err) {
           reject(result.err)

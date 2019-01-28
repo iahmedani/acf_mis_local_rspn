@@ -8,7 +8,7 @@ module.exports.initScrPlwNewReport = function () {
 
     $('#ddInterval').on('change', function () {
       var value = $(this).val();
-      console.log(value);
+      // console.log(value);
       if (value == 1) {
         $('#start_date').attr('disabled', false);
         $('#end_date').attr('disabled', false);
@@ -72,7 +72,7 @@ module.exports.initScrPlwNewReport = function () {
       x: 'screening_date',
       y: [$('#start_date').val(), $('#end_date').val()]
     }: '';
-    console.log(qry);
+    // console.log(qry);
     return qry;
   }
   $(function () {
@@ -112,23 +112,25 @@ module.exports.initScrPlwNewReport = function () {
             ipc.removeAllListeners('scrPlwNewReport')
           } else {
             resolve(result.result);
+            ipc.removeAllListeners('scrPlwNewReport')
+
           }
         })
       })
     }
     $('#showDataScrPlwReport').on('click', function () {
-      var fullTextPlw = ["Province", "District", "Tehsil", "UC", "Village", "Nutrition Site", "Screening Date", "Staff Name", "Staff Code", "Supervisor Name", "Supervisor Code", "Total Screened (Pragnent)", "Total Screened (Lectating)", "First time Screened (Pragnent)", "First time Screened (Lectating)", "Re-Screened (Pragnent)", "Re-Screened (Lactating)", "MUAC >=21 (Pragnent)", "MUAC >=21 (Lectating)", "MUAC <21 (Pragnent)", "MUAC <21 (Lectating)", "PLW Received IFA Tablets First Time (Pragnent)", "PLW Received IFA Tablets First Time (Lectating)", "PLW Followed up (Pragnent)", "PLW Followed up (Lectating)", "Exit from criteria (Pragnent)",   "Exit from criteria (Lectating)"];
-      var colNamePlw = ["province", "district_name", "tehsil_name", "uc_name", "village", "site_name", "screening_date", "staff_name", "staff_code", "sup_name", "sup_code", "total_scr_pragnent", "total_scr_lactating", "new_scr_pragnent", "new_scr_lactating", "reScreened_scr_pragnent", "reScreened_scr_lactating", "muac_gt_21_pragnent", "muac_gt_21_lactating", "muac_le_21_pragnent", "muac_le_21_lactating", "ifa_first_time_pragnent", "ifa_first_time_lactating", "followup_pragnent", "followup_lactating", "exits_pragnent", "exit_lactating"];
+      var fullTextPlw = ["Province", "District", "Tehsil", "UC", "Village", "Nutrition Site", "Reporting Month", "Staff Name", "Staff Code", "Supervisor Name", "Supervisor Code", "Total Screened (Pragnent)", "Total Screened (Lectating)", "First time Screened (Pragnent)", "First time Screened (Lectating)", "Re-Screened (Pragnent)", "Re-Screened (Lactating)", "MUAC >=21 (Pragnent)", "MUAC >=21 (Lectating)", "MUAC <21 (Pragnent)", "MUAC <21 (Lectating)", "PLW Received IFA Tablets First Time (Pragnent)", "PLW Received IFA Tablets First Time (Lectating)", "PLW Followed up (Pragnent)", "PLW Followed up (Lectating)", "Exit from criteria (Pragnent)",   "Exit from criteria (Lectating)"];
+      var colNamePlw = ["province", "district_name", "tehsil_name", "uc_name", "village", "site_name", "report_month", "staff_name", "staff_code", "sup_name", "sup_code", "total_scr_pragnent", "total_scr_lactating", "new_scr_pragnent", "new_scr_lactating", "reScreened_scr_pragnent", "reScreened_scr_lactating", "muac_gt_21_pragnent", "muac_gt_21_lactating", "muac_le_21_pragnent", "muac_le_21_lactating", "ifa_first_time_pragnent", "ifa_first_time_lactating", "followup_pragnent", "followup_lactating", "exits_pragnent", "exit_lactating"];
 
       scrChildReport(prepareQry())
         .then(result => {
-          console.log(result)
+          // console.log(result)
           putSummaryDataToTable('scrPlwNewSum', result.summary)
           createSingleEntryTable('scrPlwNewSingle', result.single, fullTextPlw, colNamePlw)
 
         })
         .catch(e => {
-          console.log('error occured during summary table creation')
+          // console.log('error occured during summary table creation')
         })
     });
     $('#exportScrPlwReport').on('click', function () {
@@ -162,7 +164,7 @@ module.exports.initScrPlwNewReport = function () {
           extensions: XTENSION
         }]
       });
-      console.log(o);
+      // console.log(o);
       XLSX.writeFile(workbook, o);
       electron.dialog.showMessageBox({
         message: "Exported data to " + o,

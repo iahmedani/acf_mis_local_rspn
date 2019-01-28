@@ -11,7 +11,7 @@ module.exports.initDashboard = function () {
     
     ipc.send("newDashboard", '')
     ipc.on("newDashboard", (event, data) => {
-      console.log(data)
+      // console.log(data)
       var scrChild = data.result.scrChildren[0];
       var ScreeningChart = new Highcharts.chart("screening-Chart", {
         chart: {
@@ -295,10 +295,10 @@ module.exports.initDashboard = function () {
       });
       // ipc.removeAllListeners("newDashboard");
     });
-    ipc.send('test')
-    ipc.on('test', (event, data) => {
-      console.log(data)
-    })
+    // ipc.send('test')
+    // ipc.on('test', (event, data) => {
+    //   console.log(data)
+    // })
 
     
   })

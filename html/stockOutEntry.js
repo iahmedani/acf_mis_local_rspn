@@ -380,13 +380,13 @@ module.exports.stockOutEntry = function () {
       delete el.id;
       stockEntryArr.push(el);
     });
-    console.log(stockEntryArr);
+    // console.log(stockEntryArr);
     ipc.send("stockOutEntry", stockEntryArr);
     ipc.removeAllListeners("stockOutEntry");
     // data = [];
     // $('#jsGrid').jsGrid("loadData");
     // $('#scrPlwForm').get(0).reset();
-    setTimeout(stockEntryTemplate, 3000);
+    setTimeout(stockOutEntryTemplate, 3000);
 
     // } else {
     //   $('#scrPlwForm').validate();

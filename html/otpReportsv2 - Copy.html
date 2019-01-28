@@ -1,0 +1,490 @@
+<template>
+  <div>
+    <div id="filter" class="rounded">
+      <div class="form-group row">
+        <div class="col-sm-2">
+          <label for="ddProvince" class="col-form-label">Province:</label>
+          <select id="ddProvince" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="ddDistrict" class="col-form-label">District:</label>
+          <select id="ddDistrict" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="ddTehsil" class="col-form-label">Tehsil:</label>
+          <select id="ddTehsil" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="ddUC" class="col-form-label">UC:</label>
+          <select id="ddUC" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <!-- </div> -->
+        <!-- <div class="form-group row"> -->
+        <div class="col-sm-2">
+          <label for="site_id" class="col-form-label">Site Name:</label>
+          <select id="ddHealthHouse" class="form-control form-control-sm" required>
+            <option selected disabled>Select One</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="month" class="col-form-label">Report Month</label>
+          <input type="month" name="report_month" id="report_month" class="form-control form-control-sm" required>
+        </div>
+      </div>
+      <div class="row">
+
+        <div class="col-sm-2 align-self-end">
+          <button type="submit" class="btn btn-info btn-sm btn-block form-control form-control-sm shadow-sm" id="showAddExitReport">
+            <i class="fas fa-filter"></i> Show Data</button>
+        </div>
+  <div class="col-sm-2 align-self-end">
+    <button class="btn btn-success btn-sm btn-block form-control form-control-sm shadow-sm" type="button" id="exportScrChReport">
+      <i class="fas fa-file-excel"></i> Export</button>
+  </div>
+      </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered repTitle text-wrap" id="addmisionReport">
+            <tr class="justify-content-center ">
+              <th colspan="12" class="align-middle bg-secondary text-white" height="15px">Addmission</th>
+            </tr>
+            <tr class="justify-content-center ">
+              <th rowspan="2" class="align-middle">Age Group</th>
+              <th rowspan="2" class="align-middle">Gender</th>
+              <th rowspan="2" class="align-middle ">Total in OTP beginning of the month (A)</th>
+              <th colspan="2" class="align-middle">Admission (B)</th>
+              <th rowspan="2" class="align-middle">Total New Admission (B=B1+B2)</th>
+              <th colspan="3" class="align-middle">Move In (C)</th>
+              <th rowspan="2" class="align-middle">Relapse After Cure (CC)</th>
+              <th rowspan="2" class="align-middle">Total Moved In (C=C2+C2+C3)</th>
+              <th rowspan="2" class="align-middle">Total In (D=A+B+C+CC)</th>
+            </tr>
+            <tr>
+              <th class="align-middle">MUAC &lt; 11.5 cm (B1)</th>
+              <th class="align-middle">ODEMA(B2)</th>
+              <th class="align-middle">Return After Default(C1)</th>
+              <th class="align-middle">Transfer from SC (C2)</th>
+              <th class="align-middle">Other (C3)</th>
+            </tr>
+            <tr>
+              <td rowspan="2" class="align-middle">6 - 23 Months</td>
+              <td>Male</td>
+              <td id="6_23-male-a"></td>
+              <td id="6_23-male-b1"></td>
+              <td id="6_23-male-b2"></td>
+              <td id="6_23-male-b"></td>
+              <td id="6_23-male-c1"></td>
+              <td id="6_23-male-c2"></td>
+              <td id="6_23-male-c3"></td>
+              <td id="6_23-male-cc"></td>
+              <td id="6_23-male-c"></td>
+              <td id="6_23-male-d"></td>
+            </tr>
+            <tr>
+              <td>Female</td>
+              <td id="6_23-female-a"></td>
+              <td id="6_23-female-b1"></td>
+              <td id="6_23-female-b2"></td>
+              <td id="6_23-female-b"></td>
+              <td id="6_23-female-c1"></td>
+              <td id="6_23-female-c2"></td>
+              <td id="6_23-female-c3"></td>
+              <td id="6_23-female-cc"></td>
+              <td id="6_23-female-c"></td>
+              <td id="6_23-female-d"></td>
+            </tr>
+            <tr>
+              <td rowspan="2" class="align-middle">24 - 59 Months</td>
+              <td>Male</td>
+            <td id="24_59-male-a"></td>
+            <td id="24_59-male-b1"></td>
+            <td id="24_59-male-b2"></td>
+            <td id="24_59-male-b"></td>
+            <td id="24_59-male-c1"></td>
+            <td id="24_59-male-c2"></td>
+            <td id="24_59-male-c3"></td>
+            <td id="24_59-male-cc"></td>
+            <td id="24_59-male-c"></td>
+            <td id="24_59-male-d"></td>
+            </tr>
+            <tr>
+              <td>Female</td>
+              <td id="24_59-female-a"></td>
+              <td id="24_59-female-b1"></td>
+              <td id="24_59-female-b2"></td>
+              <td id="24_59-female-b"></td>
+              <td id="24_59-female-c1"></td>
+              <td id="24_59-female-c2"></td>
+              <td id="24_59-female-c3"></td>
+              <td id="24_59-female-cc"></td>
+              <td id="24_59-female-c"></td>
+              <td id="24_59-female-d"></td>
+            </tr>
+            <tr>
+              <td colspan="2">Total</td>
+              <td id="total-a"></td>
+              <td id="total-b1"></td>
+              <td id="total-b2"></td>
+              <td id="total-b"></td>
+              <td id="total-c1"></td>
+              <td id="total-c2"></td>
+              <td id="total-c3"></td>
+              <td id="total-cc"></td>
+              <td id="total-c"></td>
+              <td id="total-d"></td>
+            </tr>
+          </table>
+          <table class="table table-sm table-bordered  repTitle text-wrap" id="exitReport">
+            <tr>
+              <th colspan="13" class="align-middle bg-secondary text-white" height="15px">Exit</th>
+            </tr>
+            <tr>
+              <th rowspan="2" class="align-middle">Age Group</th>
+              <th rowspan="2" class="align-middle">Gender</th>
+              <th colspan="4" class="align-middle">Discharged (E)</th>
+              <th rowspan="2" class="align-middle">Total Discharged (E=E1+E2+E3+E4)</th>
+              <th colspan="3" class="align-middle">Moved Out (F)</th>
+              <th rowspan="2" class="align-middle">Total Moved Out (F=F1+F2+F3)</th>
+              <th rowspan="2" class="align-middle">Total Exit (G=E+F)</th>
+              <th rowspan="2" class="align-middle">Total In OTP end of the month (H=D-G)</th>
+            </tr>
+            <tr>
+              <th class="align-middle">Cured (E1)</th>
+              <th class="align-middle">Death (E2)</th>
+              <th class="align-middle">Defaulter (E3)</th>
+              <th class="align-middle">No Recovered (E4)</th>
+              <th class="align-middle">Medical Transfer (F1)</th>
+              <th class="align-middle">Transfer to In patient (F2)</th>
+              <th class="align-middle">Other (F3)</th>
+            </tr>
+            <tr>
+              <td rowspan="2" class="align-middle">6 - 23 Months</td>
+              <td>Male</td>
+              <td id="6_23-male-e1"></td>
+              <td id="6_23-male-e2"></td>
+              <td id="6_23-male-e3"></td>
+              <td id="6_23-male-e4"></td>
+              <td id="6_23-male-e"></td>
+              <td id="6_23-male-f1"></td>
+              <td id="6_23-male-f2"></td>
+              <td id="6_23-male-f3"></td>
+              <td id="6_23-male-f"></td>
+              <td id="6_23-male-g"></td>
+              <td id="6_23-male-h"></td>
+            </tr>
+            <tr>
+              <td>Female</td>
+              <td id="6_23-female-e1"></td>
+              <td id="6_23-female-e2"></td>
+              <td id="6_23-female-e3"></td>
+              <td id="6_23-female-e4"></td>
+              <td id="6_23-female-e"></td>
+              <td id="6_23-female-f1"></td>
+              <td id="6_23-female-f2"></td>
+              <td id="6_23-female-f3"></td>
+              <td id="6_23-female-f"></td>
+              <td id="6_23-female-g"></td>
+              <td id="6_23-female-h"></td>
+            </tr>
+            <tr>
+              <td rowspan="2" class="align-middle">24 - 59 Months</td>
+              <td>Male</td>
+              <td id="24_59-male-e1"></td>
+              <td id="24_59-male-e2"></td>
+              <td id="24_59-male-e3"></td>
+              <td id="24_59-male-e4"></td>
+              <td id="24_59-male-e"></td>
+              <td id="24_59-male-f1"></td>
+              <td id="24_59-male-f2"></td>
+              <td id="24_59-male-f3"></td>
+              <td id="24_59-male-f"></td>
+              <td id="24_59-male-g"></td>
+              <td id="24_59-male-h"></td>
+            </tr>
+            <tr>
+              <td>Female</td>
+              <td id="24_59-female-e1"></td>
+              <td id="24_59-female-e2"></td>
+              <td id="24_59-female-e3"></td>
+              <td id="24_59-female-e4"></td>
+              <td id="24_59-female-e"></td>
+              <td id="24_59-female-f1"></td>
+              <td id="24_59-female-f2"></td>
+              <td id="24_59-female-f3"></td>
+              <td id="24_59-female-f"></td>
+              <td id="24_59-female-g"></td>
+              <td id="24_59-female-h"></td>
+            </tr>
+            <tr>
+              <td colspan="2">Total</td>
+              <td id="total-e1"></td>
+              <td id="total-e2"></td>
+              <td id="total-e3"></td>
+              <td id="total-e4"></td>
+              <td id="total-e"></td>
+              <td id="total-f1"></td>
+              <td id="total-f2"></td>
+              <td id="total-f3"></td>
+              <td id="total-f"></td>
+              <td id="total-g"></td>
+              <td id="total-h"></td>
+            </tr>
+          </table>
+         
+          
+          
+          </div>
+        <table id="tblAdd" class="table table-bordered " hidden></table>
+        <table id="tblExit" class="table table-bordered " hidden></table>
+      </div>
+      <div class="col-sm-12" id="addExitReport"></div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="table-responsive">
+          <table class="table table-sm table-bordered repTitle text-wrap" id="addmisionReport">
+            <tr colspan="24" id="reportMonthT"></tr>
+            <tr class="justify-content-center ">
+              <th colspan="1" rowspan="3" class="align-middle bg-secondary text-white" height="15px">Month</th>
+              <th colspan="12" class="align-middle bg-secondary text-white" height="15px">Addmission</th>
+              <th colspan="11" class="align-middle bg-secondary text-white" height="15px">Exit</th>
+            </tr>
+            <tr class="justify-content-center ">
+              <th rowspan="2" class="align-middle">Age Group</th>
+              <th rowspan="2" class="align-middle">Gender</th>
+              <th rowspan="2" class="align-middle ">Total in OTP beginning of the month (A)</th>
+              <th colspan="2" class="align-middle">Admission (B)</th>
+              <th rowspan="2" class="align-middle">Total New Admission (B=B1+B2)</th>
+              <th colspan="3" class="align-middle">Move In (C)</th>
+              <th rowspan="2" class="align-middle">Relapse After Cure (CC)</th>
+              <th rowspan="2" class="align-middle">Total Moved In (C=C2+C2+C3)</th>
+              <th rowspan="2" class="align-middle">Total In (D=A+B+C+CC)</th>
+              <th colspan="4" class="align-middle">Discharged (E)</th>
+              <th rowspan="2" class="align-middle">Total Discharged (E=E1+E2+E3+E4)</th>
+              <th colspan="3" class="align-middle">Moved Out (F)</th>
+              <th rowspan="2" class="align-middle">Total Moved Out (F=F1+F2+F3)</th>
+              <th rowspan="2" class="align-middle">Total Exit (G=E+F)</th>
+              <th rowspan="2" class="align-middle">Total In OTP end of the month (H=D-G)</th>
+            </tr>
+            <tr>
+              <th class="align-middle">MUAC &lt; 11.5 cm (B1)</th>
+              <th class="align-middle">ODEMA(B2)</th>
+              <th class="align-middle">Return After Default(C1)</th>
+              <th class="align-middle">Transfer from SC (C2)</th>
+              <th class="align-middle">Other (C3)</th>
+              <th class="align-middle">Cured (E1)</th>
+              <th class="align-middle">Death (E2)</th>
+              <th class="align-middle">Defaulter (E3)</th>
+              <th class="align-middle">No Recovered (E4)</th>
+              <th class="align-middle">Medical Transfer (F1)</th>
+              <th class="align-middle">Transfer to In patient (F2)</th>
+              <th class="align-middle">Other (F3)</th>
+            </tr>
+            <tr>
+              <td rowspan="5" id="otpReportMonthCol">JAN</td>
+              <td rowspan="2" class="align-middle">6 - 23 Months</td>
+              <td>Male</td>
+              <td id="m_6_23-male-a"></td>
+              <td id="m_6_23-male-b1"></td>
+              <td id="m_6_23-male-b2"></td>
+              <td id="m_6_23-male-b"></td>
+              <td id="m_6_23-male-c1"></td>
+              <td id="m_6_23-male-c2"></td>
+              <td id="m_6_23-male-c3"></td>
+              <td id="m_6_23-male-cc"></td>
+              <td id="m_6_23-male-c"></td>
+              <td id="m_6_23-male-d"></td>
+              <td id="m_6_23-male-e1"></td>
+              <td id="m_6_23-male-e2"></td>
+              <td id="m_6_23-male-e3"></td>
+              <td id="m_6_23-male-e4"></td>
+              <td id="m_6_23-male-e"></td>
+              <td id="m_6_23-male-f1"></td>
+              <td id="m_6_23-male-f2"></td>
+              <td id="m_6_23-male-f3"></td>
+              <td id="m_6_23-male-f"></td>
+              <td id="m_6_23-male-g"></td>
+              <td id="m_6_23-male-h"></td>
+            </tr>
+            <tr>
+              <td>Female</td>
+              <td id="m_6_23-female-a"></td>
+              <td id="m_6_23-female-b1"></td>
+              <td id="m_6_23-female-b2"></td>
+              <td id="m_6_23-female-b"></td>
+              <td id="m_6_23-female-c1"></td>
+              <td id="m_6_23-female-c2"></td>
+              <td id="m_6_23-female-c3"></td>
+              <td id="m_6_23-female-cc"></td>
+              <td id="m_6_23-female-c"></td>
+              <td id="m_6_23-female-d"></td>
+              <td id="m_6_23-female-e1"></td>
+              <td id="m_6_23-female-e2"></td>
+              <td id="m_6_23-female-e3"></td>
+              <td id="m_6_23-female-e4"></td>
+              <td id="m_6_23-female-e"></td>
+              <td id="m_6_23-female-f1"></td>
+              <td id="m_6_23-female-f2"></td>
+              <td id="m_6_23-female-f3"></td>
+              <td id="m_6_23-female-f"></td>
+              <td id="m_6_23-female-g"></td>
+              <td id="m_6_23-female-h"></td>
+            </tr>
+            <tr>
+              <td rowspan="2" class="align-middle">24 - 59 Months</td>
+              <td>Male</td>
+            <td id="m_24_59-male-a"></td>
+            <td id="m_24_59-male-b1"></td>
+            <td id="m_24_59-male-b2"></td>
+            <td id="m_24_59-male-b"></td>
+            <td id="m_24_59-male-c1"></td>
+            <td id="m_24_59-male-c2"></td>
+            <td id="m_24_59-male-c3"></td>
+            <td id="m_24_59-male-cc"></td>
+            <td id="m_24_59-male-c"></td>
+            <td id="m_24_59-male-d"></td>
+            <td id="m_24_59-male-e1"></td>
+            <td id="m_24_59-male-e2"></td>
+            <td id="m_24_59-male-e3"></td>
+            <td id="m_24_59-male-e4"></td>
+            <td id="m_24_59-male-e"></td>
+            <td id="m_24_59-male-f1"></td>
+            <td id="m_24_59-male-f2"></td>
+            <td id="m_24_59-male-f3"></td>
+            <td id="m_24_59-male-f"></td>
+            <td id="m_24_59-male-g"></td>
+            <td id="m_24_59-male-h"></td>
+            </tr>
+            <tr>
+              <td>Female</td>
+              <td id="m_24_59-female-a"></td>
+              <td id="m_24_59-female-b1"></td>
+              <td id="m_24_59-female-b2"></td>
+              <td id="m_24_59-female-b"></td>
+              <td id="m_24_59-female-c1"></td>
+              <td id="m_24_59-female-c2"></td>
+              <td id="m_24_59-female-c3"></td>
+              <td id="m_24_59-female-cc"></td>
+              <td id="m_24_59-female-c"></td>
+              <td id="m_24_59-female-d"></td>
+              <td id="m_24_59-female-e1"></td>
+              <td id="m_24_59-female-e2"></td>
+              <td id="m_24_59-female-e3"></td>
+              <td id="m_24_59-female-e4"></td>
+              <td id="m_24_59-female-e"></td>
+              <td id="m_24_59-female-f1"></td>
+              <td id="m_24_59-female-f2"></td>
+              <td id="m_24_59-female-f3"></td>
+              <td id="m_24_59-female-f"></td>
+              <td id="m_24_59-female-g"></td>
+              <td id="m_24_59-female-h"></td>
+              
+            </tr>
+            <tr>
+              <td colspan="2">Total</td>
+              <td id="m_total-a"></td>
+              <td id="m_total-b1"></td>
+              <td id="m_total-b2"></td>
+              <td id="m_total-b"></td>
+              <td id="m_total-c1"></td>
+              <td id="m_total-c2"></td>
+              <td id="m_total-c3"></td>
+              <td id="m_total-cc"></td>
+              <td id="m_total-c"></td>
+              <td id="m_total-d"></td>
+              <td id="m_total-e1"></td>
+              <td id="m_total-e2"></td>
+              <td id="m_total-e3"></td>
+              <td id="m_total-e4"></td>
+              <td id="m_total-e"></td>
+              <td id="m_total-f1"></td>
+              <td id="m_total-f2"></td>
+              <td id="m_total-f3"></td>
+              <td id="m_total-f"></td>
+              <td id="m_total-g"></td>
+              <td id="m_total-h"></td>
+            </tr>
+          </table>
+
+         
+          
+          
+          </div>
+        <table id="tblAdd" class="table table-bordered " hidden></table>
+        <table id="tblExit" class="table table-bordered " hidden></table>
+      </div>
+      <div class="col-sm-12" id="addExitReport"></div>
+    </div>
+
+    <!-- <div class="row">
+        <div id="report" class="col col-sm-12 rounded table-responsive-sm"> -->
+    <!-- <ul class="list-group"> -->
+    <!-- <p class="list-group-item align-center text-center h5" style="background-color: lightgray">Screening Summary</p> -->
+    <!-- </ul> -->
+    <!-- <table id="customers" class="table table-bordered rounded table-sm">
+                  <tr>
+                    <th colspan="2">Children</th>
+                    <th>Screening</th>
+                    <th>MUAC
+                      <11.5 cm</th>
+                        <th>MUAC 11.5 - 12.4 cm</th>
+                        <th>PLW</th>
+                        <th>Screening</th>
+                        <th>MUAC
+                          <21 cm</th>
+                  </tr>
+                  <tr rowspan="2">
+                    <th rowspan="2" >Active</th>
+                    <th>Male</th>
+                    <td id="tChildScrActive_M"></td>
+                    <td id="ChildScrActive_M115"></td>
+                    <td id="ChildScrActive_M115124"></td>
+                    <th>Pregnant</th>
+                    <td id="tPlwScrActive_P"></td>
+                    <td id="PlwScrActive_P21"></td>
+                  </tr>
+                  <tr>
+                    <th>Female</th>
+                    <td id="tChildScrActive_F"></td>
+                    <td id="ChildScrActive_F115"></td>
+                    <td id="ChildScrActive_F115124"></td>
+                    <th>Lactating</th>
+                    <td id="tPlwScrActive_L"></td>
+                    <td id="PlwScrActive_L21"></td>
+                  </tr>
+                  <tr rowspan="2">
+                    <th rowspan="2" >Passive</th>
+                    <th>Male</th>
+                    <td id="tChildScrPassive_M"></td>
+                    <td id="ChildScrPassive_M115"></td>
+                    <td id="ChildScrPassive_M115124"></td>
+                    <th>Pregnant</th>
+                    <td id="tPlwScrPassive_P"></td>
+                    <td id="PlwScrPassive_P21"></td>
+                  </tr>
+                  <tr>
+                    <th>Female</th>
+                    <td id="tChildScrPassive_F"></td>
+                    <td id="ChildScrPassive_F115"></td>
+                    <td id="ChildScrPassive_F115124"></td>
+                    <th>Lactating</th>
+                    <td id="tPlwScrPassive_L"></td>
+                    <td id="PlwScrPassive_L21"></td>
+                  </tr>
+                </table>
+                <table id="tblChild" class="table table-bordered " hidden></table>
+                <table id="tblPlw" class="table table-bordered " hidden></table>
+          </div>
+        </div> -->
+  </div>
+</template>

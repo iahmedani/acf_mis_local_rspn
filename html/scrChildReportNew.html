@@ -44,13 +44,13 @@
     </div>
     <form action="#!" id="filterDate" class="col-sm-12">
       <div class="form-group row">
-        <label for="start_date" class="col-sm-1 col-form-label">Start Date:</label>
+        <label for="start_date" class="col-sm-1 col-form-label">Start Month:</label>
         <div class="form-group col-sm-3" id="picYear">
-          <input type="date" name="start_date" id="start_date" class="form-control form-control-sm" disabled required>
+          <input type="month" name="start_date" id="start_date" class="form-control form-control-sm" disabled required>
         </div>
-        <label for="end_date" class="col-sm-1 col-form-label">End Date:</label>
+        <label for="end_date" class="col-sm-1 col-form-label">End Month:</label>
         <div class="form-group col-sm-3" id="picQuarter">
-          <input type="date" name="end_date" id="end_date" disabled class="form-control form-control-sm" required>
+          <input type="month" name="end_date" id="end_date" disabled class="form-control form-control-sm" required>
         </div>
         <div class="form-group col-sm-2 align-self-end">
           <button type="submit" class="btn btn-info btn-sm btn-block form-control shadow-sm" id="showDataScrReport">
@@ -124,8 +124,8 @@
           <td class="text-center" id="total_mnp_sch_fifth"></td>
           <td class="text-center" id="total_mnp_sch_sixth"></td>
           <td class="text-center" id="total_deworming"></td>
-          <td></td>
-          <td></td>
+          <td class="text-center" id="total_followedup"></td>
+          <td class="text-center" id="total_exits"></td>
         </tr>
         <tr>
           <th class="text-center">Boys</th>
@@ -152,8 +152,8 @@
           <td class="text-center" id="fifth_mnp_30_boys"></td>
           <td class="text-center" id="sixth_mnp_30_boys"></td>
           <td class="text-center" id="deworming_boys"></td>
-          <td></td>
-          <td></td>
+          <td class="text-center" id="followedup_boys"></td>
+          <td class="text-center" id="exits_boys"></td>
         </tr>
         <tr>
           <th class="text-center">Girls</th>
@@ -180,8 +180,8 @@
           <td class="text-center" id="fifth_mnp_30_girls"></td>
           <td class="text-center" id="sixth_mnp_30_girls"></td>
           <td class="text-center" id="deworming_girls"></td>
-          <td></td>
-          <td></td>
+          <td class="text-center" id="followedup_girls"></td>
+          <td class="text-center" id="exits_girls"></td>
         </tr>
       </table>
     </div>

@@ -193,18 +193,21 @@ $(function(){
         `);
     }
     if (prog === 'otp' || prog === 'sc'){
-       $('#age option[value="above59"]').attr('disabled', true)
+      $('#age option[value="above59"]').attr('disabled', true)
       $('#age option[value="below_6"]').attr('disabled', false)
-
-       $('#plw_type').attr('disabled', true);
-       $('#muac').attr('max','11.4');
-       $('#muac').attr('min','0');
-       $('#oedema').empty();
+      
+      $('#plw_type').attr('disabled', true);
+      $('#muac').attr('max','11.4');
+      $('#muac').attr('min','0');
+      $('#oedema').empty();
       $('#oedema').append(`<option selected disabled>Choose</option>
-                    <option value="absent">absent</option>
-                    <option value="plus_1">&plus;(1)</option>
-                    <option value="plus_2">&plus;&plus;(2)</option>
-                    <option value="plus_3">&plus;&plus;&plus;(3)</option>`)
+      <option value="absent">absent</option>
+      <option value="plus_1">&plus;(1)</option>
+      <option value="plus_2">&plus;&plus;(2)</option>
+      <option value="plus_3">&plus;&plus;&plus;(3)</option>`)
+                        if(prog === 'otp'){
+                          $('#oedema').val('absent');
+                        }
       $("#nsc_tranfer_from_otp_div").css("display", "none");
       $("#nsc_otp_id").attr("required", false);
       if (prog == 'sc') {

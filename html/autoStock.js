@@ -79,13 +79,13 @@ module.exports.autoStock = function () {
             }
           })
           if (avgItems.length - 1 == w) {
-            console.log(avg)
+            // console.log(avg)
             // $(() => {
             // console.table(avg)
             var newReq = avg.filter(_el => _el.precent <= 25);
-            console.log({msg:'New Req', els: newReq.length})
+            // console.log({msg:'New Req', els: newReq.length})
             if (newReq.length > 0) {
-              $('#btnStockRequest').attr("hidden",false)
+              $('#btnStockRequest').attr("hidden",true)
             }
             $(() => {
               if ($.fn.DataTable.isDataTable("#example")) {
@@ -112,7 +112,7 @@ module.exports.autoStock = function () {
                 data: test,
                 dom: 'Bfrtip',
                 buttons: [
-                  'copy', 'csv', 'excel'
+                  'copy', { extend:'csv', title:`Stock Movement Report_${Date.now()}`}, {extend:'excel', title:`Stock Movement Report_${Date.now()}`}
                 ],
                 columns: [
                   { title: "Year", data: 'year' },
@@ -262,5 +262,6 @@ module.exports.autoStock = function () {
        
       }
     })
+    ipc.removeAllListeners('stocks')
   })
 }

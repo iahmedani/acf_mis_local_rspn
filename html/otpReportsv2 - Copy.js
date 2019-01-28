@@ -1,51 +1,5 @@
-// var async = require('async');
-const {knex} = require('../dbTest');
+var async = require('async');
 module.exports.initOtpReportsV2 = function () {
-  var ddReportType = $('#reportType');
-  $('#singles').hide();
-
-  ddReportType.on('change', (e)=>{
-    var strDate = $('#strDateDiv')
-    var endDate = $('#endDateDiv')
-    var btn = $('#btnIntervalDiv')
-    var rptDate = $('#rptMonthDiv')
-    // var exp = $('#btnExportDiv')
-    var show = $('#btnShowDiv')
-    var table = $('#addmisionReport')
-    var tableInerval = $('#myId')
-    if(ddReportType.val() == 'interval'){
-      strDate.css('display', '')
-      endDate.css('display', '')
-      btn.css('display', '')
-      rptDate.css('display', 'none')
-      // exp.css('display', 'none')
-      show.css('display', 'none')
-      table.css('display', 'none')
-      tableInerval.css('display', '')
-      $('#startMonth').attr('required', true)
-      $('#endMonth').attr('required', true)
-      $('#report_month').attr('required', false)
-
-      
-    } else {
-      strDate.css('display', 'none')
-      endDate.css('display', 'none')
-      btn.css('display', 'none')
-      tableInerval.css('display', 'none')
-      rptDate.css('display', '')
-      // exp.css('display', '')
-      show.css('display', '')
-      table.css('display', '')
-      $('#startMonth').attr('required', false)
-      $('#endMonth').attr('required', false)
-      $('#report_month').attr('required', true)
-      // $('#example').DataTable().destroy();
- 
-      // table1
-// $('#tableDestroy').on( 'click', function () {
-// } );
-    }
-  })
   ipc.send("getProvince");
   ipc.on("province", function(evt, province) {
     $("#ddProvince")
@@ -102,24 +56,14 @@ module.exports.initOtpReportsV2 = function () {
   $("#showAddExitReport").on("click", function(e) {
     e.preventDefault();
     ipc.send("getReport", prepareQry());
-    $('#tblMonthCol').empty()
-    $('#tblMonthCol').text($('#report_month').val())
-    $('#reportMonthT').empty();
-    $('#reportMonthT').text(`Province:${$('#ddProvince option:selected').text()},District:${$('#ddDistrict option:selected').text()},Tehsil:${$('#ddTehsil option:selected').text()},UC:${$('#ddUC option:selected').text()},Reporting Site:${$('#ddHealthHouse option:selected').text()}`);
     ipc.on("getReport", (e, data) => {
       myPushData(data);
-    //   $('#DataTable').DataTable( {
-    //     dom: 'Bfrtip',
-    //     buttons: [
-    //         'copy', 'csv', 'excel'
-    //     ]
-    // } );
       // $("#addExitSummary td:empty").each(function(el, y) {
       //   $(y).text("0");
       // });
       // createTblAdd(data.addTable, "tblAdd");
       // createTblExit(data.exitTable, "tblExit");
-      ipc.removeAllListeners('getReport');
+      ipc.removeAllListener('getReport');
     });
   });
   
@@ -530,484 +474,156 @@ module.exports.initOtpReportsV2 = function () {
 
   function prepareQry() {
     var qry = {};
-    $("#ddProvince").val() ? (qry.province_id = $("#ddProvince").val()) : qry.province_id= "";
-    $("#ddDistrict").val() ? (qry.district_id = $("#ddDistrict").val()) : qry.district_id = "";
-    $("#ddTehsil").val() ? (qry.tehsil_id = $("#ddTehsil").val()) : qry.tehsil_id = "";
-    $("#ddUc").val() ? (qry.uc_id = $("#ddTehsil").val()) : qry.uc_id = "";
-    $("#ddHealthHouse").val() ? (qry.site_id = $("#ddHealthHouse").val()) : qry.site_id= "";
-    $("#report_month").val() ? (qry.report_month = $("#report_month").val())  : qry.report_month ="";
+    // $("#ddProvince").val() ? (qry.province_id = $("#ddProvince").val()) : "";
+    // $("#ddDistrict").val() ? (qry.district_id = $("#ddDistrict").val()) : "";
+    // $("#ddTehsil").val() ? (qry.tehsil_id = $("#ddTehsil").val()) : "";
+    $("#ddHealthHouse").val() ? (qry.site_id = $("#ddHealthHouse").val()) : "";
+    $("#report_month").val() ? (qry.report_month = $("#report_month").val())  : "";
     // $("#prog_type").val() ? (qry.prog_type = $("#ddProgramType").val()) : "";
     // console.log(qry);
     return qry;
   }
-  function prepareQryInterval() {
-    var qry = {};
-    $("#ddProvince").val() ? (qry.province_id = $("#ddProvince").val()) : qry.province_id= "";
-    $("#ddDistrict").val() ? (qry.district_id = $("#ddDistrict").val()) : qry.district_id = "";
-    $("#ddTehsil").val() ? (qry.tehsil_id = $("#ddTehsil").val()) : qry.tehsil_id = "";
-    $("#ddUc").val() ? (qry.uc_id = $("#ddTehsil").val()) : qry.uc_id = "";
-    $("#ddHealthHouse").val() ? (qry.site_id = $("#ddHealthHouse").val()) : qry.site_id="";
-    $("#startMonth").val() ? (qry.startMonth = $("#startMonth").val())  : qry.startMonth="";
-    $("#endMonth").val() ? (qry.endMonth = $("#endMonth").val())  : qry.endMonth = "";
-    // $("#prog_type").val() ? (qry.prog_type = $("#ddProgramType").val()) : "";
-    // console.log(qry);
-    // if(qry.startMonth == ""|| qry.endMonth ==""){
 
-    // }
-    return qry;
+  function createTblExit(data, table) {
+    var head = [
+      "OTP_id",
+      "Province",
+      "District",
+      "Tehsil",
+      "UC",
+      "Nutrition Site",
+      "Village",
+      "Name",
+      "Father Name",
+      "Gender",
+      "Registration No",
+      "Admission Date",
+      "Exit Date",
+      "Exit Reason"
+    ];
+
+    var keys = [
+      "otp_id",
+      "province",
+      "district_name",
+      "tehsil_name",
+      "uc_name",
+      "site_name",
+      "site_village",
+      "p_name",
+      "f_or_h_name",
+      "gender",
+      "reg_id",
+      "reg_date",
+      "exit_date",
+      "exit_reason"
+    ];
+    var html = "<tr>";
+    head.forEach(el => {
+      html += "<th>" + el + "</th>";
+    });
+    html += "</tr>";
+    data.forEach(el => {
+      html += "<tr>";
+      keys.forEach(key => {
+        html += "<td>" + el[key] + "</td>";
+      });
+      html += "</tr>";
+    });
+    // console.log(html);
+    $("#" + table).empty();
+    $("#" + table).append(html);
   }
 
-  // function toArrayData(data, month){
-  //   var returnData = [];
+  function createTblAdd(data, table) {
+    var head = [
+      "OTP_id",
+      "Province",
+      "District",
+      "Tehsil",
+      "UC",
+      "Nutrition Site",
+      "Village",
+      "Name",
+      "Father Name",
+      "Contact Number",
+      "Addmision Date",
+      "Gender",
+      "Age",
+      "Address",
+      "Admision Reason",
+      "Refferal Type",
+      "Oedema",
+      "MUAC",
+      "Weight",
+      "Height",
+      "Diarrhoea",
+      "Vomiting",
+      "Cough",
+      "Appetite",
+      "Daily Stool",
+      "Urine",
+      "Breast Feeding"
+    ];
+    var keys = [
+      "otp_id",
+      "province",
+      "district_name",
+      "tehsil_name",
+      "uc_name",
+      "site_name",
+      "site_village",
+      "p_name",
+      "f_or_h_name",
+      "cnt_number",
+      "reg_date",
+      "gender",
+      "age",
+      "address",
+      "ent_reason",
+      "ref_type",
+      "oedema",
+      "muac",
+      "weight",
+      "height",
+      "diarrhoea",
+      "vomiting",
+      "cough",
+      "appetite",
+      "daily_stool",
+      "pass_urine",
+      "b_Feeding"
+    ];
 
-
-  // }
-  function monthDiff(d1, d2) {
-    var months;
-    months = (d2.getFullYear() - d1.getFullYear()) * 12;
-    months -= d1.getMonth();
-    months += d2.getMonth();
-    return months <= 0 ? 0 : months+1;
-  }
- 
-  function prepareMonth (start, end, cb){
-    // console.log(start, end)
-    // return new Promise(resolve =>{
-      var x = [];
-      var totalMonth = monthDiff(new Date(start), new Date(end)) 
-      // console.log(totalMonth)
-      if(totalMonth == 0){
-        cb(0)
-      } else {
-
-        var i = 0;
-        while (i < totalMonth){
-          var dt = new Date(start);
-          dt.setMonth( dt.getMonth() + i)
-          x.push(`${dt.getFullYear()+ '-' + (dt.getMonth() < 9 ? '0'+(dt.getMonth()+1) : dt.getMonth()+1) }`)
-          i ++;
-          // console.log(i)
-          if( totalMonth -1 == i){
-            // console.log(x)
-            cb(null, x)
-          }
+    var yN = ["No", "Yes"];
+    var html = "<tr>";
+    head.forEach(el => {
+      html += "<th>" + el + "</th>";
+    });
+    html += "</tr>";
+    data.forEach(el => {
+      html += "<tr>";
+      keys.forEach(key => {
+        if (
+          key === "diarrhoea" ||
+          key === "vomiting" ||
+          key === "cough" ||
+          key === "pass_uring" ||
+          key === "b_Feeding"
+        ) {
+          html += "<td>" + yN[el[key]] + "</td>";
+        } else {
+          html += "<td>" + el[key] + "</td>";
         }
-      }
-    
-    // })
-    // console.log(totalMonth)  
+      });
+      html += "</tr>";
+    });
+    // console.log(html);
+    $("#" + table).empty();
+    $("#" + table).append(html);
   }
-  let prepareMonthPromise = (start, end)=>{
-    return new Promise((resolve, reject)=>{
-      prepareMonth(start, end, (err, test)=>{
-        if(err){
-          reject()
-        }else{
-          resolve(test)
-        }
-      })
-    })
-  }
-
-
-
-  async function IntervalReportData(qry, month){
-    var last = await  knex("v_otpNotExitInterval")
-                      .select('age_group', 'gender')
-                      .count({ a: 'otp_id' })
-                      .where('reg_date', '<', month)
-                      .where('site_id', 'like', `%${qry.site_id}%`)
-                      .where('province_id', 'like', `%${qry.province_id}%`)
-                      .where('district_id', 'like', `%${qry.district_id}%`)
-                      .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
-                      .where('uc_id', 'like', `%${qry.uc_id}%`)
-                      .groupBy("age_group", "gender")
-
-  var otpAdd = await knex("v_otpAddInterval")
-  .select(knex.raw(`(case when age > 23 then '24_59' when age <24 then '6_23' end) as age_group,
-gender,
-count(case when muac < 11.5  and ent_reason = 'no_prv_pro' then 1 end) as b1,  
-count(case when oedema <> 'absent' and ent_reason = 'no_prv_pro' then 1 end) as b2,
-( count(case when muac < 11.5  and ent_reason = 'no_prv_pro' then 1 end) + count(case when oedema <> 'absent' and ent_reason = 'no_prv_pro' then 1 end)) as b,
-count(case when ent_reason = 'return_def' then 1 end) as c1,
-count(case when ent_reason = 'transfer_in_from_nsc' then 1 end) as c2,
-count(case when (ent_reason <> 'transfer_in_from_nsc' and  ent_reason <> 'return_def') and ent_reason <> 'relapse' and ent_reason = 'no_prv_pro' then 1 end) as c3,
-count(case when ent_reason = 'relapse' then 1 end) as cc,
-(  count(case when ent_reason = 'return_def' then 1 end) + count(case when ent_reason = 'transfer_in_from_nsc' then 1 end) + count(case when ent_reason <> 'transfer_in_from_nsc' and  ent_reason <> 'return_def' and ent_reason <> 'relapse' and ent_reason = 'no_prv_pro' then 1 end) )  as c,
-(( count(case when muac < 11.5  and ent_reason = 'no_prv_pro' then 1 end) + count(case when oedema <> 'absent' and ent_reason = 'no_prv_pro' then 1 end)) + (count(case when ent_reason = 'relapse' then 1 end)) + (count(case when ent_reason = 'return_def' then 1 end) + count(case when ent_reason = 'transfer_in_from_nsc' then 1 end) + count(case when ent_reason <> 'transfer_in_from_nsc' and  ent_reason <> 'return_def' and ent_reason <> 'relapse' and ent_reason = 'no_prv_pro' then 1 end))) as d`))
-  .where("reg_date", "like", `${month}%`)
-  .where('site_id', 'like', `%${qry.site_id}%`)
-  .where('province_id', 'like', `%${qry.province_id}%`)
-  .where('district_id', 'like', `%${qry.district_id}%`)
-  .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
-  .where('uc_id', 'like', `%${qry.uc_id}%`)
-  .groupBy("age_group", "gender")
-
-  // console.log(otpAdd)
-
-var otpExit = await  knex('v_exitOtpReportInterval')
-.select(knex.raw(`(case when age > 23 then '24_59' when age <24 then '6_23' end) as age_group,
-gender,
-count(case when exit_reason = 'cured' then 1 end) as e1,
-count(case when exit_reason = 'death' then 1 end) as e2,
-count(case when exit_reason = 'defaulter' then 1 end) as e3,
-count(case when exit_reason = 'non_respondent' then 1 end) as e4,
-(count(case when exit_reason = 'cured' then 1 end)+ count(case when exit_reason = 'death' then 1 end) + count(case when exit_reason = 'defaulter' then 1 end) + count(case when exit_reason = 'non_respondent' then 1 end)) as e,
-count(case when exit_reason = 'medical_transfer' then 1 end) as f1,
-count(case when exit_reason = 'medical_transfer_sc' then 1 end) as f2,
-count(case when exit_reason <> 'cured' and exit_reason <> 'death' and exit_reason <> 'defaulter' and exit_reason <> 'non_respondent' and exit_reason <> 'medical_transfer' and exit_reason <> 'medical_transfer_sc' then 1 end) as f3,
-(count(case when exit_reason = 'medical_transfer' then 1 end) + count(case when exit_reason = 'medical_transfer_sc' then 1 end) + count(case when exit_reason <> 'cured' and exit_reason <> 'death' and exit_reason <> 'defaulter' and exit_reason <> 'non_respondent' and exit_reason <> 'medical_transfer' and exit_reason <> 'medical_transfer_sc' then 1 end)) as f,
-((count(case when exit_reason = 'medical_transfer' then 1 end) + count(case when exit_reason = 'medical_transfer_sc' then 1 end) + count(case when exit_reason <> 'cured' and exit_reason <> 'death' and exit_reason <> 'defaulter' and exit_reason <> 'non_respondent' and exit_reason <> 'medical_transfer' and exit_reason <> 'medical_transfer_sc' then 1 end)) +(count(case when exit_reason = 'cured' then 1 end)+ count(case when exit_reason = 'death' then 1 end) + count(case when exit_reason = 'defaulter' then 1 end) + count(case when exit_reason = 'non_respondent' then 1 end))) as g `))
-.where("exit_date", "like", `${month}%`)
-.where('site_id', 'like', `%${qry.site_id}%`)
-  .where('province_id', 'like', `%${qry.province_id}%`)
-  .where('district_id', 'like', `%${qry.district_id}%`)
-  .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
-  .where('uc_id', 'like', `%${qry.uc_id}%`)         
-.groupBy('age_group', 'gender')
-// console.log(last, otpAdd, otpExit)
-    return ({
-      month,
-      last,
-      otpAdd,
-      otpExit
-    }
-    )
-}
-
-async function reFormateArray(data, cb){
-  var intervalData = await IntervalReportData();
-  console.log(intervalData)
-}
-  async function runReport (qry){
-  //  console.log(qry)
-   var months = await prepareMonthPromise(qry.startMonth, qry.endMonth)
-   console.log(months)
-  
- }
-
-async function SingleEntriesMonthly (qry){
-  const addDataSingle = await knex('v_otpAdd_full')
-  .where('site_id', 'like', `%${qry.site_id}%`)
-  .where('province_id', 'like', `%${qry.province_id}%`)
-  .where('district_id', 'like', `%${qry.district_id}%`)
-  .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
-  .where('uc_id', 'like', `%${qry.uc_id}%`)
-  .where('reg_date', 'like', `%${qry.report_month}%`)
-  const exitDataSingle = await knex('v_otpExit_full')
-  .where('site_id', 'like', `%${qry.site_id}%`)
-  .where('province_id', 'like', `%${qry.province_id}%`)
-  .where('district_id', 'like', `%${qry.district_id}%`)
-  .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
-  .where('uc_id', 'like', `%${qry.uc_id}%`)
-  .where('exit_date', 'like', `%${qry.report_month}%`)
-
-  return {addDataSingle, exitDataSingle}
-}
-async function SingleEntriesInterval (qry){
-  // console.log(qry)
-  $('#otpReportFilerForm').validate();
-  if($('#otpReportFilerForm').valid()){
-    try {
-      const addDataSingle = await knex('v_otpAdd_full')
-      .where('site_id', 'like', `%${qry.site_id}%`)
-      .where('province_id', 'like', `%${qry.province_id}%`)
-      .where('district_id', 'like', `%${qry.district_id}%`)
-      .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
-      .where('uc_id', 'like', `%${qry.uc_id}%`)
-      .whereBetween('reg_date',[qry.startMonth, qry.endMonth])
-      // .where('reg_date', 'like', `%${qry.report_month}%`)
-      const exitDataSingle = await knex('v_otpExit_full')
-      .where('site_id', 'like', `%${qry.site_id}%`)
-      .where('province_id', 'like', `%${qry.province_id}%`)
-      .where('district_id', 'like', `%${qry.district_id}%`)
-      .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
-      .where('uc_id', 'like', `%${qry.uc_id}%`)
-      .whereBetween('reg_date',[qry.startMonth, qry.endMonth])
-      // console.log({addDataSingle, exitDataSingle})
-     return {addDataSingle, exitDataSingle}
-
-    } catch (error) {
-      console.log(error)
-    } 
-  }else{
-    
-  }
-}
-
-function prepareDataForTable (data, cb){
-  // console.log(data)
-  // var lines = 4;
-  var genders =['male', 'female'];
-  var age_groups = ['6_23', '24_59'];
-  // var totalMonths = data.length;
-  var y = [];
-  if(data.length == 0){
-    cb(0)
-  }else {
-    for ( month of data){
-      var last = month.last;
-      var otpAdd = month.otpAdd;
-      var otpExit = month.otpExit;
-      for (age of age_groups){
-        for(gender of genders){
-          var z = {};
-          z.month = month.month;
-          z.age_group = age;
-          z.gender = gender;
-          if(last.length > 0){
-            var newLast = last.filter(el=> el.gender == gender && el.age_group == age)[0];
-            if(newLast){
-              z.a = newLast.a;
-            } else {
-              z.a =0;
-            }
-          } else {
-            z.a =0;
-          }
-  
-          if(otpAdd.length > 0){
-            var newOtp = otpAdd.filter(el=> el.gender == gender && el.age_group == age)[0];
-            // console.log(newOtp)
-            if(newOtp){
-              z.b=newOtp.b,
-              z.b1=newOtp.b1
-              z.b2=newOtp.b2
-              z.c=newOtp.c
-              z.c1=newOtp.c1
-              z.c2=newOtp.c2
-              z.c3=newOtp.c3
-              z.cc=newOtp.cc
-              z.d=newOtp.d
-            }else {
-              z.b=0,
-              z.b1=0
-              z.b2=0
-              z.c=0,
-              z.c1=0,
-              z.c2=0,
-              z.c3=0,
-              z.cc=0,
-              z.d=0  
-            }  
-          } else {
-            z.b=0,
-            z.b1=0
-            z.b2=0
-            z.c=0,
-            z.c1=0,
-            z.c2=0,
-            z.c3=0,
-            z.cc=0,
-            z.d=0 
-  
-          }  
-          if(otpExit.length > 0 ){
-            var newExit = otpAdd.filter(el=> el.gender == gender && el.age_group == age)[0];
-            if(newExit){
-              z.e = newExit.e;
-              z.e1 = newExit.e1;
-              z.e2 = newExit.e2;
-              z.e3 = newExit.e3;
-              z.e4 = newExit.e4;
-              z.f = newExit.f;
-              z.f1 = newExit.f1;
-              z.f2 = newExit.f2;
-              z.f3 = newExit.f3;
-              z.g = newExit.g
-            }else{
-              z.e  = 0;
-              z.e1 = 0;
-              z.e2 = 0;
-              z.e2 = 0;
-              z.e3 = 0;
-              z.e4 = 0;
-              z.f  = 0;
-              z.f1 = 0;
-              z.f2 = 0;
-              z.f3 = 0;
-              z.g  = 0;
-            }
-           }else{
-            z.e  = 0;
-            z.e1 = 0;
-            z.e2 = 0;
-            z.e2 = 0;
-            z.e3 = 0;
-            z.e4 = 0;
-            z.f  = 0;
-            z.f1 = 0;
-            z.f2 = 0;
-            z.f3 = 0;
-            z.g  = 0;
-          }
-          y.push(z)
-        }
-      }
-      if(y.length / 4 == data.length){
-        cb(null, y);
-      }
-    }
-  } 
-  
-}
-
-function prepareDataForTablePromise (data){
-  return new Promise((resolve, reject)=>{
-    prepareDataForTable(data, (err, data)=>{
-      if(err){
-        reject()
-      }else{
-        resolve(data);
-      }
-    })
-  })
-}
-
-const singleTables = (data)=>{
-  if ( $.fn.DataTable.isDataTable('#tblAdd') ) {
-    $('#tblAdd').DataTable().destroy();
-  }
-  $('#tblAdd tbody').empty();
-  $('#tblAdd').DataTable({
-    data :data.addDataSingle,
-    "scrollY": 380,
-    "scrollX": true,
-    columns:[
-      {title:'Province', data:'province'},
-      {title:'District', data:'district_name'},
-      {title:'Tehsil', data:'tehsil_name'},
-      {title:'UC', data:'uc_name'},
-      {title:'Site Name', data:'site_name'},
-      {title:'Registration Date', data:'reg_date'},
-      {title:'Registration ID', data:'reg_id'},
-      {title:'Name', data:'p_name'},
-      {title:'Age', data:'age'},
-      {title:'Gender', data:'gender'},
-      {title:'Father/Husband Name', data:'f_or_h_name'},
-      {title:'CNIC', data:'cnic'},
-      {title:'Contact Number', data:'cnt_number'},
-      {title:'Address', data:'address'},
-      {title:'Entry Reason', data:'ent_reason'},
-      {title:'Referral Type', data:'ref_type'},
-      {title:'Oedema', data:'oedema'},
-      {title:'MUAC', data:'muac'},
-      {title:'Weight', data:'weight'},
-      {title:'Height', data:'height'},
-      {title:'Diarrhoea', data:'diarrhoea'},
-      {title:'vomiting', data:'vomiting'},
-      {title:'cough', data:'cough'},
-      {title:'Appetite', data:'appetite'},
-      {title:'Daily Stool', data:'daily_stool'},
-      {title:'Urine', data:'pass_urine'},
-      {title:'Breast Fed', data:'b_Feeding'}
-    ]
-  })
-
-  if ( $.fn.DataTable.isDataTable('#tblExit') ) {
-    $('#tblExit').DataTable().destroy();
-  }
-  $('#tblExit tbody').empty();
-  $('#tblExit').DataTable({
-    data : data.exitDataSingle,
-    "scrollY": 380,
-    "scrollX": true,
-    columns:[
-      {title:'Province', data:'province'},
-      {title:'District', data:'district_name'},
-      {title:'Tehsil', data:'tehsil_name'},
-      {title:'UC', data:'uc_name'},
-      {title:'Site Name', data:'site_name'},
-      {title:'Exir Date', data:'reg_date'},
-      {title:'Registration Date', data:'reg_date'},
-      {title:'Registration ID', data:'reg_id'},
-      {title:'Name', data:'p_name'},
-      {title:'Gender', data:'gender'},
-      {title:'Father/Husband Name', data:'f_or_h_name'},
-      {title:'Exit Reason', data:'exit_reason'}
-    ]
-  })
-}
-
-
-
-
-$('#exportScrChReportInterval').on('click', async (e)=>{
-  var qry = prepareQryInterval()
-  var singleData = await SingleEntriesInterval(qry);
-  singleTables(singleData);
-  // console.log(singleData)
-    var x = await prepareMonthPromise(qry.startMonth, qry.endMonth);
-    var g = [];
-    for (i of x){
-      var a = await IntervalReportData(qry, i)
-      g.push(a);
-      // console.log(g)
-      if(x.length == g.length){
-        const tableData = await prepareDataForTablePromise(g);
-        // console.log(tableData)
-
-        if ( $.fn.DataTable.isDataTable('#example') ) {
-          $('#example').DataTable().destroy();
-        }
-        $('#example tbody').empty();
-        $('#example').DataTable( {
-          data:tableData,
-          dom: 'Bfrtip',
-                buttons: [
-                  'copy', { extend:'csv', title:`OTP Addministion and Exit Report_${Date.now()}`}, {extend:'excel', title:`OTP Addministion and Exit Report_${Date.now()}`}
-                ],
-                "scrollY": 380,
-        "scrollX": true,
-          columns:[
-            {title: 'Month', data:'month'},
-            {title: 'Age Group', data:null, render: function(data, type, row){
-              return ((data.age_group == '6_23'? '6-23 Months': '24-59 Months'))
-            }},
-            {title:'Gender', data:null, render: function(data, type, row){
-              return data.gender.toUpperCase();
-            }},
-            {title: `Total in OTP beginning of the month (A)`, data:'a'},
-            {title: `MUAC < 11.5 cm (B1)`, data:'b1'},
-            {title: `ODEMA(B2)`, data:'b2'},
-            {title: 'Total New Admission (B=B1+B2)', data:'b'},
-            {title: 'Return After Default(C1)', data:'c1'},
-            {title: 'Transfer from SC (C2)', data:'c2'},
-            {title: 'Other (C3)', data:'c3'},
-            {title: 'Relapse After Cure (CC)', data:'cc'},
-            {title: 'Total Moved In (C=C2+C2+C3)', data:'c3'},
-            {title: 'Total In (D=A+B+C+CC)', data:null, render: function(data, type, row){
-              return (data.a + data.d)
-            }},
-            {title: 'Cured (E1)', data:'e1'},
-            {title: 'Death (E2)', data:'e2'},
-            {title: 'Defaulter (E3)', data:'e3'},
-            {title: 'No Recovered (E4)', data:'e4'},
-            {title: 'Total Discharged (E=E1+E2+E3+E4)', data:'e'},
-            {title: 'Medical Transfer (F1)', data:'f1'},
-            {title: 'Transfer to In patient (F2)', data:'f2'},
-            {title: 'Other (F3)', data:'f3'},
-            {title: 'Total Moved Out (F=F1+F2+F3)', data:'f'},
-            {title: 'Total Exit (G=E+F)', data:'g'},
-            {title: 'Total In OTP end of the month (H=D-G)', data:null, render:function(data, type, row){
-              // console.log(data);
-              return ((data.a + data.d) - data.g) 
-            }},
-          ]
-      } );
-        // mydataTable.clear().draw();
-      }
-    }
-   
-})
-
-
-
-
-  $("#exportScrChReport").on("click", async (e) => {
+  $("#exportScrChReport").on("click", e => {
     e.preventDefault();
-    const monthlySingleData = await SingleEntriesMonthly(prepareQry())
-    singleTables(monthlySingleData)
     export_xlsx();
   });
   var XLSX = require("xlsx");
@@ -1020,15 +636,15 @@ $('#exportScrChReportInterval').on('click', async (e)=>{
     );
     return function() {
       var addExitReport = XLSX.utils.book_new();
-      var addExitSumary = ($('#reportType').val() == 'monthly')? XLSX.utils.table_to_sheet(document.getElementById("addmisionReport")) : XLSX.utils.table_to_sheet(document.getElementById("example"))
-      XLSX.utils.book_append_sheet(addExitReport, addExitSumary, "Summary");
+      var addExitSumary = XLSX.utils.table_to_sheet(document.getElementById("addmisionReport"));
+      XLSX.utils.book_append_sheet(addExitReport, addExitSumary, "Addmision");
       // console.log(addExitSumary);
 
       /* convert table 'table2' to worksheet named "Sheet2" */
-      var Addmissions = XLSX.utils.table_to_sheet(document.getElementById("tblAdd"));
-      XLSX.utils.book_append_sheet(addExitReport, Addmissions, "Addmisions");
-      var Exits = XLSX.utils.table_to_sheet(document.getElementById("tblExit"));
-      XLSX.utils.book_append_sheet(addExitReport, Exits, "Exits");
+      var Addmissions = XLSX.utils.table_to_sheet(document.getElementById("exitReport"));
+      XLSX.utils.book_append_sheet(addExitReport, Addmissions, "Exit");
+      // var Exits = XLSX.utils.table_to_sheet(document.getElementById("tblExit"));
+      // XLSX.utils.book_append_sheet(addExitReport, Exits, "Exits");
       // var wb = XLSX.utils.table_to_book(HTMLOUT);
       var o = electron.dialog.showSaveDialog({
         title: "Save file as",

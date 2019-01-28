@@ -52,7 +52,7 @@ module.exports.StaffList = function () {
       // supervisors = data;
       ipc.send("geoList");
       ipc.on("geoList", (evt, data) => {
-        console.log(data);
+        // console.log(data);
         var _staff = staff;
         var province = data.province;
         var district = data.district;
@@ -67,14 +67,16 @@ module.exports.StaffList = function () {
           uc,
           site
         })
+        ipc.removeAllListeners("geoList")
       });
+      ipc.removeAllListeners("stafflist")
     });
     // })
   }
   function initStaffListGrid() {
     _staffList((x, result) => {
-      console.log(result);
-      console.log(result)
+      // console.log(result);
+      // console.log(result)
       var _staffData = {
         loadData: function (filter) {
           return $.grep(result._staff, function (client) {
@@ -206,7 +208,7 @@ module.exports.StaffList = function () {
     $("#staffForm").validate();
     if ($("#staffForm").valid()) {
       var supData = $("#staffForm").serializeFormJSON();
-      console.log(supData);
+      // console.log(supData);
       ipc.send("addStaff", supData);
       ipc.removeAllListeners("addStaff");
       $("#staffForm")

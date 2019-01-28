@@ -140,12 +140,12 @@ module.exports.initScrPlwNewUpd = function () {
       return new Promise((resolve, reject) => {
         ipc.send("allScrPlw", filter);
         ipc.on("allScrPlw", (e, result) => {
-          console.log(result);
-          var s = { data: result.result.data, itemsCount: result.result.itemsCount[0].total };
+          // console.log(result);
           if (result.err) {
             reject(result.err);
             ipc.removeAllListeners("allScrPlw");
           } else {
+            var s = { data: result.result.data, itemsCount: result.result.itemsCount[0].total };
             resolve(s);
             ipc.removeAllListeners("allScrPlw");
           }
@@ -164,7 +164,7 @@ module.exports.initScrPlwNewUpd = function () {
             $("#jsGrid")
               .jsGrid("render")
               .done(function () {
-                console.log("rendering completed and data loaded");
+                // console.log("rendering completed and data loaded");
               });
             $('#scrPlwNewUpdForm').get(0).reset();
             $("#scrPlwNewUpdForm select").val('');
@@ -392,7 +392,7 @@ module.exports.initScrPlwNewUpd = function () {
     $('#scrPlwNewUpdForm').validate();
     if ($('#scrPlwNewUpdForm').valid()) {
       var scrPlwNewUpdData = $('#scrPlwNewUpdForm').serializeFormJSON();
-      console.log(scrPlwNewUpdData);
+      // console.log(scrPlwNewUpdData);
       ipc.send('scrPlwNewUpd', scrPlwNewUpdData);
       ipc.removeAllListeners('scrPlwNewUpd');
       $('#scrPlwNewUpdForm').get(0).reset();
@@ -400,7 +400,7 @@ module.exports.initScrPlwNewUpd = function () {
       $("#scrPlwNewUpdForm select").val('');
 
       $('#jsGrid').jsGrid("render").done(() => {
-        console.log('js grid rendered')
+        // console.log('js grid rendered')
       })
     }
     e.preventDefault();

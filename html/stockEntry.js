@@ -3,7 +3,7 @@ module.exports.stockEntry = function () {
     var datePickerId = document.getElementById('dn_date');
     datePickerId.max = new Date().toISOString().split("T")[0];
   });
-  console.log('stock Entry')
+  // console.log('stock Entry')
   var data = [];
   let myInsert = (item) => {
     return new Promise((resolve, reject) => {

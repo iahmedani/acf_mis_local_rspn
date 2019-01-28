@@ -2,7 +2,8 @@ var knex = require("knex")({
   client: "sqlite3",
   connection: {
     filename: "acf_mis_local.sqlite3"
-  }
+  },
+  useNullAsDefault:true,
 });
 
 module.exports.test = function(cond, cb) {
@@ -18,7 +19,7 @@ module.exports.test = function(cond, cb) {
       console.log(err);
     });
 };
-
+module.exports.knex = knex;
 module.exports.scrSummary = function(cond, callback) {
   console.log(cond);
 
@@ -606,7 +607,9 @@ module.exports.scrChildReport = function(cond, callback) {
       sum(fourth_mnp_30_girls + fourth_mnp_30_boys) as total_mnp_sch_fourth,
       sum(fifth_mnp_30_girls + fifth_mnp_30_boys) as total_mnp_sch_fifth,
       sum(sixth_mnp_30_girls + sixth_mnp_30_boys) as total_mnp_sch_sixth,
-    sum(deworming_girls + deworming_boys) as total_deworming`)
+    sum(deworming_girls + deworming_boys) as total_deworming,
+    sum(followedup_boys + followedup_girls) as total_followedup,
+    sum(exits_boys + exits_girls) as total_exits`)
       )
       .from("v_tblScrChildrenFull")
       .sum({
@@ -746,6 +749,18 @@ module.exports.scrChildReport = function(cond, callback) {
       })
       .sum({
         deworming_girls: "deworming_girls"
+      })
+      .sum({
+        followedup_boys: "followedup_boys"
+      })
+      .sum({
+        followedup_girls: "followedup_girls"
+      })
+      .sum({
+        exits_boys: "exits_boys"
+      })
+      .sum({
+        exits_girls: "exits_girls"
       })
       .then(result => {
         callback(null, result);
@@ -778,7 +793,9 @@ module.exports.scrChildReport = function(cond, callback) {
     sum(fourth_mnp_30_girls + fourth_mnp_30_boys) as total_mnp_sch_fourth,
     sum(fifth_mnp_30_girls + fifth_mnp_30_boys) as total_mnp_sch_fifth,
     sum(sixth_mnp_30_girls + sixth_mnp_30_boys) as total_mnp_sch_sixth,
-  sum(deworming_girls + deworming_boys) as total_deworming`)
+  sum(deworming_girls + deworming_boys) as total_deworming,
+    sum(followedup_boys + followedup_girls) as total_followedup,
+    sum(exits_boys + exits_girls) as total_exits`)
       )
       .from("v_tblScrChildrenFull")
       .sum({
@@ -919,6 +936,18 @@ module.exports.scrChildReport = function(cond, callback) {
       .sum({
         deworming_girls: "deworming_girls"
       })
+      .sum({
+        followedup_boys: "followedup_boys"
+      })
+      .sum({
+        followedup_girls: "followedup_girls"
+      })
+      .sum({
+        exits_boys: "exits_boys"
+      })
+      .sum({
+        exits_girls: "exits_girls"
+      })
       .where(builder => {
         if (!cond.date) {
           builder.where(cond);
@@ -930,10 +959,10 @@ module.exports.scrChildReport = function(cond, callback) {
             delete newCond.date;
           }
           if (date && isEmpty(newCond)) {
-            builder.whereBetween("screening_date", date.y);
+            builder.whereBetween("report_month", date.y);
           } else {
             console.log(date);
-            builder.where(newCond).whereBetween("screening_date", date.y);
+            builder.where(newCond).whereBetween("report_month", date.y);
           }
         }
       })
@@ -1020,10 +1049,10 @@ module.exports.scrPlwNewReport = function(cond, callback) {
             delete newCond.date;
           }
           if (date && isEmpty(newCond)) {
-            builder.whereBetween("screening_date", date.y);
+            builder.whereBetween("report_month", date.y);
           } else {
             console.log(date);
-            builder.where(newCond).whereBetween("screening_date", date.y);
+            builder.where(newCond).whereBetween("report_month", date.y);
           }
         }
       })

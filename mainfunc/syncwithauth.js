@@ -1,4 +1,4 @@
-module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request) => {
+module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
    
     ipcMain.on('updateDB', function () {
         const {client, mac } = JSON.parse(fs.readFileSync( __dirname+'/../config.json', 'utf8'));
@@ -802,9 +802,32 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request) => {
             cb(e)
             })
         },
-        // uploadStockIn: (cb)=>{
+        uploadStockIn: (cb)=>{
+            knex('tblStock').where('upload_status', 0).orWhereNull('upload_status')
+                .then(result=>{
+                    var options = {
+                        method: 'POST',
+                        uri: surl + '/stockIn',
+                        headers,
+                        body: result,
+                        json: true
+                        }
+                    if(result.length > 0){
+                        rp(options)
+                            .then(result=>{
+                                cb(null,result)
+                            }).catch(e=>{
+                                console.log(e)
+                                cb(e)
+                            })
+                
+                    }
+                }).catch(e=>{
+                    console.log(e)
+                    cb(e)
+                })
             
-        // }
+        }
         // uploadStockRequest: (cb) => {
         // knex('tblStockRequest')
         //     .where({

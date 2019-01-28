@@ -39,7 +39,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
     }, (e, result) => {
       if (e) {
         event.sender.send("allScrChildren", { err: e });
-        // console.log(e)
+        console.log(e)
       } else {
         event.sender.send("allScrChildren", { result });
         // console.log(result);

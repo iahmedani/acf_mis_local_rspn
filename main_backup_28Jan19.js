@@ -823,34 +823,6 @@ function isEmpty(arg) {
 
 // app.use(bParser.json());
 // first run check
-
-function _newfirstRun() {
-  const {
-    width,
-    height
-  } = electron.screen.getPrimaryDisplay().workAreaSize
-  var client_id = imran.client;
-  runFirst = new BrowserWindow({
-    width,
-    height,
-    title: 'first Run'
-  });
-
-  runFirst.loadURL(url.format({
-    pathname: path.join(__dirname, '/html/firstRunNew.html'),
-    protocol: 'file:',
-    slashes: true
-  }));
-
-  runFirst.on('closed', function () {
-    runFirst = null;
-  })
-
-  runFirst.on('close', function () {
-    runFirst = null;
-  })
-}
-
 function firstRun() {
   const {
     width,
@@ -987,8 +959,7 @@ function creatWindow() {
       });
     } else if (err.code == 'ENOENT') {
       // file does not exist
-      _newfirstRun()
-      // firstRun();
+      firstRun();
       firstRunDB(knex);
     } else {
       console.log('Some other error: ', err.code);
