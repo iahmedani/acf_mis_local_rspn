@@ -193,7 +193,9 @@
           formData.org_nameL = formData.org_name;
           formData.project_nameL = formData.project_name;
           formData.passwordL = formData.password;
+          formData.mac= mac;
           fs.writeFileSync('config.json',JSON.stringify(formData));
+          await knex('tblConfig').insert({description:'url', value: formData._url})
           $('body').append(
           `<div class="alert alert-success alert-dismissible fade show" role="alert">App Registered Successfully </div>`)
         $('.alert').alert()

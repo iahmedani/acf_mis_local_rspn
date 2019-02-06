@@ -343,7 +343,8 @@ module.exports.initOtpFollowUp = function () {
 
             {
               type: "control",
-              deleteButton: false
+              deleteButton: false,
+              editButtonTooltip:'Add Followup',
             }
           ],
           rowClass: function(item, itemIndex) {
@@ -360,5 +361,7 @@ module.exports.initOtpFollowUp = function () {
 
       
   })
+
+ 
   
 }

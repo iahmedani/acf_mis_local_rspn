@@ -11,12 +11,16 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
   //       sndMsg.errMsg(event, "", "Unable to query available commodities");
   //     });
   // });
-  ipcMain.on("stockDistEntry", (event, data) => {
+  ipcMain.on("stockDistEntry", async (event, data) => {
     // console.log(data);
+    const { client, mac } = JSON.parse(
+      fs.readFileSync(__dirname + "/../config.json", "utf8")
+    );
     async.waterfall([function(cb) {
         var n = new Date().valueOf();
         data.forEach((el, i, allData) => {
-          el.stockReportID = n;
+          el.stockDistId = n;
+          el.client_id= client;
           // delete el.avalable_stock;
           delete el.disp_sub_unit;
           delete el.item_desc;

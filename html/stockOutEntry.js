@@ -185,31 +185,37 @@ module.exports.stockOutEntry = function () {
       var SubUnit  = [{ Name: '', item:''}];
       var items = [{ Name: ""}];
       var availStock = [{ Name: "", item:''}];
-      com.commodity.forEach((el, i) => {
-        Description.push({
-          Name: el.item_desc,
-          item: el.item_name,
+      if(com.commodity.length>0){
+        $('.alert').css('display', 'none')
+
+        com.commodity.forEach((el, i) => {
+          Description.push({
+            Name: el.item_desc,
+            item: el.item_name,
+          })
+          Unit.push({
+            Name: el.item_unit,
+            item: el.item_name,
+          })
+          SubUnit.push({
+            Name: el.item_sub_unit,
+            item: el.item_name,
+          })
+          items.push({
+            Name: el.item_name,
+            item: el.item_name,
+          })
+          availStock.push({
+            Name: el.remaining,
+             item: el.item_name,
+          })
+          if (com.commodity.length - 1 == i) {
+            stockGrid(Description, Unit, items, SubUnit, availStock);
+          }
         })
-        Unit.push({
-          Name: el.item_unit,
-          item: el.item_name,
-        })
-        SubUnit.push({
-          Name: el.item_sub_unit,
-          item: el.item_name,
-        })
-        items.push({
-          Name: el.item_name,
-          item: el.item_name,
-        })
-        availStock.push({
-          Name: el.remaining,
-           item: el.item_name,
-        })
-        if (com.commodity.length - 1 == i) {
-          stockGrid(Description, Unit, items, SubUnit, availStock);
-        }
-      })
+      }else{
+        $('.alert').css('display', '')
+      }
       ipc.removeAllListeners("availableCommodity");
     })
     // var items = [

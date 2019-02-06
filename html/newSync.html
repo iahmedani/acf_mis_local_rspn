@@ -168,6 +168,7 @@
         ipc.on('updateDB', (e, data)=>{
           $('#imran').attr('hidden', true)
         })
+        ipc.removeAllListeners('updateDB')
     })
     $('#updateServer').on('click', function (e) {
         console.log('clicked')
@@ -175,7 +176,9 @@
         $('#imran').attr('hidden', false)
         ipc.on('updateServer', (e, data)=>{
           $('#imran').attr('hidden', true)
+          ipc.removeAllListeners('updateServer')
         })
+
 
     })
       ipc.on('errUpdDb', (e, x)=>{

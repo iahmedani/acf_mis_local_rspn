@@ -18,6 +18,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
           .where("tehsil_name", "like", `%${filter.tehsil_name}%`)
           .where("prog_type", "like", `%${filter.prog_type}%`)
           .where({ is_deleted: 0 })
+          .whereRaw(`otp_id NOT IN (select otp_id from tblOtpExit where is_deleted = 0)`)
           .limit(_limit)
           .offset(_offset)
           .then(result => cb(null, result))
@@ -34,6 +35,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
           .where("tehsil_name", "like", `%${filter.tehsil_name}%`)
           .where("prog_type", "like", `%${filter.prog_type}%`)
           .where({ is_deleted: 0 })
+          .whereRaw(`otp_id NOT IN (select otp_id from tblOtpExit where is_deleted = 0) `)
           .count("otp_id as total")
           .then(result => cb(null, result))
           .catch(e => cb(e));
@@ -54,7 +56,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
       .where({ otp_id })
       .then(result => {
         if (result.length > 0) {
-          errMsg(event, "", `Patient with id: ${otp_id} couldn't be delted as patient is exited. To delete first delete it from exit `);
+          sndMsg.errMsg(event, "", `Patient with id: ${otp_id} couldn't be delted as patient is exited. To delete first delete it from exit `);
         } else {
           async.series({
             delFollowup: cb => {

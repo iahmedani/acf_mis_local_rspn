@@ -264,8 +264,9 @@ $('#otpAddSubmit').on('click', (e)=>{
     var otpAddFormData = $('#otpAddForm').serializeFormJSON();
     ipc.send('submitOtpAdd', otpAddFormData);
     ipc.removeAllListeners('submitOtpAdd');
+
     $('.clr').val("");
-    $('.cld').val("");
+    $(".cld option[value='']").attr('selected', true)
     // setTimeout(otpAddTemplate, 3000);
   }
 

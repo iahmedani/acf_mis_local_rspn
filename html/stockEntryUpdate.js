@@ -33,7 +33,7 @@ module.exports.stockEntryUpdate = function () {
   })
 
   function update(data){
-    console.log(data)
+    // console.log(data)
     // var data = ipc.sendSync('getStockInReport');
     let delUpdItem = (item)=>{
       return new Promise((resolve, reject)=>{

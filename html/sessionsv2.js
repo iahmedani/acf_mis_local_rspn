@@ -306,28 +306,6 @@ module.exports.initSessionsV2 = function () {
         filtering: false,
       },
       {
-        name: "new_participants",
-        title: "New Part:",
-        width: 50,
-        type: "number",
-        validate: {
-          validator: 'min',
-          param: 0
-        },
-        filtering: false,
-      },
-      {
-        name: "old_participants",
-        title: "Old Part:",
-        width: 50,
-        type: "number",
-        validate: {
-          validator: 'min',
-          param: 0
-        },
-        filtering: false
-      },
-      {
         name: "pragnent",
         width: 50,
         title: "Pragnent",
@@ -341,6 +319,28 @@ module.exports.initSessionsV2 = function () {
       {
         name: "lactating",
         title: "Lactating",
+        width: 50,
+        type: "number",
+        validate: {
+          validator: 'min',
+          param: 0
+        },
+        filtering: false
+      },
+      {
+        name: "new_participants",
+        title: "New Part:",
+        width: 50,
+        type: "number",
+        validate: {
+          validator: 'min',
+          param: 0
+        },
+        filtering: false,
+      },
+      {
+        name: "old_participants",
+        title: "Old Part:",
         width: 50,
         type: "number",
         validate: {

@@ -1,5 +1,7 @@
 module.exports = (ipcMain, knex, fs, sndMsg, async) => {
-
+  const { client, mac } = JSON.parse(
+    fs.readFileSync(__dirname + "/../config.json", "utf8")
+  );
   ipcMain.on("getAvailableCommodity", (event) => {
     knex("v_availableCom")
       .where("remaining", '>', 0)
@@ -23,6 +25,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
           delete el.disp_unit;
           el.program_type = el.prog_type;
           delete el.prog_type;
+          el.client_id = client;
           if (allData.length - 1 == i) {
             cb(null, allData)
           }
@@ -146,6 +149,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
     delete item.disp_unit;
     delete item.item_desc;
     delete item.avalable_stock;
+    item.client_id = client;
     item.upload_status = 2;
     if (item.sameDate) {
       delete item.sameDate;

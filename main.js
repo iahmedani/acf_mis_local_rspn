@@ -6,6 +6,8 @@ const {
   Menu,
   dialog
 } = electron;
+
+// require('electron-reload')(__dirname);
 const firstRunDB = require('./firstRunCreateDb').firstCreateDb;
 const url = require('url');
 const path = require('path');
@@ -17,9 +19,6 @@ const {
   autoUpdater
 } = require("electron-updater");
 autoUpdater.autoDownload = false;
-// JSON.parse(fs.readFileSync('./config.json', 'utf8'))
-// fs.readfilesy
-
 
 // console.log(imran);
 var async = require('async');
@@ -27,13 +26,15 @@ var knex = require("knex")({
   client: "sqlite3",
   connection: {
     filename: 'acf_mis_local.sqlite3'
-    // filename: './acf_mis_local.sqlite3'
   },
   useNullAsDefault: true
 });
-// const serverUrl = 'http://52.15.65.89:5000';
-const serverUrl = 'http://localhost:5000';
-console.log(serverUrl)
+// let _testVar 
+async function _serverUrl (){
+  var  x = await knex('tblConfig'); 
+  return x;
+}
+
 
 function toJSONLocal (date) {
 	var local = new Date(date);
@@ -282,12 +283,18 @@ ipcMain.on('otpExitUpdate', (e, data) => {
 
 // sending all admisions for otp exit
 function otpAddDataForExit(event, filter) {
+  if(filter.site_id){
+    var myFilter = {site_id:filter.site_id}
+  }else{
+    var myFilter = ['site_id','like','%%']
+  }
   knex.from('tblOtpAdd')
     .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
     .where({
-      site_id: filter.site_id,
       status: 'open'
     })
+    // .orWhere({site_id: filter.site_id})
+    .where(myFilter)
     .then(result => {
       event.sender.send('getOtpAll', ({
         result: result
@@ -809,6 +816,10 @@ function plwNewScrAddSave(event, data, client, username, project) {
 //       console.log('func plwNewScrUpdSave error', e)
 //     })
 // }
+
+async function _firstRunDb (knex, Promise){
+ await  require('./migrations/20190128163134_Screening').up(knex, Promise);
+}
 var db = require('./dbTest');
 const request = require('request');
 var rp = require('request-promise-native');
@@ -989,7 +1000,9 @@ function creatWindow() {
       // file does not exist
       _newfirstRun()
       // firstRun();
-      firstRunDB(knex);
+      // firstRunDB(knex);
+      _firstRunDb(knex, Promise);
+      
     } else {
       console.log('Some other error: ', err.code);
     }
@@ -4055,14 +4068,15 @@ function runDemo() {
 const mac = '01:02:03:0a:0b:0c';
 const appKey = 'A4C74FBD-2375-496E-97BA-C4C3E4D3F868';
 // Creating Admin : sync Refference
-function newSync() {
+async function  newSync() {
   const {
     width,
     height
   } = electron.screen.getPrimaryDisplay().workAreaSize
 
-  console.log(imran);
-  var surl = serverUrl;
+  // console.log(imran);
+  var surl = await _serverUrl();
+  surl = surl[0].value;
   console.log(surl);
   syncNew = new BrowserWindow({
     width,
@@ -4229,6 +4243,6 @@ require("./mainfunc/dashboard")(ipcMain, knex, fs, clientMessages, async);
 // Managing OTP Add and Exit Report
 require("./mainfunc/otpAddExitReport")(ipcMain, knex, fs, clientMessages, async);
 // Managing Sync with Auth
-require("./mainfunc/syncwithauth")(ipcMain, knex, fs, clientMessages, async, serverUrl, request, rp);
+require("./mainfunc/syncwithauth")(ipcMain, knex, fs, clientMessages, async, request, rp);
 // Managing Update of StockIn
 require("./mainfunc/stockInUpdate")(ipcMain, knex, fs, clientMessages, async);
