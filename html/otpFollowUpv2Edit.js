@@ -326,6 +326,42 @@ module.exports.initOtpFollowUpEdit = function () {
               return diffDays;
             }
           },
+          {
+            name: 'upload_status',
+            title: 'Upload Status',
+            width: 50,
+            type: 'select',
+            valueType: 'number',
+            items: [{ Name: '', value: '' }, { Name: 'Uploaded', value: 1 }, { Name: 'Not Uploaded', value: 0 }, { Name: 'Edited', value: 2 }],
+            readOnly: true,
+            valueField: "value",
+            textField: "Name",
+            editing: false,
+            inserting: false,
+            filtering: false,
+    
+            },{
+            name: "upload_date",
+            title: "Upload Date",
+            type: "number",
+            filtering: false,
+          },
+          {
+            align:'center',
+            headerTemplate: function() {
+              return "<th class='jsgrid-header-cell'>Days since uploaded </th>";
+            },
+            itemTemplate: function(value, item) {
+              // console.log(item)
+              var date1 = new Date(item.upload_date);
+                var date2 = new Date();
+                var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+                var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+                diffDays = (item.upload_status == 1) ? diffDays : 0;
+                // alert(diffDays);
+              return diffDays;
+            }
+          },
 
           {
             type: "control",
@@ -342,6 +378,20 @@ module.exports.initOtpFollowUpEdit = function () {
           return diffDays > 21 ? 'bg-red': '';
           // itemIndex%2==0 ? 'bg-red' : 'bg-green';
       },
+      rowClick: function(args) {
+        var date1 = new Date(args.item.upload_date);
+              var date2 = new Date();
+              var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+              var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+              diffDays = (args.item.upload_status == 1) ? diffDays : 0;
+        if(diffDays < 6){
+        
+        this.editItem(args.item);
+        }else{
+        alert('This could not be edited b/c its been more than 5 days since uploaded')
+
+        }
+      }
       });
     }
 

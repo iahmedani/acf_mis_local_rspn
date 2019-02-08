@@ -1,7 +1,10 @@
 module.exports = (ipcMain, knex, fs, sndMsg, async) => {
-  const { client, mac } = JSON.parse(
-    fs.readFileSync(__dirname + "/../config.json", "utf8")
-  );
+ if(fs.existsSync(__dirname + "/../config.json")){
+
+   const { client, mac } = JSON.parse(
+     fs.readFileSync(__dirname + "/../config.json", "utf8")
+   );
+ }
   ipcMain.on("getAvailableCommodity", (event) => {
     knex("v_availableCom")
       .where("remaining", '>', 0)

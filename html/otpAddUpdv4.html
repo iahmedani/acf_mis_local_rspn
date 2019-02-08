@@ -1,4 +1,14 @@
 <template>
+    <style>
+    
+        .myScrol{
+          overflow-y: scroll;
+          height: 550px;
+          width: 100%;
+          overflow-x: hidden;
+          }
+        
+      </style>
   <div class="container-fluid">
     <div class="row">
       <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">Admission</p>
@@ -13,7 +23,7 @@
       
       <div class="row">
         <form action="#!" id="otpAddUpdForm">
-          <div class="card">
+          <div class="card ">
             <div class="card-header"> Addmision Form
             </div>
             <input type="number" name="otp_id" id="otp_id" hidden>
@@ -57,6 +67,14 @@
                         </div>
                         <div class="form-group col-sm-2">
 
+                            <label for="site_village" class="form-label">Village:</label>
+                  
+                            <select name="site_village" id="ddVillageName" class="form-control form-control-sm" required>
+                              <option value="">Select One</option>
+                            </select>
+                          </div>
+                        <div class="form-group col-sm-2">
+
                           <label for="reg_date" class="form-label">Addmision Date:</label>
                           <input type="date" name="reg_date" id="reg_date" class="form-control form-control-sm clr" required>
                         </div>
@@ -87,17 +105,15 @@
                     <input type="text" name="travel_time_minutes" id="travel_time_minutes" class="form-control form-control-sm clr"
                       required>
                   </div>
-                </div>
-                <div class="row">
                  
-                  <div class="form-group col-sm-2">
+                  <div class="form-group col-sm-1">
                     <label for="is_mother_alive" class="form-label">Mother Alive</label>
                     <select type="text" name="is_mother_alive" id="is_mother_alive" class="form-control form-control-sm clr" required>
                       <option value="yes" selected>Yes</option>
                       <option value="no">No</option>
                     </select>
                   </div>
-                  <div class="form-group col-sm-2">
+                  <div class="form-group col-sm-1">
                     <label for="age" class="form-label">Age</label>
                     <input type="number" name="age" id="age" class="form-control form-control-sm" required>
                   </div>
@@ -168,11 +184,12 @@
                       <option value="other">Other</option>
                     </select>
                   </div>
+                </div>
+
                   <div class="form-group col-sm-2" id="ref_type_other_div" style="display:none">
                     <label for="ref_type_other" class="form-label">Specify Other</label>
                     <input type="text" name="ref_type_other" id="entryref_type_other" class="form-control form-control-sm clr">
                   </div>
-                </div>
               </div>
               <div id="anthro" class="border border-info rounded-top">
                 <p class="list-group-item bg-info text-white sm">Addmision Anthropometry</p>
@@ -220,7 +237,7 @@
                       <option value="0">No</option>
                     </select>
                   </div>
-                  <div class="form-group col-sm-2">
+                  <div class="form-group col-sm-1">
 
                     <label for="vomiting">Vomiting</label>
                     <select name="vomiting" id="vomiting" class="form-control form-control-sm" required>
@@ -229,7 +246,7 @@
                       <option value="0">No</option>
                     </select>
                   </div>
-                  <div class="form-group col-sm-2">
+                  <div class="form-group col-sm-1">
 
                     <label for="cough">Cough</label>
                     <select name="cough" id="cough" class="form-control form-control-sm" required>
@@ -302,7 +319,7 @@
                       <option value="IYCF_Cups_and_Spoons">IYCF Cups &and; Spoons </option>
                     </select>
                   </div>
-                  <div class="form-group col-sm-2">
+                  <div class="form-group col-sm-1">
                     <label for="quantity1">Quantity:</label>
                     <input type="number" name="quantity1" id="quantity1" class="form-control form-control-sm" min="0"
                       required>
@@ -327,7 +344,7 @@
                       <option value="IYCF_Cups_and_Spoons">IYCF Cups &and; Spoons </option>
                     </select>
                   </div>
-                  <div class="form-group col-sm-2">
+                  <div class="form-group col-sm-1">
                     <label for="quantity2">Quantity:</label>
                     <input type="number" name="quantity2" id="quantity2" class="form-control form-control-sm" min="0">
                   </div>
@@ -350,7 +367,7 @@
                       <option value="IYCF_Cups_and_Spoons">IYCF Cups &and; Spoons </option>
                     </select>
                   </div>
-                  <div class="form-group col-sm-2">
+                  <div class="form-group col-sm-1">
                     <label for="quantity3">Quantity:</label>
                     <input type="number" name="quantity3" id="quantity3" class="form-control form-control-sm" min="0">
                   </div>
@@ -358,17 +375,17 @@
                     <label for="other_com_name" class="form-label">Other Commodity Name</label>
                     <input type="text" name="other_com_name" id="other_com_name" class="form-control form-control-sm clr">
                   </div>
-                  <div class="form-group col-sm-2">
-                    <label for="other_com_qty" class="form-label">Other Commodity Qunatity</label>
+                  <div class="form-group col-sm-1">
+                    <label for="other_com_qty" class="form-label">Other Comm: Qty:</label>
                     <input type="number" name="other_com_qty" id="other_com_qty" class="form-control form-control-sm clr" >
                   </div>
                 </div>
               </div>
-              <button type="submit" class="btn btn-info btn-block float-right" id="otpAddUpdSubmit">Save</button>
-            <!-- </div> -->
+              <!-- </div> -->
+            </div>
+            
           </div>
-
-      </div>
+          <button type="submit" class="btn btn-success btn-block float-right col col-sm-6 col-md-4 col-lg-2 pr-0 mr-0" id="otpAddUpdSubmit">Save</button>
     <!-- </div> -->
     </form>
   </div>

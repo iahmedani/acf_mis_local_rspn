@@ -54,7 +54,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
     async.series({ data: cb => {
       knex("tblStokDistv2")
         .sum({ total_distribution: "distributed" })
-        .column("stockReportID", "dist_month", "upload_status", "program_type")
+        .column("stockDistId", "dist_month", "upload_status", "program_type","upload_date")
         .where({ is_deleted: 0 })
         .where("program_type", "like", `%${filter.program_type}%`)
         .where("district_id", "like", `%${filter.district_id}%`)
@@ -64,7 +64,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
         .where("dist_month", "like", `%${filter.dist_month}%`)
         .where("CHW_id", "like", `%${filter.CHW_id}%`)
         .where("CHS_id", "like", `%${filter.CHS_id}%`)
-        .groupBy("stockReportID", "dist_month", "upload_status", "program_type")
+        .groupBy("stockDistId", "dist_month", "upload_status", "program_type", "upload_date")
         .offset(_offset)
         .limit(_limit)
         .then(result => {
@@ -78,7 +78,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
       }, itemsCount: cb => {
         // knex("tblSessions")
         knex("tblStokDistv2")
-          .column("stockReportID", "dist_month", "upload_status", "program_type")
+          .column("stockDistId", "dist_month", "upload_status", "program_type","upload_date")
           .where({ is_deleted: 0 })
           .where("program_type", "like", `%${filter.program_type}%`)
           .where("district_id", "like", `%${filter.district_id}%`)
@@ -88,8 +88,8 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
           .where("dist_month", "like", `%${filter.dist_month}%`)
           .where("CHW_id", "like", `%${filter.CHW_id}%`)
           .where("CHS_id", "like", `%${filter.CHS_id}%`)
-          .groupBy("stockReportID", "dist_month", "upload_status", "program_type")
-          .countDistinct({ total: "stockReportID" })
+          .groupBy("stockDistId", "dist_month", "upload_status", "program_type", "upload_date")
+          .countDistinct({ total: "stockDistId" })
           // .groupBy("stockReportID", "dist_month")
           .then(result => {
             cb(null, result);
@@ -119,7 +119,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
       data: cb => {
         knex("tblStokDistv2")
           .where({ is_deleted: 0 })
-          .where({ stockReportID: filter})
+          .where({ stockDistId: filter})
           .offset(_offset)
           .limit(_limit)
           .then(result => {
@@ -132,7 +132,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
         // knex("tblSessions")
         knex("tblStokDistv2")
           .where({ is_deleted: 0 })
-          .where({ stockReportID: filter })
+          .where({ stockDistId: filter })
           .count({total: 'dist_id'})
           .then(result => {
             cb(null, result);
@@ -194,7 +194,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
       function (cb) {
         knex("tblStokDistv2")
           .update(item)
-          .where({ dist_id: item.dist_id, stockReportID: item.stockReportID })
+          .where({ dist_id: item.dist_id, stockDistId: item.stockDistId })
           .then(result => { 
             console.log(result+'194')
             cb(null, result)
@@ -219,7 +219,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
   ipcMain.on("deleteStockDistItem", (event, item) => {
     console.log({msg:215, item})
     knex("tblStokDistv2")
-      .where({ stockReportID: item.stockReportID, dist_id: item.dist_id })
+      .where({ stockDistId: item.stockDistId, dist_id: item.dist_id })
       .update({ is_deleted: 1 })
       .then(result => {
         // console.log(result + "219");
@@ -231,7 +231,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
   });
   ipcMain.on('deleteStockDist', (event, report) => {
     knex('tblStokDistv2')
-      .where({ stockReportID: report.stockReportID })
+      .where({ stockDistId: report.stockDistId })
       .update({is_deleted: 1})
       .then(result => {
         event.sender.send("deleteStockDist", { result });

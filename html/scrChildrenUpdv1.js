@@ -314,129 +314,188 @@ module.exports.initScrChildrenUpd = function () {
           width: 50
         },
         {
+          name: 'upload_status',
+          title: 'Upload Status',
+          width: 50,
+          type: 'select',
+          valueType: 'number',
+          items: [{ Name: '', value: '' }, { Name: 'Uploaded', value: 1 }, { Name: 'Not Uploaded', value: 0 }, { Name: 'Edited', value: 2 }],
+          readOnly: true,
+          valueField: "value",
+          textField: "Name",
+          editing: false,
+          inserting: false,
+          filtering: false,
+  
+          },
+        {
+          name: "upload_date",
+          title: "Upload Date",
+          type: "number",
+          filtering: false,
+          width: 50
+        },
+        {
+          width: 80,
+          align:'center',
+          headerTemplate: function() {
+            return "<th class='jsgrid-header-cell'>Days since uploaded </th>";
+          },
+          itemTemplate: function(value, item) {
+            // console.log(item)
+            var date1 = new Date(item.upload_date);
+              var date2 = new Date();
+              var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+              var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+              diffDays = (item.upload_status == 1) ? diffDays : 0;
+              // alert(diffDays);
+            return diffDays;
+          }
+        },
+        {
           type: "control",
           editButton: false,
           modeSwitchButton: false,
           width: 50
         }
       ],
+    //   onItemEditing: function(args) {
+    //     var date1 = new Date(args.item.upload_date);
+    //           var date2 = new Date();
+    //           var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+    //           var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+    //     // cancel editing of the row of item with field 'ID' = 0
+    //     if(diffDays > 0) {
+    //         args.cancel = true;
+    //     }
+    // },
       rowClick: function(args) {
-        this.editItem(args.item);
-        var data = args.item;
-        var dataKeys = Object.keys(data);
-        // console.log(dataKeys);
-        dataKeys.forEach(el => {
-          $(`input[name="${el}"]`).val(data[el]);
-          $(`select[name="${el}"]`).val(data[el]);
-          // console.log(data[el])
-          // }
-        });
-        $("#ddProvince").val(data.province_id);
+        var date1 = new Date(args.item.upload_date);
+              var date2 = new Date();
+              var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+              var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+              diffDays = (args.item.upload_status == 1) ? diffDays : 0;
+        if(diffDays < 6){
 
-        $("#ddDistrict")
-          .children("option:not(:first)")
-          .remove();
-        $("#ddDistrict").append(
-          `<option value="${data.district_id}" selected>${
-          data.district_name
-          }</option>`
-        );
-        // $("#ddDistrict").val(data.district_id);
-        $("#ddTehsil")
-          .children("option:not(:first)")
-          .remove();
-        $("#ddTehsil").append(
-          `<option value="${data.tehsil_id}" selected>${
-          data.tehsil_name
-          }</option>`
-        );
-
-        // $("#ddTehsil").val(data.tehsil_id);
-        $("#ddUC")
-          .children("option:not(:first)")
-          .remove();
-        $("#ddUC").append(
-          `<option value="${data.uc_id}" selected>${data.uc_name}</option>`
-        );
-
-        // $("#ddUC").val(data.uc_id);
-        $("#ddHealthHouse")
-          .children("option:not(:first)")
-          .remove();
-        $("#ddHealthHouse").append(
-          `<option value="${data.site_id}" selected>${
-          data.site_name
-          }</option>`
-        );
-        $("#ddStaff_code")
-          .children("option:not(:first)")
-          .remove();
-        $("#ddStaff_code").append(
-          `<option value="${data.staff_code}" selected>${
-          data.staff_code
-          }</option>`
-        );
-        $("#ddStaff_name")
-          .children("option:not(:first)")
-          .remove();
-        $("#ddStaff_name").append(
-          `<option value="${data.staff_name}" selected>${
-          data.staff_name
-          }</option>`
-        );
-        $("#ddSup_code")
-          .children("option:not(:first)")
-          .remove();
-        $("#ddSup_code").append(
-          `<option value="${data.sup_code}" selected>${
-          data.sup_code
-          }</option>`
-        );
-        $("#ddSup_name")
-          .children("option:not(:first)")
-          .remove();
-        $("#ddSup_name").append(
-          `<option value="${data.sup_name}" selected>${
-          data.sup_name
-          }</option>`
-        );
-
-        var normal_boys = data.normal_boys_623 + data.normal_boys_2459;
-        var normal_girls = data.normal_girls_623 + data.normal_girls_2459;
-        var mam_boys = data.mam_boys_623 + data.mam_boys_2459;
-        var mam_girls = data.mam_girls_623 + data.mam_girls_2459;
-        var sam_comp_boys =
-          data.sam_with_comp_boys_623 + data.sam_with_comp_boys_2459;
-        var sam_comp_girls =
-          data.sam_with_comp_girls_623 + data.sam_with_comp_girls_2459;
-        var sam_boys =
-          data.sam_without_comp_boys_623 + data.sam_without_comp_boys_2459;
-        var sam_girls =
-          data.sam_without_comp_girls_623 +
-          data.sam_without_comp_girls_2459;
-        $("#total_normal_boys").empty();
-        $("#total_normal_boys").val(normal_boys);
-        $("#total_normal_girls").empty();
-        $("#total_normal_girls").val(normal_girls);
-        $("#total_mam_boys").empty();
-        $("#total_mam_boys").val(mam_boys);
-        $("#total_mam_girls").empty();
-        $("#total_mam_girls").val(mam_girls);
-        $("#total_sam_boys").empty();
-        $("#total_sam_boys").val(sam_boys);
-        $("#total_sam_girls").empty();
-        $("#total_sam_girls").val(sam_girls);
-        $("#total_comp_boys").empty();
-        $("#total_comp_boys").val(sam_comp_boys);
-        $("#total_comp_girls").empty();
-        $("#total_comp_girls").val(sam_comp_girls);
-
-        // $('#p_name').val(data.p_name);
-        // $('#gender').val(data.gender);
-        // $('#village').val(data.site_village);
-        // $('#otp_id').val(data.otp_id);
-        // console.log(args.item);
-      }
+          this.editItem(args.item);
+          var data = args.item;
+          var dataKeys = Object.keys(data);
+          // console.log(dataKeys);
+          dataKeys.forEach(el => {
+            $(`input[name="${el}"]`).val(data[el]);
+            $(`select[name="${el}"]`).val(data[el]);
+            // console.log(data[el])
+            // }
+          });
+          $("#ddProvince").val(data.province_id);
+  
+          $("#ddDistrict")
+            .children("option:not(:first)")
+            .remove();
+          $("#ddDistrict").append(
+            `<option value="${data.district_id}" selected>${
+            data.district_name
+            }</option>`
+          );
+          // $("#ddDistrict").val(data.district_id);
+          $("#ddTehsil")
+            .children("option:not(:first)")
+            .remove();
+          $("#ddTehsil").append(
+            `<option value="${data.tehsil_id}" selected>${
+            data.tehsil_name
+            }</option>`
+          );
+  
+          // $("#ddTehsil").val(data.tehsil_id);
+          $("#ddUC")
+            .children("option:not(:first)")
+            .remove();
+          $("#ddUC").append(
+            `<option value="${data.uc_id}" selected>${data.uc_name}</option>`
+          );
+  
+          // $("#ddUC").val(data.uc_id);
+          $("#ddHealthHouse")
+            .children("option:not(:first)")
+            .remove();
+          $("#ddHealthHouse").append(
+            `<option value="${data.site_id}" selected>${
+            data.site_name
+            }</option>`
+          );
+          $("#ddStaff_code")
+            .children("option:not(:first)")
+            .remove();
+          $("#ddStaff_code").append(
+            `<option value="${data.staff_code}" selected>${
+            data.staff_code
+            }</option>`
+          );
+          $("#ddStaff_name")
+            .children("option:not(:first)")
+            .remove();
+          $("#ddStaff_name").append(
+            `<option value="${data.staff_name}" selected>${
+            data.staff_name
+            }</option>`
+          );
+          $("#ddSup_code")
+            .children("option:not(:first)")
+            .remove();
+          $("#ddSup_code").append(
+            `<option value="${data.sup_code}" selected>${
+            data.sup_code
+            }</option>`
+          );
+          $("#ddSup_name")
+            .children("option:not(:first)")
+            .remove();
+          $("#ddSup_name").append(
+            `<option value="${data.sup_name}" selected>${
+            data.sup_name
+            }</option>`
+          );
+  
+          var normal_boys = data.normal_boys_623 + data.normal_boys_2459;
+          var normal_girls = data.normal_girls_623 + data.normal_girls_2459;
+          var mam_boys = data.mam_boys_623 + data.mam_boys_2459;
+          var mam_girls = data.mam_girls_623 + data.mam_girls_2459;
+          var sam_comp_boys =
+            data.sam_with_comp_boys_623 + data.sam_with_comp_boys_2459;
+          var sam_comp_girls =
+            data.sam_with_comp_girls_623 + data.sam_with_comp_girls_2459;
+          var sam_boys =
+            data.sam_without_comp_boys_623 + data.sam_without_comp_boys_2459;
+          var sam_girls =
+            data.sam_without_comp_girls_623 +
+            data.sam_without_comp_girls_2459;
+          $("#total_normal_boys").empty();
+          $("#total_normal_boys").val(normal_boys);
+          $("#total_normal_girls").empty();
+          $("#total_normal_girls").val(normal_girls);
+          $("#total_mam_boys").empty();
+          $("#total_mam_boys").val(mam_boys);
+          $("#total_mam_girls").empty();
+          $("#total_mam_girls").val(mam_girls);
+          $("#total_sam_boys").empty();
+          $("#total_sam_boys").val(sam_boys);
+          $("#total_sam_girls").empty();
+          $("#total_sam_girls").val(sam_girls);
+          $("#total_comp_boys").empty();
+          $("#total_comp_boys").val(sam_comp_boys);
+          $("#total_comp_girls").empty();
+          $("#total_comp_girls").val(sam_comp_girls);
+  
+          // $('#p_name').val(data.p_name);
+          // $('#gender').val(data.gender);
+          // $('#village').val(data.site_village);
+          // $('#otp_id').val(data.otp_id);
+          // console.log(args.item);
+        } else{
+          alert('This could not be edited b/c its been more than 5 days since uploaded')
+        }
+        }
     });
     $(function () {
       $('#ddInterval').on('change', function () {

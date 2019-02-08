@@ -39,6 +39,48 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
         });
     });
   }
+  function batchUpdateUp(table, collection) {
+    return knex.transaction(trx => {
+      let queries = collection.map(tuple =>
+        knex(table)
+          .where("id", tuple.id)
+          .update("upload_status", 1)
+          .update('upload_date', new Date().toJSON().split('T')[0])
+          .transacting(trx)
+      );
+      return Promise.all(queries)
+        .then(() => {
+          console.log(`${table}, update  Success`);
+          trx.commit;
+        })
+        .catch(() => {
+          console.log(`${table}, update  Failed`);
+
+          trx.rollback;
+        });
+    });
+  }
+  function batchUpdateCustomUp(table, collection, idColName) {
+    return knex.transaction(trx => {
+      let queries = collection.map(tuple =>
+        knex(table)
+          .where(idColName, tuple[idColName])
+          .update("upload_status", 1)
+          .update('upload_date', new Date().toJSON().split('T')[0])
+          .transacting(trx)
+      );
+      return Promise.all(queries)
+        .then(() => {
+          console.log(`${table}, update Custom Success`);
+          trx.commit;
+        })
+        .catch(() => {
+          console.log(`${table}, update Custom Failed`);
+
+          trx.rollback;
+        });
+    });
+  }
 
   async function myUpdate(table, collection, idColName) {
     for (single of collection) {
@@ -316,7 +358,29 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
               cb(err);
             }
           });
-        }
+        },
+        config: cb => {
+          var options = {
+            method: "POST",
+            uri: surl + "/getConfig",
+            headers,
+            // body: result,
+            json: true
+          };
+          request(options, function(err, response, body) {
+            console.log(body);
+            if (!err) {
+              var data = body[0];
+              knex('tblConfig').whereNot('value', data.value)
+                .update('value', data.value)
+                .then(cb(null, 'Config Updated'))
+                .catch(e=>cb(e))
+            } else {
+              cb(err);
+            }
+          });
+        },
+
       },
       function(err, results) {
         if (err) {
@@ -347,6 +411,54 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
     surl = surl[0].value;
     async.series(
       {
+        updateFollowup: cb => {
+          knex("tblOtpFollowup")
+            .where({
+              upload_status: 2
+            })
+            .then(result => {
+              if (result.length > 0) {
+                var options = {
+                  method: "PUT",
+                  uri: surl + "/followupv1",
+                  headers,
+                  body: result,
+                  json: true
+                };
+                // console.log(result)
+                request(options, (err, response, body) => {
+                  if (err) {
+                    cb(err);
+                  } else {
+                    console.log(typeof body);
+                    // body = JSON.parse(body);
+                    if (body.success === "Followups Added") {
+                      cb(null, body);
+                      result.forEach(el => {
+                        console.log(el);
+                        knex("tblOtpFollowup")
+                          .where({
+                            followup_id: el.followup_id
+                          })
+                          .update("upload_status", 1)
+                          .update('upload_date', new Date().toJSON().split('T')[0])
+                          .then(result => {
+                            console.log(result);
+                          });
+                      });
+                    } else {
+                      cb(body);
+                    }
+                  }
+                });
+              } else {
+                cb(null, "Followup Add: No new record");
+              }
+            })
+            .catch(e => {
+              cb(e);
+            });
+        },
         uploadStockOut: cb => {
           console.log("Upload Stock Called");
           knex("tblSiteStock")
@@ -371,7 +483,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                   } else {
                     if (body.success === "StocksOut are uploaded") {
                       cb(null, body);
-                      batchUpdateCustom("tblSiteStock", result, "stock_out_id");
+                      batchUpdateCustomUp("tblSiteStock", result, "stock_out_id");
                       // try {
                       //   batchUpdateCustom
                       // await myUpdate('tblSiteStock', result, 'stock_out_id');
@@ -414,7 +526,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                   } else {
                     if (body.success === "StocksOut are updated") {
                       cb(null, body);
-                      batchUpdateCustom("tblSiteStock", result, "stock_out_id");
+                      batchUpdateCustomUp("tblSiteStock", result, "stock_out_id");
 
                       // try {
                       //   await myUpdate('tblSiteStock', result, 'stock_out_id')
@@ -458,7 +570,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                   } else {
                     if (body.success === "Distributions are uploaded") {
                       cb(null, body);
-                      batchUpdateCustom("tblStokDistv2", result, "dist_id");
+                      batchUpdateCustomUp("tblStokDistv2", result, "dist_id");
                       
                     } else {
                       cb(body);
@@ -495,7 +607,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                   } else {
                     if (body.success === "Distributions are updated") {
                       cb(null, body);
-                      batchUpdateCustom("tblStokDistv2", result, "dist_id");
+                      batchUpdateCustomUp("tblStokDistv2", result, "dist_id");
 
                       cb(body);
                     }
@@ -779,6 +891,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                                   ch_scr_id: el.ch_scr_id
                                 })
                                 .update("upload_status", 1)
+                                .update('upload_date', new Date().toJSON().split('T')[0])
                                 .then(result => {
                                   console.log(result);
                                 });
@@ -826,6 +939,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                                   ch_scr_id: el.ch_scr_id
                                 })
                                 .update("upload_status", 1)
+                                .update('upload_date', new Date().toJSON().split('T')[0])
                                 .then(result => {
                                   console.log(result);
                                 });
@@ -873,6 +987,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                                   plw_scr_id: el.plw_scr_id
                                 })
                                 .update("upload_status", 1)
+                                .update('upload_date', new Date().toJSON().split('T')[0])
                                 .then(result => {
                                   console.log(result);
                                 });
@@ -918,6 +1033,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                                   plw_scr_id: el.plw_scr_id
                                 })
                                 .update("upload_status", 1)
+                                .update('upload_date', new Date().toJSON().split('T')[0])
                                 .then(result => {
                                   console.log(result);
                                 });
@@ -962,6 +1078,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                                   otp_id: el.otp_id
                                 })
                                 .update("upload_status", 1)
+                                .update('upload_date', new Date().toJSON().split('T')[0])
                                 .then(x => {
                                   console.log(x);
                                 });
@@ -1006,6 +1123,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                                   otp_id: el.otp_id
                                 })
                                 .update("upload_status", 1)
+                                .update('upload_date', new Date().toJSON().split('T')[0])
                                 .then(x => {
                                   console.log(x);
                                 });
@@ -1050,6 +1168,8 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                                   exit_id: el.exit_id
                                 })
                                 .update("upload_status", 1)
+                                .update('upload_date', new Date().toJSON().split('T')[0])
+
                                 .then(x => {
                                   console.log(x);
                                 });
@@ -1094,6 +1214,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                                   exit_id: el.exit_id
                                 })
                                 .update("upload_status", 1)
+                                .update('upload_date', new Date().toJSON().split('T')[0])
                                 .then(x => {
                                   console.log(x);
                                 });
@@ -1138,6 +1259,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                                   session_id: el.session_id
                                 })
                                 .update("upload_status", 1)
+                                .update('upload_date', new Date().toJSON().split('T')[0])
                                 .then(x => {
                                   console.log(x);
                                 });
@@ -1182,6 +1304,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                                   session_id: el.session_id
                                 })
                                 .update("upload_status", 1)
+                                .update('upload_date', new Date().toJSON().split('T')[0])
                                 .then(x => {
                                   console.log(x);
                                 });
@@ -1230,6 +1353,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                                   followup_id: el.followup_id
                                 })
                                 .update("upload_status", 1)
+                                .update('upload_date', new Date().toJSON().split('T')[0])
                                 .then(result => {
                                   console.log(result);
                                 });
@@ -1270,7 +1394,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                         } else {
                           if (body.success === "Stocks are uploaded") {
                             cb(null, body);
-                            batchUpdate("tblStock", result);
+                            batchUpdateUp("tblStock", result);
                           } else {
                             cb(body);
                           }
@@ -1304,7 +1428,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                         } else {
                           if (body.success === "Stocks are updated") {
                             cb(null, body);
-                            batchUpdate("tblStock", result);
+                            batchUpdateUp("tblStock", result);
                           } else {
                             cb(body);
                           }

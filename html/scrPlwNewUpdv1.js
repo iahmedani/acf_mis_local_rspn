@@ -255,6 +255,43 @@ module.exports.initScrPlwNewUpd = function () {
         title: 'Total Lactating',
         type: 'number',
         filtering: false
+        },
+        {
+          name: 'upload_status',
+          title: 'Upload Status',
+          width: 50,
+          type: 'select',
+          valueType: 'number',
+          items: [{ Name: '', value: '' }, { Name: 'Uploaded', value: 1 }, { Name: 'Not Uploaded', value: 0 }, { Name: 'Edited', value: 2 }],
+          readOnly: true,
+          valueField: "value",
+          textField: "Name",
+          editing: false,
+          inserting: false,
+          filtering: false,
+  
+          },
+        {
+          name: "upload_date",
+          title: "Upload Date",
+          type: "number",
+          filtering: false,
+        },
+        {
+          align:'center',
+          headerTemplate: function() {
+            return "<th class='jsgrid-header-cell'>Days since uploaded </th>";
+          },
+          itemTemplate: function(value, item) {
+            // console.log(item)
+            var date1 = new Date(item.upload_date);
+              var date2 = new Date();
+              var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+              var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+              diffDays = (item.upload_status == 1) ? diffDays : 0;
+              // alert(diffDays);
+            return diffDays;
+          }
         },{
           type: "control",
           editButton: false,
@@ -263,85 +300,96 @@ module.exports.initScrPlwNewUpd = function () {
         }
       ],
       rowClick: function (args) {
-        this.editItem(args.item);
-        var data = args.item;
-        var dataKeys = Object.keys(data);
-        // console.log(dataKeys)
-        dataKeys.forEach(el => {
-          $(`input[name="${el}"]`).val(data[el]);
-          $(`select[name="${el}"]`).val(data[el]);
-          // console.log(data[el])
-          // }
-        })
-        $("#ddProvince").val(data.province_id);
+        var date1 = new Date(args.item.upload_date);
+              var date2 = new Date();
+              var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+              var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+              diffDays = (args.item.upload_status == 1) ? diffDays : 0;
+        if(diffDays < 6){
+          
+          this.editItem(args.item);
+          var data = args.item;
+          var dataKeys = Object.keys(data);
+          // console.log(dataKeys)
+          dataKeys.forEach(el => {
+            $(`input[name="${el}"]`).val(data[el]);
+            $(`select[name="${el}"]`).val(data[el]);
+            // console.log(data[el])
+            // }
+          })
+          $("#ddProvince").val(data.province_id);
+  
+          $("#ddDistrict")
+            .children("option:not(:first)")
+            .remove();
+          $("#ddDistrict").append(
+            `<option value="${data.district_id}" selected>${
+            data.district_name
+            }</option>`
+          );
+          // $("#ddDistrict").val(data.district_id);
+          $("#ddTehsil")
+            .children("option:not(:first)")
+            .remove();
+          $("#ddTehsil").append(
+            `<option value="${data.tehsil_id}" selected>${
+            data.tehsil_name
+            }</option>`
+          );
+  
+          // $("#ddTehsil").val(data.tehsil_id);
+          $("#ddUC")
+            .children("option:not(:first)")
+            .remove();
+          $("#ddUC").append(
+            `<option value="${data.uc_id}" selected>${data.uc_name}</option>`
+          );
+  
+          // $("#ddUC").val(data.uc_id);
+          $("#ddHealthHouse")
+            .children("option:not(:first)")
+            .remove();
+          $("#ddHealthHouse").append(
+            `<option value="${data.site_id}" selected>${
+            data.site_name
+            }</option>`
+          );
+          $("#ddStaff_code")
+            .children("option:not(:first)")
+            .remove();
+          $("#ddStaff_code").append(
+            `<option value="${data.staff_code}" selected>${
+            data.staff_code
+            }</option>`
+          );
+          $("#ddStaff_name")
+            .children("option:not(:first)")
+            .remove();
+          $("#ddStaff_name").append(
+            `<option value="${data.staff_name}" selected>${
+            data.staff_name
+            }</option>`
+          );
+          $("#ddSup_code")
+            .children("option:not(:first)")
+            .remove();
+          $("#ddSup_code").append(
+            `<option value="${data.sup_code}" selected>${
+            data.sup_code
+            }</option>`
+          );
+          $("#ddSup_name")
+            .children("option:not(:first)")
+            .remove();
+          $("#ddSup_name").append(
+            `<option value="${data.sup_name}" selected>${
+            data.sup_name
+            }</option>`
+          );
+        } else{
+          alert('This could not be edited b/c its been more than 5 days since uploaded')
 
-        $("#ddDistrict")
-          .children("option:not(:first)")
-          .remove();
-        $("#ddDistrict").append(
-          `<option value="${data.district_id}" selected>${
-          data.district_name
-          }</option>`
-        );
-        // $("#ddDistrict").val(data.district_id);
-        $("#ddTehsil")
-          .children("option:not(:first)")
-          .remove();
-        $("#ddTehsil").append(
-          `<option value="${data.tehsil_id}" selected>${
-          data.tehsil_name
-          }</option>`
-        );
-
-        // $("#ddTehsil").val(data.tehsil_id);
-        $("#ddUC")
-          .children("option:not(:first)")
-          .remove();
-        $("#ddUC").append(
-          `<option value="${data.uc_id}" selected>${data.uc_name}</option>`
-        );
-
-        // $("#ddUC").val(data.uc_id);
-        $("#ddHealthHouse")
-          .children("option:not(:first)")
-          .remove();
-        $("#ddHealthHouse").append(
-          `<option value="${data.site_id}" selected>${
-          data.site_name
-          }</option>`
-        );
-        $("#ddStaff_code")
-          .children("option:not(:first)")
-          .remove();
-        $("#ddStaff_code").append(
-          `<option value="${data.staff_code}" selected>${
-          data.staff_code
-          }</option>`
-        );
-        $("#ddStaff_name")
-          .children("option:not(:first)")
-          .remove();
-        $("#ddStaff_name").append(
-          `<option value="${data.staff_name}" selected>${
-          data.staff_name
-          }</option>`
-        );
-        $("#ddSup_code")
-          .children("option:not(:first)")
-          .remove();
-        $("#ddSup_code").append(
-          `<option value="${data.sup_code}" selected>${
-          data.sup_code
-          }</option>`
-        );
-        $("#ddSup_name")
-          .children("option:not(:first)")
-          .remove();
-        $("#ddSup_name").append(
-          `<option value="${data.sup_name}" selected>${
-          data.sup_name
-          }</option>`
-        );
+        }
         // $('#p_name').val(data.p_name);
         // $('#gender').val(data.gender);
         // $('#village').val(data.site_village);

@@ -3,17 +3,18 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
     knex('tblSiteStock')
       .select('stock_release_date')
       .limit(1)
+      .where('is_deleted', 0)
       .orderBy('stock_release_date', 'desc')
       .then(result=>{
         // console.log(result)
         return knex('tblStock')
         .select('dn_number', 'dn_date')
-        .sum({total_recieved: 'rec_qty'})
+        .sum({total_recieved: 'rec_qty'})        
         .where((builder)=>{
           if(result.length){
             builder.where('dn_date', '<', result)
           }
-        })        
+        })
         .groupBy('dn_number', 'dn_date')
       })
       .then(result=>{

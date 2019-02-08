@@ -234,6 +234,7 @@ module.exports.initSessionsV2 = function () {
           item.site_id = ($("#ddHealthHouse").val()) ? $("#ddHealthHouse").val() : '';
           item.CHW_id = $("#ddStaff_code").val() ? $("#ddStaff_code").val() : "";
           item.CHS_id = $("#ddSup_code").val() ? $("#ddSup_code").val() : "";
+          delete item['']
           return insertData(item)
           // if (item.site_id != '') {
           //   $("#site_must").attr("hidden", true);
@@ -369,12 +370,50 @@ module.exports.initSessionsV2 = function () {
         title: 'Remarks',
         type: 'text',
         filtering:false,
-      }, {
+      },
+      {
+        name: "upload_date",
+        title: "Upload Date",
+        type: "number",
+        filtering: false,
+        editing: false,
+        inserting: false,
+      },
+      {
+        align:'center',
+        headerTemplate: function() {
+          return "<th class='jsgrid-header-cell'>Days since uploaded </th>";
+        },
+        itemTemplate: function(value, item) {
+          // console.log(item)
+          var date1 = new Date(item.upload_date);
+            var date2 = new Date();
+            var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+            diffDays = (item.upload_status == 1 && item.upload_date != null) ? diffDays : 0;
+            // alert(diffDays);
+          return diffDays;
+        }
+      }, 
+        {
         type: 'control',
         // modeSwitchButton: false,
 
         // deleteButton: false,
-      }]
+      }],
+      rowClick: function (args) {
+        var date1 = new Date(args.item.upload_date);
+              var date2 = new Date();
+              var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+              var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+              diffDays = (args.item.upload_status == 1) ? diffDays : 0;
+          if(diffDays < 6){
+            this.editItem(args.item)
+          }else{
+          alert('This could not be edited b/c its been more than 5 days since uploaded')
+          }
+      }
+
       // ,
       // onDataLoaded: function (data) {
       //   console.log(data);

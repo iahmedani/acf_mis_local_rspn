@@ -167,8 +167,8 @@
         $('#imran').attr('hidden', false)
         ipc.on('updateDB', (e, data)=>{
           $('#imran').attr('hidden', true)
+          ipc.removeAllListeners('updateDB')
         })
-        ipc.removeAllListeners('updateDB')
     })
     $('#updateServer').on('click', function (e) {
         console.log('clicked')

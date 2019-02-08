@@ -8,17 +8,17 @@ module.exports.stockDistUpd = function () {
     return new Promise((resolve, reject) => {
       ipc.send('getAllStockDist', data);
       ipc.on('getAllStockDist', (e, result) => {
-        // console.log(result);
+        console.log(result);
         if (result.result.data.length < 1) {
           var s = { data: [], itemsCount: 0 };
           resolve(s)
         } else {
           
-          var s = { data: result.result.data, itemsCount: result.result.itemsCount[0].total };
           if (result.err) {
             reject(result.err)
             ipc.removeAllListeners('getAllStockDist')
           } else {
+            var s = { data: result.result.data, itemsCount: result.result.itemsCount[0].total };
             resolve(s)
             ipc.removeAllListeners('getAllStockDist')
           }
@@ -121,7 +121,7 @@ module.exports.stockDistUpd = function () {
         textField: "Name"
       },
       {
-        name: "stockReportID",
+        name: "stockDistId",
         title: "Report ID",
         filtering: false,
         type: "text"
@@ -157,6 +157,27 @@ module.exports.stockDistUpd = function () {
         editing: false,
         inserting: false,
         filtering: false
+      },{
+        name: "upload_date",
+        title: "Upload Date",
+        type: "number",
+        filtering: false,
+      },
+      {
+        align:'center',
+        headerTemplate: function() {
+          return "<th class='jsgrid-header-cell'>Days since uploaded </th>";
+        },
+        itemTemplate: function(value, item) {
+          // console.log(item)
+          var date1 = new Date(item.upload_date);
+            var date2 = new Date();
+            var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+            diffDays = (item.upload_status == 1 && item.upload_date != null) ? diffDays : 0;
+            // alert(diffDays);
+          return diffDays;
+        }
       },
       {
         type: "control",
@@ -166,27 +187,36 @@ module.exports.stockDistUpd = function () {
       }
     ],
     rowClick: function(args) {
-      var getData = args.item;
-      console.log(getData);
-      $("#updateStockDistModalId").modal("show");
-      // var prog_type = $("#ddProgramType").val();
-      if (getData.program_type == "outreach") {
-        $(".outreach-upd").show();
-        $(".outreach-upd input").attr("required", true);
-        $(".nsc-upd").show();
-        $(".nsc-upd input").attr("required", true);
-      } else if (getData.program_type == "sc") {
-        $(".nsc-upd").hide();
-        $(".nsc-upd input").attr("required", false);
-        $(".outreach-upd").hide();
-        $(".outreach-upd input").attr("required", false);
-      } else {
-        $(".outreach-upd").hide();
-        $(".nsc-upd").show();
-        $(".nsc-upd input").attr("required", true);
-        $(".outreach-upd input").attr("required", false);
-      }
-      updateGrid(getData.stockReportID, getData.program_type);
+      var date1 = new Date(args.item.upload_date);
+            var date2 = new Date();
+            var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+            diffDays = (args.item.upload_status == 1 && args.item.upload_date != null) ? diffDays : 0;
+            if (diffDays <6){
+
+              var getData = args.item;
+              $("#updateStockDistModalId").modal("show");
+              // var prog_type = $("#ddProgramType").val();
+              if (getData.program_type == "outreach") {
+                $(".outreach-upd").show();
+                $(".outreach-upd input").attr("required", true);
+                $(".nsc-upd").show();
+                $(".nsc-upd input").attr("required", true);
+              } else if (getData.program_type == "sc") {
+                $(".nsc-upd").hide();
+                $(".nsc-upd input").attr("required", false);
+                $(".outreach-upd").hide();
+                $(".outreach-upd input").attr("required", false);
+              } else {
+                $(".outreach-upd").hide();
+                $(".nsc-upd").show();
+                $(".nsc-upd input").attr("required", true);
+                $(".outreach-upd input").attr("required", false);
+              }
+              updateGrid(getData.stockDistId, getData.program_type);
+            }else{
+              alert('This could not be edited b/c its been more than 5 days since uploaded')
+            }
     }
   });
 

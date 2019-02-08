@@ -158,7 +158,7 @@ exports.up = function(knex, Promise) {
         [prog_type] varchar(255), 
         [created_at] datetime, 
         [updated_at] datetime, 
-        [upload_status] INTEGER, 
+        [upload_status] INTEGER DEFAULT 0, 
         [username] VARCHAR(50), 
         [org_name] VARCHAR(50), 
         [project_name] VARCHAR(50), 
@@ -172,59 +172,64 @@ exports.up = function(knex, Promise) {
         [is_mother_alive] VARCHAR(3) NOT NULL DEFAULT Yes, 
         [tehsil_id] INTEGER, 
         [nsc_otp_id] VARCHAR, 
-        UNIQUE([reg_id]));
+        [uplaod_date] DATE, 
+        UNIQUE([reg_id]));           
       `
     )
     .raw(
       `CREATE TABLE [tblOtpExit](
-       [exit_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
-       [otp_id] integer REFERENCES [tblOtpAdd]([otp_id]) ON DELETE RESTRICT ON UPDATE NO ACTION, 
-       [client_id] integer, 
-       [exit_muac] integer, 
-       [exit_weight] integer, 
-       [exit_height] integer, 
-       [exit_ration1] varchar(255), 
-       [exit_quantity1] integer, 
-       [exit_ration2] varchar(255), 
-       [exit_quantity2] integer, 
-       [exit_ration3] varchar(255), 
-       [exit_quantity3] integer, 
-       [exit_prog_type] varchar(255), 
-       [exit_date] date, 
-       [exit_reason] varchar(255), 
-       [created_at] datetime, 
-       [updated_at] datetime, 
-       [upload_status] INTEGER, 
-       [weight_gain] INTEGER(7), 
-       [days_in_program] INTEGER(7), 
-       [is_deleted] INT(1) NOT NULL DEFAULT 0, 
-       [exit_other_com_name] VARCHAR(20), 
-       [exit_other_com_qty] DECIMAL DEFAULT 0);`
+        [exit_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+        [otp_id] integer REFERENCES [tblOtpAdd]([otp_id]) ON DELETE RESTRICT ON UPDATE NO ACTION, 
+        [client_id] integer, 
+        [exit_muac] integer, 
+        [exit_weight] integer, 
+        [exit_height] integer, 
+        [exit_ration1] varchar(255), 
+        [exit_quantity1] integer, 
+        [exit_ration2] varchar(255), 
+        [exit_quantity2] integer, 
+        [exit_ration3] varchar(255), 
+        [exit_quantity3] integer, 
+        [exit_prog_type] varchar(255), 
+        [exit_date] date, 
+        [exit_reason] varchar(255), 
+        [created_at] datetime, 
+        [updated_at] datetime, 
+        [upload_status] INTEGER, 
+        [weight_gain] INTEGER(7), 
+        [days_in_program] INTEGER(7), 
+        [is_deleted] INT(1) NOT NULL DEFAULT 0, 
+        [exit_other_com_name] VARCHAR(20), 
+        [exit_other_com_qty] DECIMAL DEFAULT 0, 
+        [upload_date] DATE);
+      
+      `
     )
     .raw(
       `CREATE TABLE [tblOtpFollowup](
-       [followup_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
-       [otp_id] integer, 
-       [client_id] integer, 
-       [weight] DECIMAL, 
-       [height] DECIMAL, 
-       [ration1] varchar(255), 
-       [quantity1] integer DEFAULT 0, 
-       [ration2] varchar(255), 
-       [quantity2] integer DEFAULT 0, 
-       [ration3] varchar(255), 
-       [quantity3] integer DEFAULT 0, 
-       [prog_type] varchar(255), 
-       [curr_date] date, 
-       [status] varchar(255), 
-       [next_followup] date, 
-       [created_at] datetime, 
-       [updated_at] datetime, 
-       [muac] INTEGER, 
-       [upload_status] INTEGER, 
-       [is_deleted] INT(1) NOT NULL DEFAULT 0, 
-       [other_com_name] varchar(20), 
-       [other_com_qty] DECIMAL DEFAULT 0);`
+        [followup_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+        [otp_id] integer, 
+        [client_id] integer, 
+        [weight] DECIMAL, 
+        [height] DECIMAL, 
+        [ration1] varchar(255), 
+        [quantity1] integer DEFAULT 0, 
+        [ration2] varchar(255), 
+        [quantity2] integer DEFAULT 0, 
+        [ration3] varchar(255), 
+        [quantity3] integer DEFAULT 0, 
+        [prog_type] varchar(255), 
+        [curr_date] date, 
+        [status] varchar(255), 
+        [next_followup] date, 
+        [created_at] datetime, 
+        [updated_at] datetime, 
+        [muac] INTEGER, 
+        [upload_status] INTEGER, 
+        [is_deleted] INT(1) NOT NULL DEFAULT 0, 
+        [other_com_name] varchar(20), 
+        [other_com_qty] DECIMAL DEFAULT 0, 
+        [upload_date] DATE);`
     )
     .raw(
       `CREATE TABLE [tblScrChildren](
@@ -296,43 +301,46 @@ exports.up = function(knex, Promise) {
         [exits_girls] INTEGER, 
         [other_specify] VARCHAR, 
         [other_boys] INTEGER, 
-        [other_girls] INTEGER);
+        [other_girls] INTEGER, 
+        [upload_date] DATE);
+           
       `
     )
     .raw(
       `CREATE TABLE [tblScrPlw](
-       [plw_scr_id] INTEGER PRIMARY KEY AUTOINCREMENT, 
-       [site_id] INTEGER, 
-       [screening_date] DATE, 
-       [created_at] DATE, 
-       [village] VARCHAR(50), 
-       [staff_name] VARCHAR(50), 
-       [staff_code] VARCHAR(10), 
-       [sup_name] VARCHAR(50), 
-       [sup_code] VARCHAR(10), 
-       [total_scr_pragnent] INTEGER, 
-       [total_scr_lactating] INTEGER, 
-       [new_scr_pragnent] INTEGER, 
-       [new_scr_lactating] INTEGER, 
-       [reScreened_scr_pragnent] INTEGER, 
-       [reScreened_scr_lactating] INTEGER, 
-       [muac_gt_21_pragnent] INTEGER, 
-       [muac_gt_21_lactating] INTEGER, 
-       [muac_le_21_pragnent] INTEGER, 
-       [muac_le_21_lactating] INTEGER, 
-       [client_id] INTEGER, 
-       [username] VARCHAR, 
-       [project] VARCHAR, 
-       [upload_status] INTEGER DEFAULT 0, 
-       [approved] INTEGER, 
-       [is_deleted] INTEGER(1) NOT NULL DEFAULT 0, 
-       [report_month] VARCHAR, 
-       [ifa_first_time_pragnent] INTEGER NOT NULL DEFAULT 0, 
-       [ifa_first_time_lactating] INTEGER NOT NULL DEFAULT 0, 
-       [followup_pragnent] INTEGER NOT NULL DEFAULT 0, 
-       [followup_lactating] INTEGER NOT NULL DEFAULT 0, 
-       [exits_pragnent] INTEGER NOT NULL DEFAULT 0, 
-       [exit_lactating] INTEGER NOT NULL DEFAULT 0);`
+        [plw_scr_id] INTEGER PRIMARY KEY AUTOINCREMENT, 
+        [site_id] INTEGER, 
+        [screening_date] DATE, 
+        [created_at] DATE, 
+        [village] VARCHAR(50), 
+        [staff_name] VARCHAR(50), 
+        [staff_code] VARCHAR(10), 
+        [sup_name] VARCHAR(50), 
+        [sup_code] VARCHAR(10), 
+        [total_scr_pragnent] INTEGER, 
+        [total_scr_lactating] INTEGER, 
+        [new_scr_pragnent] INTEGER, 
+        [new_scr_lactating] INTEGER, 
+        [reScreened_scr_pragnent] INTEGER, 
+        [reScreened_scr_lactating] INTEGER, 
+        [muac_gt_21_pragnent] INTEGER, 
+        [muac_gt_21_lactating] INTEGER, 
+        [muac_le_21_pragnent] INTEGER, 
+        [muac_le_21_lactating] INTEGER, 
+        [client_id] INTEGER, 
+        [username] VARCHAR, 
+        [project] VARCHAR, 
+        [upload_status] INTEGER DEFAULT 0, 
+        [approved] INTEGER, 
+        [is_deleted] INTEGER(1) NOT NULL DEFAULT 0, 
+        [report_month] VARCHAR, 
+        [ifa_first_time_pragnent] INTEGER NOT NULL DEFAULT 0, 
+        [ifa_first_time_lactating] INTEGER NOT NULL DEFAULT 0, 
+        [followup_pragnent] INTEGER NOT NULL DEFAULT 0, 
+        [followup_lactating] INTEGER NOT NULL DEFAULT 0, 
+        [exits_pragnent] INTEGER NOT NULL DEFAULT 0, 
+        [exit_lactating] INTEGER NOT NULL DEFAULT 0, 
+        [upload_date] DATE);`
     )
     .raw(
       `CREATE TABLE [tblScrStockDist](
@@ -368,28 +376,31 @@ exports.up = function(knex, Promise) {
     )
     .raw(
       `CREATE TABLE [tblSessions](
-              [session_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
-              [site_id] integer, 
-              [client_id] varchar(255), 
-              [session_date] date, 
-              [session_type] varchar(255), 
-              [male_participants] INTEGER, 
-              [female_participants] INTEGER, 
-              [session_location] varchar(255), 
-              [upload_status] integer, 
-              [created_at] datetime, 
-              [updated_at] datetime, 
-              [old_participants] INTEGER, 
-              [new_participants] INTEGER, 
-              [username] VARCHAR(50), 
-              [org_name] VARCHAR(50), 
-              [project_name] VARCHAR(50), 
-              [pragnent] INT, 
-              [lactating] INT, 
-              [is_deleted] INTEGER(1) NOT NULL DEFAULT 0, 
-              [remarks] VARCHAR NOT NULL DEFAULT "N/A", 
-              [CHS_id] VARCHAR, 
-              [CHW_id] VARCHAR);`
+        [session_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+        [site_id] integer, 
+        [client_id] varchar(255), 
+        [session_date] date, 
+        [session_type] varchar(255), 
+        [male_participants] INTEGER, 
+        [female_participants] INTEGER, 
+        [session_location] varchar(255), 
+        [upload_status] integer, 
+        [created_at] datetime, 
+        [updated_at] datetime, 
+        [old_participants] INTEGER, 
+        [new_participants] INTEGER, 
+        [username] VARCHAR(50), 
+        [org_name] VARCHAR(50), 
+        [project_name] VARCHAR(50), 
+        [pragnent] INT, 
+        [lactating] INT, 
+        [is_deleted] INTEGER(1) NOT NULL DEFAULT 0, 
+        [remarks] VARCHAR NOT NULL DEFAULT "N/A", 
+        [CHS_id] VARCHAR, 
+        [CHW_id] VARCHAR, 
+        [upload_date] DATE);
+      
+      `
     )
     .raw(
       `CREATE TABLE [tblSiteStock](
@@ -409,7 +420,8 @@ exports.up = function(knex, Promise) {
         [created_at] datetime, 
         [updated_at] datetime, 
         [stockOutID] VARCHAR, 
-        [client_id] VARCHAR);
+        [client_id] VARCHAR,
+        [upload_date] DATE);
       
       `
     )
@@ -428,7 +440,8 @@ exports.up = function(knex, Promise) {
         [lost_and_damage] DECIMAL NOT NULL DEFAULT 0, 
         [expiry_date] DATE, 
         [client_id] VARCHAR, 
-        [upload_status] INTEGER DEFAULT 0);`
+        [upload_status] INTEGER DEFAULT 0,
+        [upload_date] DATE);`
     )
     .raw(
       `CREATE TABLE [tblStockRequest](
@@ -466,7 +479,8 @@ exports.up = function(knex, Promise) {
         [dist_month] VARCHAR, 
         [province_id] INTEGER, 
         [uc_id] INTEGER, 
-        [client_id] VARCHAR);
+        [client_id] VARCHAR,
+        [upload_date] DATE);
 
       `
     )
@@ -683,36 +697,36 @@ exports.up = function(knex, Promise) {
     )
     .raw(
       `CREATE VIEW [vStockDistReport]
-       AS
-       SELECT 
-       [main].[tblStokDistv2].[stockReportID] AS [Report ID], 
-       [main].[tblStokDistv2].[program_type] AS [Program], 
-       [main].[tblGeoProvince].[provinceName] AS [Province], 
-       [main].[tblGeoDistrict].[districtName] AS [District], 
-       [main].[tblStokDistv2].[dist_month] AS [Month], 
-       [main].[tblGeoTehsil].[tehsilName] AS [Tehsil], 
-       IFNULL ([main].[tblGeoUC].[ucName], '') AS [UC], 
-       IFNULL ([main].[tblGeoNutSite].[siteName], '') AS [Health House], 
-       IFNULL ([main].[tblLhw].[staff_name], '') AS [CHW], 
-       IFNULL ([main].[tblSupervisors].[sup_name], '') AS [CHS], 
-       [main].[tblStokDistv2].[dist_id], 
-       [main].[tblStokDistv2].[item_name] AS [Item], 
-       [main].[tblStokDistv2].[opening], 
-       [main].[tblStokDistv2].[received], 
-       [main].[tblStokDistv2].[distributed], 
-       [main].[tblStokDistv2].[damaged], 
-       [main].[tblStokDistv2].[remaining], 
-       [main].[tblStokDistv2].[created_at] AS [Created], 
-       [main].[tblStokDistv2].[upload_status]
-       FROM   [main].[tblStokDistv2]
-       LEFT JOIN [main].[tblGeoDistrict] ON [main].[tblGeoDistrict].[id] = [main].[tblStokDistv2].[district_id]
-       LEFT JOIN [main].[tblGeoTehsil] ON [main].[tblGeoTehsil].[id] = [main].[tblStokDistv2].[tehsil_id]
-       LEFT JOIN [main].[tblGeoNutSite] ON [main].[tblGeoNutSite].[id] = [main].[tblStokDistv2].[site_id]
-       LEFT JOIN [main].[tblLhw] ON [main].[tblLhw].[staff_code] = [main].[tblStokDistv2].[CHW_id]
-       LEFT JOIN [main].[tblSupervisors] ON [main].[tblSupervisors].[sup_code] = [main].[tblStokDistv2].[CHS_id]
-       LEFT JOIN [main].[tblGeoProvince] ON [main].[tblStokDistv2].[province_id] = [main].[tblGeoProvince].[id]
-       LEFT JOIN [main].[tblGeoUC] ON [main].[tblStokDistv2].[uc_id] = [main].[tblGeoUC].[id]
-       WHERE  [main].[tblStokDistv2].[is_deleted] = 0;`
+      AS
+      SELECT 
+             [main].[tblStokDistv2].[stockDistId] AS [Report ID], 
+             [main].[tblStokDistv2].[program_type] AS [Program], 
+             [main].[tblGeoProvince].[provinceName] AS [Province], 
+             [main].[tblGeoDistrict].[districtName] AS [District], 
+             [main].[tblStokDistv2].[dist_month] AS [Month], 
+             [main].[tblGeoTehsil].[tehsilName] AS [Tehsil], 
+             IFNULL ([main].[tblGeoUC].[ucName], '') AS [UC], 
+             IFNULL ([main].[tblGeoNutSite].[siteName], '') AS [Health House], 
+             IFNULL ([main].[tblLhw].[staff_name], '') AS [CHW], 
+             IFNULL ([main].[tblSupervisors].[sup_name], '') AS [CHS], 
+             [main].[tblStokDistv2].[dist_id], 
+             [main].[tblStokDistv2].[item_name] AS [Item], 
+             [main].[tblStokDistv2].[opening], 
+             [main].[tblStokDistv2].[received], 
+             [main].[tblStokDistv2].[distributed], 
+             [main].[tblStokDistv2].[damaged], 
+             [main].[tblStokDistv2].[remaining], 
+             [main].[tblStokDistv2].[created_at] AS [Created], 
+             [main].[tblStokDistv2].[upload_status]
+      FROM   [main].[tblStokDistv2]
+             LEFT JOIN [main].[tblGeoDistrict] ON [main].[tblGeoDistrict].[id] = [main].[tblStokDistv2].[district_id]
+             LEFT JOIN [main].[tblGeoTehsil] ON [main].[tblGeoTehsil].[id] = [main].[tblStokDistv2].[tehsil_id]
+             LEFT JOIN [main].[tblGeoNutSite] ON [main].[tblGeoNutSite].[id] = [main].[tblStokDistv2].[site_id]
+             LEFT JOIN [main].[tblLhw] ON [main].[tblLhw].[staff_code] = [main].[tblStokDistv2].[CHW_id]
+             LEFT JOIN [main].[tblSupervisors] ON [main].[tblSupervisors].[sup_code] = [main].[tblStokDistv2].[CHS_id]
+             LEFT JOIN [main].[tblGeoProvince] ON [main].[tblStokDistv2].[province_id] = [main].[tblGeoProvince].[id]
+             LEFT JOIN [main].[tblGeoUC] ON [main].[tblStokDistv2].[uc_id] = [main].[tblGeoUC].[id]
+      WHERE  [main].[tblStokDistv2].[is_deleted] = 0;`
     )
     .raw(
       `CREATE VIEW [v_totalSiteStock]
