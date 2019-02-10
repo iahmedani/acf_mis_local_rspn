@@ -14,7 +14,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
   ipcMain.on("stockDistEntry", async (event, data) => {
     // console.log(data);
     const { client, mac } = JSON.parse(
-      fs.readFileSync(__dirname + "/../config.json", "utf8")
+      fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, "utf8")
     );
     async.waterfall([function(cb) {
         var n = new Date().valueOf();

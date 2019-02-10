@@ -7,7 +7,7 @@ const {
   dialog
 } = electron;
 
-process.env.GH_TOKEN = '8a8c45814b6a26c56e8177e1322debd75b1f1aaf'
+process.env.GH_TOKEN = '070e11c25f4fe177bf5daca4fd9b29698af82299'
 
 // require('electron-reload')(__dirname);
 const firstRunDB = require('./firstRunCreateDb').firstCreateDb;
