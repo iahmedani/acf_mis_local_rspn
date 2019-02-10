@@ -87,10 +87,20 @@
               <label for="stock_release_date" class="col-form-label">Stock Release Date:</label>
               <input type="date" name="stock_release_date" id="stock_release_date" class="form-control form-control-sm" required>
             </div>
+            
           </div>
-          <div class="table-responsive">
-            <div id="stockOutGrid"></div>
-          </div>
+          <div class="row">
+
+              <div class="alert alert-danger col-sm-12 col-lg-12 col-md-12" role="alert">
+                  <span class="b"> Note! </span> All Quantities must be added in Sub Unit.
+                </div>
+            </div>
+            <div class="row">
+
+              <div class="table-responsive">
+                <div id="stockOutGrid"></div>
+              </div>
+            </div>
           <div class="alert alert-warning" role="alert" style="display:none">
             No Stock Available for further dispatch
           </div>

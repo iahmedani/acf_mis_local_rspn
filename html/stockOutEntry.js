@@ -186,7 +186,7 @@ module.exports.stockOutEntry = function () {
       var items = [{ Name: ""}];
       var availStock = [{ Name: "", item:''}];
       if(com.commodity.length>0){
-        $('.alert').css('display', 'none')
+        $('.alert-warning').css('display', 'none')
 
         com.commodity.forEach((el, i) => {
           Description.push({
@@ -214,7 +214,7 @@ module.exports.stockOutEntry = function () {
           }
         })
       }else{
-        $('.alert').css('display', '')
+        $('.alert-warning').css('display', '')
       }
       ipc.removeAllListeners("availableCommodity");
     })

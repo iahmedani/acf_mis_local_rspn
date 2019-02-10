@@ -172,7 +172,7 @@ exports.up = function(knex, Promise) {
         [is_mother_alive] VARCHAR(3) NOT NULL DEFAULT Yes, 
         [tehsil_id] INTEGER, 
         [nsc_otp_id] VARCHAR, 
-        [uplaod_date] DATE, 
+        [upload_date] DATE, 
         UNIQUE([reg_id]));           
       `
     )
