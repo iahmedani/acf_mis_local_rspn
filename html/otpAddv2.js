@@ -1,4 +1,5 @@
 module.exports.initOtpAdd = function (){
+  var knex = require('../mainfunc/db')
   $(":input").inputmask();
   // $("#phone").inputmask({ "mask": "(999) 999-9999" });
 $(function () {
@@ -258,20 +259,30 @@ $(function(){
   })
 })
 
-$('#otpAddSubmit').on('click', (e)=>{
+$('#otpAddForm').on('submit', async (e)=>{
+  e.preventDefault();
   $('#otpAddForm').validate();
   if($('#otpAddForm').valid()){
-    var otpAddFormData = $('#otpAddForm').serializeFormJSON();
-    ipc.send('submitOtpAdd', otpAddFormData);
-    ipc.removeAllListeners('submitOtpAdd');
 
-    $('.clr').val("");
-    $(".cld option[value='']").attr('selected', true)
+    var otpAddFormData = $('#otpAddForm').serializeFormJSON();
+    var check = await knex('tblOtpAdd').where({site_id: otpAddFormData.site_id, reg_id: otpAddFormData.reg_id})
+    if(check.length > 0){
+      $('#regIdInfo').css('display', '')
+
+    }else{
+      $('#regIdInfo').css('display', 'none')
+
+      ipc.send('submitOtpAdd', otpAddFormData);
+      ipc.removeAllListeners('submitOtpAdd');
+  
+      $('.clr').val("");
+      $(".cld").val("")
+
+    }
     // setTimeout(otpAddTemplate, 3000);
   }
 
     // addScrChildTemplate()
-  e.preventDefault();
   })
   
   function rusfOnWeigth(_weight) {
@@ -369,7 +380,6 @@ $('#otpAddSubmit').on('click', (e)=>{
     }
   });
   $("#ddProgramType").on("change", function () {
-    console.log($(this).val())
     if ($(this).val() == "sc") {
       $("#ddHealthHouse").attr("disabled", true);
       $("#ddUC").attr("disabled", true);

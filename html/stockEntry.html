@@ -1,8 +1,9 @@
 <template>
   <div id="stockEntry">
     <div class="row">
-      <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">Stock Entry:</p>
-      <form action="#" id="stockEntryForm" class="col-sm-12">
+      <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">Stock Entry: </p>
+     <p class="text-danger h5"> Note: All quantities must be added in subunit</p>
+      <form id="stockEntryForm" class="col-sm-12">
         <div class="form-group row">
           <label for="dn_number" class="col-sm-2 col-form-label">Delivery Note #:</label>
           <div class="col-sm-4">
@@ -13,15 +14,22 @@
             <input type="date" name="dn_date" id="dn_date" class="form-control form-control-sm" required>
           </div>
         </div>
-        <div class="table-responsive">
-          <div id="jsGrid"></div>
-        </div>
-        <div class="form-group row">
-          <div class="offset-sm-10 col-sm-2">
-            <button type="submit" class="btn btn-info btn-block" id="stockEntrySubmit">Save</button>
-          </div>
-        </div>
+        
+        
+          
       </form>
     </div>
-  </div>
+      <div class="row">
+        <div class="table-responsive">
+            <div id="jsGrid"></div>
+          </div>
+
+      </div>
+
+        <div class=" row">
+            <div class="offset-sm-10 col-sm-2">
+              <button type="submit" class="btn btn-info btn-block" id="stockEntrySubmit">Save</button>
+            </div>
+          </div>
+    </div>
 </template>

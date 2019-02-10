@@ -1,5 +1,6 @@
 // var async = require('async');
-const {knex} = require('../dbTest');
+const knex = require('../mainfunc/db');
+
 module.exports.initOtpReportsV2 = function () {
   var ddReportType = $('#reportType');
   $('#singles').hide();

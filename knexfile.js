@@ -5,7 +5,8 @@ module.exports = {
   development: {
     client: 'sqlite3',
     connection: {
-      filename: './acf_mis_local.sqlite3'
+      filename:`${process.env.APPDATA}/NIMS/acf_mis_local.sqlite3`
+
     },
   useNullAsDefault:true
   },

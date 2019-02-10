@@ -1,4 +1,5 @@
-const {knex} = require('../dbTest')
+const knex = require('../mainfunc/db');
+
 
 module.exports.initOtpFollowUpEdit = function () {
   function DecimalField(config) {
@@ -140,6 +141,7 @@ module.exports.initOtpFollowUpEdit = function () {
       return ''
     }
     let _editFollowUp = async (item)=>{
+      // console.log(item)
       delete item.site_village;
       delete item.reg_id;
       delete item.p_name;
@@ -149,6 +151,7 @@ module.exports.initOtpFollowUpEdit = function () {
        delete item.tehsil_id
        delete item.uc_id
        delete item.site_id
+       item.next_followup = item.next_followup.split('T')[0];
       var x = await knex('tblOtpFollowup').update(item).where({followup_id:item.followup_id})
       console.log({x});
       var y = await knex('v_otpFollowupUpdate').where({followup_id:x})
@@ -179,6 +182,7 @@ module.exports.initOtpFollowUpEdit = function () {
             return  await _followup(id);
           },
           updateItem: async (item)=> {
+            console.log(item)
             // console.log("update");
             // item.followup_date = $('#followup_date').val();
             // console.log(item);
@@ -304,13 +308,6 @@ module.exports.initOtpFollowUpEdit = function () {
             width: 50
           },
           {
-            name: "next_followup",
-            type: "date",
-            title: "Next Follow Up",
-            // editing: false,
-            align: "right"
-          },
-          {
             width: 80,
             align:'center',
             headerTemplate: function() {
@@ -325,6 +322,13 @@ module.exports.initOtpFollowUpEdit = function () {
                 // alert(diffDays);
               return diffDays;
             }
+          },
+          {
+            name: "next_followup",
+            type: "date",
+            title: "Next Follow Up",
+            // editing: false,
+            align: "right"
           },
           {
             name: 'upload_status',
@@ -378,15 +382,21 @@ module.exports.initOtpFollowUpEdit = function () {
           return diffDays > 21 ? 'bg-red': '';
           // itemIndex%2==0 ? 'bg-red' : 'bg-green';
       },
-      rowClick: function(args) {
+      rowClick:  async function(args) {
         var date1 = new Date(args.item.upload_date);
               var date2 = new Date();
               var timeDiff = Math.abs(date2.getTime() - date1.getTime());
               var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
               diffDays = (args.item.upload_status == 1) ? diffDays : 0;
         if(diffDays < 6){
-        
-        this.editItem(args.item);
+          var exit_check = await knex('tblOtpExit').where({otp_id: args.item.otp_id, is_deleted:0})
+          if(exit_check.length>0){
+            alert('This could not be edited b/c patient is already exited')
+
+          }else{
+
+            this.editItem(args.item);
+          }
         }else{
         alert('This could not be edited b/c its been more than 5 days since uploaded')
 

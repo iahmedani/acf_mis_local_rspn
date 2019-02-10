@@ -318,13 +318,6 @@ module.exports.initOtpFollowUp = function () {
               width: 50
             },
             {
-              name: "next_followup",
-              type: "date",
-              title: "Next Follow Up",
-              // editing: false,
-              align: "right"
-            },
-            {
               width: 80,
               align:'center',
               headerTemplate: function() {
@@ -339,6 +332,13 @@ module.exports.initOtpFollowUp = function () {
                   // alert(diffDays);
                 return diffDays;
               }
+            },
+            {
+              name: "next_followup",
+              type: "date",
+              title: "Next Follow Up",
+              // editing: false,
+              align: "right"
             },
 
             {

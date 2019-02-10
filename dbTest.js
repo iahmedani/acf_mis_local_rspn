@@ -1,10 +1,4 @@
-var knex = require("knex")({
-  client: "sqlite3",
-  connection: {
-    filename: "acf_mis_local.sqlite3"
-  },
-  useNullAsDefault:true,
-});
+const knex = require('./mainfunc/db');
 
 module.exports.test = function(cond, cb) {
   knex("scr_report_final")

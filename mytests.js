@@ -1,10 +1,5 @@
 
-var knex = require('knex')({
-  client: 'sqlite3',
-  connection: {
-    filename: 'acf_mis_local.sqlite3'
-  }
-});
+const knex = require('./mainfunc/db');
 
 // knex('v_otpAddNewReport')
 // .select(knex.raw(`count( case when ent_reason = 'no_prv_pro' then '' END ) as newAdmision,

@@ -73,6 +73,21 @@
           <label for="village" class="form-label" >Village:</label>
           <input type="text" id="village" name="village" class="form-control form-control-sm " readonly>
           </div>
+          <div class="form-group col col-sm-2">
+  
+            <label for="exit_reason" >Exit Reasons:</label>
+           <select name="exit_reason" id="exit_reason" class="form-control form-control-sm" required>
+            <option selected value="">Choose</option>
+            <option value="cured">Cured</option>
+            <option value="defaulter">Defaulter</option>
+            <option value="non_respondent">Non Respondent</option>
+            <option value="death">Death</option>
+            <option value="medical_transfer_sc">Transfer To NSC</option>
+            <option value="medical_transfer">Medical Transfer</option>
+            <option value="transfer_out_to_other_otp">Transfer Out to other OTP</option>
+            <option value="other">Other</option>
+           </select>
+        </div>
         <div class="form-group col-sm-2">
   
             <label for="exit_weight" class="form-label">Exit Weight:</label>
@@ -83,21 +98,7 @@
             <label for="exit_muac" >Exit MUAC:</label>
             <input type="text" id="exit_muac"  name="exit_muac" class="form-control form-control-sm " required>
   </div>
-  <div class="form-group col col-sm-2">
-  
-      <label for="exit_reason" >Exit Reasons:</label>
-     <select name="exit_reason" id="exit_reason" class="form-control form-control-sm" required>
-      <option selected value="">Choose</option>
-      <option value="cured">Cured</option>
-      <option value="defaulter">Defaulter</option>
-      <option value="non_respondent">Non Respondent</option>
-      <option value="death">Death</option>
-      <option value="medical_transfer_sc">Transfer To NSC</option>
-      <option value="medical_transfer">Medical Transfer</option>
-      <option value="transfer_out_to_other_otp">Transfer Out to other OTP</option>
-      <option value="other">Other</option>
-     </select>
-  </div>
+ 
   </div>
   <div class="row">
       <div class="form-group col-sm-2">

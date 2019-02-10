@@ -1025,7 +1025,7 @@ function updateGrid(reportId, prog_type) {
       pageLoading: true, // this is the clue
       pageSize: 10,
       pageButtonCount: 5,
-      deleteConfirm: "Do you really want to delete Session?",
+      deleteConfirm: "Do you really want to delete Stock Distribution?",
       sorting: true,
       paging: true,
       controller: {

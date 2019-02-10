@@ -80,11 +80,11 @@ module.exports.stockEntryUpdate = function () {
             type: 'text',
             editing: false
           },
-          { name: 'disp_qty', title: 'Quantity Dispatched', type: 'decimal' },
-          { name: 'rec_qty', title: 'Received  Quantity (*)', type: 'decimal' },
+          { name: 'disp_qty', title: 'Quantity Dispatched', type: 'decimal' ,validate: "required" },
+          { name: 'rec_qty', title: 'Received  Quantity (*)', type: 'decimal',validate: "required"  },
           { name: 'rec_obs', title: 'Quality, observations', type: 'text' },
-          { name: 'lost_and_damage', title: 'Lost and Damage Qty', type: 'decimal' },
-          { name: 'expiry_date', title: 'Expiry Date', type: 'date' },
+          { name: 'lost_and_damage', title: 'Lost and Damage Qty', type: 'decimal', validate: "required"  },
+          { name: 'expiry_date', title: 'Expiry Date', type: 'date' , validate: "required" },
           {
             type: "control",
             editButton: true, deleteButton: true, modeSwitchButton: false

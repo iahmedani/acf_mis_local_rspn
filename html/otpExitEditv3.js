@@ -441,4 +441,17 @@ module.exports.initOtpExitEditV2 = function(){
       // console.log(args.item);
     }
   });
+  $('#exit_reason').change(function(){
+    if($(this).val() == 'defaulter'){
+      $('#exit_weight').attr('required', false)
+      $('#exit_muac').attr('required', false)
+      $('#exit_ration1').attr('required', false)
+      $('#exit_quantity1').attr('required', false)
+    }else{
+      $('#exit_weight').attr('required', true)
+      $('#exit_muac').attr('required', true)
+      $('#exit_ration1').attr('required', true)
+      $('#exit_quantity1').attr('required', true)
+    }
+  })
 }

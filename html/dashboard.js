@@ -1,4 +1,4 @@
-const {knex} = require('../dbTest')
+const knex = require('../mainfunc/db');
 module.exports.initDashboard = function () {
   async function plwData (){
     var _plwData = await knex('tblScrPlw')

@@ -1,10 +1,5 @@
-var knex = require("knex")({
-  client: "sqlite3",
-  connection: {
-    filename: 'acf_mis_local.sqlite3'
-    // filename: './acf_mis_local.sqlite3'
-  }
-});
+const knex = require('./mainfunc/db');
+
 
 knex.select(
   knex.raw(`SUM(total_scr_girls + total_scr_boys) as total_scr,

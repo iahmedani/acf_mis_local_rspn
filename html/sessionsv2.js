@@ -234,6 +234,7 @@ module.exports.initSessionsV2 = function () {
           item.site_id = ($("#ddHealthHouse").val()) ? $("#ddHealthHouse").val() : '';
           item.CHW_id = $("#ddStaff_code").val() ? $("#ddStaff_code").val() : "";
           item.CHS_id = $("#ddSup_code").val() ? $("#ddSup_code").val() : "";
+          item.prog_type = $('#ddProgramType').val();
           delete item['']
           return insertData(item)
           // if (item.site_id != '') {
@@ -491,6 +492,7 @@ module.exports.initSessionsV2 = function () {
     return new Promise((resolve, reject) => {
       $("#sessionForm").validate();
       if ($("#sessionForm").valid()) {
+        
         ipc.send("insertSessionsSingle", item);
         ipc.on("insertSessionsSingle", (e, result) => {
           if (result.err) {

@@ -1,24 +1,32 @@
 module.exports.stockEntry = function () {
+  let data = [];
   $(function () {
     var datePickerId = document.getElementById('dn_date');
     datePickerId.max = new Date().toISOString().split("T")[0];
   });
   // console.log('stock Entry')
-  var data = [];
   let myInsert = (item) => {
+    console.log(item)
     return new Promise((resolve, reject) => {
       var length = data.length + 1;
       item.id = data.length + 1;
       item.dn_number = $('#dn_number').val();
       item.dn_date = $('#dn_date').val();
       $('#stockEntryForm').validate();
-      if ($('#stockEntryForm').valid()) {
-        data.push(item);
-        // console.log(data);
+      if ($('#stockEntryForm').valid() ) {
+        var __x = data.filter(el=> el.item_name == item.item_name && el.expiry_date == item.expiry_date)
+        if(__x.length < 1){
+
+          data.push(item);
+        }else{
+          alert('Error: Duplicate Items are not allowed')
+        }
+
       }
+        // console.log(data);
       // data.push(item);
       // console.log(data);
-      if (length == data.length && $('#stockEntryForm').valid()) {
+      if (length == data.length && $('#stockEntryForm').valid() && __x.length < 1 ) {
         resolve(data[data.length]);
       } else {
         reject()
@@ -51,12 +59,14 @@ module.exports.stockEntry = function () {
           tempVar = true
         }
       })
+      var __x = data.filter(el=> el.item_name == item.item_name && el.expiry_date == item.expiry_date)
 
-      if (tempVar) {
+      if (tempVar  && __x.length < 1) {
         // delIndex.splice(index, 1);
         // console.log(data);
         resolve(item)
       } else {
+        alert('Duplicate Item is not allowed')
         reject()
       }
     })
@@ -223,11 +233,11 @@ module.exports.stockEntry = function () {
               return disp_sub_unit;
             }
           },
-          { name: 'disp_qty', title: 'Quantity Dispatched', type: 'decimal' },
-          { name: 'rec_qty', title: 'Received  Quantity (*)', type: 'decimal' },
+          { name: 'disp_qty', title: 'Quantity Dispatched', type: 'decimal', validate: "required"  },
+          { name: 'rec_qty', title: 'Received  Quantity (*)', type: 'decimal', validate: "required"  },
           { name: 'rec_obs', title: 'Quality, observations', type: 'text' },
-          { name: 'lost_and_damage', title: 'Lost and Damage Qty', type: 'decimal' },
-          { name: 'expiry_date', title: 'Expiry Date', type: 'date' },
+          { name: 'lost_and_damage', title: 'Lost and Damage Qty', type: 'decimal', validate: "required" },
+          { name: 'expiry_date', title: 'Expiry Date', type: 'date', validate: "required" },
           {
             type: "control",
             editButton: false, modeSwitchButton: false
@@ -239,18 +249,19 @@ module.exports.stockEntry = function () {
     
   });
 
-  $('#stockEntrySubmit').on('click', (e) => {
-    console.log(data);
+  $('#stockEntrySubmit').on('click', async (e) => {
+    // console.log(data);
     // if(data.length>0){
-
+      
+    e.preventDefault();
     var stockEntryArr = [];
-    data.forEach(el => {
-      delete el.id;
-      stockEntryArr.push(el)
-    })
-    console.log(stockEntryArr)
-    ipc.send('stockEntry', (stockEntryArr))
-    ipc.removeAllListeners('stockEntry')
+    for (stock of data){
+      delete stock.id;
+      stockEntryArr.push(stock);
+    }
+    // console.log(stockEntryArr)
+    await ipc.send('stockEntry', (stockEntryArr))
+    await ipc.removeAllListeners('stockEntry')
     // data = [];
     // $('#jsGrid').jsGrid("loadData");
     // $('#scrPlwForm').get(0).reset();
@@ -259,6 +270,5 @@ module.exports.stockEntry = function () {
     // } else {
     //   $('#scrPlwForm').validate();
     // }
-    e.preventDefault();
   })
 }

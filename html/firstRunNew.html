@@ -55,7 +55,7 @@
       <form id="myForm" class="col col-sm-12">
         <div class="form-group">
           <label for="username">User Name:</label>
-          <input type="text" name="username" class="form-control" id="username" minlength="2" maxlength="50" placeholder="Enter AAH provided username" required>
+          <input type="text" name="username" class="form-control" id="username" minlength="2" maxlength="50" placeholder="Enter ACF provided username" required>
         </div>
         <div class="form-group">
           <label for="password">Password:</label>
@@ -72,11 +72,11 @@
         </div>
         <div class="form-group">
           <label for="client">Licence Key:</label>
-          <input type="text" minlength="36" maxlength="36" name="client" class="form-control" id="client" placeholder="AAF Provided software licence key" required>
+          <input type="text" minlength="36" maxlength="36" name="client" class="form-control" id="client" placeholder="ACF Provided software licence key" required>
         </div>
         <div class="form-group">
           <label for="_url">Server Url</label>
-          <input type="text"  name="_url" class="form-control" id="_url" placeholder="AAF Provided software licence key" required>
+          <input type="text"  name="_url" class="form-control" id="_url" placeholder="ACF Provided URL" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>
@@ -93,7 +93,7 @@
     const request = require('request');
     const ipc = require('electron').ipcRenderer;
     const remote = require('electron').remote;
-    const {knex} = require('../dbTest')
+    const knex = require('../mainfunc/db');
 
   </script>
   <script src="../js/bootstrap.bundle.js"></script>
@@ -194,7 +194,7 @@
           formData.project_nameL = formData.project_name;
           formData.passwordL = formData.password;
           formData.mac= mac;
-          fs.writeFileSync('config.json',JSON.stringify(formData));
+          fs.writeFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`,JSON.stringify(formData));
           await knex('tblConfig').insert({description:'url', value: formData._url})
           $('body').append(
           `<div class="alert alert-success alert-dismissible fade show" role="alert">App Registered Successfully </div>`)

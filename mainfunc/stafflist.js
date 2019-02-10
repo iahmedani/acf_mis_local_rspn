@@ -25,7 +25,7 @@ module.exports = (ipcMain, knex, fs, sndMsg) => {
 
   ipcMain.on("addStaff", async (evt, data) => {
     data.created_at = new Date(Date.now()).toLocaleDateString();
-    data.client_id = await JSON.parse(fs.readFileSync("config.json", "utf8")).client;
+    data.client_id = await JSON.parse(fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, "utf8")).client;
     console.log(data);
     if (!data.id == "") {
       knex("tblLhw")

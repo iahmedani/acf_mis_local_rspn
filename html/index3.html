@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
   <link rel="stylesheet" href="../css/bootstrap.min.css" crossorigin="anonymous">
   <link rel="stylesheet" href="../fa5/css/fontawesome-all.min.css">
   <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous"> -->
@@ -68,6 +69,7 @@
         <a class="navbar-brand" href="#" id="homeDashboard">
           <img src="../img/acf-logo.svg" style="height: 50px;" alt="">
         </a>
+
         <ul id="nav" class="list-unstyled">
           <li><a href="#"><strong class="display-6"><i class="fas fa-clipboard-list "></i> Data Entry</strong></a>
             <ul class="list-unstyled">
@@ -113,7 +115,11 @@
             </ul>
           </li>
         </ul>
-
+        <ul class="text-white my-auto" style="font-size:14px; margin-bottom: 0px;" >
+            <li>Version: <span id="appVersion"></span></li>
+            <li>Developed By: Shumaila &copy; 2019</li>
+            <li id="updMessage" style="display:none">Update Available</li>
+        </ul>
       </div>
 
       <main class="col-md-10 col-xs-11 p-l-2 p-t-2">
@@ -887,12 +893,12 @@
       //   // console.log(ipc.listeners()[0]);
       // })
     });
-    ipc.on('updateNote', (e, index)=>{
-      if(index === 1){
-        console.log('Update Cancel')
-      } else if (index === 0){
-        ipc.send('updateSoftware')
-      }
+    ipc.on('updateNote', (e)=>{
+      $('#updMessage').css('display', '');
+    })
+    $(function(){
+      let x = ipc.sendSync('getVersion')
+      $('#appVersion').text(x);
     })
   </script>
 </body>

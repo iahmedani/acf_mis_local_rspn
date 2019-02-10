@@ -1,4 +1,5 @@
-const {knex} = require('../dbTest')
+const knex = require('../mainfunc/db');
+
 module.exports.initDefaulterv2 = function(){
   ipc.send("getProvince");
   ipc.on("province", function(evt, province) {

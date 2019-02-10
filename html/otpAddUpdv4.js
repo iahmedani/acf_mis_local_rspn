@@ -356,7 +356,7 @@ module.exports.initOtpAddUpdV2 = function () {
         this.editItem(args.item);
         var data = args.item;
         ipc.send("getCommodity", data.prog_type);
-        ipc.on('commodity', function (evt, com) {
+        ipc.on('commodity', async function (evt, com) {
           $('#ration1').children('option:not(:first)').remove();
           $('#ration2').children('option:not(:first)').remove();
           $('#ration3').children('option:not(:first)').remove();
@@ -365,9 +365,9 @@ module.exports.initOtpAddUpdV2 = function () {
           // $('#ddDistrict').append(`<option value="${el.id}">${el.districtName}</option>`);              
           //   })
           // dist(district);
-          commodity(com, 'ration1');
-          commodity(com, 'ration2');
-          commodity(com, 'ration3');
+          await commodity(com, 'ration1');
+          await commodity(com, 'ration2');
+         await commodity(com, 'ration3');
         })
         $("#travel_time_minutes").val(data.travel_time_minutes);
         $("#is_mother_alive").val(data.is_mother_alive);
@@ -404,11 +404,15 @@ module.exports.initOtpAddUpdV2 = function () {
           $("#ddHealthHouse").empty()
           $("#ddUC").empty()
           $("#ddVillageName").empty();
-          $("#ddVillageName").attr('disabled', true);
+          $("#ddVillageName").attr('disabled', false);
 
           
         };
-        $("#site_village").val(data.site_village);
+        console.log(data)
+        // villListener(data.)
+        // villListener(data.site_id);
+        // setTimeout($("#ddVillageName").val(data.site_village), 200)
+        // $("#ddVillageName").val(data.site_village);
         $("#reg_date").val(data.reg_date);
         $("#reg_id").val(data.reg_id);
         $("#f_or_h_name").val(data.f_or_h_name);
@@ -418,7 +422,7 @@ module.exports.initOtpAddUpdV2 = function () {
         $("#address").val(data.address);
         $("#age").val(data.age);
         $("#gender").val(data.gender);
-        $("#village").val(data.site_village);
+        // $("#village").val(data.site_village);
         data.plw_type === null
           ? $("#plw_type").attr("disabled", true)
           : $("#plw_type").val(data.plw_type);
@@ -458,18 +462,24 @@ module.exports.initOtpAddUpdV2 = function () {
         $("#pass_urine").val(data.pass_urine);
         $("#b_feeding").val(data.b_Feeding);
         $("#od_swol_time").val(data.od_swol_time);
-        $("#ration1").val(data.ration1);
-        $("#quantity1").val(data.quantity1);
-        $("#ration2").val(data.ration2);
-        $("#quantity2").val(data.quantity2);
-        $("#ration3").val(data.ration3);
-        $("#quantity3").val(data.quantity3);
+        
         $("#otp_id").val(data.otp_id);
         $('#other_com_name').val(data.other_com_name);
         $('#other_com_qty').val(data.other_com_qty);
         $('#nsc_old_otp_id').val(data.nsc_old_otp_id);
         // updateProvinceDD();
         $("#ddProvince").val(data.province_id);
+        // console.log(data.ration1)
+        setTimeout(qtz,200)
+        function qtz(){
+
+          $("#ration1").val(data.ration1);
+          $("#quantity1").val(data.quantity1);
+          $("#ration2").val(data.ration2);
+          $("#quantity2").val(data.quantity2);
+          $("#ration3").val(data.ration3);
+          $("#quantity3").val(data.quantity3);
+        }
         if (data.ent_reason == "transfer_in_from_nsc") {
           $("#nsc_old_otp_id_div").css('display', '');
           $("#nsc_old_otp_id").attr("hidden", false);
@@ -512,6 +522,11 @@ module.exports.initOtpAddUpdV2 = function () {
         $("#ddHealthHouse").append(
           `<option value="${data.site_id}" selected>${
             data.site_name
+          }</option>`
+        );
+        $("#ddVillageName").append(
+          `<option value="${data.site_village}" selected>${
+            data.site_village
           }</option>`
         );
       }else{

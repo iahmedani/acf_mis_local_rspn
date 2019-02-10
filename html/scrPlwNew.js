@@ -1,6 +1,29 @@
 module.exports.initScrPlwNew = function (){
   $(()=>{
     $('input[type="number"]').attr('min',0);
+    var p = $('.p')
+    var l = $('.l')
+    var pt = $('#total_scr_pragnent')
+    var lt = $('#total_scr_lactating')
+   
+
+    p.change(()=>{
+      var total=0;
+      p.each(function(){
+        total += isNaN(parseInt($(this).val())) ?  0 : parseInt($(this).val()) 
+        pt.val(total);
+      })
+    })
+    l.change(()=>{
+      var total=0;
+      l.each(function(){
+        total += isNaN(parseInt($(this).val())) ?  0 : parseInt($(this).val()) 
+
+
+        lt.val(total);
+      })
+    })
+
   })
   $(function () {
     var datePickerId = document.getElementById('txtScrChildDate');

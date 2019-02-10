@@ -19,8 +19,8 @@
 
   <select name="prog_type" id="ddProgramType" class="form-control form-control-sm ptype" required>
     <option selected value="">Select One</option>
-    <option value="sfp">TSFP</option>
-    <option value="sfp_Plw">TSFP-PLW</option>
+    <option disabled value="sfp">TSFP</option>
+    <option disabled value="sfp_Plw">TSFP-PLW</option>
     <option value="otp">OTP</option>
     <option value="sc">NSC</option>
   </select>
@@ -83,6 +83,7 @@
 
           <label for="reg_id" class="form-label">Registration ID:</label>
           <input type="text" name="reg_id" id="reg_id" class="form-control form-control-sm clr" maxlength="7" required>
+          <span style="display:none; color: red" id="regIdInfo">Duplicate registration id</span>
         </div>
       </div>
       <div class="row">
@@ -247,7 +248,7 @@
                 <div class="row">
                   <div class="form-group col-sm-1">
                     <label for="diarrhoea">Diarrhoea</label>
-                    <select name="diarrhoea" id="diarrhoea" class="form-control form-control-sm cld" required>
+                    <select name="diarrhoea" id="diarrhoea" class="form-control form-control-sm " required>
                       <option  value="">Choose</option>
                       <option value="1">Yes</option>
                       <option selected value="0">No</option>
@@ -256,7 +257,7 @@
                   <div class="form-group col-sm-1">
 
                     <label for="vomiting">Vomiting</label>
-                    <select name="vomiting" id="vomiting" class="form-control form-control-sm cld" required>
+                    <select name="vomiting" id="vomiting" class="form-control form-control-sm " required>
                       <option  value="">Choose</option>
                       <option value="1">Yes</option>
                       <option selected value="0">No</option>
@@ -265,7 +266,7 @@
                   <div class="form-group col-sm-2">
 
                     <label for="cough">Cough</label>
-                    <select name="cough" id="cough" class="form-control form-control-sm cld" required>
+                    <select name="cough" id="cough" class="form-control form-control-sm " required>
                       <option  value="">Choose</option>
                       <option value="1">Yes</option>
                       <option selected value="0">No</option>
@@ -274,7 +275,7 @@
                   <div class="form-group col-sm-2">
 
                     <label for="appetite">Appetite</label>
-                    <select name="appetite" id="appetite" class="form-control form-control-sm cld" required>
+                    <select name="appetite" id="appetite" class="form-control form-control-sm " required>
                       <option  value="">Choose</option>
                       <option selected value="good">Good</option>
                       <option value="poor">Poor</option>
@@ -284,7 +285,7 @@
                   <div class="form-group col-sm-2">
 
                     <label for="daily_stool">Stools&#047;Day</label>
-                    <select name="daily_stool" id="daily_stool" class="form-control form-control-sm cld" required>
+                    <select name="daily_stool" id="daily_stool" class="form-control form-control-sm " required>
                       <option  value="">Choose</option>
                       <option selected value="bet1_3">1 to 3</option>
                       <option value="bet4_5">4 to 5</option>
@@ -294,7 +295,7 @@
                   <div class="form-group col-sm-2">
 
                     <label for="pass_urine">Passing Urine</label>
-                    <select name="pass_urine" id="pass_urine" class="form-control form-control-sm cld" required>
+                    <select name="pass_urine" id="pass_urine" class="form-control form-control-sm " required>
                       <option  value="">Choose</option>
                       <option selected value="1">Yes</option>
                       <option value="0">No</option>
@@ -303,7 +304,7 @@
                   <div class="form-group col-sm-2">
 
                     <label for="b_feeding">Breast Feeding</label>
-                    <select name="b_feeding" id="b_feeding" class="form-control form-control-sm cld" required>
+                    <select name="b_feeding" id="b_feeding" class="form-control form-control-sm " required>
                       <option  value="">Choose</option>
                       <option selected value="1">Yes</option>
                       <option value="0">No</option>

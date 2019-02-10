@@ -1,9 +1,5 @@
-const knex = require('knex')({
-    client: 'sqlite3',
-    connection: {
-      filename: "./acf_mis_local.sqlite3"
-    }
-  });
+const knex = require('./mainfunc/db');
+
   
   // create tblGeoProvince
   knex.schema.hasTable('tblGeoProvince').then(function (exists) {

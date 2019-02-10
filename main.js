@@ -7,6 +7,8 @@ const {
   dialog
 } = electron;
 
+process.env.GH_TOKEN = '8a8c45814b6a26c56e8177e1322debd75b1f1aaf'
+
 // require('electron-reload')(__dirname);
 const firstRunDB = require('./firstRunCreateDb').firstCreateDb;
 const url = require('url');
@@ -18,17 +20,12 @@ const log = require('electron-log');
 const {
   autoUpdater
 } = require("electron-updater");
-autoUpdater.autoDownload = false;
+// autoUpdater.autoDownload = true;
 
 // console.log(imran);
 var async = require('async');
-var knex = require("knex")({
-  client: "sqlite3",
-  connection: {
-    filename: 'acf_mis_local.sqlite3'
-  },
-  useNullAsDefault: true
-});
+const knex = require('./mainfunc/db');
+
 // let _testVar 
 async function _serverUrl (){
   var  x = await knex('tblConfig'); 
@@ -161,7 +158,7 @@ function followupAddData(event, item) {
     curr_date: item.followup_date,
     other_com_name: item.other_com_name,
     other_com_qty: item.other_com_qty,
-    next_followup: item.next_followup,
+    next_followup: item.next_followup.split('T')[0],
 
     // next_followup: function () {
     //   var myDate = new Date(item.followup_date);
@@ -500,7 +497,7 @@ function stockRequest(event, data) {
 // Save Stock Entry
 function stockSave(event, data) {
   // console.log(data)
-  const {client, mac } = JSON.parse(fs.readFileSync( __dirname+'/config.json', 'utf8'));
+  const {client, mac } = JSON.parse(fs.readFileSync( `${process.env.APPDATA}/ACF MIS Local app/config.json`, 'utf8'));
   const newData =[];
    data.forEach((el, i)=>{
     el.client_id = client; 
@@ -987,12 +984,12 @@ function creatWindow() {
     show: false
   });
   // mainWindow.fullscreen = true;
-  fs.stat('config.json', function (err, stat) {
+  fs.stat(`${process.env.APPDATA}/ACF MIS Local app/config.json`, function (err, stat) {
     if (err == null) {
       console.log('File exists');
       mainWindow.once('ready-to-show', () => {
         mainWindow.maximize();
-        imran = config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
+        imran = config = JSON.parse(fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, 'utf8'));
         mainWindow.show()
 
       });
@@ -1687,6 +1684,44 @@ function creatWindow() {
 }
 //Creating main window
 app.on('ready', creatWindow);
+
+
+// Electron auto updator
+autoUpdater.on('checking-for-update', () => {
+  console.log('Checking for update...');
+})
+autoUpdater.on('update-available', (info) => {
+  console.log('Update available.');
+  mainWindow.webContents.send('updateNote', 'Update Available')
+})
+autoUpdater.on('update-not-available', (info) => {
+  console.log('Update not available.');
+})
+autoUpdater.on('error', (err) => {
+  console.log('Error in auto-updater. ' + err);
+})
+
+
+autoUpdater.on('download-progress', (progressObj) => {
+  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  console.log(log_message);
+})
+autoUpdater.on('update-downloaded', (info) => {
+
+  console.log('Update downloaded');
+});
+
+
+app.on('ready', ()=>{
+  autoUpdater.checkForUpdatesAndNotify();
+
+})
+
+ipcMain.on('getVersion', (e)=>{
+  e.returnValue =app.getVersion();
+})
 
 // function sessions() {
 //   const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize
@@ -4167,38 +4202,68 @@ const mainMenuTemplate = [
       }
     ]
   },
-  {
-    label: 'View',
-    submenu: [{
-        role: 'reload'
-      },
-      {
-        role: 'forcereload'
-      },
-       { role: 'toggledevtools'}
-      ,
-      {
-        type: 'separator'
-      },
-      {
-        role: 'resetzoom'
-      },
-      {
-        role: 'zoomin'
-      },
-      {
-        role: 'zoomout'
-      },
-      {
-        type: 'separator'
-      },
-      {
-        role: 'togglefullscreen'
-      }
-    ]
-  }
+  
 ];
 
+var new_menu = (process.env.NODE_ENV == 'production') ? {
+  label: 'View',
+  submenu: [{
+      role: 'reload'
+    },
+    {
+      role: 'forcereload'
+    },
+    {
+      type: 'separator'
+    },
+    {
+      role: 'resetzoom'
+    },
+    {
+      role: 'zoomin'
+    },
+    {
+      role: 'zoomout'
+    },
+    {
+      type: 'separator'
+    },
+    {
+      role: 'togglefullscreen'
+    }
+  ]
+  } : {
+  label: 'View',
+  submenu: [{
+      role: 'reload'
+    },
+    {
+      role: 'forcereload'
+    },
+     { role: 'toggledevtools'}
+    ,
+    {
+      type: 'separator'
+    },
+    {
+      role: 'resetzoom'
+    },
+    {
+      role: 'zoomin'
+    },
+    {
+      role: 'zoomout'
+    },
+    {
+      type: 'separator'
+    },
+    {
+      role: 'togglefullscreen'
+    }
+  ]
+};
+
+mainMenuTemplate.push(new_menu)
 
 
 app.on('window-all-closed', () => {
@@ -4246,3 +4311,7 @@ require("./mainfunc/otpAddExitReport")(ipcMain, knex, fs, clientMessages, async)
 require("./mainfunc/syncwithauth")(ipcMain, knex, fs, clientMessages, async, request, rp);
 // Managing Update of StockIn
 require("./mainfunc/stockInUpdate")(ipcMain, knex, fs, clientMessages, async);
+
+// Future db updates
+
+require('./mainfunc/updateDb');
