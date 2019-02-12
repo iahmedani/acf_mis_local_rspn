@@ -234,7 +234,12 @@ module.exports.initOtpExit = function (){
 
     _dataGrid();
       
+    function _refreshGrid(){
+      $("#otpExitGrid").jsGrid("render").done(function() {
+       console.log("rendering completed and data loaded");
+   });
 
+    }
 
   
     $('#exitAddForm').on('submit',  (e)=> {
@@ -255,9 +260,7 @@ module.exports.initOtpExit = function (){
          filter.site_id =  $('#ddHealthHouse').val()
         //  $("#otpExitGrid").jsGrid("reset");
         // _dataGrid();
-         $("#otpExitGrid").jsGrid("render").done(function() {
-          console.log("rendering completed and data loaded");
-      });
+        setTimeout(_refreshGrid, 200)
         //  _dataGrid();
         //  $("#otpExitGrid").jsGrid("loadData", { site_id: filter}).done(function() {
         //   console.log("data loaded");

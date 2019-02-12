@@ -48,8 +48,10 @@
           </div>
           <div class="card-body"> -->
   <div class="row">
-    
-    <div id="otpExitGrid" ></div>
+    <div class="table-responsive">
+      <div id="otpExitGrid" ></div>
+      
+    </div>
   </div>
   <div class="row">
     <div id="exitEntry" class="col-sm-12 border rounded">
@@ -120,7 +122,7 @@
           <option value="IYCF_Cups_and_Spoons">IYCF Cups &and; Spoons </option> -->
         </select>
       </div>
-      <div class="form-group col-sm-2">
+      <div class="form-group col-sm-1">
         <label for="exit_quantity1">Quantity:</label>
         <input type="number" name="exit_quantity1" id="exit_quantity1" class="form-control form-control-sm" min="0" required>
       </div>
@@ -144,7 +146,7 @@
           <option value="IYCF_Cups_and_Spoons">IYCF Cups &and; Spoons </option> -->
         </select>
       </div>
-      <div class="form-group col-sm-2">
+      <div class="form-group col-sm-1">
         <label for="exit_quantity2">Quantity:</label>
         <input type="number" name="exit_quantity2" id="exit_quantity2" class="form-control form-control-sm" min="0">
       </div>
@@ -168,19 +170,19 @@
           <option value="IYCF_Cups_and_Spoons">IYCF Cups &and; Spoons </option> -->
         </select>
       </div>
-      <div class="form-group col-sm-2">
+      <div class="form-group col-sm-1">
         <label for="exit_quantity3">Quantity:</label>
         <input type="number" name="exit_quantity3" id="exit_quantity3" class="form-control form-control-sm" min="0">
       </div>
-      <div class="form-group col-sm-4">
+      <div class="form-group col-sm-3">
         <label for="exit_other_com_name" class="form-label">Other Commodity Name:</label>
         <input type="text" name="exit_other_com_name" id="exit_other_com_name" class="form-control form-control-sm clr">
       </div>
-      <div class="form-group col-sm-4">
-        <label for="exit_other_com_qty" class="form-label">Other Commodity Qunatity:</label>
+      <div class="form-group col-sm-2">
+        <label for="exit_other_com_qty" class="form-label">Other Comm: Qty:</label>
         <input type="number" name="exit_other_com_qty" id="exit_other_com_qty" class="form-control form-control-sm clr">
       </div>
-      <div class="form-group col-sm-4">
+      <div class="form-group col-sm-2">
       
         <label for="exit_date" class="form-label">Exit Date:</label>
       
@@ -190,10 +192,10 @@
       <input type="number"  id="add_weight" hidden>
       <input type="date"  id="add_date" hidden>
       
-    </div>
-  <div class="row">
+    <!-- </div> -->
+  <!-- <div class="row"> -->
     
-    <div class="form-group col-sm-3">
+    <div class="form-group col-sm-2">
     
       <label for="days_in_program" class="form-label">Days in Program:</label>
     
@@ -203,13 +205,13 @@
           
           <label for="weight_gain" class="form-label">Weight Gain:</label>
           
-          <input type="number" min="0" max="500" name="weight_gain" id="weight_gain" class="form-control form-control-sm" aria-describedby="weight_gain_help" required>
+          <input type="number" min="0" name="weight_gain" id="weight_gain" class="form-control form-control-sm" aria-describedby="weight_gain_help" required>
           <small id="weight_gain_help" class="form-text text-muted">g/kg/day</small>
   
         </div>
         
         
-      <div class="form-group col-sm-4 ">
+      <div class="form-group col-sm-2 ">
   <label for="mybtn" class="form-label text-white"> Save </label>
      <input type="submit" id="otpExitAddSubmit" name="mybtn" value="Save" class="btn btn-info btn-block btn-sm form-control form-control-sm ">
     </div>

@@ -79,6 +79,27 @@ async function _session (){
                       .sum({lactating: 'lactating'})
                       .where({is_deleted:0})
                       .groupBy('session_type');
+  var _chartData = {
+    cat:[]
+  };
+
+  for (session of data){
+      _chartData.cat.push(session.session_type.toUpperCase().repplace('_', ' '))
+      var x = Object.keys(session);
+      var subCat = [];
+      var __data= [];
+      for (y of x ){
+        if(subCat.filter(el => el== y.toUpperCase().repplace('_', ' ')).length < 1){
+          subCat.push(y.toUpperCase().repplace('_', ' '))
+        }
+        __data.push(session[y])
+      }
+      var _sesries = [];
+      var s = {};
+      for (series of subCat){
+
+      }
+  }
   var sessions = data.map(el=> el.session_type);
   // var _subCat = ['Male Participants','Female Participants', 'Pragnent', 'Lactating']
   var _subCat = ['Male Participants','Female Participants', 'Pragnent', 'Lactating']
