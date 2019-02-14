@@ -1,11 +1,19 @@
 const knex = require('./db');
+const fs = require('fs')
 const {app} = require('electron');
 
- async function _updateDb_v14 (knex, Promise){
-    if(app.getVersion() != '1.4.0'){
-        
-        await  require('../migrations/20190210085428_alter_tables').up(knex, Promise);
+// knex.schema.hasColumn('tblOtpAdd', 'uplaod_date')
+//     .then( async (exists)=>{
+//         if(exists){
+//             fs.unlinkSync(`${process.env.APPDATA}/ACF MIS Local app/acf_mis_local.sqlite3`)
+//             console.log('db deleted')
+//             await require('../migrations/20190128163134_Screening').up(knex, Promise)
+//             console.log('New Db Created')
 
-    }
-}
-_updateDb_v14(knex, Promise)
+//         }else{
+//             console.log('Db is already updated')
+//         }
+//     })
+//     .catch(e=> console.log(e))
+
+

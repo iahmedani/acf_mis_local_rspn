@@ -398,7 +398,8 @@ exports.up = function(knex, Promise) {
         [remarks] VARCHAR NOT NULL DEFAULT "N/A", 
         [CHS_id] VARCHAR, 
         [CHW_id] VARCHAR, 
-        [upload_date] DATE);
+        [upload_date] DATE
+        [prog_type] varchar(10));
       
       `
     )

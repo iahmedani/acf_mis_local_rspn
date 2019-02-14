@@ -79,59 +79,41 @@ async function _session (){
                       .sum({lactating: 'lactating'})
                       .where({is_deleted:0})
                       .groupBy('session_type');
-  var _chartData = {
-    cat:[]
-  };
+ 
 
-  for (session of data){
-      _chartData.cat.push(session.session_type.toUpperCase().repplace('_', ' '))
-      var x = Object.keys(session);
-      var subCat = [];
-      var __data= [];
-      for (y of x ){
-        if(subCat.filter(el => el== y.toUpperCase().repplace('_', ' ')).length < 1){
-          subCat.push(y.toUpperCase().repplace('_', ' '))
-        }
-        __data.push(session[y])
-      }
-      var _sesries = [];
-      var s = {};
-      for (series of subCat){
-
-      }
-  }
-  var sessions = data.map(el=> el.session_type);
+  var _thisChartData = await _sessionData(data)
+  // var sessions = data.map(el=> el.session_type);
   // var _subCat = ['Male Participants','Female Participants', 'Pragnent', 'Lactating']
-  var _subCat = ['Male Participants','Female Participants', 'Pragnent', 'Lactating']
-  // console.log(data);
-  var _mySessionData = (data.length > 0 ) ? [{
-    name:'Male Participants',
-    data:[data.filter(el=> el.session_type == "cooking")[0].male_participants,   data.filter(el=> el.session_type == "iycf")[0].male_participants,  data.filter(el=> el.session_type == "nut_health_hygene")[0].male_participants,]
-  },{
-    name:'Female Participants',
-    data:[data.filter(el=> el.session_type == "cooking")[0].female_participants,   data.filter(el=> el.session_type == "iycf")[0].female_participants,  data.filter(el=> el.session_type == "nut_health_hygene")[0].female_participants,]
-  },
-    {
-      name:'Pragnent',
+  // var _subCat = ['Male Participants','Female Participants', 'Pragnent', 'Lactating']
+  // // console.log(data);
+  // var _mySessionData = (data.length > 0 ) ? [{
+  //   name:'Male Participants',
+  //   data:[data.filter(el=> el.session_type == "cooking")[0].male_participants,   data.filter(el=> el.session_type == "iycf")[0].male_participants,  data.filter(el=> el.session_type == "nut_health_hygene")[0].male_participants,]
+  // },{
+  //   name:'Female Participants',
+  //   data:[data.filter(el=> el.session_type == "cooking")[0].female_participants,   data.filter(el=> el.session_type == "iycf")[0].female_participants,  data.filter(el=> el.session_type == "nut_health_hygene")[0].female_participants,]
+  // },
+  //   {
+  //     name:'Pragnent',
 
-      data:[data.filter(el=> el.session_type == "cooking")[0].pragnent,   data.filter(el=> el.session_type == "iycf")[0].pragnent,  data.filter(el=> el.session_type == "nut_health_hygene")[0].pragnent,]
-    },
-    {
-      name:'Lactating',
-    data:[data.filter(el=> el.session_type == "cooking")[0].lactating,   data.filter(el=> el.session_type == "iycf")[0].lactating,  data.filter(el=> el.session_type == "nut_health_hygene")[0].lactating,]
+  //     data:[data.filter(el=> el.session_type == "cooking")[0].pragnent,   data.filter(el=> el.session_type == "iycf")[0].pragnent,  data.filter(el=> el.session_type == "nut_health_hygene")[0].pragnent,]
+  //   },
+  //   {
+  //     name:'Lactating',
+  //   data:[data.filter(el=> el.session_type == "cooking")[0].lactating,   data.filter(el=> el.session_type == "iycf")[0].lactating,  data.filter(el=> el.session_type == "nut_health_hygene")[0].lactating,]
 
-  }   
-  ]: [];
-  var seriesData = []
-  for (session of sessions){
-    var x = {};
-    x.name= session;
-    var y = data.filter(el => el.session_type === session)[0];
-    x.data = [y.male_participants, y.female_participants, y.pragnent, y.lactating]
-    // console.log(x)
-    seriesData.push(x);
+  // }   
+  // ]: [];
+  // var seriesData = []
+  // for (session of sessions){
+  //   var x = {};
+  //   x.name= session;
+  //   var y = data.filter(el => el.session_type === session)[0];
+  //   x.data = [y.male_participants, y.female_participants, y.pragnent, y.lactating]
+  //   // console.log(x)
+  //   seriesData.push(x);
 
-  }
+  // }
   var stockChart = new Highcharts.chart('stock-Chart', {
     chart: {
       type: 'column'
@@ -143,7 +125,7 @@ async function _session (){
     credits: false,
     subtitle: false,
     xAxis: {
-      categories: ['Cooking Demonstration','IYCF', 'Nutrition Health & Hygene'],
+      categories: _thisChartData.cat,
       // crosshair: true
     },
     yAxis: {
@@ -169,7 +151,7 @@ async function _session (){
       },
       }
     },
-    series: _mySessionData
+    series: _thisChartData.serries
   });
   
 }
@@ -432,3 +414,29 @@ _session();
   _plwScrChart();
   
 }
+
+
+let _sessionData = async function(sessions){
+  var _data ={
+    cat:[],
+    serries:[]
+   }
+  
+  for (session of sessions){
+    _data.cat.push(session.session_type.toUpperCase().replace(/_/g, ' '))
+    var keys = Object.keys(session);
+    keys = await keys.filter(el=> el != 'session_type' )
+    for (key of keys){
+      var x = {};
+      x.name = key.toUpperCase().replace(/_/g, ' ');
+      var xData = []; 
+      for ( n of sessions){
+          xData.push(n[key])
+      }
+      x.data = xData;
+      _data.serries.push(x)
+    }
+  }
+  return _data;
+}
+

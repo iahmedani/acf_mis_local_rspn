@@ -7,7 +7,6 @@ const {
   dialog
 } = electron;
 
-process.env.GH_TOKEN = '26c5fbbbffa68b2644e8970b32d3d7a0080b9fd6'
 
 // require('electron-reload')(__dirname);
 const firstRunDB = require('./firstRunCreateDb').firstCreateDb;
@@ -26,6 +25,20 @@ const {
 var async = require('async');
 const knex = require('./mainfunc/db');
 
+let _urlBugRemove = async ()=>{
+  try {
+    
+    var x = await knex('tblConfig')
+    console.log(x)
+    if(x[0].value == 'https://training.paka.cf'){
+      await knex('tblConfig').update({value:'http://training.paka.cf'}).where({value: 'https://training.paka.cf'})
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+_urlBugRemove();
 // let _testVar 
 async function _serverUrl (){
   var  x = await knex('tblConfig'); 
