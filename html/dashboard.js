@@ -220,7 +220,7 @@ _session();
           shadow: false
         },
         tooltip: {
-          headerFormat: "<b>{point.x}</b><br/>",
+          headerFormat: "<b>Session Type: {point.x}</b><br/>",
           pointFormat:
             "{series.name}: {point.y}<br/>Total: {point.stackTotal}"
         },
@@ -434,7 +434,10 @@ let _sessionData = async function(sessions){
           xData.push(n[key])
       }
       x.data = xData;
-      _data.serries.push(x)
+      if(_data.cat.length == sessions.length){
+
+        _data.serries.push(x)
+      }
     }
   }
   return _data;

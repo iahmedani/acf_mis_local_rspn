@@ -8,6 +8,7 @@ const {
 } = electron;
 
 
+
 // require('electron-reload')(__dirname);
 const firstRunDB = require('./firstRunCreateDb').firstCreateDb;
 const url = require('url');
@@ -20,7 +21,6 @@ const {
   autoUpdater
 } = require("electron-updater");
 // autoUpdater.autoDownload = true;
-
 // console.log(imran);
 var async = require('async');
 const knex = require('./mainfunc/db');
