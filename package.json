@@ -31,10 +31,9 @@
   "license": "ISC",
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.6",
-    "asar": "^0.14.3",
+    "asar": "^0.14.6",
     "async": "^2.6.1",
     "body-parser": "^1.18.2",
-    "bower": "^1.8.4",
     "electron-log": "^2.2.16",
     "electron-updater": "^3.0.3",
     "getmac": "^1.4.6",
@@ -52,6 +51,6 @@
   "devDependencies": {
     "electron": "^2.0.13",
     "electron-builder": "^20.26.0",
-    "electron-packager": "^12.1.0"
+    "electron-packager": "^13.0.1"
   }
 }
