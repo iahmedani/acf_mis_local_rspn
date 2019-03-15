@@ -843,22 +843,20 @@ exports.up = function(knex, Promise) {
        WHERE  [main].[v_default_initial].[Days since last follow up] > 21;`
     )
     .raw(
-      `CREATE VIEW [v_exitOtpReport]
-       AS
-       SELECT 
-       [main].[tblOtpExit].[exit_id], 
-       [main].[tblOtpAdd].[otp_id], 
-       [main].[tblOtpAdd].[site_id], 
-       [main].[tblOtpAdd].[age], 
-       [main].[tblOtpAdd].[gender], 
-       [main].[tblOtpAdd].[prog_type], 
-       [main].[tblOtpExit].[exit_reason], 
-       [main].[tblOtpExit].[exit_date]
-       FROM   [main].[tblOtpAdd]
-       INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
-       WHERE  [main].[tblOtpAdd].[prog_type] = 'otp'
-       AND [main].[tblOtpAdd].[is_deleted] = 0
-       AND [main].[tblOtpAdd].[is_deleted] = 0;`
+      `SELECT 
+      [main].[tblOtpExit].[exit_id], 
+      [main].[tblOtpAdd].[otp_id], 
+      [main].[tblOtpAdd].[site_id], 
+      [main].[tblOtpAdd].[age], 
+      [main].[tblOtpAdd].[gender], 
+      [main].[tblOtpAdd].[prog_type], 
+      [main].[tblOtpExit].[exit_reason], 
+      [main].[tblOtpExit].[exit_date]
+FROM   [main].[tblOtpAdd]
+      INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+WHERE  [main].[tblOtpAdd].[prog_type] = 'otp'
+      AND [main].[tblOtpExit].[is_deleted] = 0
+      AND [main].[tblOtpAdd].[is_deleted] = 0;`
     )
     .raw(
       `CREATE VIEW [v_exitOtpReportInterval]
