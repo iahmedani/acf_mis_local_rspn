@@ -39,16 +39,55 @@ module.exports.initSessionsV2 = function () {
       });
     });
     var ucForHH;
+    $('#ddUC').on('change', function(){
+      var ucs = $(this).val();
+      ucForHH = ucs
+      ipc.send('getHealthHouse', ucs )
+      ipc.on('hh', async function(evt, hh){
+        // console.log(hh)
+        $('#site_one').children('option:not(:first)').remove();
+        if(hh.hh.length > 1){
+          $('.secondSite').css('display', '')  
+          $('#site_two').children('option:not(:first)').remove();
+          await asyncForEach(hh.hh, async(el)=>{
+            $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);              
+          })            
+        }else{
+          $('.secondSite').css('display', 'none')  
+
+        }
+        hhListener_siteOne(hh);
+
+      });
+    ipc.send("getStaffuc", ucs);
+    ipc.send("getSupsuc", ucs);
+
+    ipc.on("haveStaffuc", function(evt, staffs) {
+      $("#ddStaff_code")
+        .children("option:not(:first)")
+        .remove();
+      staffListeneruc(staffs);
+    });
+    ipc.on("haveSupsuc", function(evt, _sups) {
+      $("#ddSup_code")
+        .children("option:not(:first)")
+        .remove();
+      supListeneruc(_sups);
+    });
+  })
     $("#ddUC").on("change", function() {
       var ucs = $(this).val();
       ucForHH = ucs;
-      ipc.send("getHealthHouse", ucs);
-      ipc.on("hh", function(evt, hh) {
-        $("#ddHealthHouse")
-          .children("option:not(:first)")
-          .remove();
-        hhListener(hh);
-      });
+      if($('#ddProgramType').val() == 'otp'){
+
+        ipc.send("getHealthHouse", ucs);
+        ipc.on("hh", function(evt, hh) {
+          $("#ddHealthHouse")
+            .children("option:not(:first)")
+            .remove();
+          hhListener(hh);
+        });
+      }
     });
     $("#ddHealthHouse").on("change", function() {
       var siteId = $(this).val();
@@ -101,6 +140,7 @@ module.exports.initSessionsV2 = function () {
         $('.outreach input').attr('required', true);
         $('.nsc').show();
         $('.nsc input').attr('required', true);
+        $('.noOutreach').hide();
       }  else {
         $('.outreach').hide();
         $('.nsc').show();
@@ -179,7 +219,7 @@ module.exports.initSessionsV2 = function () {
       x.district_id = ($("#ddDistrict").val()) ? $("#ddDistrict").val() : '';
       x.tehsil_id = ($("#ddTehsil").val()) ? $("#ddTehsil").val() : '';
       x.uc_id = ($("#ddUC").val()) ? $("#ddUC").val() : '';
-      x.site_id = ($("#ddHealthHouse").val()) ? $("#ddHealthHouse").val() : '';
+      x.site_id = ($("#ddHealthHouse").val() && $('#ddProgramType').val() != 'otp') ? $("#ddHealthHouse").val() : '';
       x.CHW_id = ($("#ddStaff_code").val()) ? $("#ddStaff_code").val() : '';
       x.CHS_id = ($("#ddSup_code").val()) ? $("#ddSup_code").val() : '';
 
@@ -209,9 +249,10 @@ module.exports.initSessionsV2 = function () {
           filter.district_id = ($("#ddDistrict").val())?  $("#ddDistrict").val() : ''  ;
           filter.tehsil_id = ($("#ddTehsil").val())?  $("#ddTehsil").val() : ''  ;
           filter.uc_id = ($("#ddUC").val())?  $("#ddUC").val() : ''  ;
-          filter.site_id = ($("#ddHealthHouse").val()) ? $("#ddHealthHouse").val() : '';
+          filter.site_id = ($("#ddHealthHouse").val() && $('#ddProgramType').val() != 'otp') ? $("#ddHealthHouse").val() : '';
           filter.CHW_id = ($("#ddStaff_code").val()) ? $("#ddStaff_code").val() : '';
           filter.CHS_id = ($("#ddSup_code").val()) ? $("#ddSup_code").val() : '';
+          console.log(filter)
           return loadData(filter);
         },
         updateItem: function (item) {
@@ -287,7 +328,7 @@ module.exports.initSessionsV2 = function () {
           { Name: 'In Community', value: 'community' }
         ], valueField: "value",
         textField: "Name",
-        validate: 'required'
+        validate: 'required',
       },
       {
         name: "ind_session",
@@ -556,6 +597,7 @@ module.exports.initSessionsV2 = function () {
   }
 
   let updateData = (item)=>{
+    delete item["uc_id:1"]
     return new Promise((resolve, reject)=>{
       ipc.send('updateSessionsSingle', item);
       ipc.on('updateSessionsSingle', (e, result)=>{

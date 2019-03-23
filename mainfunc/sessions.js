@@ -26,6 +26,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
             .offset(_offset)
             .limit(_limit)
             .then(result => {
+              console.log(result)
               cb(null, result);
               // event.sender.send("getSessionsAll", { result: result });
             })
@@ -45,6 +46,8 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
             .where('site_id', 'like', `%${filter.site_id}%`)
             .where("session_type", "like", `%${filter.session_type}%`)
             .where("session_location", "like", `%${filter.session_location}%`)
+            .where("CHW_id", "like", `%${filter.CHW_id}%`)
+            .where("CHS_id", "like", `%${filter.CHS_id}%`)
             .count("session_id as total")
             .then(result => cb(null, result))
             .catch(e => cb(e));

@@ -12,9 +12,10 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
 //      fs.readFileSync(__dirname + "/../config.json", "utf8")
 //    );
 //  }
-  ipcMain.on("getAvailableCommodity", (event) => {
+  ipcMain.on("getAvailableCommodity", (event, prog_type) => {
     knex("v_availableCom")
       .where("remaining", '>', 0)
+      .where('prog_type', 'like', `%${prog_type}%`)
       .then(result => {
         event.sender.send("availableCommodity", { commodity: result });
       })

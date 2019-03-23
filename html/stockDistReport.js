@@ -35,15 +35,63 @@ module.exports.stockDistReport = function () {
       })
     })
     var ucForHH;
+    $('#ddUC').on('change', function(){
+      var ucs = $(this).val();
+      ucForHH = ucs
+      ipc.send('getHealthHouse', ucs )
+      ipc.on('hh', async function(evt, hh){
+        // console.log(hh)
+        $('#site_one').children('option:not(:first)').remove();
+        if(hh.hh.length > 1){
+          $('.secondSite').css('display', '')  
+          $('#site_two').children('option:not(:first)').remove();
+          await asyncForEach(hh.hh, async(el)=>{
+            $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);              
+          })            
+        }else{
+          $('.secondSite').css('display', 'none')  
+
+        }
+        hhListener_siteOne(hh);
+
+      });
+    ipc.send("getStaffuc", ucs);
+    ipc.send("getSupsuc", ucs);
+
+    ipc.on("haveStaffuc", function(evt, staffs) {
+      $("#ddStaff_code")
+        .children("option:not(:first)")
+        .remove();
+      staffListeneruc(staffs);
+    });
+    ipc.on("haveSupsuc", function(evt, _sups) {
+      $("#ddSup_code")
+        .children("option:not(:first)")
+        .remove();
+      supListeneruc(_sups);
+    });
+  })
     $('#ddUC').on('change', function () {
       var ucs = $(this).val();
       ucForHH = ucs
-      ipc.send('getHealthHouse', ucs)
-      ipc.on('hh', function (evt, hh) {
-        $('#ddHealthHouse').children('option:not(:first)').remove();
-        hhListener(hh);
-      })
+      if($('#ddProgramType').val() == 'otp'){
+        ipc.send('getHealthHouse', ucs)
+        ipc.on('hh', function (evt, hh) {
+          $('#ddHealthHouse').children('option:not(:first)').remove();
+          hhListener(hh);
+        })
+
+      }
     })
+    // $('#ddUC').on('change', function () {
+    //   var ucs = $(this).val();
+    //   ucForHH = ucs
+    //   ipc.send('getHealthHouse', ucs)
+    //   ipc.on('hh', function (evt, hh) {
+    //     $('#ddHealthHouse').children('option:not(:first)').remove();
+    //     hhListener(hh);
+    //   })
+    // })
     $("#ddHealthHouse").on("change", function () {
       var siteId = $(this).val();
       // ucForHH = ucs;
@@ -111,6 +159,7 @@ module.exports.stockDistReport = function () {
           $('.outreach input').attr('required', true);
           $('.nsc').show();
           $('.nsc input').attr('required', true);
+          $('.noOutreach').hide();
         } else if (val == 'sc') {
           $('.nsc').hide();
           $('.nsc input').attr('required', false);
