@@ -1,6 +1,7 @@
 module.exports.initScrChildrenUpd = function () {
   $(() => {
     $('input[type="number"]').attr('min', 0);
+    $('.secondSite').css('display', 'none') 
   })
   $(function () {
     var datePickerId = document.getElementById('txtScrChildDate');
@@ -456,14 +457,21 @@ module.exports.initScrChildrenUpd = function () {
             data.site_one
             }</option>`
           );
-          $("#site_two")
-            .children("option:not(:first)")
-            .remove();
-          $("#site_two").append(
-            `<option value="${data.site_two}" selected>${
-            data.site_two
-            }</option>`
-          );
+          if(data.site_two){
+            $('.secondSite').css('display', '')  
+            $("#site_two")
+              .children("option:not(:first)")
+              .remove();
+            $("#site_two").append(
+              `<option value="${data.site_two}" selected>${
+              data.site_two
+              }</option>`
+            );
+
+          }else{
+            $('.secondSite').css('display', 'none')  
+
+          }
           $("#ddStaff_code")
             .children("option:not(:first)")
             .remove();
