@@ -368,7 +368,8 @@ module.exports.initOtpAddUpdV2 = function () {
           await commodity(com, 'ration1');
           await commodity(com, 'ration2');
          await commodity(com, 'ration3');
-        })
+        });
+        $("#hh_id").val(data.hh_id);
         $("#travel_time_minutes").val(data.travel_time_minutes);
         $("#is_mother_alive").val(data.is_mother_alive);
         $("#ddProgramType").val(data.prog_type);

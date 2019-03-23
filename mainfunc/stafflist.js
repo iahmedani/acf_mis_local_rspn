@@ -22,6 +22,18 @@ module.exports = (ipcMain, knex, fs, sndMsg) => {
         sndMsg.errMsg(evt, "", "Unable to fetch staff list, please contact administrator");
       });
   });
+  ipcMain.on("getStaffuc", (evt, uc) => {
+    knex("tblLhw")
+      .where({ uc: uc })
+      .then(result => {
+        console.log(result);
+        evt.sender.send("haveStaffuc", result);
+      })
+      .catch(e => {
+        console.log({ msg: "stafflist fetching error", e });
+        sndMsg.errMsg(evt, "", "Unable to fetch staff list, please contact administrator");
+      });
+  });
 
   ipcMain.on("addStaff", async (evt, data) => {
     data.created_at = new Date(Date.now()).toLocaleDateString();

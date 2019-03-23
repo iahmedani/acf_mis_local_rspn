@@ -53,11 +53,21 @@ module.exports.initScrChildrenReport = function () {
     $('#ddUC').on('change', function () {
       var ucs = $(this).val();
       ucForHH = ucs
-      ipc.send('getHealthHouse', ucs)
-      ipc.on('hh', function (evt, hh) {
-        $('#ddHealthHouse').children('option:not(:first)').remove();
-        hhListener(hh);
-      })
+      ipc.send("getStaffuc", ucs);
+      ipc.send("getSupsuc", ucs);
+
+      ipc.on("haveStaffuc", function(evt, staffs) {
+        $("#ddStaff_code")
+          .children("option:not(:first)")
+          .remove();
+        staffListeneruc(staffs);
+      });
+      ipc.on("haveSupsuc", function(evt, _sups) {
+        $("#ddSup_code")
+          .children("option:not(:first)")
+          .remove();
+        supListeneruc(_sups);
+      });
     })
   });
 
@@ -67,6 +77,8 @@ module.exports.initScrChildrenReport = function () {
     ($('#ddDistrict').val()) ? qry.district_id = $('#ddDistrict').val(): '';
     ($('#ddTehsil').val()) ? qry.tehsil_id = $('#ddTehsil').val(): '';
     ($('#ddUC').val()) ? qry.uc_id = $('#ddUC').val(): '';
+    ($('#ddStaff_code').val()) ? qry.staff_code = $('#ddStaff_code').val(): '';
+    ($('#ddSup_code').val()) ? qry.sup_code = $('#ddSup_code').val(): '';
     ($('#ddInterval').val() == 1) ? qry.date = {
       x: 'screening_date',
       y: [$('#start_date').val(), $('#end_date').val()]
@@ -120,8 +132,8 @@ module.exports.initScrChildrenReport = function () {
     }
     $('#showDataScrReport').on('click', function (e) {
       e.preventDefault();
-      var fullTextCh = ['Province', 'District', 'Tehsil', 'UC', 'Village', 'Nutrition Site', 'Reporting Month', 'Staff Name', 'Staff Code', 'Supervisor Name', 'Supervisor Code', 'Total Screened (Girls)', 'Total Screened (Boys)', 'First time Screened (Girls)', 'First time screened (Boys)', 'Re-Screened Girls', 'Re-Screened Boys', 'Normal (6 to 23 Girls)', 'Normal (6 to 23 Boys)', 'Normal (24 to 59 Girls)', 'Normal (24 to 59 Boys)', 'MAM (6 to 23 Girls)', 'MAM (6 to 23 Boys)', 'MAM (24 to 59 Girls)', 'MAM (24 to 59 Boys)', 'SAM without complication (6 to 23 Girls)', 'SAM without complication (6 to 23 Boys)', 'SAM without complication (24 to 59 Girls)', 'SAM without complication (24 to 59 Boys)', 'SAM with complication (6 to 23 Girls)', 'SAM with complication (6 to 23 Boys)', 'SAM with complication (24 to 59 Girls)', 'SAM with complication (24 to 59 Boys)', 'No Oedema (Girls)', 'No Oedema (Boys)', '+,++ Oedema (Girls)', '+,++ Oedema (Boys)', '+++ Oedema (Girls)', '+++ Oedema (Boys)', 'Refered TSFP (Girls)', 'Refered TSFP (Boys)', 'Refeedr OTP (Girls)', 'Refered OTP (Boys)', 'Deworming Girls', 'Deworming Boys', 'MNP Sachet distributed (Girls) (1st)', 'MNP Sachet distributed (Boys)(1st)', 'MNP Sachet distributed (Girls)(2nd)', 'MNP Sachet distributed (Boys)(2nd)', 'MNP Sachet distributed (Girls)(3rd)', 'MNP Sachet distributed (Boys)(3rd)', 'MNP Sachet distributed (Girls)(4th)', 'MNP Sachet distributed (Boys)(4th)', 'MNP Sachet distributed (Girls)(5th)', 'MNP Sachet distributed (Boys)(5th)', 'MNP Sachet distributed (Girls)(6th)', 'MNP Sachet distributed (Boys)(6th)','Dworming Grils','Dworming Boys','Followed Up Girls', 'Followed Up Boys','Exit From Criteria Girls','Exit From Criteria Boys']
-      var colNameCh = ['province', 'district_name', 'tehsil_name', 'uc_name', 'village', 'site_name', 'report_month', 'staff_name', 'staff_code', 'sup_name', 'sup_code', 'total_scr_girls', 'total_scr_boys', 'new_girls', 'new_boys', 'reScreened_girls', 'reScreened_boys', 'normal_girls_623', 'normal_boys_623', 'normal_girls_2459', 'normal_boys_2459', 'mam_girls_623', 'mam_boys_623', , 'mam_girls_2459', 'mam_boys_2459', 'sam_without_comp_girls_623', 'sam_without_comp_boys_623', 'sam_without_comp_girls_2459', 'sam_without_comp_boys_2459', 'sam_with_comp_girls_623', 'sam_with_comp_boys_623', 'sam_with_comp_girls_2459', 'sam_with_comp_boys_2459', 'no_oedema_girls', 'no_oedema_boys', 'plus12_oedema_girls', 'plus12_oedema_boys', 'plus3_oedema_girls', 'plus3_oedema_boys', 'reffer_tsfp_girls', 'reffer_tsfp_boys', 'reffer_otp_girls', 'reffer_otp_boys', 'deworming_girls', 'deworming_boys', 'first_mnp_30_girls', 'first_mnp_30_boys', 'second_mnp_30_girls', 'second_mnp_30_boys', 'third_mnp_30_girls', 'third_mnp_30_boys', 'fourth_mnp_30_girls', 'fourth_mnp_30_boys', 'fifth_mnp_30_girls', 'fifth_mnp_30_boys', 'sixth_mnp_30_girls', 'sixth_mnp_30_boys','deworming_girls','deworming_boys','followedup_girls','followedup_boys','exits_girls','exits_boys']
+      var fullTextCh = ['Province', 'District', 'Tehsil', 'UC', 'Catchment Population',  'Reporting Month', 'Staff Name', 'Staff Code', 'Supervisor Name', 'Supervisor Code','Total HH Visited', 'Total Screened (Girls)', 'Total Screened (Boys)', 'First time Screened (Girls)', 'First time screened (Boys)', 'Re-Screened Girls', 'Re-Screened Boys', 'Normal (6 to 23 Girls)', 'Normal (6 to 23 Boys)', 'Normal (24 to 59 Girls)', 'Normal (24 to 59 Boys)', 'MAM (6 to 23 Girls)', 'MAM (6 to 23 Boys)', 'MAM (24 to 59 Girls)', 'MAM (24 to 59 Boys)', 'SAM without complication (6 to 23 Girls)', 'SAM without complication (6 to 23 Boys)', 'SAM without complication (24 to 59 Girls)', 'SAM without complication (24 to 59 Boys)', 'SAM with complication (6 to 23 Girls)', 'SAM with complication (6 to 23 Boys)', 'SAM with complication (24 to 59 Girls)', 'SAM with complication (24 to 59 Boys)', 'No Oedema (Girls)', 'No Oedema (Boys)', '+,++ Oedema (Girls)', '+,++ Oedema (Boys)', '+++ Oedema (Girls)', '+++ Oedema (Boys)', 'Total Refered TSFP (Girls)', 'Total Refered TSFP (Boys)', 'Total Refeedr OTP (Girls)', 'Total Refered OTP (Boys)','Site One', 'Refered TSFP (Girls) S1', 'Refered TSFP (Boys) S1', 'Refeedr OTP (Girls) S1', 'Refered OTP (Boys) S1', 'Site Two', 'Refered TSFP (Girls) S2', 'Refered TSFP (Boys) S2', 'Refeedr OTP (Girls) S2', 'Refered OTP (Boys) S2', 'Deworming Girls', 'Deworming Boys', 'MNP Sachet distributed (Girls) (1st)', 'MNP Sachet distributed (Boys)(1st)', 'MNP Sachet distributed (Girls)(2nd)', 'MNP Sachet distributed (Boys)(2nd)', 'MNP Sachet distributed (Girls)(3rd)', 'MNP Sachet distributed (Boys)(3rd)', 'MNP Sachet distributed (Girls)(4th)', 'MNP Sachet distributed (Boys)(4th)', 'MNP Sachet distributed (Girls)(5th)', 'MNP Sachet distributed (Boys)(5th)', 'MNP Sachet distributed (Girls)(6th)', 'MNP Sachet distributed (Boys)(6th)','Dworming Grils','Dworming Boys','Followed Up Girls', 'Followed Up Boys','Exit From Criteria Girls','Exit From Criteria Boys']
+      var colNameCh = ['province', 'district_name', 'tehsil_name', 'uc_name', 'catchment_population',  'report_month', 'staff_name', 'staff_code', 'sup_name', 'sup_code', 'total_hh','total_scr_girls', 'total_scr_boys', 'new_girls', 'new_boys', 'reScreened_girls', 'reScreened_boys', 'normal_girls_623', 'normal_boys_623', 'normal_girls_2459', 'normal_boys_2459', 'mam_girls_623', 'mam_boys_623', , 'mam_girls_2459', 'mam_boys_2459', 'sam_without_comp_girls_623', 'sam_without_comp_boys_623', 'sam_without_comp_girls_2459', 'sam_without_comp_boys_2459', 'sam_with_comp_girls_623', 'sam_with_comp_boys_623', 'sam_with_comp_girls_2459', 'sam_with_comp_boys_2459', 'no_oedema_girls', 'no_oedema_boys', 'plus12_oedema_girls', 'plus12_oedema_boys', 'plus3_oedema_girls', 'plus3_oedema_boys', 'reffer_tsfp_girls', 'reffer_tsfp_boys', 'reffer_otp_girls', 'reffer_otp_boys', 'site_one', 'reffer_tsfp_girls_s1', 'reffer_tsfp_boys_s1', 'reffer_otp_girls_s1', 'reffer_otp_boys_s1', 'site_two', 'reffer_tsfp_girls_s2', 'reffer_tsfp_boys_s2', 'reffer_otp_girls_s2', 'reffer_otp_boys_s2',  'deworming_girls', 'deworming_boys', 'first_mnp_30_girls', 'first_mnp_30_boys', 'second_mnp_30_girls', 'second_mnp_30_boys', 'third_mnp_30_girls', 'third_mnp_30_boys', 'fourth_mnp_30_girls', 'fourth_mnp_30_boys', 'fifth_mnp_30_girls', 'fifth_mnp_30_boys', 'sixth_mnp_30_girls', 'sixth_mnp_30_boys','deworming_girls','deworming_boys','followedup_girls','followedup_boys','exits_girls','exits_boys']
       // $('#filterDate').validate();
       if ($('#filterDate').valid()) {
 

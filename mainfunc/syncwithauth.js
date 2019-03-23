@@ -106,6 +106,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
       {
         province: cb => {
           var options = {
+            "rejectUnauthorized": false, 
             method: "GET",
             uri: surl + "/getProvince",
             headers,
@@ -148,6 +149,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
         },
         district: cb => {
           var options = {
+            "rejectUnauthorized": false, 
             method: "GET",
             uri: surl + "/getDistrict",
             // body: result,
@@ -190,6 +192,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
         },
         tehsil: cb => {
           var options = {
+            "rejectUnauthorized": false, 
             method: "GET",
             uri: surl + "/getTehsil",
             // body: result,
@@ -233,6 +236,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
         },
         uc: cb => {
           var options = {
+            "rejectUnauthorized": false, 
             method: "GET",
             uri: surl + "/getUC",
             // body: result,
@@ -276,6 +280,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
         },
         site: cb => {
           var options = {
+            "rejectUnauthorized": false, 
             method: "GET",
             uri: surl + "/getSite",
             // body: result,
@@ -319,6 +324,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
         },
         itemList: cb => {
           var options = {
+            "rejectUnauthorized": false, 
             method: "GET",
             uri: surl + "/getItems",
             // body: result,
@@ -362,6 +368,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
         },
         config: cb => {
           var options = {
+            "rejectUnauthorized": false, 
             method: "POST",
             uri: surl + "/getConfig",
             headers,
@@ -420,6 +427,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
             .then(result => {
               if (result.length > 0) {
                 var options = {
+                  "rejectUnauthorized": false, 
                   method: "PUT",
                   uri: surl + "/followupv1",
                   headers,
@@ -470,6 +478,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
             .then(result => {
               if (result.length > 0) {
                 var options = {
+                  "rejectUnauthorized": false, 
                   method: "POST",
                   uri: surl + "/stockOut",
                   headers,
@@ -514,6 +523,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
             .then(result => {
               if (result.length > 0) {
                 var options = {
+                  "rejectUnauthorized": false, 
                   method: "PUT",
                   uri: surl + "/stockOut",
                   headers,
@@ -557,6 +567,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
               console.log(result)
               if (result.length > 0) {
                 var options = {
+                  "rejectUnauthorized": false, 
                   method: "POST",
                   uri: surl + "/StockDist",
                   headers,
@@ -595,6 +606,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
             .then(result => {
               if (result.length > 0) {
                 var options = {
+                  "rejectUnauthorized": false, 
                   method: "PUT",
                   uri: surl + "/StockDist",
                   headers,
@@ -632,6 +644,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
               console.log(result)
               if (result.length > 0) {
                 var options = {
+                  "rejectUnauthorized": false, 
                   method: "POST",
                   uri: surl + "/VillageList",
                   headers,
@@ -670,6 +683,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
             console.log(result)
             if (result.length > 0) {
               var options = {
+                "rejectUnauthorized": false, 
                 method: "PUT",
                 uri: surl + "/VillageList",
                 headers,
@@ -709,6 +723,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
               console.log(result)
               if (result.length > 0) {
                 var options = {
+                  "rejectUnauthorized": false, 
                   method: "POST",
                   uri: surl + "/CHWList",
                   headers,
@@ -746,6 +761,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
             console.log(result)
             if (result.length > 0) {
               var options = {
+                "rejectUnauthorized": false, 
                 method: "PUT",
                   uri: surl + "/CHWList",
                 headers,
@@ -785,6 +801,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
               console.log(result)
               if (result.length > 0) {
                 var options = {
+                  "rejectUnauthorized": false, 
                   method: "POST",
                   uri: surl + "/LHSList",
                   headers,
@@ -822,6 +839,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
             console.log(result)
             if (result.length > 0) {
               var options = {
+                "rejectUnauthorized": false, 
                 method: "PUT",
                 uri: surl + "/LHSList",
                 headers,
@@ -870,6 +888,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                   .then(result => {
                     if (result.length > 0) {
                       var options = {
+                        "rejectUnauthorized": false, 
                         method: "POST",
                         uri: surl + "/newChScr",
                         headers,
@@ -917,6 +936,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                   .then(result => {
                     if (result.length > 0) {
                       var options = {
+                        "rejectUnauthorized": false, 
                         method: "PUT",
                         uri: surl + "/newChScr",
                         headers,
@@ -966,6 +986,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                   .then(result => {
                     if (result.length > 0) {
                       var options = {
+                        "rejectUnauthorized": false, 
                         method: "POST",
                         uri: surl + "/newPlwScr",
                         headers,
@@ -1013,6 +1034,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                   .then(result => {
                     if (result.length > 0) {
                       var options = {
+                        "rejectUnauthorized": false, 
                         method: "PUT",
                         uri: surl + "/newPlwScr",
                         headers,
@@ -1061,6 +1083,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                   .then(result => {
                     if (result.length > 0) {
                       var options = {
+                        "rejectUnauthorized": false, 
                         method: "POST",
                         uri: surl + "/otpv1",
                         headers,
@@ -1106,6 +1129,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                   .then(result => {
                     if (result.length > 0) {
                       var options = {
+                        "rejectUnauthorized": false, 
                         method: "PUT",
                         uri: surl + "/otpv1",
                         body: result,
@@ -1151,6 +1175,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                   .then(result => {
                     if (result.length > 0) {
                       var options = {
+                        "rejectUnauthorized": false, 
                         method: "POST",
                         uri: surl + "/otpExitv1",
                         headers,
@@ -1197,6 +1222,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                   .then(result => {
                     if (result.length > 0) {
                       var options = {
+                        "rejectUnauthorized": false, 
                         method: "PUT",
                         uri: surl + "/otpExitv1",
                         headers,
@@ -1242,6 +1268,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                   .then(result => {
                     if (result.length > 0) {
                       var options = {
+                        "rejectUnauthorized": false, 
                         method: "POST",
                         uri: surl + "/sessionsv1",
                         headers,
@@ -1287,6 +1314,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                   .then(result => {
                     if (result.length > 0) {
                       var options = {
+                        "rejectUnauthorized": false, 
                         method: "PUT",
                         uri: surl + "/sessionsv1",
                         headers,
@@ -1332,6 +1360,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                   .then(result => {
                     if (result.length > 0) {
                       var options = {
+                        "rejectUnauthorized": false, 
                         method: "POST",
                         uri: surl + "/followupv1",
                         headers,
@@ -1382,6 +1411,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                   .then(result => {
                     if (result.length > 0) {
                       var options = {
+                        "rejectUnauthorized": false, 
                         method: "POST",
                         uri: surl + "/stockIn",
                         headers,
@@ -1417,6 +1447,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                   .then(result => {
                     if (result.length > 0) {
                       var options = {
+                        "rejectUnauthorized": false, 
                         method: "PUT",
                         uri: surl + "/stockIn",
                         headers,

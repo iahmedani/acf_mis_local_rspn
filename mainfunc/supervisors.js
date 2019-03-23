@@ -24,6 +24,18 @@ module.exports = (ipcMain, knex, fs, sndMsg) => {
         console.log({ msg: "supervisors fetching error", e });
       });
   });
+  ipcMain.on("getSupsuc", (evt, uc) => {
+    knex("tblSupervisors")
+      .where({uc:uc})
+      .then(result => {
+        // console.log(result);
+        evt.sender.send('haveSupsuc', (result));
+      })
+      .catch(e => {
+        sndMsg.errMsg(evt, '', 'Unable to fetch supervior list, please contact administrator')
+        console.log({ msg: "supervisors fetching error", e });
+      });
+  });
   ipcMain.on("addSup", async(evt, data) => {
     data.created_at = new Date(Date.now()).toLocaleDateString();
     data.client_id = await JSON.parse(fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, 'utf8')).client;

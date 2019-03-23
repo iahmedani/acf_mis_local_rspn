@@ -58,14 +58,14 @@ module.exports.StaffList = function () {
         var district = data.district;
         var tehsil = data.tehsil;
         var uc = data.uc;
-        var site = data.site;
+        // var site = data.site;
         cb(null, {
           _staff,
           province,
           district,
           tehsil,
           uc,
-          site
+          // site
         })
         ipc.removeAllListeners("geoList")
       });
@@ -81,7 +81,7 @@ module.exports.StaffList = function () {
         loadData: function (filter) {
           return $.grep(result._staff, function (client) {
             return (!filter.staff_code || client.staff_code.indexOf(filter.staff_code) > -1) &&
-              (!filter.staff_name || client.staff_name.indexOf(filter.staff_name) > -1) && (!filter.province || client.province == filter.province) && (!filter.district || client.district === filter.district) && (!filter.tehsil || client.tehsil === filter.tehsil) && (!filter.uc || client.uc === filter.uc) && (!filter.site || client.site === filter.site);
+              (!filter.staff_name || client.staff_name.indexOf(filter.staff_name) > -1) && (!filter.province || client.province == filter.province) && (!filter.district || client.district === filter.district) && (!filter.tehsil || client.tehsil === filter.tehsil) && (!filter.uc || client.uc === filter.uc) ;
             // && (filter.Married === undefined || client.Married === filter.Married);
           });
         },
@@ -103,7 +103,7 @@ module.exports.StaffList = function () {
         result.district.unshift({ districtName: '', id: 0 })
         result.tehsil.unshift({ tehsilName: '', id: 0 })
         result.uc.unshift({ ucName: '', id: 0 })
-        result.site.unshift({ siteName: '', id: 0 })
+        // result.site.unshift({ siteName: '', id: 0 })
       }
       $("#tblStaffList").jsGrid({
         height: "400px",
@@ -158,14 +158,14 @@ module.exports.StaffList = function () {
             width: 50
 
           },
-          {
-            title: "Site",
-            name: "site",
-            type: "select",
-            items: result.site,
-            valueField: "id",
-            textField: "siteName"
-          },
+          // {
+          //   title: "Site",
+          //   name: "site",
+          //   type: "select",
+          //   items: result.site,
+          //   valueField: "id",
+          //   textField: "siteName"
+          // },
           { title: "Code", name: "staff_code", type: "text" },
           { title: "Name", name: "staff_name", type: "text" },
           {
@@ -186,8 +186,8 @@ module.exports.StaffList = function () {
           // $('#ddTehsil').val(getData.tehsil);
           $('#ddUC').children('option:not(:first)').remove();
           $("#ddUC").append(`<option value="${getData.uc}" selected>${result.uc.filter(el => el.id == getData.uc)[0].ucName}</option>`);
-          $("#ddHealthHouse").children("option:not(:first)").remove();
-          $("#ddHealthHouse").append(`<option value="${getData.site}" selected>${result.site.filter(el => el.id == getData.site)[0].siteName}</option>`);
+          // $("#ddHealthHouse").children("option:not(:first)").remove();
+          // $("#ddHealthHouse").append(`<option value="${getData.site}" selected>${result.site.filter(el => el.id == getData.site)[0].siteName}</option>`);
 
           // $('#ddUC').val(getData.uc);
           $("#staff_code").val(getData.staff_code);

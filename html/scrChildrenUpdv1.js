@@ -43,31 +43,63 @@ module.exports.initScrChildrenUpd = function () {
     $('#ddUC').on('change', function () {
       var ucs = $(this).val();
       ucForHH = ucs
-      ipc.send('getHealthHouse', ucs)
-      ipc.on('hh', function (evt, hh) {
-        $('#ddHealthHouse').children('option:not(:first)').remove();
-        hhListener(hh);
-      })
-    })
-    $("#ddHealthHouse").on("change", function () {
-      var siteId = $(this).val();
-      // ucForHH = ucs;
-      ipc.send("getStaff", siteId);
-      ipc.send("getSups", siteId);
+      ipc.send('getHealthHouse', ucs )
+        ipc.on('hh', async function(evt, hh){
+          // console.log(hh)
+          $('#site_one').children('option:not(:first)').remove();
+          if(hh.hh.length > 1){
+            $('.secondSite').css('display', '')  
+            $('#site_two').children('option:not(:first)').remove();
+            await asyncForEach(hh.hh, async(el)=>{
+              $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);              
+            })            
+          }else{
+            $('.secondSite').css('display', 'none')  
 
-      ipc.on("haveStaff", function (evt, staffs) {
+          }
+          hhListener_siteOne(hh);
+
+        });
+      ipc.send("getStaffuc", ucs);
+      ipc.send("getSupsuc", ucs);
+
+      ipc.on("haveStaffuc", function (evt, staffs) {
         $("#ddStaff_code")
           .children("option:not(:first)")
           .remove();
-        staffListener(staffs);
+        staffListeneruc(staffs);
       });
-      ipc.on("haveSups", function (evt, _sups) {
+      ipc.on("haveSupsuc", function (evt, _sups) {
         $("#ddSup_code")
           .children("option:not(:first)")
           .remove();
-        supListener(_sups);
+        supListeneruc(_sups);
       });
-    });
+      // ipc.send('getHealthHouse', ucs)
+      // ipc.on('hh', function (evt, hh) {
+      //   $('#ddHealthHouse').children('option:not(:first)').remove();
+      //   hhListener(hh);
+      // })
+    })
+    // $("#ddHealthHouse").on("change", function () {
+    //   var siteId = $(this).val();
+    //   // ucForHH = ucs;
+    //   ipc.send("getStaff", siteId);
+    //   ipc.send("getSups", siteId);
+
+    //   ipc.on("haveStaff", function (evt, staffs) {
+    //     $("#ddStaff_code")
+    //       .children("option:not(:first)")
+    //       .remove();
+    //     staffListener(staffs);
+    //   });
+    //   ipc.on("haveSups", function (evt, _sups) {
+    //     $("#ddSup_code")
+    //       .children("option:not(:first)")
+    //       .remove();
+    //     supListener(_sups);
+    //   });
+    // });
     $("#ddStaff_code").on("change", function () {
       var staff_code = $(this).val();
       $("#ddStaff_name").val(staff_code);
@@ -279,8 +311,8 @@ module.exports.initScrChildrenUpd = function () {
           width: 50
         },
         {
-          name: "village",
-          title: "Total Villages",
+          name: "catchment_population",
+          title: "Catchment Population",
           type: "text",
           editing: false,
           width: 50
@@ -415,13 +447,21 @@ module.exports.initScrChildrenUpd = function () {
             `<option value="${data.uc_id}" selected>${data.uc_name}</option>`
           );
   
-          // $("#ddUC").val(data.uc_id);
-          $("#ddHealthHouse")
+          $("#ddUC").val(data.uc_id);
+          $("#site_one")
             .children("option:not(:first)")
             .remove();
-          $("#ddHealthHouse").append(
-            `<option value="${data.site_id}" selected>${
-            data.site_name
+          $("#site_one").append(
+            `<option value="${data.site_one}" selected>${
+            data.site_one
+            }</option>`
+          );
+          $("#site_two")
+            .children("option:not(:first)")
+            .remove();
+          $("#site_two").append(
+            `<option value="${data.site_two}" selected>${
+            data.site_two
             }</option>`
           );
           $("#ddStaff_code")
@@ -454,6 +494,22 @@ module.exports.initScrChildrenUpd = function () {
           $("#ddSup_name").append(
             `<option value="${data.sup_name}" selected>${
             data.sup_name
+            }</option>`
+          );
+          $("#site_two")
+            .children("option:not(:first)")
+            .remove();
+          $("#site_two").append(
+            `<option value="${data.site_two}" selected>${
+            data.site_two
+            }</option>`
+          );
+          $("#site_one")
+            .children("option:not(:first)")
+            .remove();
+          $("#site_one").append(
+            `<option value="${data.site_one}" selected>${
+            data.site_one
             }</option>`
           );
   
@@ -541,6 +597,10 @@ module.exports.initScrChildrenUpd = function () {
     $('#scrChildrenUpdForm').validate();
     if ($('#scrChildrenUpdForm').valid() ) {
       var scrChildrenUpdData = $('#scrChildrenUpdForm').serializeFormJSON();
+      scrChildrenUpdData.reffer_otp_boys = parseInt(scrChildrenUpdData.reffer_otp_boys_s1) + parseInt(scrChildrenUpdData.reffer_otp_boys_s2)
+      scrChildrenUpdData.reffer_otp_girls = parseInt(scrChildrenUpdData.reffer_otp_girls_s1) + parseInt(scrChildrenUpdData.reffer_otp_girls_s2)
+      scrChildrenUpdData.reffer_tsfp_boys = parseInt(scrChildrenUpdData.reffer_tsfp_boys_s1) + parseInt(scrChildrenUpdData.reffer_tsfp_boys_s2)
+      scrChildrenUpdData.reffer_tsfp_girls = parseInt(scrChildrenUpdData.reffer_tsfp_girls_s1) + parseInt(scrChildrenUpdData.reffer_tsfp_girls_s2)
       // console.log(scrChildrenUpdData);
       ipc.send('scrChildrenUpd', scrChildrenUpdData);
       ipc.removeAllListeners('scrChildrenUpd');
@@ -570,6 +630,65 @@ module.exports.initScrChildrenUpd = function () {
   //   $("#total_scr_girls").val(total);
   // });
 
+  $('.tnew').on('change', function () {
+    var total = 0;
+    $('.tnew').each(function (i, el) {
+      total = total + ($(el).val() ? parseInt($(el).val()) : 0);
+    })
+    $("#total_scr_boys").empty();
+    $("#total_scr_boys").val(total);
+  })
+  $('.tgnew').on('change', function () {
+    var total = 0;
+    $('.tgnew').each(function (i, el) {
+      total = total + ($(el).val() ? parseInt($(el).val()) : 0);
+    })
+    $("#total_scr_girls").empty();
+    $("#total_scr_girls").val(total);
+  })
+  
+  let totalCheck = () => {
+    var totalScrB = parseInt($("#total_scr_boys").val());
+    var x = 0;
+    $(".tchkb").each(function (i, el) {
+      x = x + ($(el).val() ? parseInt($(el).val()) : 0);
+      if ($(".tchkb").length - 1 == i) {
+        if (x != totalScrB) {
+          $(".tchkb").addClass("highlightInput");
+          // alert('Value not allowed')
+        } else {
+          $(".tchkb").removeClass("highlightInput");
+        }
+      }
+    });
+    var totalScrG = parseInt($("#total_scr_girls").val());
+    var y = 0;
+    $(".tchkg").each(function (i, el) {
+      y = y + ($(el).val() ? parseInt($(el).val()) : 0);
+      if ($(".tchkg").length - 1 == i) {
+        if (y != totalScrG) {
+          $(".tchkg").addClass('highlightInput');
+          // alert('Value not allowed')
+        } else {
+          $(".tchkg").removeClass('highlightInput');
+        }
+      }
+    });
+
+  }
+
+
+  $('#site_one').on('change', function(){
+    var that = $(this)
+    $('#site_two option').each(function(){
+      if($(this).val() == that.val()){
+        $(this).prop('disabled', true)
+      }else{
+        $(this).prop('disabled', false)
+
+      }
+    })
+  })
 
 
 }

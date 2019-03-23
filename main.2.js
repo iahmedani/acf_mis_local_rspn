@@ -778,7 +778,6 @@ function childrenScrAddSave(event, data, client, username, project) {
         errMsg(event, '', 'Duplicate registration ID is not allowed')
       }
       errMsg(event, '', 'Record not saved, plz try again or contact admin')
-      console.log(e)
       // console.log('func childrenScrAddSave error', e)
     })
 }
@@ -1532,7 +1531,7 @@ function creatWindow() {
 
   // children Screening add Data 
   ipcMain.on('scrChildren', (e, data) => {
-    console.log(data);
+    console.log(e);
     childrenScrAddSave(e, data, imran.client, imran.usernameL, imran.project_nameL);
     // (e,data);
   })

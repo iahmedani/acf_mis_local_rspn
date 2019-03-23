@@ -231,18 +231,6 @@
         })
         ipc.removeAllListeners('hh');
     }
-    const hhListener_siteOne = async (hh)=>{
-        await asyncForEach(hh.hh, async(el)=>{
-        $('#site_one').append(`<option value="${el.siteName}">${el.siteName}</option>`);              
-        })
-        ipc.removeAllListeners('hh');
-    }
-    const hhListener_siteTwo = async (hh)=>{
-        await asyncForEach(hh.hh, async(el)=>{
-        $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);              
-        })
-        ipc.removeAllListeners('hh');
-    }
     const staffListener = async (staffs) => {
         await asyncForEach(staffs, async (el) => {
           $('#ddStaff_code').append(`<option value="${el.staff_code}">${el.staff_code}</option>`);
@@ -256,20 +244,6 @@
           $('#ddSup_name').append(`<option value="${el.sup_code}">${el.sup_name}</option>`);
         })
         ipc.removeAllListeners('haveSups');
-      }
-    const staffListeneruc = async (staffs) => {
-        await asyncForEach(staffs, async (el) => {
-          $('#ddStaff_code').append(`<option value="${el.staff_code}">${el.staff_code}</option>`);
-          $('#ddStaff_name').append(`<option value="${el.staff_code}">${el.staff_name}</option>`);
-        })
-        ipc.removeAllListeners('haveStaffuc');
-      }
-    const supListeneruc = async (_sups) => {
-        await asyncForEach(_sups, async (el) => {
-          $('#ddSup_code').append(`<option value="${el.sup_code}">${el.sup_code}</option>`);
-          $('#ddSup_name').append(`<option value="${el.sup_code}">${el.sup_name}</option>`);
-        })
-        ipc.removeAllListeners('haveSupsuc');
       }
     const villListener = async (_villages) => {
         await asyncForEach(_villages, async (el) => {

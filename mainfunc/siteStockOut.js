@@ -1,10 +1,17 @@
 module.exports = (ipcMain, knex, fs, sndMsg, async) => {
- if(fs.existsSync(__dirname + "/../config.json")){
+  // if(fs.existsSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`)){
 
-   const { client, mac } = JSON.parse(
-     fs.readFileSync(__dirname + "/../config.json", "utf8")
-   );
- }
+  //   const { client, mac } = JSON.parse(
+  //     fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, "utf8")
+      
+  //   );
+  // }
+//  if(fs.existsSync(__dirname + "/../config.json")){
+  
+//    const { client, mac } = JSON.parse(
+//      fs.readFileSync(__dirname + "/../config.json", "utf8")
+//    );
+//  }
   ipcMain.on("getAvailableCommodity", (event) => {
     knex("v_availableCom")
       .where("remaining", '>', 0)
@@ -17,6 +24,10 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
       });
   });
   ipcMain.on("stockOutEntry", (event, data) => {
+    let { client, mac } = JSON.parse(
+      fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, "utf8")
+      
+    );
     async.waterfall([
       function (cb) {
         var n = new Date().valueOf();
@@ -148,6 +159,10 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
 
   });
   ipcMain.on("addNewItemStockOut", (event, item) => {
+    let { client, mac } = JSON.parse(
+      fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, "utf8")
+      
+    );
     delete item.disp_sub_unit;
     delete item.disp_unit;
     delete item.item_desc;

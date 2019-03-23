@@ -39,18 +39,18 @@
         </div>
         <div class="col-sm-2">
           <label for="ddUC" class="col-form-label">UC:</label>
-          <select id="ddUC" name="uc_id" class="form-control form-control-sm" tabindex="5">
+          <select id="ddUC" class="form-control form-control-sm" tabindex="5">
             <option value="">Select One</option>
           </select>
         </div>
         <!-- </div> -->
         <!-- <div class="form-group row"> -->
-        <!-- <div class="col-sm-2">
+        <div class="col-sm-2">
           <label for="site_id" class="col-form-label">Reprting Site Name:</label>
           <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm" tabindex="6" required>
             <option selected value="">Select One</option>
           </select>
-        </div> -->
+        </div>
         <div class="col-sm-2">
           <label for="sup_code" class=" col-form-label">Supervisor Code:</label>
           <select id="ddSup_code" name="sup_code" class="form-control form-control-sm cld" tabindex="7">
@@ -82,12 +82,8 @@
           <input type="number" name="catchment_population" id="catchment_population" class="form-control form-control-sm clr" tabindex="11" required>
         </div>
         <div class="col-sm-2">
-          <label for="screening_date" class=" col-form-label">Entry Date</label>
+          <label for="screening_date" class=" col-form-label">Entry Date:</label>
           <input type="date" name="screening_date" id="txtScrChildDate" class="form-control form-control-sm clr" tabindex="12" required>
-        </div>
-        <div class="col-sm-2">
-          <label for="total_hh" class=" col-form-label">Total House Visited</label>
-          <input type="number" name="total_hh" id="total_hh" class="form-control form-control-sm clr" tabindex="12" required>
         </div>
         
         
@@ -279,7 +275,7 @@
             <td colspan="4"></td>
             <td >Site One</td>
             <td colspan="2">
-              <select name="site_one" id="site_one" class="form-control form-control-sm clr" tabindex="37" required>
+              <select name="site_one" id="ddHealthHouse_1" class="form-control form-control-sm" tabindex="6" required>
                 <option selected value="">Select One</option>
               </select>
             </td>
@@ -288,52 +284,51 @@
             <td>Reffer to OTP </td>
             <td colspan="4"></td>            
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="reffer_otp_boys_s1" id="reffer_otp_boys_s1" tabindex="38">
+              <input type="number" required class="form-control form-control-sm clr" name="reffer_otp_boys_s1" id="reffer_otp_boys_s1" tabindex="37">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="reffer_otp_girls_s1" id="reffer_otp_girls_s2" tabindex="39">
+              <input type="number" required class="form-control form-control-sm clr" name="reffer_otp_girls_s1" id="reffer_otp_girls_s2" tabindex="38">
             </td>
           </tr>
           <tr style="background-color: lightgreen">
             <td>Reffer to TSFP </td>
             <td colspan="4"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="reffer_tsfp_boys_s1" id="reffer_tsfp_boys_s1" tabindex="40">
+              <input type="number" required class="form-control form-control-sm clr" name="reffer_tsfp_boys_s1" id="reffer_tsfp_boys_s1" tabindex="39">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="reffer_tsfp_girls_s1" id="reffer_tsfp_girls_s1" tabindex="41">
+              <input type="number" required class="form-control form-control-sm clr" name="reffer_tsfp_girls_s1" id="reffer_tsfp_girls_s1" tabindex="40">
             </td>
           </tr>
-
-            <tr  style="background-color: chocolate" class="secondSite">
-              <td colspan="4"></td>
-              <td>Site Two</td>
-              <td colspan="2">
-                <select name="site_two" id="site_two" class="form-control form-control-sm clr" tabindex="42" required>
-                  <option selected value="">Select One</option>
-                </select>
-              </td>
-            </tr>
-            <tr  style="background-color: chocolate" class="secondSite">
-              <td>Reffer to OTP </td>
-              <td colspan="4"></td>
-              <td>
-                <input type="number" required class="form-control form-control-sm clr" name="reffer_otp_boys_s2" id="reffer_otp_boys_s2" tabindex="43">
-              </td>
-              <td>
-                <input type="number" required class="form-control form-control-sm clr" name="reffer_otp_girls_s2" id="reffer_otp_girls_s2" tabindex="44">
-              </td>
-            </tr>
-            <tr style="background-color: chocolate" class="secondSite">
-              <td>Reffer to TSFP </td>
-              <td colspan="4"></td>
-              <td>
-                <input type="number" required class="form-control form-control-sm clr" name="reffer_tsfp_boys_s2" id="reffer_tsfp_boys_s2" tabindex="45">
-              </td>
-              <td>
-                <input type="number" required class="form-control form-control-sm clr" name="reffer_tsfp_girls_s2" id="reffer_tsfp_girls_s2" tabindex="46">
-              </td>
-            </tr>
+          <tr  style="background-color: chocolate">
+            <td colspan="4"></td>
+            <td>Site Two</td>
+            <td colspan="2">
+              <select name="site_two" id="ddHealthHouse_2" class="form-control form-control-sm" tabindex="6" required>
+                <option selected value="">Select One</option>
+              </select>
+            </td>
+          </tr>
+          <tr  style="background-color: chocolate">
+            <td>Reffer to OTP </td>
+            <td colspan="4"></td>
+            <td>
+              <input type="number" required class="form-control form-control-sm clr" name="reffer_otp_boys_s2" id="reffer_otp_boys_s2" tabindex="37">
+            </td>
+            <td>
+              <input type="number" required class="form-control form-control-sm clr" name="reffer_otp_girls_s2" id="reffer_otp_girls_s2" tabindex="38">
+            </td>
+          </tr>
+          <tr style="background-color: chocolate">
+            <td>Reffer to TSFP </td>
+            <td colspan="4"></td>
+            <td>
+              <input type="number" required class="form-control form-control-sm clr" name="reffer_tsfp_boys_s2" id="reffer_tsfp_boys_s2" tabindex="39">
+            </td>
+            <td>
+              <input type="number" required class="form-control form-control-sm clr" name="reffer_tsfp_girls_s2" id="reffer_tsfp_girls_s2" tabindex="40">
+            </td>
+          </tr>
        
           <tr class="bg-warning">
             <td>No of Children Recieved MNP Sch:
@@ -343,10 +338,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="first_mnp_30_boys" id="first_mnp_30_boys" tabindex="47">
+              <input type="number" required class="form-control form-control-sm clr" name="first_mnp_30_boys" id="first_mnp_30_boys" tabindex="41">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="first_mnp_30_girls" id="first_mnp_30_girls" tabindex="48">
+              <input type="number" required class="form-control form-control-sm clr" name="first_mnp_30_girls" id="first_mnp_30_girls" tabindex="42">
             </td>
           </tr>
           <tr class="bg-warning">
@@ -358,10 +353,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="second_mnp_30_boys" id="second_mnp_30_boys" tabindex="49">
+              <input type="number" required class="form-control form-control-sm clr" name="second_mnp_30_boys" id="second_mnp_30_boys" tabindex="43">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="second_mnp_30_girls" id="second_mnp_30_girls" tabindex="50">
+              <input type="number" required class="form-control form-control-sm clr" name="second_mnp_30_girls" id="second_mnp_30_girls" tabindex="44">
             </td>
           </tr>
           <tr class="bg-warning">
@@ -373,10 +368,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="third_mnp_30_boys" id="third_mnp_30_boys" tabindex="51">
+              <input type="number" required class="form-control form-control-sm clr" name="third_mnp_30_boys" id="third_mnp_30_boys" tabindex="45">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="third_mnp_30_girls" id="third_mnp_30_girls" tabindex="52">
+              <input type="number" required class="form-control form-control-sm clr" name="third_mnp_30_girls" id="third_mnp_30_girls" tabindex="46">
             </td>
           </tr>
           <tr class="bg-warning">
@@ -388,10 +383,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="fourth_mnp_30_boys" id="fourth_mnp_30_boys" tabindex="53">
+              <input type="number" required class="form-control form-control-sm clr" name="fourth_mnp_30_boys" id="fourth_mnp_30_boys" tabindex="47">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="fourth_mnp_30_girls" id="fourth_mnp_30_girls" tabindex="54">
+              <input type="number" required class="form-control form-control-sm clr" name="fourth_mnp_30_girls" id="fourth_mnp_30_girls" tabindex="48">
             </td>
           </tr>
           <tr class="bg-warning">
@@ -403,10 +398,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="fifth_mnp_30_boys" id="fifth_mnp_30_boys" tabindex="55"> 
+              <input type="number" required class="form-control form-control-sm clr" name="fifth_mnp_30_boys" id="fifth_mnp_30_boys" tabindex="49"> 
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="fifth_mnp_30_girls" id="fifth_mnp_30_girls" tabindex="56">
+              <input type="number" required class="form-control form-control-sm clr" name="fifth_mnp_30_girls" id="fifth_mnp_30_girls" tabindex="50">
             </td>
           </tr>
           <tr class="bg-warning">
@@ -418,10 +413,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="sixth_mnp_30_boys" id="sixth_mnp_30_boys" tabindex="57">
+              <input type="number" required class="form-control form-control-sm clr" name="sixth_mnp_30_boys" id="sixth_mnp_30_boys" tabindex="51">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="sixth_mnp_30_girls" id="sixth_mnp_30_girls" tabindex="58">
+              <input type="number" required class="form-control form-control-sm clr" name="sixth_mnp_30_girls" id="sixth_mnp_30_girls" tabindex="52">
             </td>
           </tr>
           <tr>
@@ -431,10 +426,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="deworming_boys" id="deworming_boys" tabindex="59">
+              <input type="number" required class="form-control form-control-sm clr" name="deworming_boys" id="deworming_boys" tabindex="53">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="deworming_girls" id="deworming_girls" tabindex="60">
+              <input type="number" required class="form-control form-control-sm clr" name="deworming_girls" id="deworming_girls" tabindex="54">
             </td>
           </tr>
           <tr>
@@ -444,10 +439,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td >
-              <input type="number" required class="form-control form-control-sm clr" name="followedup_boys" id="followedup_boys" tabindex="61">
+              <input type="number" required class="form-control form-control-sm clr" name="followedup_boys" id="followedup_boys" tabindex="55">
             </td>
             <td >
-              <input type="number" required class="form-control form-control-sm clr" name="followedup_girls" id="followedup_girls" tabindex="62">
+              <input type="number" required class="form-control form-control-sm clr" name="followedup_girls" id="followedup_girls" tabindex="56">
             </td>
           </tr>
           <tr>
@@ -457,10 +452,10 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="exits_boys" id="exits_boys" tabindex="63">
+              <input type="number" required class="form-control form-control-sm clr" name="exits_boys" id="exits_boys" tabindex="57">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="exits_girls" id="exits_girls" tabindex="64">
+              <input type="number" required class="form-control form-control-sm clr" name="exits_girls" id="exits_girls" tabindex="58">
             </td>
           </tr>
           <tr>
@@ -470,13 +465,13 @@
             <td>Other specify</td>
             
             <td colspan="4">
-              <input type="text"  class="form-control form-control-sm clr" name="other_specify" id="other_specify" tabindex="65">
+              <input type="text"  class="form-control form-control-sm clr" name="other_specify" id="other_specify" tabindex="59">
             </td>
             <td>
-              <input type="number"  class="form-control form-control-sm clr" name="other_boys" id="other_boys" tabindex="66">
+              <input type="number"  class="form-control form-control-sm clr" name="other_boys" id="other_boys" tabindex="60">
             </td>
             <td>
-              <input type="number"  class="form-control form-control-sm clr" name="other_girls" id="other_girls" tabindex="67">
+              <input type="number"  class="form-control form-control-sm clr" name="other_girls" id="other_girls" tabindex="61">
             </td>
           </tr>
           <!-- </tbody> -->
@@ -487,11 +482,11 @@
 
         <div class="col-sm-2 offset-sm-8">
           <label for="" class="text-white col-form-label">Save</label>
-          <button type="submit" id="submitScrChildForm" class="btn btn-sm btn-block btn-info" tabindex="68">Save</button>
+          <button type="submit" id="submitScrChildForm" class="btn btn-sm btn-block btn-info" tabindex="62">Save</button>
         </div>
         <div class="col-sm-2">
           <label for="" class="text-white col-form-label">Reset</label>
-          <button id="resetScrChildForm" class="btn btn-sm btn-block btn-warning" tabindex="69">Reset</button>
+          <button id="resetScrChildForm" class="btn btn-sm btn-block btn-warning" tabindex="63">Reset</button>
         </div>
       </div>
     </form>

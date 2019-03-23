@@ -137,6 +137,7 @@
       $('#loader').css('dispaly', 'block')
       $('.container').css('display', 'none');
       var opt = {
+        "rejectUnauthorized": false, 
         url: data._url + '/app_register',
         method: 'POST',
         body: {

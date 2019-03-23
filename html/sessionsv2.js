@@ -227,6 +227,9 @@ module.exports.initSessionsV2 = function () {
           delete item.uc_id;
           delete item.site_name;
           // delete item.district_id;
+          item.total_session = parseInt(item.ind_session) + parseInt(item.grp_sessions)
+
+          // item.total_session = item.ind_session + item.grp_sessions
           return updateData(item);
         },
         insertItem: function (item) {
@@ -236,6 +239,7 @@ module.exports.initSessionsV2 = function () {
           item.CHS_id = $("#ddSup_code").val() ? $("#ddSup_code").val() : "";
           item.prog_type = $('#ddProgramType').val();
           delete item['']
+          item.total_session = parseInt(item.ind_session) + parseInt(item.grp_sessions)
           return insertData(item)
           // if (item.site_id != '') {
           //   $("#site_must").attr("hidden", true);
@@ -284,6 +288,40 @@ module.exports.initSessionsV2 = function () {
         ], valueField: "value",
         textField: "Name",
         validate: 'required'
+      },
+      {
+        name: "ind_session",
+        width:50,
+        title: "Individual Sessions",
+        type: "number",
+        filtering: false,
+        validate: {
+          validator: 'min',
+          param: 0
+        }
+      },
+      {
+        name: "grp_sessions",
+        width:50,
+        title: "Group Sessions:",
+        type: "number",
+        filtering: false,
+        validate: {
+          validator: 'min',
+          param: 0
+        }
+      },
+      {
+        name: "total_session",
+        width:50,
+        title: "Total Sessions",
+        type: "number",
+        filtering: false,
+        readOnly: true,
+        itemTemplate: function(value, item){
+          var x = ((item.ind_session) ? parseInt(item.ind_session) : 0 ) + ((item.grp_sessions) ? parseInt(item.grp_sessions) : 0 ) 
+          return x;
+        }
       },
       {
         name: "male_participants",
@@ -375,6 +413,7 @@ module.exports.initSessionsV2 = function () {
       {
         name: "upload_date",
         title: "Upload Date",
+        width: 50,        
         type: "number",
         filtering: false,
         editing: false,
@@ -382,6 +421,7 @@ module.exports.initSessionsV2 = function () {
       },
       {
         align:'center',
+        width: 50,        
         headerTemplate: function() {
           return "<th class='jsgrid-header-cell'>Days since uploaded </th>";
         },

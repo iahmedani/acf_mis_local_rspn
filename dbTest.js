@@ -502,7 +502,7 @@ module.exports.otpExitTable = function(cond, callback) {
 };
 module.exports.allScrChildrenData = function(cond, callback) {
   if (!cond) {
-    knex("v_tblScrChildrenFull")
+    knex("v_ScrChildUpd")
       .then(result => {
         callback(null, result);
       })
@@ -510,7 +510,7 @@ module.exports.allScrChildrenData = function(cond, callback) {
         callback(err);
       });
   } else {
-    knex("v_tblScrChildrenFull")
+    knex("v_ScrChildUpd")
       .where(builder => {
         if (!cond.date) {
           builder.where(cond);
@@ -539,7 +539,7 @@ module.exports.allScrChildrenData = function(cond, callback) {
 };
 module.exports.allScrPlwNewData = function(cond, callback) {
   if (!cond) {
-    knex("v_tblScrPlwFull")
+    knex("v_ScrPlwUpd")
       .then(result => {
         callback(null, result);
       })
@@ -547,7 +547,7 @@ module.exports.allScrPlwNewData = function(cond, callback) {
         callback(err);
       });
   } else {
-    knex("v_tblScrPlwFull")
+    knex("v_ScrPlwUpd")
       .where(builder => {
         if (!cond.date) {
           builder.where(cond);
@@ -605,7 +605,7 @@ module.exports.scrChildReport = function(cond, callback) {
     sum(followedup_boys + followedup_girls) as total_followedup,
     sum(exits_boys + exits_girls) as total_exits`)
       )
-      .from("v_tblScrChildrenFull")
+      .from("v_ScrChildUpd")
       .sum({
         total_scr_boys: "total_scr_boys"
       })
@@ -791,7 +791,7 @@ module.exports.scrChildReport = function(cond, callback) {
     sum(followedup_boys + followedup_girls) as total_followedup,
     sum(exits_boys + exits_girls) as total_exits`)
       )
-      .from("v_tblScrChildrenFull")
+      .from("v_ScrChildUpd")
       .sum({
         total_scr_boys: "total_scr_boys"
       })
@@ -980,7 +980,7 @@ module.exports.scrPlwNewReport = function(cond, callback) {
       sum(ifa_first_time_pragnent + ifa_first_time_lactating ) as total_ifa_first_time,
       sum(followup_pragnent + followup_lactating ) as total_followup,
       sum(exits_pragnent + exit_lactating ) as total_exits`))
-      .from("v_tblScrPlwFull")
+      .from("v_ScrPlwUpd")
       .sum({ total_scr_pragnent: "total_scr_pragnent" })
       .sum({ total_scr_lactating: "total_scr_lactating" })
       .sum({ new_scr_pragnent: "new_scr_pragnent" })
@@ -1015,7 +1015,7 @@ module.exports.scrPlwNewReport = function(cond, callback) {
       sum(ifa_first_time_pragnent + ifa_first_time_lactating ) as total_ifa_first_time,
       sum(followup_pragnent + followup_lactating ) as total_followup,
       sum(exits_pragnent + exit_lactating ) as total_exits`))
-      .from("v_tblScrPlwFull")
+      .from("v_ScrPlwUpd")
       .sum({ total_scr_pragnent: "total_scr_pragnent" })
       .sum({ total_scr_lactating: "total_scr_lactating" })
       .sum({ new_scr_pragnent: "new_scr_pragnent" })

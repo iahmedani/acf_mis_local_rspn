@@ -38,16 +38,16 @@ module.exports.SupList = function () {
       ucListener(uc);
     })
   })
-  var ucForHH;
-  $('#ddUC').on('change', function () {
-    var ucs = $(this).val();
-    ucForHH = ucs
-    ipc.send('getHealthHouse', ucs)
-    ipc.on('hh', function (evt, hh) {
-      $('#ddHealthHouse').children('option:not(:first)').remove();
-      hhListener(hh);
-    })
-  })
+  // var ucForHH;
+  // $('#ddUC').on('change', function () {
+  //   var ucs = $(this).val();
+  //   ucForHH = ucs
+  //   ipc.send('getHealthHouse', ucs)
+  //   ipc.on('hh', function (evt, hh) {
+  //     $('#ddHealthHouse').children('option:not(:first)').remove();
+  //     hhListener(hh);
+  //   })
+  // })
 
   
   // $(() => {
@@ -65,14 +65,14 @@ module.exports.SupList = function () {
             var district = data.district;
             var tehsil = data.tehsil;
             var uc = data.uc;
-            var site = data.site;
+            // var site = data.site;
             cb(null,{
               supervisors,
               province,
               district,
               tehsil,
               uc,
-              site
+              // site
             })
             ipc.removeAllListeners('geoList')
           });
@@ -88,7 +88,8 @@ module.exports.SupList = function () {
       var _supData = {
         loadData: function (filter) {
           return $.grep(result.supervisors, function (client) {
-            return (!filter.sup_code || client.sup_code.indexOf(filter.sup_code)>-1) && (!filter.sup_name || client.sup_name.indexOf(filter.sup_name) >-1) && (!filter.province || client.province == filter.province) && (!filter.district || client.district === filter.district) && (!filter.tehsil || client.tehsil === filter.tehsil) && (!filter.uc || client.uc === filter.uc) && (!filter.site || client.site === filter.site);
+            return (!filter.sup_code || client.sup_code.indexOf(filter.sup_code)>-1) && (!filter.sup_name || client.sup_name.indexOf(filter.sup_name) >-1) && (!filter.province || client.province == filter.province) && (!filter.district || client.district === filter.district) && (!filter.tehsil || client.tehsil === filter.tehsil) && (!filter.uc || client.uc === filter.uc);
+            //  && (!filter.site || client.site === filter.site);
             // && (filter.Married === undefined || client.Married === filter.Married);
           });
         },
@@ -111,7 +112,7 @@ module.exports.SupList = function () {
         result.district.unshift({ districtName: '', id: 0 })
         result.tehsil.unshift({ tehsilName: '', id: 0 })
         result.uc.unshift({ ucName: '', id: 0 })
-        result.site.unshift({ siteName: '', id: 0 })
+        // result.site.unshift({ siteName: '', id: 0 })
       }
 
       $("#tblSupList").jsGrid({
@@ -167,14 +168,14 @@ module.exports.SupList = function () {
             width: 50
 
           },
-          {
-            title: "Site",
-            name: "site",
-            type: "select",
-            items: result.site,
-            valueField: "id",
-            textField: "siteName"
-          },
+          // {
+          //   title: "Site",
+          //   name: "site",
+          //   type: "select",
+          //   items: result.site,
+          //   valueField: "id",
+          //   textField: "siteName"
+          // },
           { title: "Code", name: "sup_code", type: "text", },
           { title: "Name", name: "sup_name", type: "text" },
           {
@@ -195,8 +196,8 @@ module.exports.SupList = function () {
           // $('#ddTehsil').val(getData.tehsil);
           $('#ddUC').children('option:not(:first)').remove();
           $("#ddUC").append(`<option value="${getData.uc}" selected>${result.uc.filter(el => el.id == getData.uc)[0].ucName}</option>`);
-          $("#ddHealthHouse").children("option:not(:first)").remove();
-          $("#ddHealthHouse").append(`<option value="${getData.site}" selected>${result.site.filter(el => el.id == getData.site)[0].siteName}</option>`);
+          // $("#ddHealthHouse").children("option:not(:first)").remove();
+          // $("#ddHealthHouse").append(`<option value="${getData.site}" selected>${result.site.filter(el => el.id == getData.site)[0].siteName}</option>`);
 
           // $('#ddUC').val(getData.uc);
           $("#sup_code").val(getData.sup_code);

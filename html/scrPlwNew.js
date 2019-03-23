@@ -66,31 +66,46 @@ module.exports.initScrPlwNew = function (){
       $('#ddUC').on('change', function(){
         var ucs = $(this).val();
         ucForHH = ucs
-        ipc.send('getHealthHouse', ucs )
-        ipc.on('hh', function(evt, hh){
-          $('#ddHealthHouse').children('option:not(:first)').remove();
-        hhListener(hh);
-        })
-    })
-    $("#ddHealthHouse").on("change", function () {
-      var siteId = $(this).val();
-      // ucForHH = ucs;
-      ipc.send("getStaff", siteId);
-      ipc.send("getSups", siteId);
+        ipc.send("getStaffuc", ucs);
+      ipc.send("getSupsuc", ucs);
 
-      ipc.on("haveStaff", function (evt, staffs) {
+      ipc.on("haveStaffuc", function (evt, staffs) {
         $("#ddStaff_code")
           .children("option:not(:first)")
           .remove();
-        staffListener(staffs);
+        staffListeneruc(staffs);
       });
-      ipc.on("haveSups", function (evt, _sups) {
+      ipc.on("haveSupsuc", function (evt, _sups) {
         $("#ddSup_code")
           .children("option:not(:first)")
           .remove();
-        supListener(_sups);
+        supListeneruc(_sups);
       });
-    });
+        // ipc.send('getHealthHouse', ucs )
+        // ipc.on('hh', function(evt, hh){
+        //   $('#ddHealthHouse').children('option:not(:first)').remove();
+        // hhListener(hh);
+        // })
+    })
+    // $("#ddHealthHouse").on("change", function () {
+    //   var siteId = $(this).val();
+    //   // ucForHH = ucs;
+    //   ipc.send("getStaff", siteId);
+    //   ipc.send("getSups", siteId);
+
+    //   ipc.on("haveStaff", function (evt, staffs) {
+    //     $("#ddStaff_code")
+    //       .children("option:not(:first)")
+    //       .remove();
+    //     staffListener(staffs);
+    //   });
+    //   ipc.on("haveSups", function (evt, _sups) {
+    //     $("#ddSup_code")
+    //       .children("option:not(:first)")
+    //       .remove();
+    //     supListener(_sups);
+    //   });
+    // });
     $("#ddStaff_code").on("change", function () {
       var staff_code = $(this).val();
       $("#ddStaff_name").val(staff_code);

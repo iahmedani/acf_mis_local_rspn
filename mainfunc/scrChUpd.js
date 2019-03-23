@@ -7,7 +7,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
     // console.log({ _limit, _offset })
     async.series({
       data: cb => {
-        knex("v_scrChildFull")
+        knex("v_ScrChildUpd")
           .where('province', 'like', `%${filter.province}%`)
           .where('district_name', 'like', `%${filter.district_name}%`)
           .where('tehsil_name', 'like', `%${filter.tehsil_name}%`)
@@ -22,7 +22,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
           .catch(e => cb(e));
       },
       itemsCount: cb => {
-        knex("v_scrChildFull")
+        knex("v_ScrChildUpd")
           .where("province", "like", `%${filter.province}%`)
           .where("district_name", "like", `%${filter.district_name}%`)
           .where("tehsil_name", "like", `%${filter.tehsil_name}%`)
