@@ -769,18 +769,20 @@ WHERE  [tblsessions].[is_deleted] = 0;`
     )
     .raw(
       `CREATE VIEW [v_availableCom]
-       AS
-       SELECT 
-       [main].[tblCommodity].[item_name], 
-       [main].[tblCommodity].[item_desc], 
-       [main].[tblCommodity].[item_unit], 
-       [main].[tblCommodity].[item_sub_unit], 
-       [main].[v_totlStockIn].[recieved], 
-       [main].[v_totalSiteStock].[released], 
-       [recieved] - IFNULL ([released], 0) AS [remaining]
-       FROM   [main].[v_totlStockIn]
-       LEFT JOIN [main].[v_totalSiteStock] ON [main].[v_totlStockIn].[item_name] = [main].[v_totalSiteStock].[item_name]
-       INNER JOIN [main].[tblCommodity] ON [main].[v_totlStockIn].[item_name] = [main].[tblCommodity].[item_name];`
+      AS
+      SELECT 
+             [main].[tblCommodity].[item_name], 
+             [main].[tblCommodity].[item_desc], 
+             [main].[tblCommodity].[item_unit], 
+             [main].[tblCommodity].[item_sub_unit], 
+             [main].[tblCommodity].[prog_type], 
+             [main].[v_totlStockIn].[recieved], 
+             [main].[v_totalSiteStock].[released], 
+             [recieved] - IFNULL ([released], 0) AS [remaining]
+      FROM   [main].[v_totlStockIn]
+             LEFT JOIN [main].[v_totalSiteStock] ON [main].[v_totlStockIn].[item_name] = [main].[v_totalSiteStock].[item_name]
+             INNER JOIN [main].[tblCommodity] ON [main].[v_totlStockIn].[item_name] = [main].[tblCommodity].[item_name];
+      `
     )
     .raw(
       `CREATE VIEW [v_otpAdd_full]
