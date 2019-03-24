@@ -48,8 +48,8 @@ module.exports.stockDistUpd = function () {
     x.program_type = $("#ddProgramType").val() ? $("#ddProgramType").val() : "";
     x.district_id = ($("#ddDistrict").val()) ? $("#ddDistrict").val() : '';
     x.tehsil_id = ($("#ddTehsil").val()) ? $("#ddTehsil").val() : '';
-    // x.uc_id = ($("#ddUC").val()) ? $("#ddUC").val() : '';
-    x.site_id = ($("#ddHealthHouse").val()) ? $("#ddHealthHouse").val() : '';
+    x.uc_id = ($("#ddUC").val()) ? $("#ddUC").val() : '';
+    x.site_id = ($("#ddHealthHouse").val() && $("#ddProgramType").val() != 'otp') ? $("#ddHealthHouse").val() : '';
     x.dist_month = ($("#distMonth").val()) ? $("#distMonth").val() : '';
     x.CHW_id = ($("#ddStaff_code").val()) ? $("#ddStaff_code").val() : '';
     x.CHS_id = ($("#ddSup_code").val()) ? $("#ddSup_code").val() : '';
@@ -85,9 +85,7 @@ module.exports.stockDistUpd = function () {
           ? $("#ddDistrict").val()
           : "";
         filter.tehsil_id = $("#ddTehsil").val() ? $("#ddTehsil").val() : "";
-        filter.site_id = $("#ddHealthHouse").val()
-          ? $("#ddHealthHouse").val()
-          : "";
+    filter.site_id = ($("#ddHealthHouse").val() && $("#ddProgramType").val() != 'otp') ? $("#ddHealthHouse").val() : '';
         filter.dist_month = $("#distMonth").val()
           ? $("#distMonth").val()
           : "";
@@ -201,6 +199,7 @@ module.exports.stockDistUpd = function () {
                 $(".outreach-upd").show();
                 $(".outreach-upd input").attr("required", true);
                 $(".nsc-upd").show();
+                $('.noOutreach-upd').hide();
                 $(".nsc-upd input").attr("required", true);
               } else if (getData.program_type == "sc") {
                 $(".nsc-upd").hide();
@@ -253,14 +252,53 @@ module.exports.stockDistUpd = function () {
       })
     })
     var ucForHH;
+    $('#ddUC').on('change', function(){
+      var ucs = $(this).val();
+      ucForHH = ucs
+      ipc.send('getHealthHouse', ucs )
+      ipc.on('hh', async function(evt, hh){
+        // console.log(hh)
+        $('#site_one').children('option:not(:first)').remove();
+        if(hh.hh.length > 1){
+          $('.secondSite').css('display', '')  
+          $('#site_two').children('option:not(:first)').remove();
+          await asyncForEach(hh.hh, async(el)=>{
+            $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);              
+          })            
+        }else{
+          $('.secondSite').css('display', 'none')  
+
+        }
+        hhListener_siteOne(hh);
+
+      });
+    ipc.send("getStaffuc", ucs);
+    ipc.send("getSupsuc", ucs);
+
+    ipc.on("haveStaffuc", function(evt, staffs) {
+      $("#ddStaff_code")
+        .children("option:not(:first)")
+        .remove();
+      staffListeneruc(staffs);
+    });
+    ipc.on("haveSupsuc", function(evt, _sups) {
+      $("#ddSup_code")
+        .children("option:not(:first)")
+        .remove();
+      supListeneruc(_sups);
+    });
+  })
     $('#ddUC').on('change', function () {
       var ucs = $(this).val();
       ucForHH = ucs
-      ipc.send('getHealthHouse', ucs)
-      ipc.on('hh', function (evt, hh) {
-        $('#ddHealthHouse').children('option:not(:first)').remove();
-        hhListener(hh);
-      })
+      if($('#ddProgramType').val() == 'otp'){
+
+        ipc.send('getHealthHouse', ucs)
+        ipc.on('hh', function (evt, hh) {
+          $('#ddHealthHouse').children('option:not(:first)').remove();
+          hhListener(hh);
+        })
+      }
     })
     $("#ddHealthHouse").on("change", function () {
       var siteId = $(this).val();
@@ -339,9 +377,30 @@ module.exports.stockDistUpd = function () {
       });
     });
     var ucForHH;
+    $('#ddUC-upd').on('change', function(){
+      var ucs = $(this).val();
+      ucForHH = ucs
+    ipc.send("getStaffuc", ucs);
+    ipc.send("getSupsuc", ucs);
+
+    ipc.on("haveStaffuc", function(evt, staffs) {
+      $("#ddStaff_code-upd")
+        .children("option:not(:first)")
+        .remove();
+      staffListeneruc(staffs);
+    });
+    ipc.on("haveSupsuc", function(evt, _sups) {
+      $("#ddSup_code-upd")
+        .children("option:not(:first)")
+        .remove();
+      supListeneruc(_sups);
+    });
+  })
     $("#ddUC-upd").on("change", function() {
       var ucs = $(this).val();
       ucForHH = ucs;
+      if($('#ddProgramType').val() == 'otp'){
+
       ipc.send("getHealthHouse", ucs);
       ipc.on("hh", function(evt, hh) {
         $("#ddHealthHouse-upd")
@@ -349,6 +408,7 @@ module.exports.stockDistUpd = function () {
           .remove();
         hhListenerUpd(hh);
       });
+    }
     });
     $("#ddHealthHouse-upd").on("change", function() {
       var siteId = $(this).val();
@@ -418,6 +478,7 @@ module.exports.stockDistUpd = function () {
         $('.outreach').show();
         $('.outreach input').attr('required', true);
         $('.nsc').show();
+        $('.noOutreach').hide();
         $('.nsc input').attr('required', true);
       } else if (val == 'sc') {
         $('.nsc').hide();
@@ -1016,7 +1077,7 @@ function updateGrid(reportId, prog_type) {
     $("#stockDistUpdateGrid").jsGrid({
       width: "100%",
       height: "400px",
-      inserting: true,
+      inserting: false,
       editing: true,
       sorting: true,
       // deleting: true,

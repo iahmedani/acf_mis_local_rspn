@@ -6,19 +6,19 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
       .where('is_deleted', 0)
       .orderBy('stock_release_date', 'desc')
       .then(result=>{
-        // console.log(result)
+        console.log(result)
         return knex('tblStock')
         .select('dn_number', 'dn_date')
         .sum({total_recieved: 'rec_qty'})        
         .where((builder)=>{
           if(result.length){
-            builder.where('dn_date', '<', result)
+            builder.where('dn_date', '>', result[0].stock_release_date)
           }
         })
         .groupBy('dn_number', 'dn_date')
       })
       .then(result=>{
-        // console.log(result)
+        console.log(result)
         event.returnValue = result
       })
       .catch(e=>{

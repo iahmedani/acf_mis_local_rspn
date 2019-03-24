@@ -1,5 +1,5 @@
 module.exports.stockEntry = function () {
-  let data = [];
+  let data = new Array;
   $(function () {
     var datePickerId = document.getElementById('dn_date');
     datePickerId.max = new Date().toISOString().split("T")[0];

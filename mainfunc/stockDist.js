@@ -59,7 +59,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
         .where("program_type", "like", `%${filter.program_type}%`)
         .where("district_id", "like", `%${filter.district_id}%`)
         .where("tehsil_id", "like", `%${filter.tehsil_id}%`)
-        // .where("uc_id", "like", `%${filter.uc_id}%`)
+        .where("uc_id", "like", `%${filter.uc_id}%`)
         .where("site_id", "like", `%${filter.site_id}%`)
         .where("dist_month", "like", `%${filter.dist_month}%`)
         .where("CHW_id", "like", `%${filter.CHW_id}%`)

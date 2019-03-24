@@ -152,10 +152,10 @@ module.exports.stockOutEntry = function () {
       item.stock_release_date = $("#stock_release_date").val();
       item.district_id = $("#ddDistrict").val();
       item.tehsil_id = $("#ddTehsil").val();
-      item.uc_id = $("#ddUC").val();
+      item.uc_id = $("#ddUC").val() || 0;
       item.site_id = $("#ddHealthHouse").val() || 0;
       item.CHW_id = $("#ddStaff_code").val() || 0;
-      item.CHS_id = $("#ddStaff_code").val() || 0;
+      item.CHS_id = $("#ddSup_code").val() || 0;
       item.upload_status = 0;
       $("#stockOutEntryForm").validate();
       if (data.filter(el => el.item_name == item.item_name).length > 0) {
