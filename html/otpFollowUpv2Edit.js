@@ -154,7 +154,7 @@ module.exports.initOtpFollowUpEdit = function () {
        item.next_followup = item.next_followup.split('T')[0];
       var x = await knex('tblOtpFollowup').update(item).where({followup_id:item.followup_id})
       console.log({x});
-      var y = await knex('v_otpFollowupUpdate').where({followup_id:x})
+      var y = await knex('v_otpFollowupUpdate').where({followup_id:item.followup_id})
       console.log({y})
       return y[0];
 
