@@ -17,7 +17,7 @@
       <div class="form-group row">
           <div class="col-sm-2">
               <label for="report_month" class=" col-form-label">Report Month</label>
-              <input type="month" name="report_month" class="form-control form-control-sm clr" tabindex="1" required>
+              <input type="month" name="report_month" class="form-control form-control-sm " tabindex="1" required>
             </div>
         <div class="col-sm-2">
           <label for="ddProvince" class="col-form-label">Province:</label>
@@ -53,42 +53,42 @@
         </div> -->
         <div class="col-sm-2">
           <label for="sup_code" class=" col-form-label">Supervisor Code:</label>
-          <select id="ddSup_code" name="sup_code" class="form-control form-control-sm cld" tabindex="7">
+          <select id="ddSup_code" name="sup_code" class="form-control form-control-sm " tabindex="7">
             <option value="">Select One</option>
           </select>
         </div>
         <div class="col-sm-2">
           <label for="sup_name" class=" col-form-label">Supervisor Name:</label>
-          <select id="ddSup_name" name="sup_name" class="form-control form-control-sm cld" tabindex="8">
+          <select id="ddSup_name" name="sup_name" class="form-control form-control-sm " tabindex="8">
             <option value="">Select One</option>
           </select>
         </div>
-        
+        <div class="col-sm-2">
+          <label for="catchment_population" class="col-form-label">Catchment Population</label>
+          <input type="number" name="catchment_population" id="catchment_population" class="form-control form-control-sm " tabindex="9" required>
+        </div>
+        <div class="col-sm-2">
+          <label for="total_hh" class=" col-form-label">Total Houses Visited</label>
+          <input type="number" name="total_hh" id="total_hh" class="form-control form-control-sm clr" tabindex="10" required>
+        </div>
         <div class="col-sm-2">
           <label for="staff_code" class="col-form-label">Staff Code:</label>
-          <select id="ddStaff_code" name="staff_code" class="form-control form-control-sm cld" tabindex="9">
+          <select id="ddStaff_code" name="staff_code" class="form-control form-control-sm cld" tabindex="11">
             <option value="">Select One</option>
           </select>
         </div>
         <div class="col-sm-2">
           <label for="staff_name" class="col-form-label">Staff Name:</label>
-          <select id="ddStaff_name" name="staff_name" class="form-control form-control-sm cld" tabindex="10">
+          <select id="ddStaff_name" name="staff_name" class="form-control form-control-sm cld" tabindex="12">
             <option value="">Select One</option>
           </select>
-        </div>
+        </div>       
         
         <div class="col-sm-2">
-          <label for="catchment_population" class="col-form-label">Catchment Population</label>
-          <input type="number" name="catchment_population" id="catchment_population" class="form-control form-control-sm clr" tabindex="11" required>
-        </div>
-        <div class="col-sm-2">
           <label for="screening_date" class=" col-form-label">Entry Date</label>
-          <input type="date" name="screening_date" id="txtScrChildDate" class="form-control form-control-sm clr" tabindex="12" required>
+          <input type="date" name="screening_date" id="txtScrChildDate" class="form-control form-control-sm clr" tabindex="13" required>
         </div>
-        <div class="col-sm-2">
-          <label for="total_hh" class=" col-form-label">Total House Visited</label>
-          <input type="number" name="total_hh" id="total_hh" class="form-control form-control-sm clr" tabindex="12" required>
-        </div>
+        
         
         
       </div>
@@ -424,30 +424,17 @@
               <input type="number" required class="form-control form-control-sm clr" name="sixth_mnp_30_girls" id="sixth_mnp_30_girls" tabindex="58">
             </td>
           </tr>
-          <tr>
-            <td>No. of Children Recieved Deworming Tables</td>
-            <td class="not-req"></td>
-            <td class="not-req"></td>
-            <td class="not-req"></td>
-            <td class="not-req"></td>
-            <td>
-              <input type="number" required class="form-control form-control-sm clr" name="deworming_boys" id="deworming_boys" tabindex="59">
-            </td>
-            <td>
-              <input type="number" required class="form-control form-control-sm clr" name="deworming_girls" id="deworming_girls" tabindex="60">
-            </td>
-          </tr>
-          <tr>
+          
             <td>Total Followed Up</td>
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td >
-              <input type="number" required class="form-control form-control-sm clr" name="followedup_boys" id="followedup_boys" tabindex="61">
+              <input type="number" required class="form-control form-control-sm clr" name="followedup_boys" id="followedup_boys" tabindex="59">
             </td>
             <td >
-              <input type="number" required class="form-control form-control-sm clr" name="followedup_girls" id="followedup_girls" tabindex="62">
+              <input type="number" required class="form-control form-control-sm clr" name="followedup_girls" id="followedup_girls" tabindex="60">
             </td>
           </tr>
           <tr>
@@ -457,12 +444,26 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="exits_boys" id="exits_boys" tabindex="63">
+              <input type="number" required class="form-control form-control-sm clr" name="exits_boys" id="exits_boys" tabindex="61">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="exits_girls" id="exits_girls" tabindex="64">
+              <input type="number" required class="form-control form-control-sm clr" name="exits_girls" id="exits_girls" tabindex="62">
             </td>
           </tr>
+          <tr>
+            <td>No. of Children Recieved Deworming Tables</td>
+            <td class="not-req"></td>
+            <td class="not-req"></td>
+            <td class="not-req"></td>
+            <td class="not-req"></td>
+            <td>
+              <input type="number" required class="form-control form-control-sm clr" name="deworming_boys" id="deworming_boys" tabindex="63">
+            </td>
+            <td>
+              <input type="number" required class="form-control form-control-sm clr" name="deworming_girls" id="deworming_girls" tabindex="64">
+            </td>
+          </tr>
+          <tr>
           <tr>
             <td colspan="7" class="bg-info text-white">Other</td>
           </tr>

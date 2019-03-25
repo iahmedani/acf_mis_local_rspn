@@ -265,7 +265,7 @@ module.exports.initSessionsV2 = function () {
           delete item.tehsil_name;
           delete item.tehsil_id;
           delete item.uc_name;
-          delete item.uc_id;
+          // delete item.uc_id;
           delete item.site_name;
           // delete item.district_id;
           item.total_session = parseInt(item.ind_session) + parseInt(item.grp_sessions)
@@ -276,6 +276,7 @@ module.exports.initSessionsV2 = function () {
         insertItem: function (item) {
           console.log(item);
           item.site_id = ($("#ddHealthHouse").val()) ? $("#ddHealthHouse").val() : '';
+          item.uc_id = ($("#ddUC").val()) ? $("#ddUC").val() : '';
           item.CHW_id = $("#ddStaff_code").val() ? $("#ddStaff_code").val() : "";
           item.CHS_id = $("#ddSup_code").val() ? $("#ddSup_code").val() : "";
           item.prog_type = $('#ddProgramType').val();
@@ -330,15 +331,19 @@ module.exports.initSessionsV2 = function () {
         textField: "Name",
         validate: 'required',
       },
+      
       {
-        name: "ind_session",
+        name: "total_session",
         width:50,
-        title: "Individual Sessions",
+        title: "Total Sessions",
         type: "number",
         filtering: false,
-        validate: {
-          validator: 'min',
-          param: 0
+        inserting: false,
+        editing:false,
+        readOnly: true,
+        itemTemplate: function(value, item){
+          var x = ((item.ind_session) ? parseInt(item.ind_session) : 0 ) + ((item.grp_sessions) ? parseInt(item.grp_sessions) : 0 ) 
+          return x;
         }
       },
       {
@@ -353,17 +358,17 @@ module.exports.initSessionsV2 = function () {
         }
       },
       {
-        name: "total_session",
+        name: "ind_session",
         width:50,
-        title: "Total Sessions",
+        title: "Individual Sessions",
         type: "number",
         filtering: false,
-        readOnly: true,
-        itemTemplate: function(value, item){
-          var x = ((item.ind_session) ? parseInt(item.ind_session) : 0 ) + ((item.grp_sessions) ? parseInt(item.grp_sessions) : 0 ) 
-          return x;
+        validate: {
+          validator: 'min',
+          param: 0
         }
       },
+     
       {
         name: "male_participants",
         width:50,

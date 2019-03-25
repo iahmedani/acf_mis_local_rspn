@@ -528,17 +528,17 @@ module.exports.stockDist = function () {
               title: "Balance",
               width: 80,
               align: "center",
-              // type: "decimal",
+              type: "decimal",
+              inserting:false,
+              editing:false,
+              filtering:false,
               // readOnly: true,
               itemTemplate: function(value, item) {
                 // console.log(value)
                 // var test = this._grid.fields[5];
                 // var $inertControl = jsGrid.fields.decimal.prototype.insertTemplate.call(test);
 
-                return 
-                  item.opening +
-                  item.received  -
-                  (item.distributed + item.damaged)
+                return ((parseFloat(item.opening) + parseFloat(item.received) ) - (parseFloat(item.distributed) + parseFloat(item.damaged)));
                 // $inertControl.on("change", function() {
                 // });
               }

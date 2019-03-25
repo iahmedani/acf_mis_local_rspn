@@ -13,6 +13,10 @@
   
         <div class="form-group row border border-primary rounded">
           <div class="form-group row">
+              <div class="col-sm-2">
+                  <label for="report_month" class=" col-form-label">Report Month</label>
+                  <input type="month" name="report_month" class="form-control form-control-sm" required>
+                </div>
             <div class="form-group  col-sm-2">
               <label for="ddProvince" class="col-form-label">Province:</label>
               <select id="ddProvince" class="form-control form-control-sm">
@@ -46,6 +50,26 @@
               </select>
             </div> -->
           <!-- </div> -->
+          <div class="col-sm-2">
+              <label for="sup_code" class=" col-form-label">Supervisor Code:</label>
+              <select id="ddSup_code" name="sup_code" class="form-control form-control-sm">
+                <option seected value="">Select One</option>
+              </select>
+            </div>
+            <div class="col-sm-2">
+              <label for="sup_name" class=" col-form-label">Supervisor Name:</label>
+              <select id="ddSup_name" name="sup_name" class="form-control form-control-sm">
+                <option selected value="">Select One</option>
+              </select>
+            </div>
+            <div class="col-sm-2">
+                <label for="catchment_population" class="col-form-label">Catchment Population</label>
+                <input type="number" name="catchment_population" id="catchment_population" class="form-control form-control-sm" required>
+              </div>
+              <div class="col-sm-2">
+                  <label for="total_hh" class="col-form-label">Total Houses Visited</label>
+                  <input type="number" name="total_hh" id="total_hh" class="form-control form-control-sm" required>
+                </div>
                   <div class="col-sm-2">
                     <label for="staff_code" class="col-form-label">Staff Code:</label>
                     <select id="ddStaff_code" name="staff_code" class="form-control form-control-sm">
@@ -58,30 +82,13 @@
                       <option selected value="">Select One</option>
                     </select>
                   </div>
-                  <div class="col-sm-2">
-                    <label for="sup_code" class=" col-form-label">Supervisor Code:</label>
-                    <select id="ddSup_code" name="sup_code" class="form-control form-control-sm">
-                      <option seected value="">Select One</option>
-                    </select>
-                  </div>
-                  <div class="col-sm-2">
-                    <label for="sup_name" class=" col-form-label">Supervisor Name:</label>
-                    <select id="ddSup_name" name="sup_name" class="form-control form-control-sm">
-                      <option selected value="">Select One</option>
-                    </select>
-                  </div>
-                  <div class="col-sm-2">
-                    <label for="village" class="col-form-label">No. of Villages:</label>
-                    <input type="number" name="village" id="village" class="form-control form-control-sm" required>
-                  </div>
+                  
+                  
                   <div class="col-sm-2">
                     <label for="screening_date" class=" col-form-label">Entry Date:</label>
                     <input type="date" name="screening_date" id="txtScrChildDate" class="form-control form-control-sm" required>
                   </div>
-                  <div class="col-sm-2">
-                    <label for="report_month" class=" col-form-label">Report Month</label>
-                    <input type="month" name="report_month" class="form-control form-control-sm" required>
-                  </div>
+                  
           </div>
   
           
@@ -89,8 +96,8 @@
  <tr>
             <th class="bg-info text-white align-middle" colspan="1">Category</th>
             <th class="bg-info text-white align-middle" colspan="1">Total Screened PLW</th>
-            <th class="bg-info text-white align-middle" colspan="1">Newly Screened PLW</th>
             <th class="bg-info text-white align-middle" colspan="1">Re-Screened PLW</th>
+            <th class="bg-info text-white align-middle" colspan="1">Newly Screened PLW</th>
             <th class="bg-info text-white align-middle" colspan="1">MUAC &lt; 21 CM</th>
             <th class="bg-info text-white align-middle" colspan="1">MUAC &geq; 21 CM</th>
             <th class="bg-info text-white align-middle" colspan="1">PLW Received IFA Tablets First time</th>
@@ -103,11 +110,11 @@
               <input required min="0" type="number" class="form-control form-control-sm clr" name="total_scr_pragnent" id="total_scr_pragnent" tabindex="-1" readonly>
             </td>
             <td class="align-middle">
-              <input required min="0" type="number" class="form-control form-control-sm clr p" name="new_scr_pragnent" id="new_scr_pragnent">
-            </td>
+                <input required min="0" type="number" class="form-control form-control-sm clr p" name="reScreened_scr_pragnent" id="reScreened_scr_pragnent">
+              </td>
             <td class="align-middle">
-              <input required min="0" type="number" class="form-control form-control-sm clr p" name="reScreened_scr_pragnent" id="reScreened_scr_pragnent">
-            </td>
+              <input required min="0" type="number" class="form-control form-control-sm clr p" name="new_scr_pragnent" id="new_scr_pragnent">
+            </td>            
             <td class="align-middle">
               <input required min="0" type="number" class="form-control form-control-sm clr" name="muac_le_21_pragnent" id="muac_le_21_pragnent">
             </td>
@@ -130,11 +137,11 @@
             <input required min="0" type="number" class="form-control form-control-sm clr " name="total_scr_lactating" id="total_scr_lactating" readonly tabindex="-1">
           </td>
           <td class="align-middle">
-            <input required min="0" type="number" class="form-control form-control-sm clr l" name="new_scr_lactating" id="new_scr_lactating">
-          </td>
+              <input required min="0" type="number" class="form-control form-control-sm clr l" name="reScreened_scr_lactating" id="reScreened_scr_lactating">
+            </td>
           <td class="align-middle">
-            <input required min="0" type="number" class="form-control form-control-sm clr l" name="reScreened_scr_lactating" id="reScreened_scr_lactating">
-          </td>
+            <input required min="0" type="number" class="form-control form-control-sm clr l" name="new_scr_lactating" id="new_scr_lactating">
+          </td>        
           
           <td class="align-middle">
             <input required min="0" type="number" class="form-control form-control-sm clr" name="muac_le_21_lactating" id="muac_le_21_lactating">

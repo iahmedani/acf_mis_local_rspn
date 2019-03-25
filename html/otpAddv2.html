@@ -85,11 +85,7 @@
           <input type="text" name="reg_id" id="reg_id" class="form-control form-control-sm clr" maxlength="7" required>
           <span style="display:none; color: red" id="regIdInfo">Duplicate registration id</span>
         </div>
-        <div class="form-group col-sm-2">
-
-          <label for="reg_id" class="form-label">HH ID:</label>
-          <input type="text" name="hh_id" id="hh_id" class="form-control form-control-sm clr" maxlength="7" required>
-        </div>
+        
       </div>
       <div class="row">
         <div class="col-sm-12">
@@ -110,26 +106,33 @@
                       required>
                   </div>
                   <div class="form-group col-sm-2">
-                    <label for="cnic" class="form-label">CNIC Number</label>
-                    <input type="text" name="cnic" id="cnic" class="form-control form-control-sm clr" 
-                    data-inputmask="'mask': '99999-9999999-9'">
-                  </div>
+                      <label for="cnic" class="form-label">CNIC Number</label>
+                      <input type="text" name="cnic" id="cnic" class="form-control form-control-sm clr" 
+                      data-inputmask="'mask': '99999-9999999-9'">
+                    </div>
+                  <div class="form-group col-sm-2">
+                      <label for="cnt_number" class="form-label">Contact Number</label>
+                      <input type="text" name="cnt_number" id="cnt_number"  class="form-control form-control-sm clr" 
+                     data-inputmask="'mask': '0999-9999999'">
+                    </div>
                   <div class="form-group col-sm-2">
                     <label for="address" class="form-label">Address</label>
                     <input type="text" name="address" id="address" class="form-control form-control-sm clr" required>
                   </div>
                   <div class="form-group col-sm-2">
-                    <label for="cnt_number" class="form-label">Contact Number</label>
-                    <input type="text" name="cnt_number" id="cnt_number"  class="form-control form-control-sm clr" 
-                   data-inputmask="'mask': '0999-9999999'">
-                  </div>
+
+                      <label for="reg_id" class="form-label">HH ID:</label>
+                      <input type="text" name="hh_id" id="hh_id" class="form-control form-control-sm clr" maxlength="7" required>
+                    </div>
+                    
+                  
                   <div class="form-group col-sm-2">
                     <label for="travel_time_minutes" class="form-label">Time to Trevel OTP Site<small>(Min)</small></label>
                     <input type="text" name="travel_time_minutes" id="travel_time_minutes" class="form-control form-control-sm clr" required>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="form-group col-sm-2">
+                <!-- </div>
+                <div class="row"> -->
+                  <div class="form-group col-sm-1">
                     <label for="is_mother_alive" class="form-label">Mother Alive</label>
                     <select type="text" name="is_mother_alive" id="is_mother_alive" class="form-control form-control-sm" required>
                       <option value="yes" selected>Yes</option>
@@ -138,9 +141,9 @@
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="age" class="form-label">Age <small id="labAge">(in months)</small></label>
-                    <input type="number" name="age" id="age" class="form-control form-control-sm clr" required>
+                    <input type="number" step="any"  name="age" id="age" class="form-control form-control-sm clr" required>
                   </div>
-                  <div class="form-group col-sm-2">
+                  <div class="form-group col-sm-1">
                     <label for="gender" class="form-label">Gender</label>
                     <select name="gender" id="gender" class="form-control form-control-sm cld" required>
                       <option selected value="">Choose</option>
@@ -218,17 +221,23 @@
               <div id="anthro" class="border border-info rounded-top">
                 <p class="list-group-item bg-info text-white sm">Addmision Anthropometry</p>
                 <div class="row">
+                    <div class="form-group col-sm-2">
+                        <label for="muac">MUAC
+                          <small>(CM)</small>
+                        </label>
+                        <input type="number" step="any"  name="muac" id="muac" class="form-control form-control-sm clr" required>
+                      </div>
                   <div class="form-group col-sm-2">
                     <label for="weight" class="form-label">Weight
                       <small>(KG)</small>
                     </label>
-                    <input type="number" name="weight" id="weight" class="form-control form-control-sm clr" min="0" required>
+                    <input type="number" step="any"  name="weight" id="weight" class="form-control form-control-sm clr" min="0" required>
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="height" class="form-label">Height
                       <small>(CM)</small>
                     </label>
-                    <input type="number" name="height" id="height" class="form-control form-control-sm clr" min="0" >
+                    <input type="number" step="any"  name="height" id="height" class="form-control form-control-sm clr" min="0" >
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="oedema" class="form-label">Oedema</label>
@@ -240,12 +249,7 @@
                       <option value="plus_3">&plus;&plus;&plus;(3)</option>
                     </select>
                   </div>
-                  <div class="form-group col-sm-2">
-                    <label for="muac">MUAC
-                      <small>(CM)</small>
-                    </label>
-                    <input type="number" name="muac" id="muac" class="form-control form-control-sm clr" required>
-                  </div>
+
                 </div>
               </div>
               <div id="history" class="border border-info rounded-top">
@@ -343,7 +347,7 @@
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="quantity1">Quantity:</label>
-                    <input type="number" name="quantity1" id="quantity1" class="form-control form-control-sm cld" min="0" required>
+                    <input type="number" step="any"  name="quantity1" id="quantity1" class="form-control form-control-sm cld" min="0" required>
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="ration2">Commodity 2:</label>
@@ -367,7 +371,7 @@
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="quantity2">Quantity:</label>
-                    <input type="number" name="quantity2" id="quantity2" class="form-control form-control-sm clr" min="0">
+                    <input type="number" step="any"  name="quantity2" id="quantity2" class="form-control form-control-sm clr" min="0">
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="ration3">Commodity 3:</label>
@@ -390,7 +394,7 @@
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="quantity3">Quantity:</label>
-                    <input type="number" name="quantity3" id="quantity3" class="form-control form-control-sm clr" min="0">
+                    <input type="number" step="any"  name="quantity3" id="quantity3" class="form-control form-control-sm clr" min="0">
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="other_com_name" class="form-label">Other Commodity Name</label>
@@ -398,7 +402,7 @@
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="other_com_qty" class="form-label">Other Commodity Qunatity</label>
-                    <input type="number" name="other_com_qty" id="other_com_qty" class="form-control form-control-sm clr" >
+                    <input type="number" step="any"  name="other_com_qty" id="other_com_qty" class="form-control form-control-sm clr" >
                   </div>
 
                 </div>

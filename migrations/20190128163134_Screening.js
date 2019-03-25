@@ -354,7 +354,9 @@ exports.up = function(knex, Promise) {
         [exits_pragnent] INTEGER NOT NULL DEFAULT 0, 
         [exit_lactating] INTEGER NOT NULL DEFAULT 0, 
         [upload_date] DATE, 
-        [uc_id] INTEGER);
+        [uc_id] INTEGER, 
+        [catchment_population] INTEGER, 
+        [total_hh]);
       `
     )
     .raw(

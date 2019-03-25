@@ -24,6 +24,34 @@ module.exports.initScrPlwNewUpd = function () {
       })
     })
   })
+
+  
+  function totalCheck (){
+    var pt = $('#total_scr_pragnent')
+    var lt = $('#total_scr_lactating')
+    var p1 = $('.p1')
+    var l1 = $('.l1')
+    var ltotal = parseInt(lt.val());
+    var ptotal =  parseInt(pt.val());
+    var p1Val = 0;
+    var l1Val = 0;
+    p1.each(function(){
+      p1Val += ($(this).val())? parseInt($(this).val()) : 0;
+    })
+    l1.each(function(){
+      l1Val += ($(this).val())? parseInt($(this).val()) : 0;
+    })
+    if(ltotal != l1Val){
+      l1.addClass('highlightInput')
+    }else{
+      l1.removeClass('highlightInput')
+    }
+    if(ptotal != p1Val){
+      p1.addClass('highlightInput')
+    }else{
+      p1.removeClass('highlightInput')
+    }
+  }
   $(function () {
     var datePickerId = document.getElementById('txtScrChildDate');
     datePickerId.max = new Date().toISOString().split("T")[0];
@@ -475,7 +503,8 @@ module.exports.initScrPlwNewUpd = function () {
   $('#submitScrPlwNewUpd').on('click', (e) => {
     // console.log(data);
     $('#scrPlwNewUpdForm').validate();
-    if ($('#scrPlwNewUpdForm').valid()) {
+    totalCheck();
+    if ($('#scrPlwNewUpdForm').valid() && $('.highlightInput').length == 0) {
       var scrPlwNewUpdData = $('#scrPlwNewUpdForm').serializeFormJSON();
       // console.log(scrPlwNewUpdData);
       ipc.send('scrPlwNewUpd', scrPlwNewUpdData);
@@ -490,7 +519,6 @@ module.exports.initScrPlwNewUpd = function () {
     }
     e.preventDefault();
   })
-
 
   
 }

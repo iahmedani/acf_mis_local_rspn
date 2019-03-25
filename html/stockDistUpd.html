@@ -9,6 +9,11 @@
       <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">Stock Distribution Update </p>
       <form action="#" id="stockDist" class="col-sm-12">
         <div class="form-group row">
+            <div class="col-sm-2">
+                <label for="distMonth" class="col-form-label">Reporting Month</label>
+                <input type="month" name="distMonth" id="distMonth" class="form-control form-control-sm myFilter"
+                  required>
+              </div>
           <div class="form-group col-sm-2">
             <label for="prog_type" class="form-label">Program Type:</label>
             <select name="prog_type" id="ddProgramType" class="form-control form-control-sm myFilter" required>
@@ -86,11 +91,7 @@
                 <div class="col-sm-4">
                   <input type="text" name="dn_number" id="dn_number" class="form-control form-control-sm" required>
                 </div> -->
-          <div class="col-sm-2">
-            <label for="distMonth" class="col-form-label">Distribution Month</label>
-            <input type="month" name="distMonth" id="distMonth" class="form-control form-control-sm myFilter"
-              required>
-          </div>
+          
          
         </div>
         <!-- <div class="row">

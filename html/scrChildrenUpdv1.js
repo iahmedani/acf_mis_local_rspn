@@ -601,9 +601,9 @@ module.exports.initScrChildrenUpd = function () {
   })
   $('#submitScrChildUpdForm').on('click', (e) => {
     // console.log(data);
-    // totalCheck();
+    totalCheck();
     $('#scrChildrenUpdForm').validate();
-    if ($('#scrChildrenUpdForm').valid() ) {
+    if ($('#scrChildrenUpdForm').valid() && $('.highlightInput').length == 0) {
       var scrChildrenUpdData = $('#scrChildrenUpdForm').serializeFormJSON();
       scrChildrenUpdData.reffer_otp_boys = parseInt(scrChildrenUpdData.reffer_otp_boys_s1) + parseInt(scrChildrenUpdData.reffer_otp_boys_s2)
       scrChildrenUpdData.reffer_otp_girls = parseInt(scrChildrenUpdData.reffer_otp_girls_s1) + parseInt(scrChildrenUpdData.reffer_otp_girls_s2)
@@ -655,6 +655,36 @@ module.exports.initScrChildrenUpd = function () {
     $("#total_scr_girls").val(total);
   })
   
+  // let totalCheck = () => {
+  //   var totalScrB = parseInt($("#total_scr_boys").val());
+  //   var x = 0;
+  //   $(".tchkb").each(function (i, el) {
+  //     x = x + ($(el).val() ? parseInt($(el).val()) : 0);
+  //     if ($(".tchkb").length - 1 == i) {
+  //       if (x != totalScrB) {
+  //         $(".tchkb").addClass("highlightInput");
+  //         // alert('Value not allowed')
+  //       } else {
+  //         $(".tchkb").removeClass("highlightInput");
+  //       }
+  //     }
+  //   });
+  //   var totalScrG = parseInt($("#total_scr_girls").val());
+  //   var y = 0;
+  //   $(".tchkg").each(function (i, el) {
+  //     y = y + ($(el).val() ? parseInt($(el).val()) : 0);
+  //     if ($(".tchkg").length - 1 == i) {
+  //       if (y != totalScrG) {
+  //         $(".tchkg").addClass('highlightInput');
+  //         // alert('Value not allowed')
+  //       } else {
+  //         $(".tchkg").removeClass('highlightInput');
+  //       }
+  //     }
+  //   });
+
+  // }
+
   let totalCheck = () => {
     var totalScrB = parseInt($("#total_scr_boys").val());
     var x = 0;
@@ -684,7 +714,6 @@ module.exports.initScrChildrenUpd = function () {
     });
 
   }
-
 
   $('#site_one').on('change', function(){
     var that = $(this)

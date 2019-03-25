@@ -1319,9 +1319,9 @@ function updateGrid(reportId, prog_type) {
             // var $inertControl = jsGrid.fields.DecimalField.prototype.insertTemplate.call(test);
 
             return (
-              item.opening +
-              item.recieved -
-              (item.distributed + item.damaged)
+              parseFloat(item.opening) +
+              parseFloat(item.recieved) -
+              (parseFloat(item.distributed) + parseFloat(item.damaged))
             );
             // $inertControl.on("change", function() {
             // });

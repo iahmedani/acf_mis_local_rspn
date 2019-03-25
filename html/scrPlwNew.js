@@ -5,7 +5,6 @@ module.exports.initScrPlwNew = function (){
     var l = $('.l')
     var pt = $('#total_scr_pragnent')
     var lt = $('#total_scr_lactating')
-   
 
     p.change(()=>{
       var total=0;
@@ -25,6 +24,33 @@ module.exports.initScrPlwNew = function (){
     })
 
   })
+
+  function totalCheck (){
+    var pt = $('#total_scr_pragnent')
+    var lt = $('#total_scr_lactating')
+    var p1 = $('.p1')
+    var l1 = $('.l1')
+    var ltotal = parseInt(lt.val());
+    var ptotal =  parseInt(pt.val());
+    var p1Val = 0;
+    var l1Val = 0;
+    p1.each(function(){
+      p1Val += ($(this).val())? parseInt($(this).val()) : 0;
+    })
+    l1.each(function(){
+      l1Val += ($(this).val())? parseInt($(this).val()) : 0;
+    })
+    if(ltotal != l1Val){
+      l1.addClass('highlightInput')
+    }else{
+      l1.removeClass('highlightInput')
+    }
+    if(ptotal != p1Val){
+      p1.addClass('highlightInput')
+    }else{
+      p1.removeClass('highlightInput')
+    }
+  }
   $(function () {
     var datePickerId = document.getElementById('txtScrChildDate');
     datePickerId.max = new Date().toISOString().split("T")[0];
@@ -124,9 +150,11 @@ module.exports.initScrPlwNew = function (){
     });
     })
   $('#submitScrPlwNew').on('click', (e)=>{
+    e.preventDefault();
     // console.log(data);
     $('#scrPlwNewForm').validate();
-    if($('#scrPlwNewForm').valid()){
+    totalCheck();
+    if($('#scrPlwNewForm').valid() && $('.highlightInput').length == 0){
       var scrPlwNewData = $('#scrPlwNewForm').serializeFormJSON();
       console.log(scrPlwNewData);
       ipc.send('scrPlwNewAdd', scrPlwNewData);
@@ -136,7 +164,6 @@ module.exports.initScrPlwNew = function (){
       $('.cld').val("");
     $('input[type="number"]').attr('min',0);
     } 
-    e.preventDefault();
   })
   $('#resetScrChildForm').on('click',()=>{
     $('#scrChildrenForm').get(0).reset();

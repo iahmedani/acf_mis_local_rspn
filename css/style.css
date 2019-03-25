@@ -248,3 +248,7 @@ th {
   display: none;
   text-align: center;
 }
+.highlightInput {
+  color: red;
+  border: 1px solid red;
+} 
