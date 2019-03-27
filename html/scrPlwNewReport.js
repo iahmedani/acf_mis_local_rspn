@@ -1,8 +1,8 @@
 module.exports.initScrPlwNewReport = function () {
 
   $(function () {
-    var datePickerId_end = document.getElementById('end_date');
-    datePickerId_end.max = new Date().toISOString().split("T")[0];
+    // var datePickerId_end = document.getElementById('end_date');
+    // datePickerId_end.max = new Date().toISOString().split("T")[0];
     var datePickerId_start = document.getElementById('start_date');
     datePickerId_start.min = new Date(2018, 07, 01).toISOString().split("T")[0];
 
