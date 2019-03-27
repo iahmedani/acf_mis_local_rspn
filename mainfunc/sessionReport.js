@@ -9,11 +9,14 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
           data: cb => {
             knex("vSessionsFullForUpdate")
               .where({ is_deleted: 0 })
+              .where('prog_type', 'like', `%${filter.prog_type}%`)
               .where('province_id', 'like', `%${filter.province_id}%`)
               .where('district_id', 'like', `%${filter.district_id}%`)
               .where('tehsil_id', 'like', `%${filter.tehsil_id}%`)
               .where('uc_id', 'like', `%${filter.uc_id}%`)
               .where('site_id', 'like', `%${filter.site_id}%`)
+              .where('CHS_id', 'like', `%${filter.CHS_id}%`)
+              .where('CHW_id', 'like', `%${filter.CHW_id}%`)
               .whereBetween("session_date", [filter.startDate, filter.endDate])
               .then(result => {
                 cb(null, result);
@@ -41,11 +44,14 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
           data: cb => {
             knex("vSessionsFullForUpdate")
               .where({ is_deleted: 0 })
+              .where('prog_type', 'like', `%${filter.prog_type}%`)
               .where('province_id', 'like', `%${filter.province_id}%`)
               .where('district_id', 'like', `%${filter.district_id}%`)
               .where('tehsil_id', 'like', `%${filter.tehsil_id}%`)
               .where('uc_id', 'like', `%${filter.uc_id}%`)
               .where('site_id', 'like', `%${filter.site_id}%`)
+              .where('CHS_id', 'like', `%${filter.CHS_id}%`)
+              .where('CHW_id', 'like', `%${filter.CHW_id}%`)
               .then(result => {
                 cb(null, result);
                 // event.sender.send("getSessionsAll", { result: result });

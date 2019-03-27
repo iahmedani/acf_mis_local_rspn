@@ -24,6 +24,12 @@
     const electron = require('electron');
     const ipc = electron.ipcRenderer;
     const remote = electron.remote;
+    var hjk = {
+      name: 'Imran',
+      Password: 'test123'
+    }
+    window.sessionStorage.setItem('user', hjk)
+    console.log(window.sessionStorage.getItem('user'))
   </script>
   <!-- <link rel="import" href="scrChildv2.html"> -->
   <!-- <link rel="import" href="scrPlwv2.html"> -->

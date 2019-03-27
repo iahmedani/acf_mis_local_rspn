@@ -52,18 +52,68 @@ module.exports.sessionsReport = () => {
       })
     })
     var ucForHH;
-    $('#ddUC').on('change', function () {
+    $('#ddUC').on('change', function(){
       var ucs = $(this).val();
       ucForHH = ucs
-      ipc.send('getHealthHouse', ucs)
-      ipc.on('hh', function (evt, hh) {
-        $('#ddHealthHouse').children('option:not(:first)').remove();
-        //   hh.hh.forEach(el=>{
-        // $('#ddHealthHouse').append(`<option value="${el.id}">${el.siteName}</option>`);              
-        //   })
-        hhListener(hh);
-      })
-    })
+      ipc.send('getHealthHouse', ucs )
+      ipc.on('hh', async function(evt, hh){
+        // console.log(hh)
+        $('#site_one').children('option:not(:first)').remove();
+        if(hh.hh.length > 1){
+          $('.secondSite').css('display', '')  
+          $('#site_two').children('option:not(:first)').remove();
+          await asyncForEach(hh.hh, async(el)=>{
+            $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);              
+          })            
+        }else{
+          $('.secondSite').css('display', 'none')  
+
+        }
+        hhListener_siteOne(hh);
+
+      });
+    ipc.send("getStaffuc", ucs);
+    ipc.send("getSupsuc", ucs);
+
+    ipc.on("haveStaffuc", function(evt, staffs) {
+      $("#ddStaff_code")
+        .children("option:not(:first)")
+        .remove();
+      staffListeneruc(staffs);
+    });
+    ipc.on("haveSupsuc", function(evt, _sups) {
+      $("#ddSup_code")
+        .children("option:not(:first)")
+        .remove();
+      supListeneruc(_sups);
+    });
+  })
+    $("#ddUC").on("change", function() {
+      var ucs = $(this).val();
+      ucForHH = ucs;
+      if($('#ddProgramType').val() == 'otp'){
+
+        ipc.send("getHealthHouse", ucs);
+        ipc.on("hh", function(evt, hh) {
+          $("#ddHealthHouse")
+            .children("option:not(:first)")
+            .remove();
+          hhListener(hh);
+        });
+      }
+    });
+    // $('#ddUC').on('change', function () {
+    //   var ucs = $(this).val();
+    //   ucForHH = ucs
+    //   ipc.send('getHealthHouse', ucs)
+    //   ipc.on('hh', function (evt, hh) {
+    //     $('#ddHealthHouse').children('option:not(:first)').remove();
+    //     //   hh.hh.forEach(el=>{
+    //     // $('#ddHealthHouse').append(`<option value="${el.id}">${el.siteName}</option>`);              
+    //     //   })
+    //     hhListener(hh);
+    //   })
+    // })
     $(".sReportFilter").on('change', function () {
       console.log($(this).val())
       // if ($.fn.DataTable.isDataTable("#tblSessionReport")) {
@@ -78,11 +128,14 @@ module.exports.sessionsReport = () => {
     });
     var currentFilter = () => {
       var x = {};
+      x.prog_type = $("#ddProgramType").val() ? $("#ddProgramType").val() : "";
       x.province_id = $("#ddProvince").val() ? $("#ddProvince").val() : "";
       x.district_id = $("#ddDistrict").val() ? $("#ddDistrict").val() : "";
       x.tehsil_id = $("#ddTehsil").val() ? $("#ddTehsil").val() : "";
       x.uc_id = $("#ddUC").val() ? $("#ddUC").val() : "";
-      x.site_id = $("#ddHealthHouse").val() ? $("#ddHealthHouse").val() : "";
+      x.site_id = ($("#ddHealthHouse").val() && $('#ddProgramType').val() == 'otp')? $("#ddHealthHouse").val() : "";
+      x.CHS_id = ($("#ddSup_code").val()) ? $("#ddSup_code").val() : "";
+      x.CHW_id = ($("#ddStaff_code").val())? $("#ddStaff_code").val() : "";
       if ($("#ddInterval").val() == 1 && $("#start_date").val() && $("#end_date").val()) {
         x.startDate = $("#start_date").val();
         x.endDate = $("#end_date").val();
@@ -114,8 +167,9 @@ module.exports.sessionsReport = () => {
                   return x.toDateString();
 
             } },
+            { title: "Program", data: "prog_type" },
             { title: "Province", data: "province" },
-            { title: "District", data: "district_name" },
+            { title: "District", data: "district_name" },            
             { title: "Tehsil", data: "tehsil_name" },
             { title: "UC", data: "uc_name" },
             { title: "Site", data: "site_name" },
@@ -167,13 +221,35 @@ module.exports.sessionsReport = () => {
       e.preventDefault();
       $("#filterDateSession").validate();
       if ($("#filterDateSession").valid()) {
-        console.log('here')
+        // console.log('here')
         getSessionData(currentFilter());
       } 
     });
   });
 
 
+  $(() => {
+    // $('.outreach').hide();
+    $('#ddProgramType').on('change', function () {
+      var val = $(this).val();
+      // if (data.length > 0) {
+      //   data = [];
+      // }
+      // console.log(val)
+      if (val == 'outreach') {
+        $('.outreach').show();
+        $('.outreach input').attr('required', true);
+        $('.otp').show();
+        $('.otp input').attr('required', true);
+        $('.noOutreach').hide();
+      }  else {
+        $('.outreach').hide();
+        $('.otp').show();
+        $('.otp input').attr('required', true);
+        $('.outreach input').attr('required', false);
 
+      }
+    })
+  })
   
 }

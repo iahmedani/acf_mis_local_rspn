@@ -290,8 +290,8 @@ module.exports.initScrPlwNewUpd = function () {
           width: 80
         },
         {
-          name: "village",
-          title: "Total Villages",
+          name: "catchment_population",
+          title: "Catchment Population",
           type: "text",
           editing: false,
           width: 50
