@@ -386,7 +386,7 @@ _session();
           "Lactating MUAC <21 cm",
         ]},
       series: [{
-        name: 'PLW Screened',
+        name: 'Total Screened',
         data: [
             ["Pragnent MUAC >21 cm", _plwData.muac_gt_21_pragnent],
             ['Lactating MUAC >21 cm', _plwData.muac_gt_21_lactating],

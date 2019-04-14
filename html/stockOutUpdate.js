@@ -1,4 +1,7 @@
 module.exports.stockOutUpdate = function () {
+  $('#ddProgramType').change(()=>{
+    $('.prgChange').val("")
+  })
   $(function () {
     ipc.send('getProvince');
     ipc.on('province', function (evt, province) {
@@ -475,6 +478,15 @@ module.exports.stockOutUpdate = function () {
           // valueType: "string",
           valueField: "value",
           textField: "Name"
+        },{
+          title:'Item Name',
+          name:'item_name',
+          type:'text'
+        },
+        {
+          title:'Total Stock',
+          name:'totlStock',
+          type:'number'
         },
         {
           name: "upload_status",

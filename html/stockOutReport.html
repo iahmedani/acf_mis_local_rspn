@@ -7,7 +7,7 @@
           <div class="form-group row">
             <div class="form-group col-sm-2">    
               <label for="prog_type" class="form-label">Program Type:</label>    
-              <select name="prog_type" id="ddProgramType" class="form-control form-control-sm" required>
+              <select name="prog_type" id="ddProgramType" class="form-control form-control-sm __filter" required>
                 <option selected value="">Select One</option>
                 <option value="sfp">TSFP</option>
                 <option value="sfp_Plw">TSFP-PLW</option>
@@ -19,7 +19,7 @@
             </div>
             <div class="form-group col-sm-2 ">
               <label for="province">Province</label>
-              <select  id="ddProvince" class="form-control form-control-sm prgChange" required>
+              <select  id="ddProvince" class="form-control form-control-sm __filter prgChange" required>
                 <option selected value="">Choose</option>
     
               </select>
@@ -27,27 +27,27 @@
             <div class="form-group col-sm-2 ">
     
               <label for="district">District</label>
-              <select name="district" id="ddDistrict" class="form-control form-control-sm prgChange" required>
+              <select name="district" id="ddDistrict" class="form-control form-control-sm __filter prgChange" required>
                 <option selected value="">Choose</option>
               </select>
             </div>
             <div class="form-group col-sm-2 ">
     
               <label for="Tehsil">Tehsil</label>
-              <select name="Tehsil" id="ddTehsil" class="form-control form-control-sm prgChange" required>
+              <select name="Tehsil" id="ddTehsil" class="form-control form-control-sm __filter prgChange" required>
                 <option selected value="">Choose</option>
     
               </select>
             </div>
             <div class="form-group col-sm-2  nsc ">
               <label for="uc">UC</label>
-              <select id="ddUC" class="form-control form-control-sm" required>
+              <select id="ddUC" class="form-control form-control-sm __filter prgChange" required>
                 <option selected value="">Choose</option>
               </select>
             </div>
             <div class=" form-group col-sm-2 nsc noOutreach">
               <label for="site_id" class="col-form-label">Site Name:</label>
-              <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm prgChange" required>
+              <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm __filter prgChange" required>
                 <option selected value="">Select One</option>
               </select>
             </div>
@@ -55,62 +55,40 @@
             <!-- <div class="form-group row"> -->
             <div class="form-group col-sm-2 outreach">
               <label for="staff_code" class="col-form-label">Staff Code:</label>
-              <select id="ddStaff_code" name="staff_code" class="form-control form-control-sm cld prgChange">
+              <select id="ddStaff_code" name="staff_code" class="form-control form-control-sm cld __filter prgChange">
                 <option value="">Select One</option>
               </select>
             </div>
             <div class="form-group col-sm-2 outreach">
               <label for="staff_name" class="col-form-label">Staff Name:</label>
-              <select id="ddStaff_name" name="staff_name" class="form-control form-control-sm cld prgChange">
+              <select id="ddStaff_name" name="staff_name" class="form-control form-control-sm cld __filter prgChange">
                 <option value="">Select One</option>
               </select>
             </div>
             <div class="form-group col-sm-2 outreach">
               <label for="sup_code" class=" col-form-label">Supervisor Code:</label>
-              <select id="ddSup_code" name="sup_code" class="form-control form-control-sm cld prgChange">
+              <select id="ddSup_code" name="sup_code" class="form-control form-control-sm cld __filter prgChange">
                 <option value="">Select One</option>
               </select>
             </div>
             <div class="form-group col-sm-2 outreach">
               <label for="sup_name" class=" col-form-label">Supervisor Name:</label>
-              <select id="ddSup_name" name="sup_name" class="form-control form-control-sm cld prgChange">
+              <select id="ddSup_name" name="sup_name" class="form-control form-control-sm cld __filter prgChange">
                 <option value="">Select One</option>
               </select>
             </div>
-            <!-- </div> -->
-            <!-- <div class="form-group row"> -->
-            <!-- <label for="dn_number" class="col-sm-2 col-form-label">Delivery Note #:</label>
-                <div class="col-sm-4">
-                  <input type="text" name="dn_number" id="dn_number" class="form-control form-control-sm" required>
-                </div> -->
             <div class="col-sm-2">
               <label for="stock_release_date" class="col-form-label">Stock Release Date:</label>
-              <input type="date" name="stock_release_date" id="stock_release_date" class="form-control form-control-sm" required>
+              <input type="date" name="stock_release_date" id="stock_release_date" class="form-control form-control-sm __filter" required>
             </div>
             
           </div>
-          <div class="row">
-
-              <div class="alert alert-danger col-sm-12 col-lg-12 col-md-12" role="alert">
-                  <span class="b"> Note! </span> All Quantities must be added in Sub Unit.
-                </div>
-            </div>
-            <div class="row">
-
-              <div class="table-responsive">
-                <div id="stockOutGrid"></div>
-                <div class="form-group row">
-                  <div class="offset-sm-10 col-sm-2">
-                    <button type="submit" class="btn btn-info btn-block" id="stockOutEntrySubmit">Save</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          <div class="alert alert-warning" role="alert" style="display:none">
-            No Stock Available for further dispatch
-          </div>
-          
         </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="table-responsive">
+        <table id="__stockOutReport" class="display" width="100%"></table>
       </div>
     </div>
 </template>

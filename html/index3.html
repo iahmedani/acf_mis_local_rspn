@@ -65,13 +65,15 @@
   <link rel="import" href="sessionsReport.html">
   <link rel="import" href="stockOutEntry.html">
   <link rel="import" href="stockOutUpdate.html">
+  <link rel="import" href="stockOutReport.html">
+
 </head>
 
 
 <body>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-2 col-xs-4 col-xs-4 p-l-0 p-r-0 " style="padding-left:0;padding-right:0" id="sidebar">
+      <div class="p-l-0 p-r-0 _mySide" style="padding-left:0;padding-right:0" id="sidebar">
         <a class="navbar-brand" href="#" id="homeDashboard">
           <img src="../img/acf-logo.svg" style="height: 50px;" alt="">
         </a>
@@ -110,6 +112,7 @@
               <li><a href="#" id="defReport">Defaulter</a></li>
               <li><a href="#" id="sessionsReport">Sessions</a></li>
               <li><a href="#" id="autoStock">Stock In</a></li>
+              <li><a href="#" id="stockOutReport">Stock Out</a></li>
               <li><a href="#" id="stockDistReport">Stock Distribution </a></li>
             </ul>
           </li>
@@ -489,6 +492,7 @@
     var InitVillageList = require('./villageList').VillageList;
     var InitSessionsReport = require('./sessionsReport').sessionsReport;
     var InitstockOutEntry = require('./stockOutEntry').stockOutEntry;
+    var InitstockOutReport = require('./stockOutReport').stockOutReport;
     var InitstockOutUpdate = require('./stockOutUpdate').stockOutUpdate;
     var InitStockDist = require('./stockDist').stockDist;
     var InitStockDistReport = require('./stockDistReport').stockDistReport;
@@ -552,6 +556,14 @@
         $('#jsContent').empty();
         document.querySelector('#jsContent').appendChild(clone)
         InitstockOutEntry();
+      }
+    function stockOutReportTemplate() {
+        var content = document.querySelector('link[href="stockOutReport.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitstockOutReport();
       }
 
     function supListTemplate() {
@@ -866,6 +878,9 @@
     })
     $('#stockOutEntry').on('click',function(){
       stockOutEntryTemplate();
+    })
+    $('#stockOutReport').on('click',function(){
+      stockOutReportTemplate();
     })
     $('#stockDistUpd').on('click',function(){
       stockDistUpdTemplate();

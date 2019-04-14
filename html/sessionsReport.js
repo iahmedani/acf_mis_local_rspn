@@ -1,4 +1,7 @@
 module.exports.sessionsReport = () => {
+  $('#ddProgramType').change(()=>{
+    $('.prgChange').val("")
+  })
   $(function () {
     // $("#tblSessionReport").DataTable({
     //   paging: false,
@@ -101,6 +104,23 @@ module.exports.sessionsReport = () => {
           hhListener(hh);
         });
       }
+    });
+
+    $("#ddStaff_code").on("change", function () {
+      var staff_code = $(this).val();
+      $("#ddStaff_name").val(staff_code);
+    });
+    $("#ddStaff_name").on("change", function() {
+      var staff_code = $(this).val();
+      $("#ddStaff_code").val(staff_code);
+    });
+    $("#ddSup_code").on("change", function () {
+      var sup_code = $(this).val();
+      $("#ddSup_name").val(sup_code);
+    });
+    $("#ddSup_name").on("change", function() {
+      var sup_code = $(this).val();
+      $("#ddSup_code").val(sup_code);
     });
     // $('#ddUC').on('change', function () {
     //   var ucs = $(this).val();

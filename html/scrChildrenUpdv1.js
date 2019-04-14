@@ -211,7 +211,7 @@ module.exports.initScrChildrenUpd = function () {
             ipc.removeAllListeners("deleteScrChildren");
           } else {
             resolve(result.result);
-            $("#jsGrid")
+            $("#jsGridScrChEdit")
               .jsGrid("render")
               .done(function() {
                 // console.log("rendering completed and data loaded");
@@ -260,7 +260,7 @@ module.exports.initScrChildrenUpd = function () {
     //   }
     // });
     // jsGrid.fields.date = MyDateField;
-    $("#jsGrid").jsGrid({
+    $("#jsGridScrChEdit").jsGrid({
       width: "100%",
       height: "300px",
       filtering: true,
@@ -605,17 +605,19 @@ module.exports.initScrChildrenUpd = function () {
     $('#scrChildrenUpdForm').validate();
     if ($('#scrChildrenUpdForm').valid() && $('.highlightInput').length == 0) {
       var scrChildrenUpdData = $('#scrChildrenUpdForm').serializeFormJSON();
-      scrChildrenUpdData.reffer_otp_boys = parseInt(scrChildrenUpdData.reffer_otp_boys_s1) + parseInt(scrChildrenUpdData.reffer_otp_boys_s2)
-      scrChildrenUpdData.reffer_otp_girls = parseInt(scrChildrenUpdData.reffer_otp_girls_s1) + parseInt(scrChildrenUpdData.reffer_otp_girls_s2)
-      scrChildrenUpdData.reffer_tsfp_boys = parseInt(scrChildrenUpdData.reffer_tsfp_boys_s1) + parseInt(scrChildrenUpdData.reffer_tsfp_boys_s2)
-      scrChildrenUpdData.reffer_tsfp_girls = parseInt(scrChildrenUpdData.reffer_tsfp_girls_s1) + parseInt(scrChildrenUpdData.reffer_tsfp_girls_s2)
+      scrChildrenUpdData.reffer_otp_boys = parseInt(scrChildrenUpdData.reffer_otp_boys_s1) + ((parseInt(scrChildrenUpdData.reffer_otp_boys_s2)) ? parseInt(scrChildrenUpdData.reffer_otp_boys_s2) : 0);
+      scrChildrenUpdData.reffer_otp_girls = parseInt(scrChildrenUpdData.reffer_otp_girls_s1) + ((parseInt(scrChildrenUpdData.reffer_otp_girls_s2)) ? parseInt(scrChildrenUpdData.reffer_otp_girls_s2) : 0); 
+      scrChildrenUpdData.reffer_tsfp_boys = parseInt(scrChildrenUpdData.reffer_tsfp_boys_s1) + ((parseInt(scrChildrenUpdData.reffer_tsfp_boys_s2)) ? parseInt(scrChildrenUpdData.reffer_tsfp_boys_s2) : 0);
+      scrChildrenUpdData.reffer_tsfp_girls = parseInt(scrChildrenUpdData.reffer_tsfp_girls_s1) + ((parseInt(scrChildrenUpdData.reffer_tsfp_girls_s2)) ? parseInt(scrChildrenUpdData.reffer_tsfp_girls_s2) : 0);
+      scrChildrenUpdData.sup_name = $("#ddSup_name option:selected").text();
+      scrChildrenUpdData.staff_name = $("#ddStaff_name option:selected").text();
       // console.log(scrChildrenUpdData);
       ipc.send('scrChildrenUpd', scrChildrenUpdData);
       ipc.removeAllListeners('scrChildrenUpd');
       $('#scrChildrenUpdForm').get(0).reset();
       $("#scrChildrenUpdForm select").val('');
       $('input[type="number"]').attr('min', 0);
-      $('#jsGrid').jsGrid("render").done(() => {
+      $('#jsGridScrChEdit').jsGrid("render").done(() => {
         // console.log('js grid rendered')
       })
     }

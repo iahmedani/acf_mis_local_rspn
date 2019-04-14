@@ -226,7 +226,7 @@ module.exports.initScrPlwNewUpd = function () {
             ipc.removeAllListeners("deleteScrPlw");
           } else {
             resolve(result.result);
-            $("#jsGrid")
+            $("#jsGridScrPlwEdit")
               .jsGrid("render")
               .done(function () {
                 // console.log("rendering completed and data loaded");
@@ -238,7 +238,7 @@ module.exports.initScrPlwNewUpd = function () {
         });
       })
     }
-    $('#jsGrid').jsGrid({
+    $('#jsGridScrPlwEdit').jsGrid({
       width: '100%',
       height: '300px',
       // editing: true,
@@ -513,7 +513,7 @@ module.exports.initScrPlwNewUpd = function () {
       $('input[type="number"]').attr('min', 0);
       $("#scrPlwNewUpdForm select").val('');
 
-      $('#jsGrid').jsGrid("render").done(() => {
+      $('#jsGridScrPlwEdit').jsGrid("render").done(() => {
         // console.log('js grid rendered')
       })
     }

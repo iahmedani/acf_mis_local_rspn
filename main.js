@@ -4,16 +4,33 @@ const {
   BrowserWindow,
   ipcMain,
   Menu,
-  dialog
+  dialog,
+  globalShortcut
 } = electron;
 
 
+var fs = require('fs');
+const _launch = require('./mainfunc/launch');
+
+if(app.getVersion() === "1.4.17"){
+  fs.stat(`${process.env.APPDATA}/ACF MIS Local app/updated.txt`, (err, stat)=>{
+    if(err){
+      console.log(err)
+      _launch.updateVersion().then(()=>{
+        console.log('done')
+        
+      }).catch(err=>console.log(err))
+    }else{
+      console.log(stat)
+    }
+  })
+  
+}
 
 // require('electron-reload')(__dirname);
 const firstRunDB = require('./firstRunCreateDb').firstCreateDb;
 const url = require('url');
 const path = require('path');
-var fs = require('fs');
 var geo = require('./geoData');
 let imran = {};
 const log = require('electron-log');
@@ -110,7 +127,7 @@ function otpAddDataSave(event, addOtpData, config, client) {
         created_at: localDate(),
         status: 'open',
         next_followup: function () {
-          var myDate = new Date();
+          var myDate = new Date(addOtpData.reg_date);
           myDate.setDate(myDate.getDate() + (addOtpData.prog_type == 'sfp' ? 14 : 7))
           return toJSONLocal(myDate)
         }()
@@ -1729,6 +1746,14 @@ autoUpdater.on('update-downloaded', (info) => {
 
 
 app.on('ready', ()=>{
+  // globalShortcut.register('CmdOrCtrl+R', ()=>{
+  //   mainWindow.reload();
+  // })
+  // globalShortcut.register('CmdOrCtrl+0', ()=>{
+  //   mainWindow.webContents.setZoomFactor(1)
+  // })
+
+  
   autoUpdater.checkForUpdatesAndNotify();
 
 })
@@ -4222,57 +4247,85 @@ const mainMenuTemplate = [
 var new_menu = (process.env.NODE_ENV == 'production') ? {
   label: 'View',
   submenu: [{
-      role: 'reload'
+      label:'Reload',
+      // role: 'reload',
+      accelerator: process.platform == 'darwin' ? 'Command+R' : 'Ctrl+R',
+      click (item, focusedWindow) {
+        if (focusedWindow) focusedWindow.reload()
+      }
     },
-    {
-      role: 'forcereload'
-    },
-    {
-      type: 'separator'
-    },
-    {
-      role: 'resetzoom'
-    },
-    {
-      role: 'zoomin'
-    },
-    {
-      role: 'zoomout'
-    },
-    {
-      type: 'separator'
-    },
-    {
-      role: 'togglefullscreen'
-    }
+    
+    // {
+    //   type: 'separator'
+    // },
+    // {
+    //   label:'Actual Zoom',
+    //   role: 'resetzoom',
+    //   accelerator: 'CmdOrCtrl+0',
+    // },
+    // {
+    //   label:'Zoom In',
+    //   role: 'zoomin',
+    //   accelerator: 'CmdOrCtrl+=',
+    // },
+    // {
+    //   label:'Zoom Out',
+    //   role: 'zoomout',
+    //   accelerator: 'CmdOrCtrl+-',
+    // },
+    // {
+    //   type: 'separator'
+    // },
+    // {
+    //   label:'Full Screen',
+    //   role: 'togglefullscreen',
+    //   // accelerator: 'F11',
+    // }
   ]
   } : {
   label: 'View',
   submenu: [{
-      role: 'reload'
-    },
-    {
-      role: 'forcereload'
-    },
-     { role: 'toggledevtools'}
+      label:'Reload',
+      // role: 'reload',
+      accelerator: process.platform == 'darwin' ? 'Command+R' : 'Ctrl+R',
+      click (item, focusedWindow) {
+        if (focusedWindow) focusedWindow.reload()
+      }
+    },    
+     {  label: 'Toggle Developer Tools',
+     accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+     click (item, focusedWindow) {
+       if (focusedWindow) focusedWindow.webContents.toggleDevTools()
+     }
+    }
     ,
     {
       type: 'separator'
     },
     {
-      role: 'resetzoom'
+      label:'Actual Zoom',
+      role: 'resetzoom',
+      accelerator: 'CmdOrCtrl+0'
     },
     {
-      role: 'zoomin'
+      label:'Zoom In',
+      role: 'zoomin',
+      accelerator: 'CmdOrCtrl+='
     },
     {
-      role: 'zoomout'
+      label:'Zoom Out',
+      role: 'zoomout',
+      accelerator: 'CmdOrCtrl+-',
     },
     {
       type: 'separator'
     },
     {
-      role: 'togglefullscreen'
+      label:'Full Screen',
+      role: 'togglefullscreen',
+      
+      // accelerator: 'F11',
+
     }
   ]
 };

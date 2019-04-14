@@ -316,7 +316,11 @@ exports.up = function(knex, Promise) {
         [total_hh] INTEGER DEFAULT 0, 
         [uc_id] INTEGER, 
         [reffer_tsfp_boys_s1] INTEGER DEFAULT 0, 
-        [reffer_tsfp_boys_s2] INTEGER DEFAULT 0);
+        [reffer_tsfp_boys_s2] INTEGER DEFAULT 0, 
+        [mnp_boys] INTEGER DEFAULT 0, 
+        [mnp_girls] INTEGER DEFAULT 0, 
+        [total_followup] INTEGER DEFAULT 0, 
+        [total_exits] INTEGER DEFAULT 0);      
       `
     )
     .raw(
@@ -356,7 +360,9 @@ exports.up = function(knex, Promise) {
         [upload_date] DATE, 
         [uc_id] INTEGER, 
         [catchment_population] INTEGER, 
-        [total_hh]);
+        [total_hh], 
+        [total_followup] INTEGER DEFAULT 0, 
+        [total_exits] INTEGER DEFAULT 0);      
       `
     )
     .raw(
@@ -434,8 +440,8 @@ exports.up = function(knex, Promise) {
         [district_id] integer NOT NULL, 
         [tehsil_id] integer NOT NULL, 
         [site_id] integer NOT NULL, 
-        [CHW_id] integer NOT NULL DEFAULT 0, 
-        [CHS_id] integer NOT NULL DEFAULT 0, 
+        [CHW_id] VARCHAR(50), 
+        [CHS_id] VARCHAR(50), 
         [is_deleted] INT NOT NULL DEFAULT 0, 
         [upload_status] INT NOT NULL DEFAULT 0, 
         [created_at] datetime, 
@@ -1541,10 +1547,19 @@ FROM   [main].[v_geo_uc]
 INNER JOIN [main].[tblScrPlw] ON [main].[v_geo_uc].[uc_id] = [main].[tblScrPlw].[uc_id]
 where tblScrPlw.is_deleted=0;
 `)
+.raw(`create view v_stockReport as
+SELECT tblSiteStock.stock_out_id, tblSiteStock.program_type, tblSiteStock.item_name, tblSiteStock.stock_release_date, tblSiteStock.quantity_released, tblSiteStock.district_id, tblGeoDistrict.districtName, tblSiteStock.tehsil_id, tblGeoTehsil.tehsilName, tblSiteStock.uc_id, tblGeoUC.ucName, tblSiteStock.site_id, tblGeoNutSite.siteName, tblSiteStock.is_deleted, tblSiteStock.upload_status, tblSiteStock.created_at, tblSiteStock.updated_at, tblSiteStock.stockOutID, tblSiteStock.client_id, tblSiteStock.upload_date, "" AS staff_code, "" AS staff_name, "" AS sup_code, "" AS sup_name, tblGeoProvince.id AS province_id, tblGeoProvince.provinceName
+FROM ((((tblGeoDistrict INNER JOIN tblSiteStock ON tblGeoDistrict.id = tblSiteStock.district_id) INNER JOIN tblGeoTehsil ON tblSiteStock.tehsil_id = tblGeoTehsil.id) INNER JOIN tblGeoUC ON tblSiteStock.uc_id = tblGeoUC.id) INNER JOIN tblGeoNutSite ON tblSiteStock.site_id = tblGeoNutSite.id) INNER JOIN tblGeoProvince ON tblGeoDistrict.province_id = tblGeoProvince.id
+
+UNION ALL
+
+SELECT tblSiteStock.stock_out_id, tblSiteStock.program_type, tblSiteStock.item_name, tblSiteStock.stock_release_date, tblSiteStock.quantity_released, tblSiteStock.district_id, tblGeoDistrict.districtName, tblSiteStock.tehsil_id, tblGeoTehsil.tehsilName, tblSiteStock.uc_id, tblGeoUC.ucName, tblSiteStock.site_id, "" AS siteName, tblSiteStock.is_deleted, tblSiteStock.upload_status, tblSiteStock.created_at, tblSiteStock.updated_at, tblSiteStock.stockOutID, tblSiteStock.client_id, tblSiteStock.upload_date, tblLhw.staff_code, tblLhw.staff_name, tblSupervisors.sup_code, tblSupervisors.sup_name, tblGeoProvince.id AS province_id, tblGeoProvince.provinceName
+FROM (tblSupervisors INNER JOIN (tblLhw INNER JOIN (((tblGeoDistrict INNER JOIN tblSiteStock ON tblGeoDistrict.id = tblSiteStock.district_id) INNER JOIN tblGeoTehsil ON tblSiteStock.tehsil_id = tblGeoTehsil.id) INNER JOIN tblGeoUC ON tblSiteStock.uc_id = tblGeoUC.id) ON tblLhw.staff_code = tblSiteStock.CHW_id) ON tblSupervisors.sup_code = tblSiteStock.CHS_id) INNER JOIN tblGeoProvince ON tblGeoDistrict.province_id = tblGeoProvince.id;`)
 };
 
 exports.down = function(knex, Promise) {
   return knex.schema
+  .raw("DROP VIEW v_stockReport")
   .raw("DROP VIEW v_ScrPlwUpd")
   .raw("DROP VIEW v_ScrChildUpd")
   .raw("DROP VIEW v_geo_uc")

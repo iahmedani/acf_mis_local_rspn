@@ -21,7 +21,7 @@
             </div>
         <div class="col-sm-2">
           <label for="ddProvince" class="col-form-label">Province:</label>
-          <select id="ddProvince" class="form-control form-control-sm" tabindex="2">
+          <select id="ddProvince" class="form-control form-control-sm" tabindex="2" >
             <option value="">Select One</option>
           </select>
         </div>
@@ -39,7 +39,7 @@
         </div>
         <div class="col-sm-2">
           <label for="ddUC" class="col-form-label">UC:</label>
-          <select id="ddUC" name="uc_id" class="form-control form-control-sm" tabindex="5">
+          <select id="ddUC" name="uc_id" class="form-control form-control-sm" tabindex="5" required>
             <option value="">Select One</option>
           </select>
         </div>
@@ -53,13 +53,13 @@
         </div> -->
         <div class="col-sm-2">
           <label for="sup_code" class=" col-form-label">Supervisor Code:</label>
-          <select id="ddSup_code" name="sup_code" class="form-control form-control-sm " tabindex="7">
+          <select id="ddSup_code" name="sup_code" class="form-control form-control-sm " tabindex="7" required>
             <option value="">Select One</option>
           </select>
         </div>
         <div class="col-sm-2">
           <label for="sup_name" class=" col-form-label">Supervisor Name:</label>
-          <select id="ddSup_name" name="sup_name" class="form-control form-control-sm " tabindex="8">
+          <select id="ddSup_name" name="sup_name" class="form-control form-control-sm " tabindex="8" required>
             <option value="">Select One</option>
           </select>
         </div>
@@ -73,13 +73,13 @@
         </div>
         <div class="col-sm-2">
           <label for="staff_code" class="col-form-label">Staff Code:</label>
-          <select id="ddStaff_code" name="staff_code" class="form-control form-control-sm cld" tabindex="11">
+          <select id="ddStaff_code" name="staff_code" class="form-control form-control-sm cld" tabindex="11" required>
             <option value="">Select One</option>
           </select>
         </div>
         <div class="col-sm-2">
           <label for="staff_name" class="col-form-label">Staff Name:</label>
-          <select id="ddStaff_name" name="staff_name" class="form-control form-control-sm cld" tabindex="12">
+          <select id="ddStaff_name" name="staff_name" class="form-control form-control-sm cld" tabindex="12" required>
             <option value="">Select One</option>
           </select>
         </div>       
@@ -337,19 +337,19 @@
        
           <tr class="bg-warning">
             <td>No of Children Recieved MNP Sch:
-              <small>1st Time</td>
+              <!-- <small>1st Time</td> -->
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="first_mnp_30_boys" id="first_mnp_30_boys" tabindex="47">
+              <input type="number" required class="form-control form-control-sm clr" name="mnp_boys" id="mnp_boys" tabindex="47">
             </td>
             <td>
-              <input type="number" required class="form-control form-control-sm clr" name="first_mnp_30_girls" id="first_mnp_30_girls" tabindex="48">
+              <input type="number" required class="form-control form-control-sm clr" name="mnp_girls" id="mnp_girls" tabindex="48">
             </td>
           </tr>
-          <tr class="bg-warning">
+          <!-- <tr class="bg-warning">
             <td>No of Children Recieved MNP Sch:
               <small>2nd Time</small>
             </td>
@@ -423,19 +423,19 @@
             <td>
               <input type="number" required class="form-control form-control-sm clr" name="sixth_mnp_30_girls" id="sixth_mnp_30_girls" tabindex="58">
             </td>
-          </tr>
+          </tr> -->
           
             <td>Total Followed Up</td>
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td class="not-req"></td>
-            <td >
-              <input type="number" required class="form-control form-control-sm clr" name="followedup_boys" id="followedup_boys" tabindex="59">
+            <td colspan="2">
+              <input type="number" required class="form-control form-control-sm clr" name="total_followup" id="total_followup" tabindex="49">
             </td>
-            <td >
-              <input type="number" required class="form-control form-control-sm clr" name="followedup_girls" id="followedup_girls" tabindex="60">
-            </td>
+            <!-- <td >
+              <input type="number" required class="form-control form-control-sm clr" name="followedup_girls" id="followedup_girls" tabindex="50">
+            </td> -->
           </tr>
           <tr>
             <td>Exit from Program</td>
@@ -443,12 +443,12 @@
             <td class="not-req"></td>
             <td class="not-req"></td>
             <td class="not-req"></td>
-            <td>
-              <input type="number" required class="form-control form-control-sm clr" name="exits_boys" id="exits_boys" tabindex="61">
+            <td colspan="2">
+              <input type="number" required class="form-control form-control-sm clr" name="total_exits" id="total_exits" tabindex="50">
             </td>
-            <td>
+            <!-- <td>
               <input type="number" required class="form-control form-control-sm clr" name="exits_girls" id="exits_girls" tabindex="62">
-            </td>
+            </td> -->
           </tr>
           <tr>
             <td>No. of Children Recieved Deworming Tables</td>

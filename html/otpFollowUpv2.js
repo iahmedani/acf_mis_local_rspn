@@ -1,4 +1,4 @@
-
+const knex = require('../mainfunc/db');
 
 module.exports.initOtpFollowUp = function () {
   function DecimalField(config) {
@@ -178,7 +178,7 @@ module.exports.initOtpFollowUp = function () {
         })
       })
       function grid( commodities) {
-        $("#jsGrid").jsGrid({
+        $("#jsGridFollowUpEntry").jsGrid({
           height: "500px",
           width: "100%",
           // filtering: true,
@@ -323,10 +323,13 @@ module.exports.initOtpFollowUp = function () {
               headerTemplate: function() {
                 return "<th class='jsgrid-header-cell'>Last Followup in days</th>";
               },
-              itemTemplate: function(value, item) {
+              itemTemplate: async function(value, item) {
                 console.log(item)
                 var date1 = new Date(item.curr_date);
+                // var 
                   var date2 = new Date();
+                  
+                  // var date2 = await getLastFollowUpDate(item.otp_id);
                   var timeDiff = Math.abs(date2.getTime() - date1.getTime());
                   var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
                   // alert(diffDays);
@@ -362,6 +365,24 @@ module.exports.initOtpFollowUp = function () {
       
   })
 
- 
+  let getLastFollowUpDate = async (otp_id)=>{
+    try {
+      const lastFollowUp = await knex.select('curr_date').from('tblOtpFollowup').where({otp_id}).limit(1).orderBy('followup_id', 'desc').where({is_deleted:0});
+      if( lastFollowUp.length > 0){
+      console.log(lastFollowUp[0].curr_date)
+
+        return new Date(lastFollowUp[0].curr_date);
+      } else {
+        const lastFollowUpOtpAdd = await knex.select('reg_date').from('tblOtpAdd').where({otp_id});
+      console.log(lastFollowUpOtpAdd[0].reg_date)
+
+        return  new Date(lastFollowUpOtpAdd[0].reg_date);
+      }
+    } catch (error) {
+      console.log(error)
+      return new Date();
+    }
+  
+   }
   
 }

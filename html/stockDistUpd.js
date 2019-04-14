@@ -4,6 +4,9 @@ module.exports.stockDistUpd = function () {
   //   datePickerId.max = new Date().toISOString().split("T")[0];
   // });
  
+  $('#ddProgramType').change(()=>{
+    $('.prgChange').val("")
+  })
   let loadData = (data) => {
     return new Promise((resolve, reject) => {
       ipc.send('getAllStockDist', data);

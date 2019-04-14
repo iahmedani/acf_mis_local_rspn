@@ -73,7 +73,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
     async.series({
       data: cb => {
         knex("tblSiteStock")
-          .column("stockOutID", "program_type", "upload_status", "stock_release_date")
+          .column("stockOutID", "program_type", "upload_status", "stock_release_date","item_name")
           .sum({ totlStock: "quantity_released" })
           .where("program_type", "like", `%${filter.program_type}%`)
           .where("district_id", "like", `%${filter.district_id}%`)
@@ -85,7 +85,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
           .where({ is_deleted: 0 }) 
           .offset(_offset)
           .limit(_limit)
-          .groupBy("stockOutID", "program_type", "upload_status", "stock_release_date")
+          .groupBy("stockOutID", "program_type", "upload_status", "stock_release_date","item_name")
           .then(result => {
             console.log(result);
 

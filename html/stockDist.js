@@ -3,6 +3,9 @@ module.exports.stockDist = function () {
   //   var datePickerId = document.getElementById('txtScrChildDate');
   //   datePickerId.max = new Date().toISOString().split("T")[0];
   // });
+  $('#ddProgramType').change(()=>{
+    $('.prgChange').val("")
+  })
   $(function () {
     ipc.send('getProvince');
     ipc.on('province', function (evt, province) {

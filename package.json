@@ -1,7 +1,7 @@
 {
   "name": "acf_mis_local",
   "productName": "ACF MIS Local app",
-  "version": "1.4.16",
+  "version": "1.4.18",
   "description": "ACF MIS FOR PINS",
   "main": "main.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "clean": "rm -rf ./dist",
     "postinstall": "electron-builder install-app-deps",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder --ia32 --x64 -w"
   },
   "build": {
     "nsis": {
@@ -28,7 +28,16 @@
     ],
     "appId": "com.github.iahmedani.aahmislocalapp",
     "win": {
-      "icon": "build/win/logo.ico"
+      "icon": "build/win/logo.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
     }
   },
   "keywords": [],
@@ -57,7 +66,7 @@
   "devDependencies": {
     "electromon": "^1.0.10",
     "electron": "^4.0.1",
-    "electron-builder": "^20.34.0",
+    "electron-builder": "^20.40.2",
     "electron-packager": "^12.1.0",
     "electron-reload": "^1.4.0"
   }

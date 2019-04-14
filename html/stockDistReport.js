@@ -3,6 +3,10 @@ module.exports.stockDistReport = function () {
   //   var datePickerId = document.getElementById('txtScrChildDate');
   //   datePickerId.max = new Date().toISOString().split("T")[0];
   // });
+
+  $('#ddProgramType').change(()=>{
+    $('.prgChange').val("")
+  })
   $(function () {
     ipc.send('getProvince');
     ipc.on('province', function (evt, province) {
@@ -649,7 +653,7 @@ module.exports.stockDistReport = function () {
                 return data.toUpperCase();
             }
           } },
-          // { title: "Province", data: "Province" },
+          { title: "Report Month", data: "Month" },
           { title: "District", data: "District" },
           { title: "Tehsil", data: "Tehsil" },
           { title: "UC", data: "UC" },

@@ -262,23 +262,47 @@ $(function(){
 $('#otpAddForm').on('submit', async (e)=>{
   e.preventDefault();
   $('#otpAddForm').validate();
-  if($('#otpAddForm').valid()){
-
+  if($('#otpAddForm').valid() ){
     var otpAddFormData = $('#otpAddForm').serializeFormJSON();
-    var check = await knex('tblOtpAdd').where({site_id: otpAddFormData.site_id, reg_id: otpAddFormData.reg_id})
-    if(check.length > 0){
-      $('#regIdInfo').css('display', '')
-
-    }else{
-      $('#regIdInfo').css('display', 'none')
+    if( $('#ddProgramType').val() == 'otp'){
+      
+      var check = await knex('tblOtpAdd').where({site_id: otpAddFormData.site_id, reg_id: otpAddFormData.reg_id})
+      if(check.length > 0){
+        
+        $('#regIdInfo').css('display', '')
+      }else{
+        $('#regIdInfo').css('display', 'none')
+      console.log(otpAddFormData)
 
       ipc.send('submitOtpAdd', otpAddFormData);
       ipc.removeAllListeners('submitOtpAdd');
   
       $('.clr').val("");
       $(".cld").val("")
+      }
+    }else{
+      $('#regIdInfo').css('display', 'none')
+      console.log(otpAddFormData)
 
+      ipc.send('submitOtpAdd', otpAddFormData);
+      ipc.removeAllListeners('submitOtpAdd');
+  
+      $('.clr').val("");
+      $(".cld").val("")
     }
+    // if( $('#ddProgramType').val() == 'otp'){
+      
+    // }else{
+    //   $('#regIdInfo').css('display', 'none')
+    //   console.log(otpAddFormData)
+
+    //   ipc.send('submitOtpAdd', otpAddFormData);
+    //   ipc.removeAllListeners('submitOtpAdd');
+  
+    //   $('.clr').val("");
+    //   $(".cld").val("")
+
+    // }
     // setTimeout(otpAddTemplate, 3000);
   }
 

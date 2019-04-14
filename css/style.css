@@ -252,3 +252,14 @@ th {
   color: red;
   border: 1px solid red;
 } 
+
+/* ._mySide {
+  width: 100%;
+} */
+
+
+@media only screen and (max-width: 7800px){
+  ._mySide {
+    width: 220px !important
+  }
+}

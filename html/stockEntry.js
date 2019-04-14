@@ -142,7 +142,7 @@ module.exports.stockEntry = function () {
     // // var itemId = '';
     
     function stockGrid(Description, Unit, items, SubUnit) {
-      $("#jsGrid").jsGrid({
+      $("#jsGridStockInEntry").jsGrid({
         width: "100%",
         height: "400px",
 

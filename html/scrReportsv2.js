@@ -1,4 +1,5 @@
 module.exports.initScrReportsV2 = function(){
+  
   $(function(){
     ipc.send('getProvince');
     ipc.on('province', function(evt, province){

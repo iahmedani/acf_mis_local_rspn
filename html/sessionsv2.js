@@ -1,4 +1,7 @@
 module.exports.initSessionsV2 = function () {
+  $('#ddProgramType').change(()=>{
+    $('.prgChange').val("")
+  })
   $(function() {
     ipc.send("getProvince");
     ipc.on("province", function(evt, province) {
@@ -216,6 +219,7 @@ module.exports.initSessionsV2 = function () {
       console.log($(this).val())
       var x = {};
       x.province_id = ($("#ddProvince").val()) ? $("#ddProvince").val() : '';
+      x.prog_type = ($("#ddProgramType").val()) ? $("#ddProgramType").val() : '';
       x.district_id = ($("#ddDistrict").val()) ? $("#ddDistrict").val() : '';
       x.tehsil_id = ($("#ddTehsil").val()) ? $("#ddTehsil").val() : '';
       x.uc_id = ($("#ddUC").val()) ? $("#ddUC").val() : '';
@@ -246,6 +250,7 @@ module.exports.initSessionsV2 = function () {
       controller: {
         loadData: function (filter) {
           filter.province_id = ($("#ddProvince").val())?  $("#ddProvince").val() : ''  ;
+          filter.prog_type = ($("#ddProgramType").val())?  $("#ddProgramType").val() : ''  ;
           filter.district_id = ($("#ddDistrict").val())?  $("#ddDistrict").val() : ''  ;
           filter.tehsil_id = ($("#ddTehsil").val())?  $("#ddTehsil").val() : ''  ;
           filter.uc_id = ($("#ddUC").val())?  $("#ddUC").val() : ''  ;

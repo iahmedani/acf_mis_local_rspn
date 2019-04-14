@@ -1,9 +1,38 @@
 // var async = require('async');
 const knex = require('../mainfunc/db');
 
-module.exports.initOtpReportsV2 = function () {
+module.exports.initOtpReportsV2 = async function () {
   var ddReportType = $('#reportType');
   $('#singles').hide();
+
+  let dateMinMax = async()=>{
+    var strDate = $('#startMonth')
+    var endDate = $('#endMonth')
+
+    var minDate = await knex.select('otp_id', 'reg_date').from('tblOtpAdd').limit(1).orderBy('otp_id', 'desc').where({is_deleted:0});
+    var maxDate = await knex.select('interim_id', 'created_at').from('tblInterimOtp').limit(1).orderBy('interim_id', 'desc').where({is_deleted:0});
+console.log({
+  minDate,
+  maxDate
+})
+    // let date_min = new Date(minDate[0].regDate);
+    // date_min.toJSON();
+    
+    strDate.prop('min', new Date(minDate[0].reg_date.substring(0,7)).toISOString().substring(0,7));
+    endDate.prop('min', new Date(minDate[0].reg_date.substring(0,7)).toISOString().substring(0,7));
+    // console.log( strDate.min)
+    // endDate.min =  maxDate[0].created_at.substring(0,7);
+    // let date_max = new Date(maxDate[0].created_at);
+    // date_max.toJSON();
+    // date_max.substring(0,7); 
+    strDate.prop('max',maxDate[0].created_at.substring(0,7));
+    endDate.prop('max', maxDate[0].created_at.substring(0,7));
+
+    console.log(strDate.min)
+    // var maxDate = await knex('tblOtp').limit(1).orderBy('otp_id', 'desc').where({id_deleted:0});
+  }
+
+  dateMinMax();
 
   ddReportType.on('change', (e)=>{
     var strDate = $('#strDateDiv')
@@ -575,14 +604,15 @@ module.exports.initOtpReportsV2 = function () {
     // console.log(start, end)
     // return new Promise(resolve =>{
       var x = [];
-      var totalMonth = monthDiff(new Date(start), new Date(end)) 
+      var totalMonth = monthDiff(new Date(start), new Date(end));
       // console.log(totalMonth)
       if(totalMonth == 0){
+        alert('To view report there should be difference of atleast one month b/w Start and End Month')
         cb(0)
-      } else {
+      }else {
 
         var i = 0;
-        while (i < totalMonth){
+        while (i < totalMonth ){
           var dt = new Date(start);
           dt.setMonth( dt.getMonth() + i)
           x.push(`${dt.getFullYear()+ '-' + (dt.getMonth() < 9 ? '0'+(dt.getMonth()+1) : dt.getMonth()+1) }`)

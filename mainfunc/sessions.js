@@ -8,6 +8,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
     (filter.session_location) ? filter.session_location = filter.session_location : filter.session_location = '';
     (filter.CHW_id) ? filter.CHW_id = filter.CHW_id : filter.CHW_id = '';
     (filter.CHS_id) ? filter.CHS_id = filter.CHS_id : filter.CHS_id = '';
+    (filter.prog_type) ? filter.prog_type = filter.prog_type : filter.prog_type = '';
     console.log(filter);
     async.series(
       {
@@ -23,10 +24,11 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
             .where("session_location", "like", `%${filter.session_location}%`)
             .where("CHW_id", "like", `%${filter.CHW_id}%`)
             .where("CHS_id", "like", `%${filter.CHS_id}%`)
+            .where("prog_type", "like", `%${filter.prog_type}%`)
             .offset(_offset)
             .limit(_limit)
             .then(result => {
-              console.log(result)
+              // console.log(result)
               cb(null, result);
               // event.sender.send("getSessionsAll", { result: result });
             })
@@ -48,6 +50,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
             .where("session_location", "like", `%${filter.session_location}%`)
             .where("CHW_id", "like", `%${filter.CHW_id}%`)
             .where("CHS_id", "like", `%${filter.CHS_id}%`)
+            .where("prog_type", "like", `%${filter.prog_type}%`)
             .count("session_id as total")
             .then(result => cb(null, result))
             .catch(e => cb(e));
@@ -56,10 +59,10 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
       (e, result) => {
         if (e) {
           event.sender.send("getSessionsAll", { err: e });
-          console.log(e)
+          // console.log(e)
         } else {
           event.sender.send("getSessionsAll", { result });
-          console.log(result);
+          // console.log(result);
         }
       }
     );

@@ -1,4 +1,7 @@
 module.exports.stockOutEntry = function () {
+  $('#ddProgramType').change(()=>{
+    $('.prgChange').val("")
+  })
   $(function () {
     ipc.send('getProvince');
     ipc.on('province', function (evt, province) {
