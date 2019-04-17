@@ -118,7 +118,9 @@ exports.up = function(knex, Promise) {
         [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
         [client_id] VARCHAR NOT NULL, 
         [upload_status] INT NOT NULL DEFAULT 0, 
-        [created_at] DATE);
+        [created_at] DATE, 
+        [upload_date] DATE);
+      
       `
     )
     .raw(
@@ -523,7 +525,9 @@ exports.up = function(knex, Promise) {
         [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
         [client_id] VARCHAR NOT NULL, 
         [upload_status] VARCHAR NOT NULL DEFAULT 0, 
-        [created_at] DATE NOT NULL);
+        [created_at] DATE NOT NULL, 
+        [upload_date] DATE);
+      
       `
     )
     .raw(
@@ -536,16 +540,18 @@ exports.up = function(knex, Promise) {
     )
     .raw(
       `CREATE TABLE [tblVillages](
-       [site] INT NOT NULL, 
-       [uc] INT NOT NULL, 
-       [tehsil] INT NOT NULL, 
-       [district] INT NOT NULL, 
-       [villageName] VARCHAR(50) NOT NULL, 
-       [province] INT NOT NULL, 
-       [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-       [client_id] VARCHAR NOT NULL, 
-       [upload_status] INT NOT NULL DEFAULT 0, 
-       [created_at] DATE);`
+        [site] INT NOT NULL, 
+        [uc] INT NOT NULL, 
+        [tehsil] INT NOT NULL, 
+        [district] INT NOT NULL, 
+        [villageName] VARCHAR(50) NOT NULL, 
+        [province] INT NOT NULL, 
+        [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+        [client_id] VARCHAR NOT NULL, 
+        [upload_status] INT NOT NULL DEFAULT 0, 
+        [created_at] DATE, 
+        [upload_date] DATE);
+      `
     )
     .raw(
       `CREATE VIEW [v_geo]
@@ -1564,6 +1570,7 @@ exports.down = function(knex, Promise) {
   .raw("DROP VIEW v_ScrChildUpd")
   .raw("DROP VIEW v_geo_uc")
     .dropTable("tblConfig")
+    .raw("DROP VIEW v_otpFollowupUpdate")
     .raw("DROP VIEW v_tblScrPlwFull")
     .raw("DROP VIEW v_tblScrChildrenFull")
     .raw("DROP VIEW v_StockMovementv2")
@@ -1578,7 +1585,7 @@ exports.down = function(knex, Promise) {
     .raw("DROP VIEW v_otpNotExitInterval")
     .raw("DROP VIEW v_otpNotExit")
     .raw("DROP VIEW v_otpExit_knex")
-    .raw("DROP VIEW v_exitOtpReport")
+    // .raw("DROP VIEW v_exitOtpReport")
     .raw("DROP VIEW v_otpExitReportNew")
     .raw("DROP VIEW v_otpExitFull_report")
     .raw("DROP VIEW v_otpExit_full")

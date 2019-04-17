@@ -46,9 +46,12 @@ let _urlBugRemove = async ()=>{
   try {
     
     var x = await knex('tblConfig')
-    console.log(x)
-    if(x[0].value == 'https://training.paka.cf'){
-      await knex('tblConfig').update({value:'http://training.paka.cf'}).where({value: 'https://training.paka.cf'})
+    if(x.length){
+      
+      console.log(x)
+      if(x[0].value == 'https://training.paka.cf'){
+        await knex('tblConfig').update({value:'http://training.paka.cf'}).where({value: 'https://training.paka.cf'})
+      }
     }
   } catch (error) {
     console.log(error)
@@ -1004,6 +1007,7 @@ function firstRun() {
 let mainWindow;
 
 function creatWindow() {
+ 
   var config = {};
   const {
     width,
@@ -1114,6 +1118,10 @@ function creatWindow() {
       console.log('error');
     }
   })
+
+  // app.on('ready', async()=>{
+  //   require('./mainfunc/updateDb').dbCreate();
+  // })
 ///////////////TEST PORTION
  
   // ipcMain.on('allOtpExit', (event, filter) => {
@@ -1752,7 +1760,15 @@ app.on('ready', ()=>{
   // globalShortcut.register('CmdOrCtrl+0', ()=>{
   //   mainWindow.webContents.setZoomFactor(1)
   // })
-
+  fs.stat(`${process.env.APPDATA}/ACF MIS Local app/.version`, async (err, stat)=>{
+    console.log(err)
+    if(err && err.code == 'ENOENT'){
+      require('./mainfunc/updateDb').dbCreate();
+    }else{
+        console.log('Db Updated')
+    }
+})
+  
   
   autoUpdater.checkForUpdatesAndNotify();
 
