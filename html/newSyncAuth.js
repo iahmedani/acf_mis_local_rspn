@@ -178,21 +178,27 @@ module.exports.newSyncAuth = function () {
 
     async function getAndUpdateBasicData(table, id_column, url, instance, title) {
         elInfo.text(`Requesting server for data - ${title}`)
+        console.log(url)
         try {            
             var _data = await instance.get(url);
             if(!Array.isArray(_data.data) && _data.data.msg){
                 _Errors.register = false
             }else if(Array.isArray(_data.data) && _data.data.length > 0){
+                _Errors.register = true
+
                 console.log(_data)
                 elInfo.text(`Updating NMIS - ${title}`)
-                for (datum of _data) {
-                    console.log(datum)
+                for (datum of _data.data) {
+                    // console.log(datum)
                     // var _id = datum[id_column];
                     // delete datum[id_column]
                     delete datum.isActive;
                     try {
-                        await knex(table).insert(datum).whereNot(id_column, datum[id_column])
-                        elInfo.text(`NMIS updated - ${title}`)
+                        var _check = await knex(table).where(id_column, datum[id_column]);
+                        if(_check.length == 0){
+                            await knex(table).insert(datum);
+                            elInfo.text(`NMIS updated - ${title}`)
+                        }
                     } catch (error) {
                         console.log(error)
                     }
@@ -262,6 +268,12 @@ module.exports.newSyncAuth = function () {
             await uploadUpdatedData('tblStock', 'id', 'client_stockIn_id', `${surl}/stockInBulk`, instance, 'Stock In');
 
             elProgress.hide();
+            elProgress.hide();
+            Swal.fire({
+                type: 'success',
+                title: 'NMIS Syncronization',
+                text: 'Successfully uploaded'
+            })
             updateBtn.attr('disabled', false)
             uploadBtn.attr('disabled', false)
 
@@ -270,7 +282,7 @@ module.exports.newSyncAuth = function () {
             elProgress.hide();
             Swal.fire({
                 type: 'error',
-                title: 'NMIS upload error',
+                title: 'NMIS Syncronization',
                 text: !_Errors.register ? 'NMIS is not registred' : 'Unable to contact with Server'
             })
             updateBtn.attr('disabled', false)
@@ -293,17 +305,25 @@ module.exports.newSyncAuth = function () {
             await getAndUpdateBasicData('tblGeoUC', 'id', `${surl}/getUC`, instance, 'Union Council(s)')
             await getAndUpdateBasicData('tblGeoNutSite', 'id', `${surl}/getSite`, instance, 'Health House(s)')
             await getAndUpdateBasicData('tblCommodity', 'id', `${surl}/getItems`, instance, 'Commodities')
-            var _config = await instance.get(`${surl}/getConfig`);
+            var _config = await instance.post(`${surl}/getConfig`);
+            console.log(_config)
             await knex('tblConfig').update({
-                value: data.value
-            }).whereNot('value', data.value)
+                value: _config.data[0].value
+            }).whereNot('value', _config.data[0].value)
+            elProgress.hide();
+            Swal.fire({
+                type: 'success',
+                title: 'NMIS Syncronization',
+                text: 'Successfully downloaded'
+            })
             updateBtn.attr('disabled', false)
             uploadBtn.attr('disabled', false)
         } catch (error) {
+            console.log(error)
             elProgress.hide();
             Swal.fire({
                 type: 'error',
-                title: 'NMIS update error',
+                title: 'NMIS Syncronization error',
                 text: !_Errors.register ? 'NMIS is not registred' : 'Unable to contact with Server'
             })
             updateBtn.attr('disabled', false)
