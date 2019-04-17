@@ -1,13 +1,13 @@
 {
   "name": "acf_mis_local",
   "productName": "ACF MIS Local app",
-  "version": "1.4.18",
+  "version": "1.4.19",
   "description": "ACF MIS FOR PINS",
   "main": "main.js",
   "scripts": {
     "start": "electron . ",
     "winbuild": "npm run clean && electron-packager . acf-local-app --out=release-builds-beta2.3 --version-string.CompanyName=ACF --version-string.FileDescription=ACF --version-string.ProductName='ACF Local App' --version-string.FileDescription='Build v1.07 15July18'",
-    "publish": "export NODE_ENV='production' || set \"NODE_ENV=production\" npm run clean && build --win -p always ",
+    "publish": "npm run clean && build --win -p always ",
     "clean": "rm -rf ./dist",
     "postinstall": "electron-builder install-app-deps",
     "pack": "electron-builder --dir",
@@ -33,7 +33,6 @@
         {
           "target": "nsis",
           "arch": [
-            "x64",
             "ia32"
           ]
         }
@@ -46,6 +45,7 @@
   "dependencies": {
     "asar": "^0.14.6",
     "async": "^2.6.1",
+    "axios": "^0.18.0",
     "body-parser": "^1.18.2",
     "electron-log": "^2.2.16",
     "electron-updater": "^4.0.6",

@@ -263,3 +263,9 @@ th {
     width: 220px !important
   }
 }
+
+@media (min-width: 1200px) {
+  .col-sm-2 {
+    max-width: 240px;
+  }
+}

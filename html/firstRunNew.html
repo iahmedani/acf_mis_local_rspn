@@ -82,10 +82,7 @@
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </div>
-    <div class="spinner-border text-secondary" role="status"  id="myspinner" >
-        <span class="sr-only">Loading...</span>
-      </div>
-  </div>
+
   <script>
     window.$ = window.jQuery = require('jquery');
     require('jquery-validation');
@@ -144,6 +141,7 @@
           client_id: data.client,
           mac: mac
         },
+        headers:{'Content-Type':'application/json'},
         json:true
       };
       request(opt, (err, response, body)=>{

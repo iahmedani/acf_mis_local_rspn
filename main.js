@@ -12,20 +12,20 @@ const {
 var fs = require('fs');
 const _launch = require('./mainfunc/launch');
 
-if(app.getVersion() === "1.4.17"){
-  fs.stat(`${process.env.APPDATA}/ACF MIS Local app/updated.txt`, (err, stat)=>{
-    if(err){
-      console.log(err)
-      _launch.updateVersion().then(()=>{
-        console.log('done')
+// if(app.getVersion() === "1.4.17"){
+//   fs.stat(`${process.env.APPDATA}/ACF MIS Local app/updated.txt`, (err, stat)=>{
+//     if(err){
+//       console.log(err)
+//       _launch.updateVersion().then(()=>{
+//         console.log('done')
         
-      }).catch(err=>console.log(err))
-    }else{
-      console.log(stat)
-    }
-  })
+//       }).catch(err=>console.log(err))
+//     }else{
+//       console.log(stat)
+//     }
+//   })
   
-}
+// }
 
 // require('electron-reload')(__dirname);
 const firstRunDB = require('./firstRunCreateDb').firstCreateDb;
@@ -780,7 +780,7 @@ function allOtpAddUpdData(event, site_id) {
 
 // Screening Children Add 
 function childrenScrAddSave(event, data, client, username, project) {
-  data.client_id = client;
+  // data.client_id = client;
   data.username = username;
   data.project = project;
   data.upload_status = 0;
@@ -801,7 +801,7 @@ function childrenScrAddSave(event, data, client, username, project) {
 }
 // Screening PLW Add 
 function plwNewScrAddSave(event, data, client, username, project) {
-  data.client_id = client;
+  // data.client_id = client;
   data.username = username;
   data.project = project;
   data.upload_status = 0;
@@ -4223,24 +4223,24 @@ const mainMenuTemplate = [
   //     }
   //   ]
   // },
-  {
-    label: 'Admin',
-    submenu: [
-      // {
-      //   label: 'Geo Refference',
-      //   click() {
-      //     createGeoWindow();
-      //   }
-      // },
-      {
-        label: 'Sync',
-        click() {
-          newSync();
-          // createSyncWindow();
-        }
-      }
-    ]
-  },
+  // {
+  //   label: 'Admin',
+  //   submenu: [
+  //     // {
+  //     //   label: 'Geo Refference',
+  //     //   click() {
+  //     //     createGeoWindow();
+  //     //   }
+  //     // },
+  //     {
+  //       label: 'Sync',
+  //       click() {
+  //         newSync();
+  //         // createSyncWindow();
+  //       }
+  //     }
+  //   ]
+  // },
   
 ];
 
@@ -4305,17 +4305,16 @@ var new_menu = (process.env.NODE_ENV == 'production') ? {
     {
       label:'Actual Zoom',
       role: 'resetzoom',
-      accelerator: 'CmdOrCtrl+0'
-    },
+      accelerator: false    },
     {
       label:'Zoom In',
       role: 'zoomin',
-      accelerator: 'CmdOrCtrl+='
+      accelerator: false
     },
     {
       label:'Zoom Out',
       role: 'zoomout',
-      accelerator: 'CmdOrCtrl+-',
+      accelerator: false,
     },
     {
       type: 'separator'
@@ -4324,7 +4323,7 @@ var new_menu = (process.env.NODE_ENV == 'production') ? {
       label:'Full Screen',
       role: 'togglefullscreen',
       
-      // accelerator: 'F11',
+      accelerator: false,
 
     }
   ]

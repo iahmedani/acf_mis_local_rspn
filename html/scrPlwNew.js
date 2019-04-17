@@ -1,4 +1,9 @@
+let fs = require('fs')
+
 module.exports.initScrPlwNew = function (){
+  const { client, mac } = JSON.parse(
+    fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, "utf8")
+);
   $(()=>{
     $('input[type="number"]').attr('min',0);
     var p = $('.p')
@@ -156,7 +161,10 @@ module.exports.initScrPlwNew = function (){
     totalCheck();
     if($('#scrPlwNewForm').valid() && $('.highlightInput').length == 0){
       var scrPlwNewData = $('#scrPlwNewForm').serializeFormJSON();
-      console.log(scrPlwNewData);
+      // console.log(scrPlwNewData);
+      scrPlwNewData.sup_name = $("#ddSup_name option:selected").text();
+      scrPlwNewData.staff_name = $("#ddStaff_name option:selected").text();
+      scrPlwNewData.client_id = client
       ipc.send('scrPlwNewAdd', scrPlwNewData);
       ipc.removeAllListeners('scrPlwNewAdd');
       // $('#scrPlwNewForm').get(0).reset();

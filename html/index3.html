@@ -66,6 +66,7 @@
   <link rel="import" href="stockOutEntry.html">
   <link rel="import" href="stockOutUpdate.html">
   <link rel="import" href="stockOutReport.html">
+  <link rel="import" href="newSyncAuth.html">
 
 </head>
 
@@ -73,10 +74,13 @@
 <body>
   <div class="container-fluid">
     <div class="row">
-      <div class="p-l-0 p-r-0 _mySide" style="padding-left:0;padding-right:0" id="sidebar">
-        <a class="navbar-brand" href="#" id="homeDashboard">
-          <img src="../img/acf-logo.svg" style="height: 50px;" alt="">
-        </a>
+      <div class="p-l-0 p-r-0 col-sm-2" style="padding-left:0;padding-right:0" id="sidebar">
+        <div class="col-sm-10 mb-0 mr-o ml-0 my-0">
+          <a class="navbar-brand" href="#" id="homeDashboard">
+            <img src="../img/acf-logo.svg" style="height: 50px;" alt="">
+          </a>
+
+        </div>
 
         <ul id="nav" class="list-unstyled">
           <li><a href="#"><strong class="display-6"><i class="fas fa-clipboard-list "></i> Data Entry</strong></a>
@@ -121,15 +125,19 @@
               <li><a href="#" id="supList">Supervisor List</a></li>
               <li><a href="#" id="staffList">CHW/LHW List</a></li>
               <li><a href="#" id="villageList">Village List</a></li>
+              <li><a href="#" id="newSyncAuth">Sync Data</a></li>
             </ul>
           </li>
         </ul>
-        <ul class="text-white my-auto" style="font-size:14px; margin-bottom: 0px;" >
-            <li>Version: <span id="appVersion"></span></li>
-            <li>Developed By:</li>
-            <li> Shumaila Nazir &copy; 2019</li>
-            <li id="updMessage" style="display:none">Update Available</li>
-        </ul>
+        <!-- <div class="col-sm-10 text-white mb-0 my-auto" style="margin-bottom:0px" > -->
+            <ul class="text-white my-auto list-unstyled" style="font-size:14px; margin-bottom: 0px;" >
+                <li class="mb-0">Version: <span id="appVersion"></span></li>
+                <li class="mb-0">Developed By:</li>
+                <li class="mb-0">Shumaila Nazir &copy; 2019</li>
+                <li class="mb-0" id="updMessage" style="display:none">Update Available</li>
+            </ul>
+        <!-- </div> -->
+        
       </div>
 
       <main class="col-md-10 col-xs-11 p-l-2 p-t-2">
@@ -498,6 +506,7 @@
     var InitStockDistReport = require('./stockDistReport').stockDistReport;
     var InitStockDistUpd = require('./stockDistUpd').stockDistUpd;
     var InitDashboard =require('./dashboard').initDashboard;
+    var InitNewSyncAuth =require('./newSyncAuth').newSyncAuth;
     // var InitDefaulterv2 = require('./defaulterv2').initDefaulterv2;
 
      function stockOutUpdateTemplate() {
@@ -507,6 +516,14 @@
         $('#jsContent').empty();
         document.querySelector('#jsContent').appendChild(clone)
         InitstockOutUpdate();
+      }
+     function newSyncAuthTemplate() {
+        var content = document.querySelector('link[href="newSyncAuth.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitNewSyncAuth();
       }
      function dashboardTemplate() {
         var content = document.querySelector('link[href="dashboard.html"]');
@@ -802,6 +819,9 @@
     })
     $('#childScr').on('click', function () {
       addScrChildTemplate1()
+    })
+    $('#newSyncAuth').on('click', function () {
+      newSyncAuthTemplate()
     })
     $('#plwScr').on('click', function () {
       addScrPlwTemplate();

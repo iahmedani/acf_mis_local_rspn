@@ -1,4 +1,8 @@
+let fs = require('fs')
 module.exports.initGrid = function (){
+  const { client, mac } = JSON.parse(
+    fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, "utf8")
+);
   $(()=>{
     $('input[type="number"]').attr('min',0);
   })
@@ -167,7 +171,8 @@ module.exports.initGrid = function (){
       scrChildrenData.reffer_tsfp_girls = parseInt(scrChildrenData.reffer_tsfp_girls_s1) + ((parseInt(scrChildrenData.reffer_tsfp_girls_s2)) ? parseInt(scrChildrenData.reffer_tsfp_girls_s2) : 0);
       scrChildrenData.sup_name = $("#ddSup_name option:selected").text();
       scrChildrenData.staff_name = $("#ddStaff_name option:selected").text();
-      console.log(scrChildrenData)
+      // console.log(scrChildrenData)
+      scrChildrenData.client_id = client;
       ipc.send('scrChildren', scrChildrenData);
       ipc.removeAllListeners('scrChildren');
       // $('#scrChildrenForm').get(0).reset();
