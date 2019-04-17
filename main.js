@@ -1748,7 +1748,7 @@ autoUpdater.on('download-progress', (progressObj) => {
   console.log(log_message);
 })
 autoUpdater.on('update-downloaded', (info) => {
-
+  mainWindow.webContents.send('updateDownloaded', 'downloaded')
   console.log('Update downloaded');
 });
 
@@ -4260,7 +4260,7 @@ const mainMenuTemplate = [
   
 ];
 
-var new_menu = (process.env.NODE_ENV == 'production') ? {
+var new_menu = (!process.env.NODE_ENV) ? {
   label: 'View',
   submenu: [{
       label:'Reload',

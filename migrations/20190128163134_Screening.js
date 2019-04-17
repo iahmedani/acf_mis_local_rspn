@@ -133,7 +133,7 @@ exports.up = function(knex, Promise) {
         [reg_id] varchar(255), 
         [p_name] varchar(255), 
         [f_or_h_name] varchar(255), 
-        [cnic] integer, 
+        [cnic] VARCHAR(255), 
         [address] varchar(255), 
         [cnt_number] varchar(255), 
         [age] integer, 
@@ -142,7 +142,7 @@ exports.up = function(knex, Promise) {
         [ent_reason] varchar(255), 
         [ref_type] varchar(255), 
         [oedema] varchar(255), 
-        [muac] decimal, 
+        [muac] FLOAT, 
         [diarrhoea] boolean, 
         [vomiting] boolean, 
         [cough] boolean, 
@@ -150,8 +150,8 @@ exports.up = function(knex, Promise) {
         [daily_stool] varchar(255), 
         [pass_urine] boolean, 
         [b_Feeding] boolean, 
-        [weight] decimal, 
-        [height] decimal, 
+        [weight] FLOAT, 
+        [height] FLOAT, 
         [ration1] varchar(255), 
         [quantity1] integer, 
         [ration2] varchar(255), 
@@ -165,9 +165,9 @@ exports.up = function(knex, Promise) {
         [username] VARCHAR(50), 
         [org_name] VARCHAR(50), 
         [project_name] VARCHAR(50), 
-        [is_deleted] INT NOT NULL DEFAULT 0, 
+        [is_deleted] BOOLEAN NOT NULL DEFAULT 0, 
         [other_com_name] VARCHAR(20), 
-        [other_com_qty] DECIMAL DEFAULT 0, 
+        [other_com_qty] FLOAT, 
         [nsc_old_otp_id] VARCHAR DEFAULT 0, 
         [ref_type_other] VARCHAR, 
         [entry_reason_other] VARCHAR, 
@@ -177,7 +177,7 @@ exports.up = function(knex, Promise) {
         [nsc_otp_id] VARCHAR, 
         [upload_date] DATE, 
         [hh_id] VARCHAR(20), 
-        UNIQUE([reg_id]));           
+        UNIQUE([reg_id]));                 
       `
     )
     .raw(
@@ -185,9 +185,9 @@ exports.up = function(knex, Promise) {
         [exit_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
         [otp_id] integer REFERENCES [tblOtpAdd]([otp_id]) ON DELETE RESTRICT ON UPDATE NO ACTION, 
         [client_id] integer, 
-        [exit_muac] integer, 
-        [exit_weight] integer, 
-        [exit_height] integer, 
+        [exit_muac] FLOAT, 
+        [exit_weight] FLOAT, 
+        [exit_height] FLOAT, 
         [exit_ration1] varchar(255), 
         [exit_quantity1] integer, 
         [exit_ration2] varchar(255), 
@@ -200,11 +200,11 @@ exports.up = function(knex, Promise) {
         [created_at] datetime, 
         [updated_at] datetime, 
         [upload_status] INTEGER, 
-        [weight_gain] INTEGER(7), 
+        [weight_gain] FLOAT(7), 
         [days_in_program] INTEGER(7), 
-        [is_deleted] INT(1) NOT NULL DEFAULT 0, 
+        [is_deleted] BOOLEAN(1) NOT NULL DEFAULT 0, 
         [exit_other_com_name] VARCHAR(20), 
-        [exit_other_com_qty] DECIMAL DEFAULT 0, 
+        [exit_other_com_qty] FLOAT DEFAULT 0, 
         [upload_date] DATE);
       
       `
@@ -232,7 +232,7 @@ exports.up = function(knex, Promise) {
         [upload_status] INTEGER, 
         [is_deleted] INT(1) NOT NULL DEFAULT 0, 
         [other_com_name] varchar(20), 
-        [other_com_qty] DECIMAL DEFAULT 0, 
+        [other_com_qty] float(7), 
         [upload_date] DATE);`
     )
     .raw(

@@ -60,18 +60,22 @@ module.exports.newSyncAuth = function () {
                 newData.push(data);
             }
             elInfo.text(`Uploading Started - ${title}`);
-            try {
-                var _x = await instance.post(url, newData)
-                if (!Array.isArray(_x.data) && _x.data.msg) {
-                    _Errors.register = false;
-                } else if (Array.isArray(_x.data) && _x.data.length > 0) {
-                    elInfo.text(`Uploading finished, updating NMIS - ${title}`)
-                    await updateData(table, id_column, _x.data, 1)
-                    elInfo.text(`NMIS updated - ${title}`)
+            var _div = (newData.length > 100) ? Math.floor(newData.length / 100) : 1;
+            var _sendData = splitToChunks(newData, _div);
+            for (_data of _sendData){
+                try {
+                    var _x = await instance.post(url, _data)
+                    if (!Array.isArray(_x.data) && _x.data.msg) {
+                        _Errors.register = false;
+                    } else if (Array.isArray(_x.data) && _x.data.length > 0) {
+                        elInfo.text(`Uploading finished, updating NMIS - ${title}`)
+                        await updateData(table, id_column, _x.data, 1)
+                        elInfo.text(`NMIS updated - ${title}`)
+                    }
+                } catch (error) {
+                    console.log(error)
+                    _Errors.requestError = true;
                 }
-            } catch (error) {
-                console.log(error)
-                _Errors.requestError = true;
             }
         } else {
             elInfo.text(`No new data - ${title}`)
@@ -90,9 +94,12 @@ module.exports.newSyncAuth = function () {
                 delete data[id_column];
                 newData.push(data);
             }
+            var _div = (newData.length > 100) ? Math.floor(newData.length / 100) : 1;
+            var _sendData = splitToChunks(newData, _div);
             elInfo.text(`Uploading updated data Started - ${title}`);
+            for (_data of _sendData){
             try {
-                var _x = await instance.put(url, newData)
+                var _x = await instance.put(url, _data)
                 if ( !Array.isArray(_x.data) && _x.data.msg) {
                     _Errors.register = false;
                 } else if (Array.isArray(_x.data) && _x.data.length > 0) {
@@ -105,6 +112,7 @@ module.exports.newSyncAuth = function () {
                 console.log(error)
                 _Errors.requestError = true;
             }
+        }
         } else {
             elInfo.text(`No new data - ${title}`)
         }
@@ -125,8 +133,12 @@ module.exports.newSyncAuth = function () {
             newData.push(data);
         }
         elInfo.text(`Uploading Started - ${title}`);
+        var _div = (newData.length > 100) ? Math.floor(newData.length / 100) : 1;
+        var _sendData = splitToChunks(newData, _div);
+        // var _sendData = splitToChunks(newData, 30);
+        for (_data of _sendData){
         try {
-            var _x = await instance.post(url, newData)
+            var _x = await instance.post(url, _data)
             if (!Array.isArray(_x.data) &&  _x.data.msg) {
                 _Errors.register = false;
             } else if (Array.isArray(_x.data) && _x.data.length > 0) {
@@ -138,6 +150,7 @@ module.exports.newSyncAuth = function () {
             console.log(error)
             _Errors.requestError = true;
         }
+    }
     } else {
         elInfo.text(`No new data - ${title}`)
     }
@@ -158,8 +171,11 @@ module.exports.newSyncAuth = function () {
             newData.push(data);
         }
         elInfo.text(`Uploading updated data started - ${title}`);
+        var _div = (newData.length > 100) ? Math.floor(newData.length / 100) : 1;
+            var _sendData = splitToChunks(newData, _div);
+        for (_data of _sendData){
         try {
-            var _x = await instance.put(url, newData)
+            var _x = await instance.put(url, _data)
             if (!Array.isArray(_x.data) && _x.data.msg) {
                 _Errors.register = false;
             } else if (Array.isArray(_x.data) && _x.data.length > 0) {
@@ -171,6 +187,7 @@ module.exports.newSyncAuth = function () {
             console.log(error)
             _Errors.requestError = true;
         }
+    }
     } else {
         elInfo.text(`No new data - ${title}`)
     }
@@ -227,8 +244,8 @@ module.exports.newSyncAuth = function () {
             await uploadData('tblScrPlw', 'plw_scr_id', 'client_scr_plw_id', `${surl}/newScrPlwBulk`, instance, 'Plw Screening');
             await uploadUpdatedData('tblScrPlw', 'plw_scr_id', 'client_scr_plw_id', `${surl}/newScrPlwBulk`, instance, 'Plw Screening');
             //  OtpFollowup Block
-            await uploadData('tblOtpFollowup', 'followup_id', 'client_followup_id', `${surl}/otpFollowupBulk`, instance, 'Followup');
-            await uploadUpdatedData('tblOtpFollowup', 'followup_id', 'client_followup_id', `${surl}/otpFollowupBulk`, instance, 'Followup');
+            await uploadDataMultiple('tblOtpFollowup', 'followup_id', 'client_followup_id','otp_id', 'client_otp_id', `${surl}/otpFollowupBulk`, instance, 'Followup');
+            await uploadUpdatedDataMultiple('tblOtpFollowup', 'followup_id', 'client_followup_id', 'otp_id', 'client_otp_id',`${surl}/otpFollowupBulk`, instance, 'Followup');
 
             // Stock Out
             await uploadData('tblSiteStock', 'stock_out_id', 'client_stock_out_id', `${surl}/stockOutBulk`, instance, 'Stock Out');
@@ -255,8 +272,8 @@ module.exports.newSyncAuth = function () {
             await uploadUpdatedData('tblOtpAdd', 'otp_id', 'client_otp_id', `${surl}/admisionsBulk`, instance, 'Admisions');
 
             // Exits Block
-            await uploadDataMultiple('tblOtpExit', 'exit_id', 'client_otp_id', 'otp_id', 'client_otp_id', `${surl}/exitsBulk`, instance, 'Admisions');
-            await uploadUpdatedDataMultiple('tblOtpExit', 'exit_id', 'client_otp_id', 'otp_id', 'client_otp_id', `${surl}/exitsBulk`, instance, 'Admisions');
+            await uploadDataMultiple('tblOtpExit', 'exit_id', 'client_exit_id', 'otp_id', 'client_otp_id', `${surl}/exitsBulk`, instance, 'Admisions');
+            await uploadUpdatedDataMultiple('tblOtpExit', 'exit_id', 'client_exit_id', 'otp_id', 'client_otp_id', `${surl}/exitsBulk`, instance, 'Admisions');
 
             // Sessions Block
             await uploadData('tblSessions', 'session_id', 'client_session_id', `${surl}/sessionsBulk`, instance, 'Sessions');
