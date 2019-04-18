@@ -41,6 +41,7 @@ module.exports = (ipcMain, knex, fs, sndMsg) => {
     data.client_id = await JSON.parse(fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, 'utf8')).client;
     console.log(data);
     if (!data.id == '') {
+      data.upload_status = 2;
       knex('tblSupervisors')
         .update(data)
         .where('id', data.id)

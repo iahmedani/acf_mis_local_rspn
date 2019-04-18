@@ -86,7 +86,7 @@ exports.up = function(knex, Promise) {
       `CREATE TABLE [tblInterimOtp](
        [interim_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
        [otp_id] integer, 
-       [client_id] integer, 
+       [client_id] varchar(255), 
        [muac] integer, 
        [weight] integer, 
        [height] integer, 
@@ -184,7 +184,7 @@ exports.up = function(knex, Promise) {
       `CREATE TABLE [tblOtpExit](
         [exit_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
         [otp_id] integer REFERENCES [tblOtpAdd]([otp_id]) ON DELETE RESTRICT ON UPDATE NO ACTION, 
-        [client_id] integer, 
+        [client_id] varchar(255), 
         [exit_muac] FLOAT, 
         [exit_weight] FLOAT, 
         [exit_height] FLOAT, 
@@ -213,7 +213,7 @@ exports.up = function(knex, Promise) {
       `CREATE TABLE [tblOtpFollowup](
         [followup_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
         [otp_id] integer, 
-        [client_id] integer, 
+        [client_id] varchar(255), 
         [weight] DECIMAL, 
         [height] DECIMAL, 
         [ration1] varchar(255), 
@@ -346,7 +346,7 @@ exports.up = function(knex, Promise) {
         [muac_gt_21_lactating] INTEGER, 
         [muac_le_21_pragnent] INTEGER, 
         [muac_le_21_lactating] INTEGER, 
-        [client_id] INTEGER, 
+        [client_id] varchar(255), 
         [username] VARCHAR, 
         [project] VARCHAR, 
         [upload_status] INTEGER DEFAULT 0, 

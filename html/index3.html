@@ -67,6 +67,7 @@
   <link rel="import" href="stockOutUpdate.html">
   <link rel="import" href="stockOutReport.html">
   <link rel="import" href="newSyncAuth.html">
+  <link rel="import" href="newSyncAuthV2.html">
 
 </head>
 
@@ -125,7 +126,8 @@
               <li><a href="#" id="supList">Supervisor List</a></li>
               <li><a href="#" id="staffList">CHW/LHW List</a></li>
               <li><a href="#" id="villageList">Village List</a></li>
-              <li><a href="#" id="newSyncAuth">Sync Data</a></li>
+              <!-- <li><a href="#" id="newSyncAuth">Sync Data</a></li> -->
+              <li><a href="#" id="newSyncAuthV2">Sync Data</a></li>
             </ul>
           </li>
         </ul>
@@ -507,6 +509,7 @@
     var InitStockDistUpd = require('./stockDistUpd').stockDistUpd;
     var InitDashboard =require('./dashboard').initDashboard;
     var InitNewSyncAuth =require('./newSyncAuth').newSyncAuth;
+    var InitNewSyncAuthV2 =require('./newSyncAuthV2').newSyncAuthV2;
     // var InitDefaulterv2 = require('./defaulterv2').initDefaulterv2;
 
      function stockOutUpdateTemplate() {
@@ -524,6 +527,14 @@
         $('#jsContent').empty();
         document.querySelector('#jsContent').appendChild(clone)
         InitNewSyncAuth();
+      }
+     function newSyncAuthV2Template() {
+        var content = document.querySelector('link[href="newSyncAuthV2.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        InitNewSyncAuthV2();
       }
      function dashboardTemplate() {
         var content = document.querySelector('link[href="dashboard.html"]');
@@ -822,6 +833,9 @@
     })
     $('#newSyncAuth').on('click', function () {
       newSyncAuthTemplate()
+    })
+    $('#newSyncAuthV2').on('click', function () {
+      newSyncAuthV2Template()
     })
     $('#plwScr').on('click', function () {
       addScrPlwTemplate();
