@@ -849,7 +849,13 @@ function plwNewScrAddSave(event, data, client, username, project) {
 // }
 
 async function _firstRunDb (knex, Promise){
- await  require('./migrations/20190128163134_Screening').up(knex, Promise);
+  try {
+    
+    await  require('./migrations/20190128163134_Screening').down(knex, Promise);
+    await  require('./migrations/20190128163134_Screening').up(knex, Promise);
+  } catch (error) {
+    await  require('./migrations/20190128163134_Screening').up(knex, Promise);    
+  }
 }
 var db = require('./dbTest');
 const request = require('request');
@@ -1034,6 +1040,10 @@ function creatWindow() {
       // firstRun();
       // firstRunDB(knex);
       _firstRunDb(knex, Promise);
+      var version = app.getVersion();
+      var regex = /([/./])/g;
+      version.replace(regex, '');
+      fs.writeFileSync(`${process.env.APPDATA}/ACF MIS Local app/.version`, version, 'utf8')
       
     } else {
       console.log('Some other error: ', err.code);
@@ -1555,6 +1565,8 @@ function creatWindow() {
     stockSave(e, data);
   })
 
+//  console.log(app.getVersion());
+
   // children Screening add Data 
   ipcMain.on('scrChildren', (e, data) => {
     console.log(data);
@@ -1754,12 +1766,7 @@ autoUpdater.on('update-downloaded', (info) => {
 
 
 app.on('ready', ()=>{
-  // globalShortcut.register('CmdOrCtrl+R', ()=>{
-  //   mainWindow.reload();
-  // })
-  // globalShortcut.register('CmdOrCtrl+0', ()=>{
-  //   mainWindow.webContents.setZoomFactor(1)
-  // })
+
   fs.stat(`${process.env.APPDATA}/ACF MIS Local app/.version`, async (err, stat)=>{
     console.log(err)
     if(err && err.code == 'ENOENT'){
