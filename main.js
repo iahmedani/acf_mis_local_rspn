@@ -10,7 +10,7 @@ const {
 
 
 var fs = require('fs');
-const _launch = require('./mainfunc/launch');
+// const _launch = require('./mainfunc/launch');
 
 // if(app.getVersion() === "1.4.17"){
 //   fs.stat(`${process.env.APPDATA}/ACF MIS Local app/updated.txt`, (err, stat)=>{
@@ -1013,7 +1013,14 @@ function firstRun() {
 let mainWindow;
 
 function creatWindow() {
- 
+  fs.stat(`${process.env.APPDATA}/ACF MIS Local app/.nv`, async (err, stat)=>{
+    console.log(err)
+    if(err && err.code == 'ENOENT'){
+      await require('./mainfunc/updateDb').dbCreate();
+    }else{
+        console.log('Db Updated')
+    }
+})
   var config = {};
   const {
     width,
@@ -1043,7 +1050,7 @@ function creatWindow() {
       var version = app.getVersion();
       var regex = /([/./])/g;
       version.replace(regex, '');
-      fs.writeFileSync(`${process.env.APPDATA}/ACF MIS Local app/.version`, version, 'utf8')
+      fs.writeFileSync(`${process.env.APPDATA}/ACF MIS Local app/.nv`, version, 'utf8')
       
     } else {
       console.log('Some other error: ', err.code);
@@ -1765,16 +1772,9 @@ autoUpdater.on('update-downloaded', (info) => {
 });
 
 
-app.on('ready', ()=>{
+app.on('ready', async ()=>{
 
-  fs.stat(`${process.env.APPDATA}/ACF MIS Local app/.version`, async (err, stat)=>{
-    console.log(err)
-    if(err && err.code == 'ENOENT'){
-      require('./mainfunc/updateDb').dbCreate();
-    }else{
-        console.log('Db Updated')
-    }
-})
+ 
   
   
   autoUpdater.checkForUpdatesAndNotify();
