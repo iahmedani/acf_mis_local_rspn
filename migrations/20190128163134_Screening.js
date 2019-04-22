@@ -540,7 +540,7 @@ exports.up = function(knex, Promise) {
        [updated_at] datetime);`
     )
     .raw(
-      `CCREATE TABLE [tblVillages](
+      `CREATE TABLE [tblVillages](
         [site] INT NOT NULL, 
         [uc] INT NOT NULL, 
         [tehsil] INT NOT NULL, 

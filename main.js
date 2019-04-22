@@ -850,10 +850,11 @@ function plwNewScrAddSave(event, data, client, username, project) {
 
 async function _firstRunDb (knex, Promise){
   try {
-    
+    // var x =  require('./migrations/20190128163134_Screening')   
     await  require('./migrations/20190128163134_Screening').down(knex, Promise);
     await  require('./migrations/20190128163134_Screening').up(knex, Promise);
   } catch (error) {
+    console.log(error)
     await  require('./migrations/20190128163134_Screening').up(knex, Promise);    
   }
 }
