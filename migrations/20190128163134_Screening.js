@@ -526,7 +526,8 @@ exports.up = function(knex, Promise) {
         [client_id] VARCHAR NOT NULL, 
         [upload_status] VARCHAR NOT NULL DEFAULT 0, 
         [created_at] DATE NOT NULL, 
-        [upload_date] DATE);
+        [upload_date] DATE, 
+        UNIQUE([sup_code], [district]) ON CONFLICT ROLLBACK);      
       
       `
     )
@@ -539,7 +540,7 @@ exports.up = function(knex, Promise) {
        [updated_at] datetime);`
     )
     .raw(
-      `CREATE TABLE [tblVillages](
+      `CCREATE TABLE [tblVillages](
         [site] INT NOT NULL, 
         [uc] INT NOT NULL, 
         [tehsil] INT NOT NULL, 
@@ -550,7 +551,10 @@ exports.up = function(knex, Promise) {
         [client_id] VARCHAR NOT NULL, 
         [upload_status] INT NOT NULL DEFAULT 0, 
         [created_at] DATE, 
-        [upload_date] DATE);
+        [upload_date] DATE, 
+        UNIQUE([uc], [villageName]) ON CONFLICT ROLLBACK);
+      
+
       `
     )
     .raw(
@@ -1223,15 +1227,15 @@ WHERE  [main].[tblOtpAdd].[prog_type] = 'otp'
     )
     .raw(
       `CREATE VIEW [v_otpNotExitInterval]
-       AS
-       SELECT 
-       [vo].*, 
-       [vg].[province_id], 
-       [vg].[district_id], 
-       [vg].[tehsil_id], 
-       [vg].[uc_id]
-       FROM   [v_geo] [vg]
-       JOIN [v_otpNotExit] [vo];`
+      AS
+      SELECT 
+             [v_otpNotExit].*, 
+             [main].[v_geo].[province_id], 
+             [main].[v_geo].[district_id], 
+             [main].[v_geo].[tehsil_id], 
+             [main].[v_geo].[uc_id]
+      FROM   [main].[v_otpNotExit]
+             INNER JOIN [main].[v_geo] ON [main].[v_otpNotExit].[site_id] = [main].[v_geo].[site_id];`
     )
     .raw(
       `CREATE VIEW [v_scrChildFull]

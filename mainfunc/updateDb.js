@@ -19,27 +19,32 @@ module.exports.dbCreate =  async()=>{
     try {
             fs.stat(`${process.env.APPDATA}/ACF MIS Local app/config.json`,(err, stat)=>{
                 if(!err){
-                    dialog.showMessageBox(null,{
-                        type:'info',
-                        message:'APP is updating'
-                    }, async(res)=>{
-                        if(res == 0){
-                            var version = app.getVersion();
-      var regex = /([/./])/g;
-      version.replace(regex, '');
-                            // try {                    
-                                // knex.disconnect();
-                                fs.writeFileSync(`${process.env.APPDATA}/ACF MIS Local app/.nv`, version, 'utf8');
-                                // fs.unlinkSync(`${process.env.APPDATA}/ACF MIS Local app/acf_mis_local.sqlite3`)
-                                fs.unlinkSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`)
-                                app.quit();
-                                app.relaunch();
+                    // dialog.showMessageBox(null,{
+                    //     type:'info',
+                    //     message:'APP is updating'
+                    // }, async(res)=>{
+
+                        // setTimeout(_myUpdate_, 3000);
+                        // if(res == 0){
+                            // function _myUpdate_(){
+                                var version = app.getVersion();
+                                var regex = /([/./])/g;
+                                version.replace(regex, '');
+                                // try {                    
+                                    // knex.disconnect();
+                                    fs.writeFileSync(`${process.env.APPDATA}/ACF MIS Local app/.nv`, version, 'utf8');
+                                    // fs.unlinkSync(`${process.env.APPDATA}/ACF MIS Local app/acf_mis_local.sqlite3`)
+                                    fs.unlinkSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`)
+                                    app.quit();
+                                    app.relaunch();
+
+                            // }
                                 // } catch (error) {
                                     // console.log(error)
                                 // }
-                        }
+                        // }
                         
-                    })
+                    // })
 
                 }
                 
