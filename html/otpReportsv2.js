@@ -646,6 +646,7 @@ console.log({
     var last = await  knex("v_otpNotExitInterval")
                       .select('age_group', 'gender')
                       .count({ a: 'otp_id' })
+                      .whereRaw(`exit_date > ${month} OR exit_date is null`)
                       .where('reg_date', '<', month)
                       .where('site_id', 'like', `%${qry.site_id}%`)
                       .where('province_id', 'like', `%${qry.province_id}%`)
@@ -696,7 +697,7 @@ count(case when exit_reason <> 'cured' and exit_reason <> 'death' and exit_reaso
   .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
   .where('uc_id', 'like', `%${qry.uc_id}%`)         
 .groupBy('age_group', 'gender')
-// console.log(last, otpAdd, otpExit)
+console.log(month, last, otpAdd, otpExit)
     return ({
       month,
       last,
@@ -774,7 +775,7 @@ function prepareDataForTable (data, cb){
   // var totalMonths = data.length;
   var y = [];
   if(data.length == 0){
-    cb(0)
+    cb('No data')
   }else {
     for ( month of data){
       var last = month.last;
@@ -834,7 +835,8 @@ function prepareDataForTable (data, cb){
   
           }  
           if(otpExit.length > 0 ){
-            var newExit = otpAdd.filter(el=> el.gender == gender && el.age_group == age)[0];
+            var newExit = otpExit.filter(el=> el.gender == gender && el.age_group == age)[0];
+            // console.log({gender, age, newExit})
             if(newExit){
               z.e = newExit.e;
               z.e1 = newExit.e1;

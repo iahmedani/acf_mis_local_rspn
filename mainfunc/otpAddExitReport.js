@@ -6,7 +6,9 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
         knex("v_otpNotExitInterval")
           .select('age_group', 'gender')
           .count({ a: 'otp_id' })
+          .whereRaw(`exit_date > ${data.report_month} OR exit_date is null`)
           .where('reg_date', '<', data.report_month)
+          // .whereNull('exit_date')
           .where('site_id', 'like', `%${data.site_id}%`)
           .where('province_id', 'like', `%${data.province_id}%`)
           .where('district_id', 'like', `%${data.district_id}%`)
@@ -14,6 +16,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
           .where('uc_id', 'like', `%${data.uc_id}%`)
           .groupBy('age_group', 'gender')
           .then(result => {
+            console.log(result)
             cb(null, result)
           })
           .catch(e => {
@@ -70,6 +73,7 @@ count(case when exit_reason <> 'cured' and exit_reason <> 'death' and exit_reaso
           .where('uc_id', 'like', `%${data.uc_id}%`)         
           .groupBy('age_group', 'gender')
           .then(result => {
+            console.log({exit:result})
             cb(null, result)
           })
           .catch(e => {
