@@ -851,11 +851,11 @@ function plwNewScrAddSave(event, data, client, username, project) {
 async function _firstRunDb (knex, Promise){
   try {
     // var x =  require('./migrations/20190128163134_Screening')   
-    await  require('./migrations/20190128163134_Screening').down(knex, Promise);
+    // await  require('./migrations/20190128163134_Screening').down(knex, Promise);
     await  require('./migrations/20190128163134_Screening').up(knex, Promise);
   } catch (error) {
     console.log(error)
-    await  require('./migrations/20190128163134_Screening').up(knex, Promise);    
+    // await  require('./migrations/20190128163134_Screening').up(knex, Promise);    
   }
 }
 var db = require('./dbTest');
@@ -1014,14 +1014,14 @@ function firstRun() {
 let mainWindow;
 
 function creatWindow() {
-  fs.stat(`${process.env.APPDATA}/ACF MIS Local app/.nv`, async (err, stat)=>{
-    console.log(err)
-    if(err && err.code == 'ENOENT'){
-      await require('./mainfunc/updateDb').dbCreate();
-    }else{
-        console.log('Db Updated')
-    }
-})
+//   fs.stat(`${process.env.APPDATA}/ACF MIS Local app/.nv`, async (err, stat)=>{
+//     console.log(err)
+//     if(err && err.code == 'ENOENT'){
+//       await require('./mainfunc/updateDb').dbCreate();
+//     }else{
+//         console.log('Db Updated')
+//     }
+// })
   var config = {};
   const {
     width,

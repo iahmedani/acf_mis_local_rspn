@@ -1,0 +1,263 @@
+<template>
+  <div>
+    <div id="filter" class="rounded">
+      <form id="otpReportFilerForm">
+      <div class="form-group row">
+          
+        <div class="col-sm-2">
+          <label for="reportType" class="col-form-label">Report Type:</label>
+          <select id="reportType" class="form-control form-control-sm">
+            <option selected value="monthly">Monthly</option>
+            <option  value="interval">Interval</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="ddProvince" class="col-form-label">Province:</label>
+          <select id="ddProvince" class="form-control form-control-sm">
+            <option value="">All</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="ddDistrict" class="col-form-label">District:</label>
+          <select id="ddDistrict" class="form-control form-control-sm">
+            <option value="">All</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="ddTehsil" class="col-form-label">Tehsil:</label>
+          <select id="ddTehsil" class="form-control form-control-sm">
+            <option value="">All</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="ddUC" class="col-form-label">UC:</label>
+          <select id="ddUC" class="form-control form-control-sm">
+            <option value="">All</option>
+          </select>
+        </div>
+        <!-- </div> -->
+        <!-- <div class="form-group row"> -->
+        <div class="col-sm-2">
+          <label for="site_id" class="col-form-label">Site Name:</label>
+          <select id="ddHealthHouse" class="form-control form-control-sm" >
+            <option selected value="">All</option>
+          </select>
+        </div>
+        <div class="col-sm-2" id="rptMonthDiv">
+          <label for="month" class="col-form-label">Report Month</label>
+          <input type="month" name="report_month" id="report_month" class="form-control form-control-sm" required>
+        </div>
+        <div class="col-sm-2 " style="display:none" id="strDateDiv" >
+          <label for="startMonth" class="col-form-label">Start Month</label>
+          <input type="month" name="startMonth" id="startMonth" class="form-control form-control-sm" >
+        </div>
+        <div class="col-sm-2" style="display:none" id="endDateDiv">
+          <label for="endMonth" class="col-form-label">End Month</label>
+          <input type="month" name="endMonth" id="endMonth" class="form-control form-control-sm" >
+        </div>
+        <div class="col-sm-2 align-self-end" id="btnShowDiv">
+          <button type="submit" class="btn btn-info btn-sm btn-block form-control form-control-sm shadow-sm" id="showAddExitReport">
+            <i class="fas fa-filter"></i> Show Data</button>
+        </div>
+        <div class="col-sm-2 align-self-end" style="display:none" id="btnIntervalDiv">
+          <button class="btn btn-info btn-sm btn-block form-control form-control-sm shadow-sm " type="button" id="exportScrChReportInterval" >
+              <i class="fas fa-filter"></i> Generate Report</button>
+        </div>
+  <div class="col-sm-2 align-self-end" id="btnExportDiv">
+    <button class="btn btn-success btn-sm btn-block form-control form-control-sm shadow-sm" type="button" id="exportScrChReport">
+      <i class="fas fa-file-excel"></i> Export</button>
+  </div>
+  
+      </div>
+    </div>
+    </form>
+   
+    <div class="row">
+      <div class="col-sm-12">
+        <!-- <div class="table-responsive"> -->
+          <table class="table table-sm table-bordered repTitle text-wrap myTableOtp text-center" id="addmisionReport">
+            <tr class="justify-content-center ">
+              <td colspan="24" id="reportMonthT"></td>
+            </tr>
+            <tr class="justify-content-center ">
+              <th colspan="1" rowspan="3" class="align-middle bg-secondary text-white" height="15px" >Month</th>
+              <th colspan="12" class="align-middle bg-secondary text-white" height="15px">Addmission</th>
+              <th colspan="11" class="align-middle bg-secondary text-white" height="15px">Exit</th>
+            </tr>
+            <tr class="justify-content-center ">
+              <th rowspan="2" class="align-middle">Age Group</th>
+              <th rowspan="2" class="align-middle">Gender</th>
+              <th rowspan="2" class="align-middle ">Total in OTP beginning of the month (A)</th>
+              <th colspan="2" class="align-middle">Admission (B)</th>
+              <th rowspan="2" class="align-middle">Total New Admission (B=B1+B2)</th>
+              <th colspan="3" class="align-middle">Move In (C)</th>
+              <th rowspan="2" class="align-middle">Relapse After Cure (CC)</th>
+              <th rowspan="2" class="align-middle">Total Moved In (C=C2+C2+C3)</th>
+              <th rowspan="2" class="align-middle">Total In (D=A+B+C+CC)</th>
+              <th colspan="4" class="align-middle">Discharged (E)</th>
+              <th rowspan="2" class="align-middle">Total Discharged (E=E1+E2+E3+E4)</th>
+              <th colspan="3" class="align-middle">Moved Out (F)</th>
+              <th rowspan="2" class="align-middle">Total Moved Out (F=F1+F2+F3)</th>
+              <th rowspan="2" class="align-middle">Total Exit (G=E+F)</th>
+              <th rowspan="2" class="align-middle">Total In OTP end of the month (H=D-G)</th>
+            </tr>
+            <tr>
+              <th class="align-middle">MUAC &lt; 11.5 cm (B1)</th>
+              <th class="align-middle">ODEMA(B2)</th>
+              <th class="align-middle">Return After Default(C1)</th>
+              <th class="align-middle">Transfer from SC (C2)</th>
+              <th class="align-middle">Other (C3)</th>
+              <th class="align-middle">Cured (E1)</th>
+              <th class="align-middle">Death (E2)</th>
+              <th class="align-middle">Defaulter (E3)</th>
+              <th class="align-middle">No Recovered (E4)</th>
+              <th class="align-middle">Medical Transfer (F1)</th>
+              <th class="align-middle">Transfer to In patient (F2)</th>
+              <th class="align-middle">Other (F3)</th>
+            </tr>
+            <tr>
+              <td rowspan="5" id="tblMonthCol"></td>
+              <td rowspan="2" class="align-middle">6 - 23 Months</td>
+              <td>Male</td>
+              <td id="6_23-male-a"></td>
+              <td id="6_23-male-b1"></td>
+              <td id="6_23-male-b2"></td>
+              <td id="6_23-male-b"></td>
+              <td id="6_23-male-c1"></td>
+              <td id="6_23-male-c2"></td>
+              <td id="6_23-male-c3"></td>
+              <td id="6_23-male-cc"></td>
+              <td id="6_23-male-c"></td>
+              <td id="6_23-male-d"></td>
+              <td id="6_23-male-e1"></td>
+              <td id="6_23-male-e2"></td>
+              <td id="6_23-male-e3"></td>
+              <td id="6_23-male-e4"></td>
+              <td id="6_23-male-e"></td>
+              <td id="6_23-male-f1"></td>
+              <td id="6_23-male-f2"></td>
+              <td id="6_23-male-f3"></td>
+              <td id="6_23-male-f"></td>
+              <td id="6_23-male-g"></td>
+              <td id="6_23-male-h"></td>
+            </tr>
+            <tr>
+              <td>Female</td>
+              <td id="6_23-female-a"></td>
+              <td id="6_23-female-b1"></td>
+              <td id="6_23-female-b2"></td>
+              <td id="6_23-female-b"></td>
+              <td id="6_23-female-c1"></td>
+              <td id="6_23-female-c2"></td>
+              <td id="6_23-female-c3"></td>
+              <td id="6_23-female-cc"></td>
+              <td id="6_23-female-c"></td>
+              <td id="6_23-female-d"></td>
+              <td id="6_23-female-e1"></td>
+              <td id="6_23-female-e2"></td>
+              <td id="6_23-female-e3"></td>
+              <td id="6_23-female-e4"></td>
+              <td id="6_23-female-e"></td>
+              <td id="6_23-female-f1"></td>
+              <td id="6_23-female-f2"></td>
+              <td id="6_23-female-f3"></td>
+              <td id="6_23-female-f"></td>
+              <td id="6_23-female-g"></td>
+              <td id="6_23-female-h"></td>
+            </tr>
+            <tr>
+              <td rowspan="2" class="align-middle">24 - 59 Months</td>
+              <td>Male</td>
+            <td id="24_59-male-a"></td>
+            <td id="24_59-male-b1"></td>
+            <td id="24_59-male-b2"></td>
+            <td id="24_59-male-b"></td>
+            <td id="24_59-male-c1"></td>
+            <td id="24_59-male-c2"></td>
+            <td id="24_59-male-c3"></td>
+            <td id="24_59-male-cc"></td>
+            <td id="24_59-male-c"></td>
+            <td id="24_59-male-d"></td>
+            <td id="24_59-male-e1"></td>
+            <td id="24_59-male-e2"></td>
+            <td id="24_59-male-e3"></td>
+            <td id="24_59-male-e4"></td>
+            <td id="24_59-male-e"></td>
+            <td id="24_59-male-f1"></td>
+            <td id="24_59-male-f2"></td>
+            <td id="24_59-male-f3"></td>
+            <td id="24_59-male-f"></td>
+            <td id="24_59-male-g"></td>
+            <td id="24_59-male-h"></td>
+            </tr>
+            <tr>
+              <td>Female</td>
+              <td id="24_59-female-a"></td>
+              <td id="24_59-female-b1"></td>
+              <td id="24_59-female-b2"></td>
+              <td id="24_59-female-b"></td>
+              <td id="24_59-female-c1"></td>
+              <td id="24_59-female-c2"></td>
+              <td id="24_59-female-c3"></td>
+              <td id="24_59-female-cc"></td>
+              <td id="24_59-female-c"></td>
+              <td id="24_59-female-d"></td>
+              <td id="24_59-female-e1"></td>
+              <td id="24_59-female-e2"></td>
+              <td id="24_59-female-e3"></td>
+              <td id="24_59-female-e4"></td>
+              <td id="24_59-female-e"></td>
+              <td id="24_59-female-f1"></td>
+              <td id="24_59-female-f2"></td>
+              <td id="24_59-female-f3"></td>
+              <td id="24_59-female-f"></td>
+              <td id="24_59-female-g"></td>
+              <td id="24_59-female-h"></td>
+              
+            </tr>
+            <tr>
+              <td colspan="2">Total</td>
+              <td id="total-a"></td>
+              <td id="total-b1"></td>
+              <td id="total-b2"></td>
+              <td id="total-b"></td>
+              <td id="total-c1"></td>
+              <td id="total-c2"></td>
+              <td id="total-c3"></td>
+              <td id="total-cc"></td>
+              <td id="total-c"></td>
+              <td id="total-d"></td>
+              <td id="total-e1"></td>
+              <td id="total-e2"></td>
+              <td id="total-e3"></td>
+              <td id="total-e4"></td>
+              <td id="total-e"></td>
+              <td id="total-f1"></td>
+              <td id="total-f2"></td>
+              <td id="total-f3"></td>
+              <td id="total-f"></td>
+              <td id="total-g"></td>
+              <td id="total-h"></td>
+            </tr>
+          </table>    
+          
+          
+          <!-- </div> -->
+        
+      </div>
+      <div class="col-sm-12" id="addExitReport"></div>
+    </div>
+    
+        <div id="myId" class="col col-sm-12">
+
+          <table id="example" class="table table-striped table-bordered table-sm" ></table>
+        </div>
+      
+        <div style="display:none">
+            <table id="tblAdd" class="table table-bordered " ></table>
+            <!-- </table> -->
+            <table id="tblExit" class="table table-bordered " ></table>
+        </div>
+
+  </div>
+</template>

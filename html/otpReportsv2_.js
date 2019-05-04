@@ -25,10 +25,12 @@ console.log({
     // let date_max = new Date(maxDate[0].created_at);
     // date_max.toJSON();
     // date_max.substring(0,7); 
-    strDate.prop('max',maxDate[0].created_at.substring(0,7));
-    endDate.prop('max', maxDate[0].created_at.substring(0,7));
+    strDate.prop('max', new Date(maxDate[0].created_at.substring(0,7)).toISOString().substring(0,7));
+    endDate.prop('max', new Date(maxDate[0].created_at.substring(0,7)).toISOString().substring(0,7));
 
-    console.log(strDate.min)
+    // console.log(maxDate[0].created_at.substring(0,7))
+
+    console.log(strDate.max)
     // var maxDate = await knex('tblOtp').limit(1).orderBy('otp_id', 'desc').where({id_deleted:0});
   }
 
@@ -129,7 +131,28 @@ console.log({
     });
   });
 
-  $("#showAddExitReport").on("click", function(e) {
+  async function beginMonth(data){
+    console.log(data)
+    var x = await knex('v_otpNotExitInterval').select('gender','age_group').count({a:'otp_id'}).where('reg_date', '<', data.report_month)
+    .where('site_id', 'like', `%${data.site_id}%`)
+    .where('province_id', 'like', `%${data.province_id}%`)
+    .where('district_id', 'like', `%${data.district_id}%`)
+    .where('tehsil_id', 'like', `%${data.tehsil_id}%`)
+    .where('uc_id', 'like', `%${data.uc_id}%`)
+    .groupBy('age_group', 'gender');
+
+    var y = await knex('v_otpNotExitInterval').select('gender','age_group').count({a:'otp_id'}).where('reg_date', '<', data.report_month)
+    .where('site_id', 'like', `%${data.site_id}%`)
+    .where('province_id', 'like', `%${data.province_id}%`)
+    .where('district_id', 'like', `%${data.district_id}%`)
+    .where('tehsil_id', 'like', `%${data.tehsil_id}%`)
+    .where('uc_id', 'like', `%${data.uc_id}%`)
+    .groupBy('age_group', 'gender').toSQL().toNative();
+    console.log({x,y})
+  }
+  $("#showAddExitReport").on("click", async function(e) {
+    var _x = prepareQry();
+    console.log(await beginMonth(_x))
     e.preventDefault();
     ipc.send("getReport", prepareQry());
     $('#tblMonthCol').empty()
