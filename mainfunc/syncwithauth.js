@@ -118,7 +118,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
             if (!err) {
               var data = body;
               if (data.length > 0) {
-                for (el of data){
+                data.forEach(el => {
                   delete el.isActive;
                   knex("tblGeoProvince")
                     .where({
@@ -126,18 +126,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                     })
                     .then(result => {
                       if (result.length > 0) {
-                        if(result[0].provinceName != el.provinceName){
-                          knex('tblGeoProvince')
-                          .update('provinceName', el.provinceName)
-                          .where({
-                            id: el.id
-                          })
-                          .then(result=>{
-                            console.log('Province updated')
-                          })
-                        }else{
-                          console.log("Province Not added as already available");
-                        }
+                        console.log("Province Not added as already available");
                       } else {
                         knex("tblGeoProvince")
                           .insert(el)
@@ -150,8 +139,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                     .catch(e => {
                       console.log(e);
                     });
-                }
-
+                });
                 cb(null, body);
               }
             } else {
@@ -173,7 +161,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
               // var data = JSON.parse(body);
               var data = body;
               if (data.length > 0) {
-                for (el of data){
+                data.forEach(el => {
                   delete el.isActive;
                   knex("tblGeoDistrict")
                     .where({
@@ -181,19 +169,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                     })
                     .then(result => {
                       if (result.length > 0) {
-                        if(result[0].districtName != el.districtName){
-                          knex('tblGeoDistrict')
-                          .update('districtName', el.districtName)
-                          .where({
-                            id: el.id
-                          })
-                          .then(result=>{
-                            console.log('District name updated')
-                          })
-                        }else{
-
-                          console.log("District Not added as already available");
-                        }
+                        console.log("District Not added as already available");
                       } else {
                         knex("tblGeoDistrict")
                           .insert(el)
@@ -206,10 +182,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                     .catch(e => {
                       cb(e);
                     });
-                }
-                // data.forEach(el => {
-                  
-                // });
+                });
                 cb(null, body);
               }
             } else {
@@ -232,7 +205,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
 
               // var data = JSON.parse(body);
               if (data.length > 0) {
-                for (el of data){
+                data.forEach(el => {
                   delete el.isActive;
                   knex("tblGeoTehsil")
                     .where({
@@ -240,19 +213,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                     })
                     .then(result => {
                       if (result.length > 0) {
-                        if(result[0].tehsilName != el.tehsilName){
-                          knex('tblGeoTehsil')
-                          .update('tehsilName', el.tehsilName)
-                          .where({
-                            id: el.id
-                          })
-                          .then(result=>{
-                            console.log('Tehsil Name updated')
-                          })
-                        }else{
-
-                          console.log("Tehsil Not added as already available");
-                        }
+                        console.log("Tehsil Not added as already available");
                       } else {
                         knex("tblGeoTehsil")
                           .insert(el)
@@ -265,10 +226,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                     .catch(e => {
                       cb(e);
                     });
-                }
-                // data.forEach(el => {
-                  
-                // });
+                });
                 cb(null, body);
               }
             } else {
@@ -291,7 +249,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
 
               // var data = JSON.parse(body);
               if (data.length > 0) {
-                for (el of data){
+                data.forEach(el => {
                   delete el.isActive;
                   knex("tblGeoUC")
                     .where({
@@ -299,20 +257,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                     })
                     .then(result => {
                       if (result.length > 0) {
-                        if(result[0].ucName != el.ucName){
-                          knex('tblGeoUC')
-                          .update('ucName', el.ucName)
-                          .where({
-                            id: el.id
-                          })
-                          .then(result=>{
-                            console.log('Uc Name updated')
-                          })
-                        }else{
-
-                          console.log("UC Allready exists");
-
-                        }
+                        console.log("UC Allready exists");
                       } else {
                         knex
                           .insert(el)
@@ -325,10 +270,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                     .catch(e => {
                       console.log(e);
                     });
-                }
-                // data.forEach(el => {
-                  
-                // });
+                });
                 cb(null, body);
               }
             } else {
@@ -351,7 +293,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
 
               // var data = JSON.parse(body);
               if (data.length > 0) {
-                for (el of data){
+                data.forEach(el => {
                   delete el.isActive;
 
                   knex("tblGeoNutSite")
@@ -360,20 +302,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                     })
                     .then(result => {
                       if (result.length > 0) {
-                        if(result[0].siteName != el.siteName){
-                          knex('tblGeoNutSite')
-                          .update('siteName', el.siteName)
-                          .where({
-                            id: el.id
-                          })
-                          .then(result=>{
-                            console.log( 'Nut site name updated')
-                          })
-
-                        }else{
-
-                          console.log("Site already avaialble");
-                        }
+                        console.log("Site already avaialble");
                       } else {
                         knex("tblGeoNutSite")
                           .insert(el)
@@ -385,10 +314,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                     .catch(e => {
                       console.log(e);
                     });
-                }
-                // data.forEach(el => {
-                  
-                // });
+                });
                 cb(null, body);
               }
             } else {
