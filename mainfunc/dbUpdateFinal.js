@@ -1,24 +1,23 @@
 const fs = require('fs')
-module.exports = (knex)=>{
+module.exports = (knex) => {
 
-    fs.stat(`${process.env.APPDATA}/ACF MIS Local app/updateHist.json`, (err, stat)=>{
-        
-        if(err){
+    fs.stat(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, (err, stat) => {
+        if (err) {
             knex.raw(`PRAGMA [main].legacy_alter_table = 'on'`)
-            .then(r=>{
-                console.log(`Setp One Done`)
-                return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
-            }).then(r=>{
-                console.log(`Setp two Done`)
-        
-                return  knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-            }).then(r=>{
-                console.log(`Setp three Done`)
-                return knex.raw(`ALTER TABLE [main].[tblOtpAdd] RENAME TO [_sqliteexpert_temp_table_1];`)  
-            }).then(r=>{
-                console.log(`Setp four Done`)
-        
-                return knex.raw(`CREATE TABLE [main].[tblOtpAdd](
+                .then(r => {
+                    console.log(`Setp One Done`)
+                    return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
+                }).then(r => {
+                    console.log(`Setp two Done`)
+
+                    return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                }).then(r => {
+                    console.log(`Setp three Done`)
+                    return knex.raw(`ALTER TABLE [main].[tblOtpAdd] RENAME TO [_sqliteexpert_temp_table_1];`)
+                }).then(r => {
+                    console.log(`Setp four Done`)
+
+                    return knex.raw(`CREATE TABLE [main].[tblOtpAdd](
                     [otp_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
                     [client_id] varchar(255), 
                     [site_id] integer, 
@@ -71,35 +70,79 @@ module.exports = (knex)=>{
                     [nsc_otp_id] VARCHAR, 
                     [upload_date] DATE, 
                     [hh_id] VARCHAR(20));`)
-            }).then(r=>{
-                console.log(`Setp five Done`)
-        
-                return knex.raw(`INSERT INTO [main].[tblOtpAdd]([rowid], [otp_id], [client_id], [site_id], [site_village], [reg_date], [reg_id], [p_name], [f_or_h_name], [cnic], [address], [cnt_number], [age], [gender], [plw_type], [ent_reason], [ref_type], [oedema], [muac], [diarrhoea], [vomiting], [cough], [appetite], [daily_stool], [pass_urine], [b_Feeding], [weight], [height], [ration1], [quantity1], [ration2], [quantity2], [ration3], [quantity3], [prog_type], [created_at], [updated_at], [upload_status], [username], [org_name], [project_name], [is_deleted], [other_com_name], [other_com_qty], [nsc_old_otp_id], [ref_type_other], [entry_reason_other], [travel_time_minutes], [is_mother_alive], [tehsil_id], [nsc_otp_id], [upload_date], [hh_id])
+                }).then(r => {
+                    console.log(`Setp five Done`)
+
+                    return knex.raw(`INSERT INTO [main].[tblOtpAdd]([rowid], [otp_id], [client_id], [site_id], [site_village], [reg_date], [reg_id], [p_name], [f_or_h_name], [cnic], [address], [cnt_number], [age], [gender], [plw_type], [ent_reason], [ref_type], [oedema], [muac], [diarrhoea], [vomiting], [cough], [appetite], [daily_stool], [pass_urine], [b_Feeding], [weight], [height], [ration1], [quantity1], [ration2], [quantity2], [ration3], [quantity3], [prog_type], [created_at], [updated_at], [upload_status], [username], [org_name], [project_name], [is_deleted], [other_com_name], [other_com_qty], [nsc_old_otp_id], [ref_type_other], [entry_reason_other], [travel_time_minutes], [is_mother_alive], [tehsil_id], [nsc_otp_id], [upload_date], [hh_id])
                 SELECT [rowid], [otp_id], [client_id], [site_id], [site_village], [reg_date], [reg_id], [p_name], [f_or_h_name], [cnic], [address], [cnt_number], [age], [gender], [plw_type], [ent_reason], [ref_type], [oedema], [muac], [diarrhoea], [vomiting], [cough], [appetite], [daily_stool], [pass_urine], [b_Feeding], [weight], [height], [ration1], [quantity1], [ration2], [quantity2], [ration3], [quantity3], [prog_type], [created_at], [updated_at], [upload_status], [username], [org_name], [project_name], [is_deleted], [other_com_name], [other_com_qty], [nsc_old_otp_id], [ref_type_other], [entry_reason_other], [travel_time_minutes], [is_mother_alive], [tehsil_id], [nsc_otp_id], [upload_date], [hh_id]
                 FROM [main].[_sqliteexpert_temp_table_1];`)
-            }).then(r=>{
-                console.log(`Setp six Done`)
-        
-                return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
-            }).then(r=>{
-                console.log(`Setp seven Done`)
-        
-                return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-            }).then(r=>{
-                console.log(`Setp eight Done`)
-        
-                return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
-            }).then(r=>{
-                console.log(`Setp nine Done`)
-        
-                return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
-            }).then(r=>{
-                console.log('Final Step')
-            }).catch(e=>{
-                console.log(e)
-            })
-        }else{
-            console.log('System Already updated')
+                }).then(r => {
+                    console.log(`Setp six Done`)
+
+                    return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
+                }).then(r => {
+                    console.log(`Setp seven Done`)
+
+                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                }).then(r => {
+                    console.log(`Setp eight Done`)
+
+                    return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
+                }).then(r => {
+                    console.log(`Setp nine Done`)
+
+                    return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
+                }).then(r => {
+                    console.log('Final Step')
+                    var updateDetails = [{
+                        update: 'Table OtpAdd remove reg_id unique contraint'
+                    }]
+                    fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '1', (err) => {
+                        if (err) throw err;
+                        console.log('Table OtpAdd remove reg_id unique contraint')
+                    })
+                }).catch(e => {
+                    console.log(e)
+                })
+        } else if (stat) {
+            var updateCheck = fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`)
+            // Check for update 1 which if for updating tblOtpAdd to remove reg_id unique contraint 
+            if (updateCheck == '1') {
+                knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    .then(r => {
+                        return knex.raw(`DROP VIEW IF EXISTS [main].[v_otpNotExit];`)
+                    }).then(r => {
+                        return knex.raw(`CREATE VIEW [main].[v_otpNotExit]
+                        AS
+                        SELECT 
+                               [main].[tblOtpAdd].[otp_id], 
+                               [main].[tblOtpAdd].[site_id], 
+                               [main].[tblOtpExit].[exit_id], 
+                               [main].[tblOtpExit].[exit_date], 
+                               (CASE WHEN [main].[tblOtpAdd].[age] > 23 THEN '24_59' WHEN [main].[tblOtpAdd].[age] < 24 THEN '6_23' END) AS [age_group], 
+                               [main].[tblOtpAdd].[gender], 
+                               STRFTIME ('%Y', [reg_date]) AS [year], 
+                               STRFTIME ('%m', [reg_date]) AS [month], 
+                               [reg_date]
+                        FROM   [main].[tblOtpAdd]
+                               LEFT JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+                        WHERE  [main].[tblOtpExit].[exit_id] IS NULL
+                               AND [main].[tblOtpAdd].[prog_type] = 'otp'
+                               AND [main].[tblOtpAdd].[is_deleted] = 0;
+                        `)
+                    }).then(r => {
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    }).then(r => {
+                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '2', (err) => {
+                            if (err) throw err;
+                            console.log('v_otpNotExitUpdated')
+                        })
+                    }).catch(e => {
+                        console.log(e)
+                    })
+            } else {
+                console.log('v_otpNotExit already updated')
+            }
         }
     })
 
