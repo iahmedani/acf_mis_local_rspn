@@ -38,49 +38,54 @@ exports.up = function(knex, Promise) {
        [prog_type] varchar(50));`
     )
     .raw(
-      `CREATE TABLE "tblGeoDistrict"(
-       "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
-       "districtName" varchar(255), 
-       "province_id" integer, 
-       "created_at" datetime, 
-       "updated_at" datetime);`
+      `CREATE TABLE [main].[tblGeoDistrict](
+        [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+        [districtName] varchar(255), 
+        [province_id] integer, 
+        [created_at] datetime, 
+        [updated_at] datetime, 
+        [isActive] BOOLEAN DEFAULT 1);`
     )
     .raw(
-      `CREATE TABLE "tblGeoNutSite"(
-       "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
-       "siteName" varchar(255), 
-       "province_id" integer, 
-       "district_id" integer, 
-       "tehsil_id" integer, 
-       "uc_id" integer, 
-       "OTP" integer, 
-       "SFP" integer, 
-       "SC" integer, 
-       "created_at" datetime, 
-       "updated_at" datetime);`
+      `CREATE TABLE [main].[tblGeoNutSite](
+        [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+        [siteName] varchar(255), 
+        [province_id] integer, 
+        [district_id] integer, 
+        [tehsil_id] integer, 
+        [uc_id] integer, 
+        [OTP] integer, 
+        [SFP] integer, 
+        [SC] integer, 
+        [created_at] datetime, 
+        [updated_at] datetime, 
+        [isActive] BOOLEAN DEFAULT 1);`
     )
     .raw(
-      `CREATE TABLE "tblGeoProvince"(
-       "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
-       "provinceName" varchar(255), 
-       "created_at" datetime, 
-       "updated_at" datetime);`
+      `CREATE TABLE [main].[tblGeoProvince](
+        [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+        [provinceName] varchar(255), 
+        [created_at] datetime, 
+        [updated_at] datetime, 
+        [isActive] BOOLEAN DEFAULT 1);`
     )
     .raw(
-      `CREATE TABLE "tblGeoTehsil"(
-       "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
-       "tehsilName" varchar(255), 
-       "district_id" integer, 
-       "created_at" datetime, 
-       "updated_at" datetime);`
+      `CREATE TABLE [main].[tblGeoTehsil](
+        [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+        [tehsilName] varchar(255), 
+        [district_id] integer, 
+        [created_at] datetime, 
+        [updated_at] datetime, 
+        [isActive] BOOLEAN DEFAULT 1);`
     )
     .raw(
-      `CREATE TABLE "tblGeoUC"(
-       "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
-       "ucName" varchar(255), 
-       "tehsil_id" integer, 
-       "created_at" datetime, 
-       "updated_at" datetime);`
+      `CREATE TABLE [main].[tblGeoUC](
+        [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+        [ucName] varchar(255), 
+        [tehsil_id] integer, 
+        [created_at] datetime, 
+        [updated_at] datetime, 
+        [isActive] BOOLEAN DEFAULT 1);`
     )
     .raw(
       `CREATE TABLE [tblInterimOtp](
@@ -1208,22 +1213,23 @@ WHERE  [main].[tblOtpAdd].[prog_type] = 'otp'
            AND [main].[tblOtpExit].[is_deleted] = 0;
       `)
     .raw(
-      `CREATE VIEW [v_otpNotExit]
-       AS
-       SELECT 
-       [main].[tblOtpAdd].[otp_id], 
-       [main].[tblOtpAdd].[site_id], 
-       [main].[tblOtpExit].[exit_id], 
-       (CASE WHEN [main].[tblOtpAdd].[age] > 23 THEN '24_59' WHEN [main].[tblOtpAdd].[age] < 24 THEN '6_23' END) AS [age_group], 
-       [main].[tblOtpAdd].[gender], 
-       STRFTIME ('%Y', [reg_date]) AS [year], 
-       STRFTIME ('%m', [reg_date]) AS [month], 
-       [reg_date]
-       FROM   [main].[tblOtpAdd]
-       LEFT JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
-       WHERE  [main].[tblOtpExit].[exit_id] IS NULL
-       AND [main].[tblOtpAdd].[prog_type] = 'otp'
-       AND [main].[tblOtpAdd].[is_deleted] = 0;`
+      `CREATE VIEW [main].[v_otpNotExit]
+      AS
+      SELECT 
+             [main].[tblOtpAdd].[otp_id], 
+             [main].[tblOtpAdd].[site_id], 
+             [main].[tblOtpExit].[exit_id], 
+             [main].[tblOtpExit].[exit_date], 
+             (CASE WHEN [main].[tblOtpAdd].[age] > 23 THEN '24_59' WHEN [main].[tblOtpAdd].[age] < 24 THEN '6_23' END) AS [age_group], 
+             [main].[tblOtpAdd].[gender], 
+             STRFTIME ('%Y', [reg_date]) AS [year], 
+             STRFTIME ('%m', [reg_date]) AS [month], 
+             [reg_date]
+      FROM   [main].[tblOtpAdd]
+             LEFT JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+      WHERE  [main].[tblOtpExit].[exit_id] IS NULL
+             AND [main].[tblOtpAdd].[prog_type] = 'otp'
+             AND [main].[tblOtpAdd].[is_deleted] = 0;`
     )
     .raw(
       `CREATE VIEW [v_otpNotExitInterval]

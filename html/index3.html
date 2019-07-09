@@ -67,7 +67,8 @@
   <link rel="import" href="stockOutUpdate.html">
   <link rel="import" href="stockOutReport.html">
   <link rel="import" href="newSyncAuth.html">
-  <link rel="import" href="newSyncAuthV2.html">
+  <!-- origional is v2 -->
+  <link rel="import" href="newSyncAuthV3.html">
 
 </head>
 
@@ -509,7 +510,8 @@
     var InitStockDistUpd = require('./stockDistUpd').stockDistUpd;
     var InitDashboard =require('./dashboard').initDashboard;
     var InitNewSyncAuth =require('./newSyncAuth').newSyncAuth;
-    var InitNewSyncAuthV2 =require('./newSyncAuthV2').newSyncAuthV2;
+    // origional is v2
+    var InitNewSyncAuthV3 =require('./newSyncAuthV3').newSyncAuthV3;
     // var InitDefaulterv2 = require('./defaulterv2').initDefaulterv2;
 
      function stockOutUpdateTemplate() {
@@ -529,12 +531,14 @@
         InitNewSyncAuth();
       }
      function newSyncAuthV2Template() {
-        var content = document.querySelector('link[href="newSyncAuthV2.html"]');
+      //  origional v2
+        var content = document.querySelector('link[href="newSyncAuthV3.html"]');
         var template = content.import.querySelector('template');
         var clone = document.importNode(template.content, true);
         $('#jsContent').empty();
         document.querySelector('#jsContent').appendChild(clone)
-        InitNewSyncAuthV2();
+        // original v2
+        InitNewSyncAuthV3();
       }
      function dashboardTemplate() {
         var content = document.querySelector('link[href="dashboard.html"]');

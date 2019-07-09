@@ -140,7 +140,165 @@ module.exports = (knex) => {
                     }).catch(e => {
                         console.log(e)
                     })
-            } else {
+            } else if(updateCheck == '2'){
+                knex.raw(`PRAGMA [main].legacy_alter_table = 'on';`)
+                    .then(r=>{
+                        return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
+                    }).then(r=>{
+                        return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    }).then(r=>{
+                        return knex.raw(`ALTER TABLE [main].[tblGeoDistrict] RENAME TO [_sqliteexpert_temp_table_1];`)
+                    }).then(r=>{
+                        return knex.raw(`CREATE TABLE [main].[tblGeoDistrict](
+                            [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+                            [districtName] varchar(255), 
+                            [province_id] integer, 
+                            [created_at] datetime, 
+                            [updated_at] datetime, 
+                            [isActive] BOOLEAN DEFAULT 1);`)
+                    }).then(r=>{
+                        return knex.raw(`INSERT INTO [main].[tblGeoDistrict]([rowid], [id], [districtName], [province_id], [created_at], [updated_at])
+                        SELECT [rowid], [id], [districtName], [province_id], [created_at], [updated_at]
+                        FROM [main].[_sqliteexpert_temp_table_1];`)
+                    }).then(r=>{
+                        return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
+                    }).then(r=>{
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].legacy_alter_table = 'on';`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
+                    }).then(r=>{
+                        return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    }).then(r=>{
+                        return knex.raw(`ALTER TABLE [main].[tblGeoProvince] RENAME TO [_sqliteexpert_temp_table_1];`)
+                    }).then(r=>{
+                        return knex.raw(`CREATE TABLE [main].[tblGeoProvince](
+                            [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+                            [provinceName] varchar(255), 
+                            [created_at] datetime, 
+                            [updated_at] datetime, 
+                            [isActive] BOOLEAN DEFAULT 1);`)
+                    }).then(r=>{
+                        return knex.raw(`INSERT INTO [main].[tblGeoProvince]([rowid], [id], [provinceName], [created_at], [updated_at])
+                        SELECT [rowid], [id], [provinceName], [created_at], [updated_at]
+                        FROM [main].[_sqliteexpert_temp_table_1];`)
+                    }).then(r=>{
+                        return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
+                    }).then(r=>{
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].legacy_alter_table = 'on';`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
+                    }).then(r=>{
+                        return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    }).then(r=>{
+                        return knex.raw(`ALTER TABLE [main].[tblGeoTehsil] RENAME TO [_sqliteexpert_temp_table_1];`)
+                    }).then(r=>{
+                        return knex.raw(`CREATE TABLE [main].[tblGeoTehsil](
+                            [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+                            [tehsilName] varchar(255), 
+                            [district_id] integer, 
+                            [created_at] datetime, 
+                            [updated_at] datetime, 
+                            [isActive] BOOLEAN DEFAULT 1);`)
+                    }).then(r=>{
+                        return knex.raw(`INSERT INTO [main].[tblGeoTehsil]([rowid], [id], [tehsilName], [district_id], [created_at], [updated_at])
+                        SELECT [rowid], [id], [tehsilName], [district_id], [created_at], [updated_at]
+                        FROM [main].[_sqliteexpert_temp_table_1];`)
+                    }).then(r=>{
+                        return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
+                    }).then(r=>{
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].legacy_alter_table = 'on';`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
+                    }).then(r=>{
+                        return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    }).then(r=>{
+                        return knex.raw(`ALTER TABLE [main].[tblGeoUC] RENAME TO [_sqliteexpert_temp_table_1];`)
+                    }).then(r=>{
+                        return knex.raw(`CREATE TABLE [main].[tblGeoUC](
+                            [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+                            [ucName] varchar(255), 
+                            [tehsil_id] integer, 
+                            [created_at] datetime, 
+                            [updated_at] datetime, 
+                            [isActive] BOOLEAN DEFAULT 1);`)
+                    }).then(r=>{
+                        return knex.raw(`INSERT INTO [main].[tblGeoUC]([rowid], [id], [ucName], [tehsil_id], [created_at], [updated_at])
+                        SELECT [rowid], [id], [ucName], [tehsil_id], [created_at], [updated_at]
+                        FROM [main].[_sqliteexpert_temp_table_1];`)
+                    }).then(r=>{
+                        return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
+                    }).then(r=>{
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].legacy_alter_table = 'on';`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
+                    }).then(r=>{
+                        return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    }).then(r=>{
+                        return knex.raw(`ALTER TABLE [main].[tblGeoNutSite] RENAME TO [_sqliteexpert_temp_table_1];`)
+                    }).then(r=>{
+                        return knex.raw(`CREATE TABLE [main].[tblGeoNutSite](
+                            [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+                            [siteName] varchar(255), 
+                            [province_id] integer, 
+                            [district_id] integer, 
+                            [tehsil_id] integer, 
+                            [uc_id] integer, 
+                            [OTP] integer, 
+                            [SFP] integer, 
+                            [SC] integer, 
+                            [created_at] datetime, 
+                            [updated_at] datetime, 
+                            [isActive] BOOLEAN DEFAULT 1);`)
+                    }).then(r=>{
+                        return knex.raw(`INSERT INTO [main].[tblGeoNutSite]([rowid], [id], [siteName], [province_id], [district_id], [tehsil_id], [uc_id], [OTP], [SFP], [SC], [created_at], [updated_at])
+                        SELECT [rowid], [id], [siteName], [province_id], [district_id], [tehsil_id], [uc_id], [OTP], [SFP], [SC], [created_at], [updated_at]
+                        FROM [main].[_sqliteexpert_temp_table_1];`)
+                    }).then(r=>{
+                        return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
+                    }).then(r=>{
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
+                    }).then(r=>{
+                        return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
+                    }).then(r=>{
+                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '3', (err) => {
+                            if (err) throw err;
+                            console.log('updated geo tables')
+                        })
+                    }).catch(e => {
+                        console.log(e)
+                    })
+    
+            }else {
                 console.log('v_otpNotExit already updated')
             }
         }

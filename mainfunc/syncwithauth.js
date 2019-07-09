@@ -95,6 +95,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
   }
 
   ipcMain.on("updateDB", async () => {
+    console.log('UpdateDB ckicked')
     var surl = await knex("tblConfig");
     surl = surl[0].value;
     const { client, mac } = JSON.parse(
@@ -105,6 +106,8 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
     async.series(
       {
         province: cb => {
+          console.log('updateprovince ckicked')
+
           var options = {
             "rejectUnauthorized": false, 
             method: "GET",
@@ -119,6 +122,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
               var data = body;
               if (data.length > 0) {
                 data.forEach(el => {
+                  console.log(el)
                   delete el.isActive;
                   knex("tblGeoProvince")
                     .where({
@@ -135,7 +139,6 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                           });
                       }
                     })
-
                     .catch(e => {
                       console.log(e);
                     });
@@ -143,6 +146,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                 cb(null, body);
               }
             } else {
+              console.log(err)
               cb(err);
             }
           });
@@ -168,6 +172,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                       id: el.id
                     })
                     .then(result => {
+                      console.log(result)
                       if (result.length > 0) {
                         console.log("District Not added as already available");
                       } else {

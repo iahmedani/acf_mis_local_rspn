@@ -1,4 +1,5 @@
 module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
+  // console.log('Check update')
   function batchUpdate(table, collection) {
     return knex.transaction(trx => {
       let queries = collection.map(tuple =>
@@ -105,6 +106,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
     async.series(
       {
         province: cb => {
+          console.log('Province update called')
           var options = {
             "rejectUnauthorized": false, 
             method: "GET",
@@ -114,9 +116,10 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
             json: true
           };
           request(options, function(err, response, body) {
-            console.log(body);
+            console.log(response);
             if (!err) {
               var data = body;
+              console.log(data)
               if (data.length > 0) {
                 for (el of data){
                   delete el.isActive;
@@ -125,6 +128,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
                       id: el.id
                     })
                     .then(result => {
+                      console.log(result)
                       if (result.length > 0) {
                         if(result[0].provinceName != el.provinceName){
                           knex('tblGeoProvince')
@@ -169,9 +173,13 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, surl, request, rp) => {
             json: true
           };
           request(options, function(err, response, body) {
+            console.log(err, response, body)
             if (!err) {
               // var data = JSON.parse(body);
+              console.log(body)
               var data = body;
+              console.log(data)
+
               if (data.length > 0) {
                 for (el of data){
                   delete el.isActive;
