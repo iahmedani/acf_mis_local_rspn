@@ -247,7 +247,7 @@ module.exports.initOtpExit = function (){
       $('#exitAddForm').validate();
       if ($('#exitAddForm').valid() ) {
         var formData = $('#exitAddForm').serializeFormJSON();
-        // console.log(formData)
+        console.log(formData)
         // var exit_date = $('#exit_date').val();
         // formData.exit_date = exit_date;
         delete formData.p_name;

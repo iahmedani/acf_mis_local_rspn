@@ -4268,45 +4268,7 @@ const mainMenuTemplate = [
   
 ];
 
-var new_menu = (!process.env.NODE_ENV) ? {
-  label: 'View',
-  submenu: [{
-      label:'Reload',
-      // role: 'reload',
-      accelerator: process.platform == 'darwin' ? 'Command+R' : 'Ctrl+R',
-      click (item, focusedWindow) {
-        if (focusedWindow) focusedWindow.reload()
-      }
-    },
-    
-    // {
-    //   type: 'separator'
-    // },
-    // {
-    //   label:'Actual Zoom',
-    //   role: 'resetzoom',
-    //   accelerator: 'CmdOrCtrl+0',
-    // },
-    // {
-    //   label:'Zoom In',
-    //   role: 'zoomin',
-    //   accelerator: 'CmdOrCtrl+=',
-    // },
-    // {
-    //   label:'Zoom Out',
-    //   role: 'zoomout',
-    //   accelerator: 'CmdOrCtrl+-',
-    // },
-    // {
-    //   type: 'separator'
-    // },
-    // {
-    //   label:'Full Screen',
-    //   role: 'togglefullscreen',
-    //   // accelerator: 'F11',
-    // }
-  ]
-  } : {
+var new_menu = {
   label: 'View',
   submenu: [{
       label:'Reload',
