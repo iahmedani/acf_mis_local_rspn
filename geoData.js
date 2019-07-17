@@ -2,6 +2,7 @@ const knex = require('./mainfunc/db');
 
 module.exports.provincev2 = (event)=>{
   knex('tblGeoProvince')
+  .where({isActive: true})
   .then(result => {
     event.sender.send('province', ({
       province: result
@@ -42,6 +43,7 @@ module.exports.commodity = (event)=>{
 }
 module.exports.districtv2 = (province, event)=>{
   knex('tblGeoDistrict')
+    .where({isActive: true})
     .where({
       province_id: province
     })
@@ -57,6 +59,7 @@ module.exports.districtv2 = (province, event)=>{
 
 module.exports.tehsilv2 = (dist, event)=>{
   knex('tblGeoTehsil')
+    .where({isActive: true})
     .where({
       district_id: dist
     })
@@ -71,6 +74,7 @@ module.exports.tehsilv2 = (dist, event)=>{
 }
 module.exports.ucv2 = (tehsil, event)=>{
   knex('tblGeoUC')
+  .where({isActive: true})
   .where({
     tehsil_id: tehsil
   })
@@ -86,6 +90,7 @@ module.exports.ucv2 = (tehsil, event)=>{
 
 module.exports.healthHousev2 = (uc, event)=>{
   knex('tblGeoNutSite')
+  .where({isActive: true})
   .where({
     uc_id: uc
   })
@@ -101,6 +106,7 @@ module.exports.healthHousev2 = (uc, event)=>{
 
 module.exports.healthHouseTypev2 = (h_id, event)=>{
   knex('tblGeoNutSite')
+  .where({isActive: true})
   .where({
     id: h_id
   })
