@@ -176,17 +176,18 @@
                   <div class="form-group col-sm-2">
                     <label for="ref_type">Refferal Type</label>
                     <select name="ref_type" id="ref_type" class="form-control form-control-sm" required>
-                      <option value="">Choose</option>
+                      <option selected value="">Choose</option>
                       <option value="self">Self</option>
-                      <option value="peer">Peer</option>
+                      <option value="peer">Peer to Peer</option>
                       <option value="chw">CHW</option>
                       <option value="lhw">LHW</option>
                       <option value="doh_staff">DOH Staff</option>
-                      <option value="parents">Parents</option>
+                      <!-- <option value="parents">Parents</option> -->
                       <option value="com_org">Community Org</option>
                       <option value="by_sc_care">By SC Care</option>
                       <option value="by_otp">By OTP</option>
-                      <option value="by_sfp">By SFP</option>
+                      <option value="from_opd">From OPD</option>
+                      <!-- <option value="by_sfp">By SFP</option> -->
                       <option value="by_tsfp">By TSFP</option>
                       <option value="other">Other</option>
                     </select>
@@ -219,7 +220,7 @@
                       <small>(CM)</small>
                     </label>
                     <input type="number" step="any"  name="height" id="height" class="form-control form-control-sm" min="0"
-                      >
+                      disabled>
                   </div>
                   <div class="form-group col-sm-2">
                     <label for="oedema" class="form-label">Oedema</label>

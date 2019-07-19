@@ -179,6 +179,12 @@ function followupIntermData(event, site_id) {
 }
 // adding followup 
 function followupAddData(event, item) {
+  var date_ = new Date(item.next_followup)
+  date_.setDate(date_.getDate() + 1);
+  // date_.toISOString();
+  // date_.toJSON().split('T')[0];
+  date_ = date_.toJSON().split('T')[0]
+  console.log(date_)
   var interimUpd = {
     muac: item.muac,
     weight: item.weight,
@@ -191,7 +197,8 @@ function followupAddData(event, item) {
     curr_date: item.followup_date,
     other_com_name: item.other_com_name,
     other_com_qty: item.other_com_qty,
-    next_followup: item.next_followup.split('T')[0],
+    // next_followup: item.next_followup,
+    next_followup: date_,
 
     // next_followup: function () {
     //   var myDate = new Date(item.followup_date);
@@ -215,7 +222,8 @@ function followupAddData(event, item) {
     curr_date: item.followup_date,
     other_com_name: item.other_com_name,
     other_com_qty: item.other_com_qty,
-    next_followup: item.next_followup,
+    // next_followup: item.next_followup,    
+    next_followup: date_,
     // next_followup: function () {
     //   var myDate = new Date(item.followup_date);
     //   myDate.setDate(myDate.getDate() + 15)

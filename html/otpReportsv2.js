@@ -9,7 +9,8 @@ module.exports.initOtpReportsV2 = async function () {
     var strDate = $('#startMonth')
     var endDate = $('#endMonth')
 
-    var minDate = await knex.select('otp_id', 'reg_date').from('tblOtpAdd').limit(1).orderBy('otp_id', 'asc').where({is_deleted:0});
+    // var minDate = await knex.select('otp_id', 'reg_date').from('tblOtpAdd').limit(1).orderBy('otp_id', 'asc').where({is_deleted:0});
+    var minDate = await knex.select('otp_id', 'reg_date').from('tblOtpAdd').limit(1).orderBy('reg_date', 'asc').where({is_deleted:0});
     var maxDate = await knex.select('interim_id', 'created_at').from('tblInterimOtp').limit(1).orderBy('interim_id', 'desc').where({is_deleted:0});
 console.log({
   minDate,
@@ -904,6 +905,7 @@ const singleTables = (data)=>{
   $('#tblAdd tbody').empty();
   $('#tblAdd').DataTable({
     data :data.addDataSingle,
+    "paging":   false,
     "scrollY": 380,
     "scrollX": true,
     columns:[
@@ -943,6 +945,7 @@ const singleTables = (data)=>{
   $('#tblExit tbody').empty();
   $('#tblExit').DataTable({
     data : data.exitDataSingle,
+    "paging":   false,
     "scrollY": 380,
     "scrollX": true,
     columns:[

@@ -167,8 +167,8 @@ module.exports.initOtpAddUpdV2 = function () {
         return new Date(date1) - new Date(date2);
       },
       itemTemplate: function(value) {
-        return new Date(value).toDateString();
-      },
+        return new Date(value).toJSON().split('T')[0];
+    },
       
       // filterTemplate: function(value) {
       //   return (this._filterPicker = $("<input>")
@@ -182,18 +182,30 @@ module.exports.initOtpAddUpdV2 = function () {
       },
 
       editTemplate: function(value) {
-        return (this._editPicker = $("<input>")
-          .datepicker()
-          .datepicker("setDate", new Date(value)));
-      },
+        return this._editPicker = $("<input>").datepicker({format:'MM/DD/YYYY'}).datepicker("setDate", new Date(value));
+    },
+ 
+    insertValue: function() {
+        return this._insertPicker.datepicker("getDate").toJSON().split('T')[0];
+    },
+ 
+    editValue: function() {
+        return this._editPicker.datepicker("getDate").toJSON().split('T')[0];
+    }
 
-      insertValue: function() {
-        return this._insertPicker.datepicker("getDate").toISOString();
-      },
+      // editTemplate: function(value) {
+      //   return (this._editPicker = $("<input>")
+      //     .datepicker()
+      //     .datepicker("setDate", new Date(value)));
+      // },
 
-      editValue: function() {
-        return this._editPicker.datepicker("getDate").toISOString();
-      },
+      // insertValue: function() {
+      //   return this._insertPicker.datepicker("getDate").toISOString();
+      // },
+
+      // editValue: function() {
+      //   return this._editPicker.datepicker("getDate").toISOString();
+      // },
       // filterValue: function() {
       //   return this._filterPicker.datepicker("getDate").toISOString();
       // }

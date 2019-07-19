@@ -272,7 +272,7 @@ module.exports.newSyncAuthV3 = function () {
                     // console.log(datum)
                     // var _id = datum[id_column];
                     // delete datum[id_column]
-                    delete datum.isActive;
+                    // delete datum.isActive;
                     try {
                         var _check = await knex(table).where(id_column, datum[id_column]);
                         // console.log(_check)
@@ -283,6 +283,9 @@ module.exports.newSyncAuthV3 = function () {
                             await knex(table).where(id_column, datum[id_column]).update(colName, datum[colName]);
                             elInfo.text(`NMIS updated - ${title}`)
                             // console.log('getAndUpdateBasicData1')
+                        }else if (datum.isActive != _check[0].isActive){
+                            await knex(table).where(id_column, datum[id_column]).update('isActive', datum.isActive);
+                            elInfo.text(`NMIS updated - ${title}`)
                         }
                     } catch (error) {
                         console.log(error)
