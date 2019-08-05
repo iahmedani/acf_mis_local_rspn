@@ -33,7 +33,7 @@ async function _exitChart (){
       type: "pie"
     },
     title: { text: 'Performance Indicators' },
-    exporting: false,
+    // exporting: true,
     credits: false,
     tooltip: {
       pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
@@ -121,9 +121,9 @@ async function _session (){
     
 
     title: { text: 'Sessions Participants Summary' },
-    exporting: false,
+    // exporting: true,
     credits: false,
-    subtitle: false,
+    // subtitle: false,
     xAxis: {
       categories: _thisChartData.cat,
       // crosshair: true
@@ -158,13 +158,13 @@ async function _session (){
 _session();
 
   $(() => {
-    var exporting = {
-      buttons: {
-        contextButton: {
-          menuItems: Highcharts.getOptions().exporting.buttons.contextButton.menuItems.filter(item => item !== 'openInCloud')
-        }
-      }
-    };
+    // var exporting = {
+    //   buttons: {
+    //     contextButton: {
+    //       menuItems: Highcharts.getOptions().exporting.buttons.contextButton.menuItems.filter(item => item !== 'openInCloud')
+    //     }
+    //   }
+    // };
     
     ipc.send("newDashboard", '')
     ipc.on("newDashboard", (event, data) => {
@@ -175,7 +175,7 @@ _session();
           type: "column"
         },
         title: { text: "Screening Children" },
-        exporting: false,
+        // exporting: true,
         credits: false,
         xAxis: {
           categories: [
@@ -371,7 +371,7 @@ _session();
         text: 'PLW Screening'
     },
       // title: { text: "PLW Children" },
-      exporting: false,
+      // exporting: true,
       credits: false,
       // yAxis:false,
       yAxis: {

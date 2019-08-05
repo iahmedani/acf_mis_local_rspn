@@ -153,19 +153,50 @@ function otpAddDataSave(event, addOtpData, config, client) {
   // addFormOtp = null;
 }
 // followup interm data share
-function followupIntermData(event, site_id) {
-  console.log('site_id from html', site_id);
+function followupIntermData(event, filter) {
+  console.log({filter})
+  var _limit = (filter.pageSize) ? filter.pageSize : 10;
+  var _offset = (filter.pageIndex == 1) ? 0 : (filter.pageIndex - 1) * _limit;
+  console.log('site_id from html', filter.site_id);
   knex.from('tblOtpAdd')
     .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
     .where({
-      site_id: site_id,
-      status: 'open'
+      site_id: filter.site_id,
+      status: 'open',
     })
+    .where('tblOtpAdd.reg_id','like', `%${filter.reg_id ? filter.reg_id :''}%`)
+    .where('tblOtpAdd.p_name','like', `%${filter.p_name ? filter.p_name :''}%`)
+    .where('tblOtpAdd.f_or_h_name','like', `%${filter.f_or_h_name ? filter.f_or_h_name :''}%`)
+    .where('tblOtpAdd.site_village','like', `%${filter.site_village ? filter.site_village :''}%`)
+    .limit(_limit)
+    .offset(_offset)
     .then(result => {
       // result.location = 'Follow up interim call'
+      return knex.from('tblOtpAdd')
+      .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
+      .where({
+        site_id: filter.site_id,
+        status: 'open',
+      })
+      .where('tblOtpAdd.reg_id','like', `%${filter.reg_id ? filter.reg_id :''}%`)
+      .where('tblOtpAdd.p_name','like', `%${filter.p_name ? filter.p_name :''}%`)
+      .where('tblOtpAdd.f_or_h_name','like', `%${filter.f_or_h_name ? filter.f_or_h_name :''}%`)
+      .where('tblOtpAdd.site_village','like', `%${filter.site_village ? filter.site_village :''}%`)
+      .count({total:'tblOtpAdd.reg_id' })
+      // .limit(_limit)
+      // .offset(_offset)
+      .then(totalCount=>{
+        return {
+          result,
+          totalCount
+        }
+      })
+      
+    }).then(result=>{
       console.log(result)
       event.sender.send('getInterim', ({
-        result: result
+        result: result.result,
+        totalCount: result.totalCount
       }))
       result = null;
     })
@@ -231,56 +262,91 @@ function followupAddData(event, item) {
     // }(),
     created_at: localDate()
   }
-  console.log('_______________update data______')
-  console.log(interimUpd)
-  console.log('_______________followup data______')
-  console.log(followupData)
+  // console.log('_______________update data______')
+  // console.log(interimUpd)
+  // console.log('_______________followup data______')
+  // console.log(followupData)
+
   knex.from('tblInterimOtp')
     .where({
-      otp_id: item.otp_id
+      otp_id: item.otp_id,
+      next_followup: date_
     })
-    .update(interimUpd)
-    .then(result => {
-      console.log(result)
-    })
-    .catch(e => {
-      console.log(e)
-    })
-  knex.from('tblOtpAdd')
-    .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
-    .where({
-      'tblInterimOtp.otp_id': item.otp_id,
-      status: 'open'
-    })
-    .then(result => {
+    .then(result=>{
+      if(result.length){
+        event.sender.send('error', ({msg: 'Duplicate Followup is not allowed'}))
+        knex.from('tblOtpAdd')
+        .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
+        .where({
+          'tblInterimOtp.otp_id': item.otp_id,
+          status: 'open'
+        })
+        .then(result => {
+    
+          // result.location = 'Follow up interim call'
+          console.log(result)
+          event.sender.send('addFollowup', ({
+            result: result
+          }))
+        })
+        .catch(e => {
+          // e.location = 'Follow up interim call'
+          console.log(e);
+          event.sender.send('addFollowup', ({
+            err: e
+          }))
+        })
+      }else{
+        knex.from('tblInterimOtp')
+        .where({
+          otp_id: item.otp_id
+        })
+        .update(interimUpd)
+        .then(result => {
+          console.log(result)
+        })
+        .catch(e => {
+          console.log(e)
+        })
+      knex.from('tblOtpAdd')
+        .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
+        .where({
+          'tblInterimOtp.otp_id': item.otp_id,
+          status: 'open'
+        })
+        .then(result => {
+    
+          // result.location = 'Follow up interim call'
+          console.log(result)
+          event.sender.send('addFollowup', ({
+            result: result
+          }))
+        })
+        .catch(e => {
+          // e.location = 'Follow up interim call'
+          console.log(e);
+          event.sender.send('addFollowup', ({
+            err: e
+          }))
+        })
+      knex('tblOtpFollowup')
+        .insert(followupData)
+        .then(result => {
+          console.log({
+            msg: 'Follow up added',
+            result: result
+          })
+        })
+        .catch(e => {
+          console.log({
+            msg: 'Error during followup record add',
+            err: e
+          })
+        })
+      }
+      })
 
-      // result.location = 'Follow up interim call'
-      console.log(result)
-      event.sender.send('addFollowup', ({
-        result: result
-      }))
-    })
-    .catch(e => {
-      // e.location = 'Follow up interim call'
-      console.log(e);
-      event.sender.send('addFollowup', ({
-        err: e
-      }))
-    })
-  knex('tblOtpFollowup')
-    .insert(followupData)
-    .then(result => {
-      console.log({
-        msg: 'Follow up added',
-        result: result
-      })
-    })
-    .catch(e => {
-      console.log({
-        msg: 'Error during followup record add',
-        err: e
-      })
-    })
+
 
 }
 

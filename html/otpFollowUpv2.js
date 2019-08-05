@@ -123,18 +123,19 @@ module.exports.initOtpFollowUp = function () {
       })
     })
     
-    let getInterimData = (site_id) => {        
+    let getInterimData = (filter) => {        
       return new Promise((resolve, reject) => {
-        ipc.send('getInterim', site_id);
+        ipc.send('getInterim', filter);
         ipc.on('getInterim', (e, result) => {
           var s = {
             data: result.result,
-            itemsCount: result.result.length
+            itemsCount: result.totalCount[0].total
           }
           if (result.err) {
             reject(result.err)
             ipc.removeAllListeners('getInterim')
           } else {
+            console.log(s)
             resolve(s)
             ipc.removeAllListeners('getInterim')
           }
@@ -181,7 +182,7 @@ module.exports.initOtpFollowUp = function () {
         $("#jsGridFollowUpEntry").jsGrid({
           height: "500px",
           width: "100%",
-          // filtering: true,
+          filtering: true,
           // inserting: true,
           editing: true,
           // sorting: true,
@@ -194,7 +195,8 @@ module.exports.initOtpFollowUp = function () {
           controller: {
             loadData: function(filter) {
               console.log(site_id);
-              return getInterimData(site_id);
+              filter.site_id = site_id;
+              return getInterimData(filter);
             },
             updateItem: function(item) {
               console.log("update");
@@ -216,28 +218,32 @@ module.exports.initOtpFollowUp = function () {
               title: "Reg #",
               type: "text",
               width: 50,
-              editing: false
+              editing: false,
+              filtering:true,
             },
             {
               name: "p_name",
               title: "Name",
               type: "text",
               width: 100,
-              editing: false
+              editing: false,
+              filtering:true,
             },
             {
               name: "f_or_h_name",
               title: "Father/Husb: Name",
               type: "text",
               width: 100,
-              editing: false
+              editing: false,
+              filtering:true
             },
             {
               name: "site_village",
               title: "Village",
               type: "text",
               width: 100,
-              editing: false
+              editing: false,
+              filtering:true
             },
             {
               name: "weight",
@@ -245,7 +251,9 @@ module.exports.initOtpFollowUp = function () {
               type: "number",
               width: 50,
               editing: true,
-              validate: "required"
+              validate: "required",
+              filtering:false
+
             },
             {
               name: "muac",
@@ -253,7 +261,9 @@ module.exports.initOtpFollowUp = function () {
               type: "decimal",
               width: 50,
               editing: true,
-              validate: "required"
+              validate: "required",
+              filtering:false
+
             },
             {
               name: "ration1",
@@ -263,12 +273,15 @@ module.exports.initOtpFollowUp = function () {
               valueField: "value",
               textField: "Name",
               width: 80,
-              validate: "required"
+              validate: "required",
+              filtering:false
+
             },
             {
               name: "quantity1",
               title: "Qty-1",
               type: "number",
+              filtering:false,
               width: 40,
               validate: {
                 validator: "min",
@@ -279,6 +292,7 @@ module.exports.initOtpFollowUp = function () {
               name: "ration2",
               title: "Ration-2",
               type: "select",
+              filtering:false,
               items: commodities,
               valueField: "value",
               textField: "Name",
@@ -288,7 +302,9 @@ module.exports.initOtpFollowUp = function () {
               name: "quantity2",
               title: "Qty-2",
               type: "number",
-              width: 40
+              width: 40,
+              filtering:false
+
             },
             {
               name: "ration3",
@@ -297,24 +313,31 @@ module.exports.initOtpFollowUp = function () {
               items: commodities,
               valueField: "value",
               textField: "Name",
+              filtering:false,
+
               width: 80
             },
             {
               name: "quantity3",
               title: "Qty-3",
               type: "number",
+              filtering:false,
+
               width: 50
             },
             {
               name: "other_com_name",
               title: "Other Com: Name",
               type: "text",
+              filtering:false,
+
               width: 50
             },
             {
               name: "other_com_qty",
               title: "Other Com: Qty",
               type: "number",
+              filtering:false,
               width: 50
             },
             {
