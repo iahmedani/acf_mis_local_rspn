@@ -163,6 +163,7 @@ function followupIntermData(event, filter) {
     .where({
       site_id: filter.site_id,
       status: 'open',
+      'tblInterimOtp.is_deleted':0
     })
     .where('tblOtpAdd.reg_id','like', `%${filter.reg_id ? filter.reg_id :''}%`)
     .where('tblOtpAdd.p_name','like', `%${filter.p_name ? filter.p_name :''}%`)
@@ -4281,6 +4282,9 @@ async function  newSync() {
 // })
 // process.env.NODE_ENV = 'production';
 // Create menu template
+
+
+
 const mainMenuTemplate = [
   // Each object is a dropdown
   {
@@ -4292,6 +4296,52 @@ const mainMenuTemplate = [
         app.quit();
       }
     }]
+  },
+  {
+    label: 'Tools',
+    submenu: [{
+      label: 'Backup',
+      accelerator: process.platform == 'darwin' ? 'Command+B' : 'Ctrl+B',
+      click() {
+        dialog.showOpenDialog(mainWindow,{ properties: ['openFile', 'openDirectory'] }, (file)=>{
+          if(file){
+            var _filedate = new Date();
+            // _filedate.toISOString().split('T')[0]
+                fs.copyFile(`${process.env.APPDATA}/ACF MIS Local app/acf_mis_local.sqlite3`, `${file[0]}\\acf_backup_${_filedate.toISOString().split('T')[0]}`, (err)=>{
+                  if(err) throw err;
+                  fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/__backupPath`,`${file[0]}\\acf_backup_${_filedate.toISOString().split('T')[0]}`,(err)=>{
+                  if(err) throw err;
+                  console.log('File coppied and path is saved')
+                  })
+                })
+              }else{
+                dialog.showMessageBox(mainWindow,{type:'info', title:'Backup', message:'Backup not created as you canceled the process'})
+              }
+        })
+      }
+    },
+    {
+      label: 'Restore',
+      click() {
+        dialog.showOpenDialog(mainWindow, {properties: ['openFile']}, (file)=>{
+          if(file){
+            app.quit();
+            fs.copyFile(`${process.env.APPDATA}/ACF MIS Local app/acf_mis_local.sqlite3`, `${file[0]}\\acf_backup_${_filedate.toISOString().split('T')[0]}_old`, (err)=>{
+              if(err) throw err;
+              fs.copyFile(file[0], `${process.env.APPDATA}/ACF MIS Local app/acf_mis_local.sqlite3`, (err)=>{
+                if(err) throw err;
+                console.log('System restoted')
+              })
+            })            
+          }else{
+            dialog.showMessageBox(mainWindow,{type:'info', title:'Restore', message:'System not restored'})
+          }
+        })
+        
+      }
+    }
+  
+  ]
   },
   // {
   //   label: 'Screening',

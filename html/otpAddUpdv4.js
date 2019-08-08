@@ -364,7 +364,6 @@ module.exports.initOtpAddUpdV2 = function () {
               var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
               diffDays = (args.item.upload_status == 1) ? diffDays : 0;
         if(diffDays < 6){
-        
         this.editItem(args.item);
         var data = args.item;
         ipc.send("getCommodity", data.prog_type);
@@ -666,4 +665,26 @@ module.exports.initOtpAddUpdV2 = function () {
       $("#ddUC").attr("disabled", false);
     }
   });
+  $('#ent_reason').on('change', function (e) {
+    var progType = $('#ddProgramType');
+    var muac = $('#muac');
+    if(progType.val() == 'otp' & $(this).val() == 'moved_in'){
+      muac.removeAttr('max')
+      muac.attr('min', 0)
+    }else{
+      muac.attr('max', 11.4)
+      muac.attr('min', 0)
+    }
+  })
+  $('#oedema').on('change', function (e) {
+    var progType = $('#ddProgramType');
+    var muac = $('#muac');
+    if(progType.val() == 'otp' & $(this).val() !== 'absent'){
+      muac.removeAttr('max')
+      muac.attr('min', 0)
+    }else{
+      muac.attr('max', 11.4)
+      muac.attr('min', 0)
+    }
+  })
 };

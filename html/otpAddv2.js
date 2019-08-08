@@ -174,6 +174,8 @@ $(function(){
                       <option value="tranfer_in_from_sfp">Transfer in
                         <small>From TSFP</small>
                       </option>
+                      <option value="moved_in">Moved In</option>
+
                       <option value="other">Other</option>
         `);
       $("#ref_type")
@@ -195,8 +197,7 @@ $(function(){
     }
     if (prog === 'otp' || prog === 'sc'){
       $('#age option[value="above59"]').attr('disabled', true)
-      $('#age option[value="below_6"]').attr('disabled', false)
-      
+      $('#age option[value="below_6"]').attr('disabled', false)      
       $('#plw_type').attr('disabled', true);
       $('#muac').attr('max','11.4');
       $('#muac').attr('min','0');
@@ -257,6 +258,41 @@ $(function(){
 
      }
   })
+  $('#ent_reason').on('change', function (e) {
+    var progType = $('#ddProgramType');
+    var muac = $('#muac');
+    if(progType.val() == 'otp' & $(this).val() == 'moved_in'){
+      muac.removeAttr('max')
+      muac.attr('min', 0)
+    }else{
+      muac.attr('max', 11.4)
+      muac.attr('min', 0)
+    }
+  })
+
+  $('#ent_reason').on('change', function (e) {
+    var progType = $('#ddProgramType');
+    var muac = $('#muac');
+    if(progType.val() == 'otp' & $(this).val() == 'moved_in'){
+      muac.removeAttr('max')
+      muac.attr('min', 0)
+    }else{
+      muac.attr('max', 11.4)
+      muac.attr('min', 0)
+    }
+  })
+  $('#oedema').on('change', function (e) {
+    var progType = $('#ddProgramType');
+    var muac = $('#muac');
+    if(progType.val() == 'otp' & $(this).val() !== 'absent'){
+      muac.removeAttr('max')
+      muac.attr('min', 0)
+    }else{
+      muac.attr('max', 11.4)
+      muac.attr('min', 0)
+    }
+  })
+  
 })
 
 $('#otpAddForm').on('submit', async (e)=>{
@@ -266,7 +302,7 @@ $('#otpAddForm').on('submit', async (e)=>{
     var otpAddFormData = $('#otpAddForm').serializeFormJSON();
     if( $('#ddProgramType').val() == 'otp'){
       
-      var check = await knex('tblOtpAdd').where({site_id: otpAddFormData.site_id, reg_id: otpAddFormData.reg_id})
+      var check = await knex('tblOtpAdd').where({site_id: otpAddFormData.site_id, reg_id: otpAddFormData.reg_id, is_deleted:0})
       if(check.length > 0){
         
         $('#regIdInfo').css('display', '')

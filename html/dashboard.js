@@ -1,4 +1,9 @@
 const knex = require('../mainfunc/db');
+var Highcharts = require('../js/charts/highcharts');
+// require('highcharts/highcharts-more')(Highcharts)
+// require('../js/charts/exporting')(Highcharts);
+// require('../js/charts/export-data')(Highcharts);
+    
 module.exports.initDashboard = function () {
   async function plwData (){
     var _plwData = await knex('tblScrPlw')
