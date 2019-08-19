@@ -258,29 +258,19 @@ $(function(){
 
      }
   })
-  $('#ent_reason').on('change', function (e) {
-    var progType = $('#ddProgramType');
-    var muac = $('#muac');
-    if(progType.val() == 'otp' & $(this).val() == 'moved_in'){
-      muac.removeAttr('max')
-      muac.attr('min', 0)
-    }else{
-      muac.attr('max', 11.4)
-      muac.attr('min', 0)
-    }
-  })
+  
 
-  $('#ent_reason').on('change', function (e) {
-    var progType = $('#ddProgramType');
-    var muac = $('#muac');
-    if(progType.val() == 'otp' & $(this).val() == 'moved_in'){
-      muac.removeAttr('max')
-      muac.attr('min', 0)
-    }else{
-      muac.attr('max', 11.4)
-      muac.attr('min', 0)
-    }
-  })
+  // $('#ent_reason').on('change', function (e) {
+  //   var progType = $('#ddProgramType');
+  //   var muac = $('#muac');
+  //   if(progType.val() == 'otp' & $(this).val() == 'moved_in'){
+  //     muac.removeAttr('max')
+  //     muac.attr('min', 0)
+  //   }else{
+  //     muac.attr('max', 11.4)
+  //     muac.attr('min', 0)
+  //   }
+  // })
   $('#oedema').on('change', function (e) {
     var progType = $('#ddProgramType');
     var muac = $('#muac');
@@ -410,16 +400,11 @@ $('#otpAddForm').on('submit', async (e)=>{
       muacEl.attr('min', false);
     }
   });
-  $('#ent_reason').on('change', function () {
-    if ($(this).val() == "transfer_in_from_nsc") {
-      $("#nsc_old_otp_id_div").css('display', '');
-      $("#nsc_old_otp_id").attr("hidden", false);
-    } else {
-      $("#nsc_old_otp_id_div").css("display", "none");
+  // $('#ent_reason').on('change', function () {
+   
 
-      $("#nsc_old_otp_id").attr("hidden", true);
-    }
-  })
+
+  // })
 
   $("#ent_reason").on('change', function() {
     if ($(this).val() == 'other') {
@@ -429,6 +414,27 @@ $('#otpAddForm').on('submit', async (e)=>{
       $("#entry_reason_other_div").css("display", "none");
       $("#entry_reason_other").css("required", false);
     }
+
+    var progType = $('#ddProgramType');
+    var muac = $('#muac');
+    if(progType.val() == 'otp' & $(this).val() == 'moved_in'){
+      muac.removeAttr('max')
+      muac.attr('min', 0)
+    }else{
+      muac.attr('max', 11.4)
+      muac.attr('min', 0)
+    }
+
+    if ($(this).val() == "transfer_in_from_nsc") {
+      $("#nsc_old_otp_id_div").css('display', '');
+      $("#nsc_old_otp_id").attr("hidden", false);
+    } else {
+      $("#nsc_old_otp_id_div").css("display", "none");
+
+      $("#nsc_old_otp_id").attr("hidden", true);
+    }
+
+
   });
   $("#ref_type").on("change", function() {
     if ($(this).val() == "other") {
@@ -451,4 +457,8 @@ $('#otpAddForm').on('submit', async (e)=>{
 
     }
   });
+  $('#ddVillageName').on("change", function(){
+    var village = $(this).val();
+    $('#address').val(village);
+  })
 }
