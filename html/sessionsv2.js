@@ -280,12 +280,18 @@ module.exports.initSessionsV2 = function () {
         },
         insertItem: function (item) {
           console.log(item);
+          var date_ = new Date(item.session_date)
+          date_.setDate(date_.getDate() + 1);
+          // date_.toISOString();
+          // date_.toJSON().split('T')[0];
+          date_ = date_.toJSON().split('T')[0]
           item.site_id = ($("#ddHealthHouse").val()) ? $("#ddHealthHouse").val() : '';
           item.uc_id = ($("#ddUC").val()) ? $("#ddUC").val() : '';
           item.CHW_id = $("#ddStaff_code").val() ? $("#ddStaff_code").val() : "";
           item.CHS_id = $("#ddSup_code").val() ? $("#ddSup_code").val() : "";
           item.prog_type = $('#ddProgramType').val();
           delete item['']
+          item.session_date = date_;
           item.total_session = parseInt(item.ind_session) + parseInt(item.grp_sessions)
           return insertData(item)
           // if (item.site_id != '') {

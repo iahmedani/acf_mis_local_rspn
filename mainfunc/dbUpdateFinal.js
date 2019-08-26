@@ -334,7 +334,7 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                 console.log(e)
             })
 
-           }else if(updateDetails == '4'){
+           }else if(updateCheck == '4'){
                knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
                .then(r=>{
                    return knex.raw(`DROP VIEW IF EXISTS [main].[v_otpExit_full];`)
