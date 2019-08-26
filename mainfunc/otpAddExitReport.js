@@ -28,9 +28,9 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
         knex("v_otpAddInterval")
           .select(knex.raw(`(case when age > 23 then '24_59' when age <24 then '6_23' end) as age_group,
 gender,
-  count(case when muac < 11.5  and ent_reason = 'no_prv_pro' then 1 end) as b1,  
+  count(case when muac < 11.5  and ent_reason = 'no_prv_pro' and oedema = 'absent' then 1 end) as b1,  
    count(case when oedema <> 'absent' and ent_reason = 'no_prv_pro' then 1 end) as b2,
-   ( count(case when muac < 11.5  and ent_reason = 'no_prv_pro' then 1 end) + count(case when oedema <> 'absent' and ent_reason = 'no_prv_pro' then 1 end)) as b,
+   ( count(case when muac < 11.5  and ent_reason = 'no_prv_pro' and oedema = 'absent'  then 1 end) + count(case when oedema <> 'absent' and ent_reason = 'no_prv_pro' then 1 end)) as b,
    count(case when ent_reason = 'return_def' then 1 end) as c1,
    count(case when ent_reason = 'transfer_in_from_nsc' then 1 end) as c2,
    count(case when (ent_reason <> 'transfer_in_from_nsc' and  ent_reason <> 'return_def' and ent_reason <> 'relapse' and ent_reason <> 'no_prv_pro') then 1 end) as c3,

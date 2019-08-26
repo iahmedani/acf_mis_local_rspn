@@ -180,7 +180,7 @@ module.exports.initOtpFollowUp = function () {
       })
       function grid( commodities) {
         $("#jsGridFollowUpEntry").jsGrid({
-          height: "500px",
+          height: "570px",
           width: "100%",
           filtering: true,
           // inserting: true,
@@ -241,7 +241,7 @@ module.exports.initOtpFollowUp = function () {
               name:'gender',
               title:'Gender',
               type: "text",
-              width: 100,
+              width: 50,
               editing: false,
             },
             {

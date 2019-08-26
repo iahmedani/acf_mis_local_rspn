@@ -824,49 +824,50 @@ WHERE  [tblsessions].[is_deleted] = 0
       `
     )
     .raw(
-      `CREATE VIEW [v_otpAdd_full]
-       AS
-       SELECT 
-       [main].[v_geo].[province_id], 
-       [main].[v_geo].[province], 
-       [main].[v_geo].[district_id], 
-       [main].[v_geo].[district_name], 
-       [main].[v_geo].[tehsil_id], 
-       [main].[v_geo].[tehsil_name], 
-       [main].[v_geo].[uc_id], 
-       [main].[v_geo].[uc_name], 
-       [main].[v_geo].[site_name], 
-       [main].[v_geo].[site_id], 
-       [main].[tblOtpAdd].[client_id], 
-       [main].[tblOtpAdd].[site_village], 
-       [main].[tblOtpAdd].[p_name], 
-       [main].[tblOtpAdd].[otp_id], 
-       [main].[tblOtpAdd].[f_or_h_name], 
-       [main].[tblOtpAdd].[cnic], 
-       [main].[tblOtpAdd].[cnt_number], 
-       [main].[tblOtpAdd].[address], 
-       [main].[tblOtpAdd].[reg_date], 
-       [main].[tblOtpAdd].[reg_id], 
-       [main].[tblOtpAdd].[gender], 
-       [main].[tblOtpAdd].[age], 
-       [main].[tblOtpAdd].[ent_reason], 
-       [main].[tblOtpAdd].[ref_type], 
-       [main].[tblOtpAdd].[oedema], 
-       [main].[tblOtpAdd].[muac], 
-       [main].[tblOtpAdd].[weight], 
-       [main].[tblOtpAdd].[height], 
-       [main].[tblOtpAdd].[diarrhoea], 
-       [main].[tblOtpAdd].[vomiting], 
-       [main].[tblOtpAdd].[cough], 
-       [main].[tblOtpAdd].[appetite], 
-       [main].[tblOtpAdd].[daily_stool], 
-       [main].[tblOtpAdd].[pass_urine], 
-       [main].[tblOtpAdd].[b_Feeding], 
-       [main].[tblOtpAdd].[prog_type], 
-       [main].[tblOtpAdd].[is_deleted], 
-       [main].[tblOtpAdd].[plw_type]
-       FROM   [main].[v_geo]
-       INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo].[site_id] = [main].[tblOtpAdd].[site_id];`
+      `CREATE VIEW [main].[v_otpAdd_full]
+      AS
+      SELECT 
+             [main].[v_geo].[province_id], 
+             [main].[v_geo].[province], 
+             [main].[v_geo].[district_id], 
+             [main].[v_geo].[district_name], 
+             [main].[v_geo].[tehsil_id], 
+             [main].[v_geo].[tehsil_name], 
+             [main].[v_geo].[uc_id], 
+             [main].[v_geo].[uc_name], 
+             [main].[v_geo].[site_name], 
+             [main].[v_geo].[site_id], 
+             [main].[tblOtpAdd].[client_id], 
+             [main].[tblOtpAdd].[site_village], 
+             [main].[tblOtpAdd].[p_name], 
+             [main].[tblOtpAdd].[otp_id], 
+             [main].[tblOtpAdd].[f_or_h_name], 
+             [main].[tblOtpAdd].[cnic], 
+             [main].[tblOtpAdd].[cnt_number], 
+             [main].[tblOtpAdd].[address], 
+             [main].[tblOtpAdd].[reg_date], 
+             [main].[tblOtpAdd].[reg_id], 
+             [main].[tblOtpAdd].[gender], 
+             [main].[tblOtpAdd].[age], 
+             [main].[tblOtpAdd].[ent_reason], 
+             [main].[tblOtpAdd].[ref_type], 
+             [main].[tblOtpAdd].[oedema], 
+             [main].[tblOtpAdd].[muac], 
+             [main].[tblOtpAdd].[weight], 
+             [main].[tblOtpAdd].[height], 
+             [main].[tblOtpAdd].[diarrhoea], 
+             [main].[tblOtpAdd].[vomiting], 
+             [main].[tblOtpAdd].[cough], 
+             [main].[tblOtpAdd].[appetite], 
+             [main].[tblOtpAdd].[daily_stool], 
+             [main].[tblOtpAdd].[pass_urine], 
+             [main].[tblOtpAdd].[b_Feeding], 
+             [main].[tblOtpAdd].[prog_type], 
+             [main].[tblOtpAdd].[is_deleted], 
+             [main].[tblOtpAdd].[plw_type]
+      FROM   [main].[v_geo]
+             INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo].[site_id] = [main].[tblOtpAdd].[site_id]
+      WHERE  [main].[tblOtpAdd].[is_deleted] = 0;`
     )
     .raw(
       `CREATE VIEW [v_default_initial]
@@ -1100,32 +1101,34 @@ WHERE  [main].[tblOtpAdd].[prog_type] = 'otp'
        WHERE  [tblOtpExit].[is_deleted] = 0;`
     )
     .raw(
-      `CREATE VIEW [v_otpExit_full]
-       AS
-       SELECT 
-       [main].[v_geo].[province_id], 
-       [main].[v_geo].[province], 
-       [main].[v_geo].[district_id], 
-       [main].[v_geo].[district_name], 
-       [main].[v_geo].[tehsil_id], 
-       [main].[v_geo].[tehsil_name], 
-       [main].[v_geo].[uc_id], 
-       [main].[v_geo].[uc_name], 
-       [main].[v_geo].[site_name], 
-       [main].[v_geo].[site_id], 
-       [main].[tblOtpAdd].[site_village], 
-       [main].[tblOtpExit].[exit_date], 
-       [main].[tblOtpExit].[exit_reason], 
-       [main].[tblOtpExit].[is_deleted], 
-       [main].[tblOtpAdd].[p_name], 
-       [main].[tblOtpAdd].[f_or_h_name], 
-       [main].[tblOtpAdd].[gender], 
-       [main].[tblOtpAdd].[reg_id], 
-       [main].[tblOtpAdd].[reg_date], 
-       [main].[tblOtpAdd].[plw_type]
-       FROM   [main].[v_geo]
-       INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo].[site_id] = [main].[tblOtpAdd].[site_id]
-       INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id];`
+      `CREATE VIEW [main].[v_otpExit_full]
+      AS
+      SELECT 
+             [main].[v_geo].[province_id], 
+             [main].[v_geo].[province], 
+             [main].[v_geo].[district_id], 
+             [main].[v_geo].[district_name], 
+             [main].[v_geo].[tehsil_id], 
+             [main].[v_geo].[tehsil_name], 
+             [main].[v_geo].[uc_id], 
+             [main].[v_geo].[uc_name], 
+             [main].[v_geo].[site_name], 
+             [main].[v_geo].[site_id], 
+             [main].[tblOtpAdd].[site_village], 
+             [main].[tblOtpExit].[exit_date], 
+             [main].[tblOtpExit].[exit_reason], 
+             [main].[tblOtpExit].[is_deleted], 
+             [main].[tblOtpAdd].[p_name], 
+             [main].[tblOtpAdd].[f_or_h_name], 
+             [main].[tblOtpAdd].[gender], 
+             [main].[tblOtpAdd].[reg_id], 
+             [main].[tblOtpAdd].[reg_date], 
+             [main].[tblOtpAdd].[plw_type]
+      FROM   [main].[v_geo]
+             INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo].[site_id] = [main].[tblOtpAdd].[site_id]
+             INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+      WHERE  [main].[tblOtpExit].[is_deleted] = 0
+             AND [main].[tblOtpAdd].[is_deleted] = 0;`
     )
     .raw(
       `CREATE VIEW [v_otpExitFull_report]
