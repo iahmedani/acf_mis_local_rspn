@@ -223,7 +223,7 @@ module.exports.initSessionsV2 = function () {
       x.district_id = ($("#ddDistrict").val()) ? $("#ddDistrict").val() : '';
       x.tehsil_id = ($("#ddTehsil").val()) ? $("#ddTehsil").val() : '';
       x.uc_id = ($("#ddUC").val()) ? $("#ddUC").val() : '';
-      x.site_id = ($("#ddHealthHouse").val() && $('#ddProgramType').val() != 'otp') ? $("#ddHealthHouse").val() : '';
+      x.site_id = ($("#ddHealthHouse").val()) ? $("#ddHealthHouse").val() : '';
       x.CHW_id = ($("#ddStaff_code").val()) ? $("#ddStaff_code").val() : '';
       x.CHS_id = ($("#ddSup_code").val()) ? $("#ddSup_code").val() : '';
 
@@ -254,7 +254,7 @@ module.exports.initSessionsV2 = function () {
           filter.district_id = ($("#ddDistrict").val())?  $("#ddDistrict").val() : ''  ;
           filter.tehsil_id = ($("#ddTehsil").val())?  $("#ddTehsil").val() : ''  ;
           filter.uc_id = ($("#ddUC").val())?  $("#ddUC").val() : ''  ;
-          filter.site_id = ($("#ddHealthHouse").val() && $('#ddProgramType').val() != 'otp') ? $("#ddHealthHouse").val() : '';
+          filter.site_id = ($("#ddHealthHouse").val()) ? $("#ddHealthHouse").val() : '';
           filter.CHW_id = ($("#ddStaff_code").val()) ? $("#ddStaff_code").val() : '';
           filter.CHS_id = ($("#ddSup_code").val()) ? $("#ddSup_code").val() : '';
           console.log(filter)

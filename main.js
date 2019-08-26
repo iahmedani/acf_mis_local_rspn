@@ -169,6 +169,7 @@ function followupIntermData(event, filter) {
     .where('tblOtpAdd.p_name','like', `%${filter.p_name ? filter.p_name :''}%`)
     .where('tblOtpAdd.f_or_h_name','like', `%${filter.f_or_h_name ? filter.f_or_h_name :''}%`)
     .where('tblOtpAdd.site_village','like', `%${filter.site_village ? filter.site_village :''}%`)
+    .where('tblOtpAdd.gender','like', `%${filter.gender ? filter.gender :''}%`)
     .limit(_limit)
     .offset(_offset)
     .then(result => {
@@ -178,11 +179,13 @@ function followupIntermData(event, filter) {
       .where({
         site_id: filter.site_id,
         status: 'open',
+      'tblInterimOtp.is_deleted':0
       })
       .where('tblOtpAdd.reg_id','like', `%${filter.reg_id ? filter.reg_id :''}%`)
       .where('tblOtpAdd.p_name','like', `%${filter.p_name ? filter.p_name :''}%`)
       .where('tblOtpAdd.f_or_h_name','like', `%${filter.f_or_h_name ? filter.f_or_h_name :''}%`)
       .where('tblOtpAdd.site_village','like', `%${filter.site_village ? filter.site_village :''}%`)
+      .where('tblOtpAdd.gender','like', `%${filter.gender ? filter.gender :''}%`)
       .count({total:'tblOtpAdd.reg_id' })
       // .limit(_limit)
       // .offset(_offset)
@@ -388,28 +391,92 @@ ipcMain.on('otpExitUpdate', (e, data) => {
 
 // sending all admisions for otp exit
 function otpAddDataForExit(event, filter) {
+  var _limit = (filter.pageSize) ? filter.pageSize : 10;
+  var _offset = (filter.pageIndex == 1) ? 0 : (filter.pageIndex - 1) * _limit;
   if(filter.site_id){
     var myFilter = {site_id:filter.site_id}
   }else{
     var myFilter = ['site_id','like','%%']
   }
+
   knex.from('tblOtpAdd')
     .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
     .where({
-      status: 'open'
+      site_id: filter.site_id,
+      status: 'open',
+      'tblInterimOtp.is_deleted':0
     })
-    // .orWhere({site_id: filter.site_id})
-    .where(myFilter)
+    .where('tblOtpAdd.reg_id','like', `%${filter.reg_id ? filter.reg_id :''}%`)
+    .where('tblOtpAdd.p_name','like', `%${filter.p_name ? filter.p_name :''}%`)
+    .where('tblOtpAdd.f_or_h_name','like', `%${filter.f_or_h_name ? filter.f_or_h_name :''}%`)
+    .where('tblOtpAdd.site_village','like', `%${filter.site_village ? filter.site_village :''}%`)
+    .where('tblOtpAdd.gender','like', `%${filter.gender ? filter.gender :''}%`)
+    .limit(_limit)
+    .offset(_offset)
     .then(result => {
+      // result.location = 'Follow up interim call'
+      return knex.from('tblOtpAdd')
+      .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
+      .where({
+        site_id: filter.site_id,
+        status: 'open',
+      'tblInterimOtp.is_deleted':0
+      })
+      .where('tblOtpAdd.reg_id','like', `%${filter.reg_id ? filter.reg_id :''}%`)
+      .where('tblOtpAdd.p_name','like', `%${filter.p_name ? filter.p_name :''}%`)
+      .where('tblOtpAdd.f_or_h_name','like', `%${filter.f_or_h_name ? filter.f_or_h_name :''}%`)
+      .where('tblOtpAdd.site_village','like', `%${filter.site_village ? filter.site_village :''}%`)
+      .where('tblOtpAdd.gender','like', `%${filter.gender ? filter.gender :''}%`)
+      .count({total:'tblOtpAdd.reg_id' })
+      // .limit(_limit)
+      // .offset(_offset)
+      .then(totalCount=>{
+        return {
+          result,
+          totalCount
+        }
+      })
+      
+    }).then(result=>{
+      console.log(result)
       event.sender.send('getOtpAll', ({
-        result: result
+        result: result.result,
+        totalCount: result.totalCount
       }))
+      result = null;
     })
     .catch(e => {
+      // e.location = 'Follow up interim call'
+      console.log(e);
       event.sender.send('getOtpAll', ({
         err: e
       }))
     })
+
+  // knex.from('tblOtpAdd')
+  //   .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
+  //   .where('tblOtpAdd.reg_id','like', `%${filter.reg_id ? filter.reg_id :''}%`)
+  //   .where('tblOtpAdd.p_name','like', `%${filter.p_name ? filter.p_name :''}%`)
+  //   .where('tblOtpAdd.f_or_h_name','like', `%${filter.f_or_h_name ? filter.f_or_h_name :''}%`)
+  //   .where('tblOtpAdd.site_village','like', `%${filter.site_village ? filter.site_village :''}%`)
+  //   .where('tblOtpAdd.gender','like', `%${filter.gender ? filter.gender :''}%`)
+  //   .where({
+  //     status: 'open',
+  //   })
+  //   .limit(_limit)
+  //   .offset(_offset)
+  //   // .orWhere({site_id: filter.site_id})
+  //   // .where(myFilter)
+  //   .then(result => {
+  //     event.sender.send('getOtpAll', ({
+  //       result: result
+  //     }))
+  //   })
+  //   .catch(e => {
+  //     event.sender.send('getOtpAll', ({
+  //       err: e
+  //     }))
+  //   })
 }
 // add OTP Exit 
 function otpExitAddDataSave(event, data, client) {

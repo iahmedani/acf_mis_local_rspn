@@ -298,6 +298,42 @@ module.exports = (knex) => {
                         console.log(e)
                     })
     
+           
+           }else if (updateCheck == '3'){
+
+            knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction]`)
+            .then(r=>{
+                return knex.raw(`DROP VIEW IF EXISTS [main].[vSessionsFullForUpdate];`)
+            })
+            .then(r=>{
+                return knex.raw(`CREATE VIEW [main].[vSessionsFullForUpdate]
+                AS
+                SELECT 
+       [main].[v_geo].[province], 
+       [main].[v_geo].[province_id], 
+       [main].[v_geo].[district_id], 
+       [main].[v_geo].[district_name], 
+       [main].[v_geo].[tehsil_id], 
+       [main].[v_geo].[tehsil_name], 
+       [main].[v_geo].[uc_name], 
+       [main].[v_geo].[site_name], 
+       [tblSessions].*
+FROM   [main].[tblSessions]
+       INNER JOIN [main].[v_geo] ON ([main].[v_geo].[site_id] = [main].[tblSessions].[site_id]) OR ([main].[v_geo].[uc_id] = [main].[tblSessions].[uc_id] and  [main].[tblSessions].[site_id] = '')
+WHERE  [tblsessions].[is_deleted] = 0`)
+            })
+            .then(r=>{
+                return knex.raw('RELEASE [sqlite_expert_apply_design_transaction];')
+            })
+            .then(r=>{
+                fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '4', (err) => {
+                    if (err) throw err;
+                    console.log('updated vSessionsFullForUpdate view')
+                })
+            }).catch(e=>{
+                console.log(e)
+            })
+
             }else {
                 console.log('v_otpNotExit already updated')
             }

@@ -121,31 +121,47 @@ module.exports.initOtpExit = function (){
 // });
     })
 
-    let xx = (site_id)=>{
+    let xx = (filter)=>{
       return new Promise((resolve, reject)=>{
-        ipc.send('getOtpAll', site_id);
-        ipc.on('getOtpAll', (e, result)=>{
-          if(result.err){
+        ipc.send('getInterim', filter);
+        ipc.on('getInterim', (e, result) => {
+          var s = {
+            data: result.result,
+            itemsCount: result.totalCount[0].total
+          }
+          if (result.err) {
             reject(result.err)
             ipc.removeAllListeners('getOtpAll')
-          }else{           
-                  var s = {
-                    data: result.result,
-                    itemsCount: result.result.length
-                  }
-                  console.log(s)
+          } else {
+            console.log(s)
             resolve(s)
             ipc.removeAllListeners('getOtpAll')
           }
         })
       })
+      //   ipc.send('getOtpAll', site_id);
+      //   ipc.on('getOtpAll', (e, result)=>{
+      //     if(result.err){
+      //       reject(result.err)
+      //       ipc.removeAllListeners('getOtpAll')
+      //     }else{           
+      //             var s = {
+      //               data: result.result,
+      //               itemsCount: result.result.length
+      //             }
+      //             console.log(s)
+      //       resolve(s)
+      //       ipc.removeAllListeners('getOtpAll')
+      //     }
+      //   })
+      // })
     }
     
   function _dataGrid(){
       $("#otpExitGrid").jsGrid({
         height: "300px",
         width: "100%",
-        // filtering: true,
+        filtering: true,
         editing: true,
         sorting: false,
         paging: true,
@@ -185,7 +201,14 @@ module.exports.initOtpExit = function (){
             type: "text",
             width: 100,
             editing: false,
-          }, {
+          },{
+            name:'gender',
+            title:'Gender',
+            type: "text",
+            width: 100,
+            editing: false,
+          },
+           {
             name: "site_village",
             title: "Village",
             type: "text",

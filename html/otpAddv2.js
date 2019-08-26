@@ -274,7 +274,7 @@ $(function(){
   $('#oedema').on('change', function (e) {
     var progType = $('#ddProgramType');
     var muac = $('#muac');
-    if(progType.val() == 'otp' & $(this).val() !== 'absent'){
+    if(progType.val() == 'otp' && $(this).val() !== 'absent'){
       muac.removeAttr('max')
       muac.attr('min', 0)
     }else{
@@ -412,12 +412,12 @@ $('#otpAddForm').on('submit', async (e)=>{
       $("#entry_reason_other").attr('required', true);
     } else {
       $("#entry_reason_other_div").css("display", "none");
-      $("#entry_reason_other").css("required", false);
+      $("#entry_reason_other").attr("required", false);
     }
 
     var progType = $('#ddProgramType');
     var muac = $('#muac');
-    if(progType.val() == 'otp' & $(this).val() == 'moved_in'){
+    if(progType.val() == 'otp' && ($(this).val() == 'moved_in' || $(this).val() == 'tranfer_in_other_otp' )){
       muac.removeAttr('max')
       muac.attr('min', 0)
     }else{
@@ -442,7 +442,7 @@ $('#otpAddForm').on('submit', async (e)=>{
       $("#ref_type_other").attr("required", true);
     } else {
       $("#ref_type_other_div").css("display", "none");
-      $("#ref_type_other").css("required", false);
+      $("#ref_type_other").attr("required", false);
     }
   });
   $("#ddProgramType").on("change", function () {

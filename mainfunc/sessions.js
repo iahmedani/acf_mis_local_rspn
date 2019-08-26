@@ -9,6 +9,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
     (filter.CHW_id) ? filter.CHW_id = filter.CHW_id : filter.CHW_id = '';
     (filter.CHS_id) ? filter.CHS_id = filter.CHS_id : filter.CHS_id = '';
     (filter.prog_type) ? filter.prog_type = filter.prog_type : filter.prog_type = '';
+    (filter.prog_type == 'otp') ? filter.uc_id = '' : filter.uc_id = filter.uc_id;
     console.log(filter);
     async.series(
       {

@@ -446,7 +446,7 @@ module.exports.initOtpAddUpdV2 = function () {
           $("#entry_reason_other").val(data.entry_reason_other);
           } else {
             $("#entry_reason_other_div").css("display", "none");
-          $("#entry_reason_other").css("required", false);
+          $("#entry_reason_other").attr("required", false);
           $("#entry_reason_other").empty();
           
           }
@@ -458,7 +458,7 @@ module.exports.initOtpAddUpdV2 = function () {
           $("#ref_type_other").val(data.ref_type_other);
           } else {
             $("#ref_type_other_div").css("display", "none");
-          $("#ref_type_other").css("required", false);
+          $("#ref_type_other").attr("required", false);
           $("#ref_type_other").empty();
           
           }
@@ -643,7 +643,7 @@ module.exports.initOtpAddUpdV2 = function () {
       $("#nsc_otp_id").attr("required", false);
     }  else {
       $("#entry_reason_other_div").css("display", "none");
-      $("#entry_reason_other").css("required", false);
+      $("#entry_reason_other").attr("required", false);
     }
   });
   $("#ref_type").on("change", function () {
@@ -652,7 +652,7 @@ module.exports.initOtpAddUpdV2 = function () {
       $("#ref_type_other").attr("required", true);
     } else {
       $("#ref_type_other_div").css("display", "none");
-      $("#ref_type_other").css("required", false);
+      $("#ref_type_other").attr("required", false);
     }
   });
   $("#ddProgramType").on("change", function() {
@@ -668,7 +668,9 @@ module.exports.initOtpAddUpdV2 = function () {
   $('#ent_reason').on('change', function (e) {
     var progType = $('#ddProgramType');
     var muac = $('#muac');
-    if(progType.val() == 'otp' & $(this).val() == 'moved_in'){
+    if(progType.val() == 'otp' && ($(this).val() == 'moved_in' || $(this).val() == 'tranfer_in_other_otp' )){
+
+    // if(progType.val() == 'otp' & $(this).val() == 'moved_in'){
       muac.removeAttr('max')
       muac.attr('min', 0)
     }else{
@@ -679,7 +681,7 @@ module.exports.initOtpAddUpdV2 = function () {
   $('#oedema').on('change', function (e) {
     var progType = $('#ddProgramType');
     var muac = $('#muac');
-    if(progType.val() == 'otp' & $(this).val() !== 'absent'){
+    if(progType.val() == 'otp' && $(this).val() !== 'absent'){
       muac.removeAttr('max')
       muac.attr('min', 0)
     }else{

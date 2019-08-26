@@ -238,6 +238,13 @@ module.exports.initOtpFollowUp = function () {
               filtering:true
             },
             {
+              name:'gender',
+              title:'Gender',
+              type: "text",
+              width: 100,
+              editing: false,
+            },
+            {
               name: "site_village",
               title: "Village",
               type: "text",
