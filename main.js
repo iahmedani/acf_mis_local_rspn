@@ -4390,10 +4390,12 @@ const mainMenuTemplate = [
     {
       label: 'Restore',
       click() {
+        var _filedate = new Date();
         dialog.showOpenDialog(mainWindow, {properties: ['openFile']}, (file)=>{
           if(file){
+            console.log(file)
             app.quit();
-            fs.copyFile(`${process.env.APPDATA}/ACF MIS Local app/acf_mis_local.sqlite3`, `${file[0]}\\acf_backup_${_filedate.toISOString().split('T')[0]}_old`, (err)=>{
+            fs.copyFile(`${process.env.APPDATA}/ACF MIS Local app/acf_mis_local.sqlite3`, `${file[0]}_old`, (err)=>{
               if(err) throw err;
               fs.copyFile(file[0], `${process.env.APPDATA}/ACF MIS Local app/acf_mis_local.sqlite3`, (err)=>{
                 if(err) throw err;
