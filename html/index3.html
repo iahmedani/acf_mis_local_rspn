@@ -142,8 +142,8 @@
                 <li class="mb-0">Shumaila Nazir &copy; 2019</li>
                 <li class="mb-0" id="updMessage" style="display:none">Update Available</li>
                 <li class="mb-0">
-                    <div class="progress">
-                        <div class="progress-bar" id="dprogress" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress" style="display:none">
+                        <div class="progress-bar" id="dprogress_" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
                 </li>
                 
@@ -1047,13 +1047,14 @@ jsGrid.fields.date = MyDateField;
     });
     ipc.on('updateNote', (e)=>{
       $('#updMessage').css('display', '');
+      $('.progress').css('display', '');
     })
 
-    ipc.on('updateProgress', (e, data)=>{
+    ipc.on('__updateProgress', (e, data)=>{
       console.log({
         e,data
       })
-      $('#dprogress').css('width', data)
+      // $('#dprogress').css('width', data)
       // $('#updMessage').css('display', '');
     })
     $(function(){
