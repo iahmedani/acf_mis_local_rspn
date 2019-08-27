@@ -2,6 +2,7 @@ module.exports = (ipcMain, knex, fs, sndMsg) => {
   
   ipcMain.on("supervisorlist", (evt, data) => {
     knex("tblSupervisors")
+      // .where({is_deleted:0})
       .then(result => {
         // console.log(result);
         evt.sender.send('supervisorlist', (result));
@@ -26,7 +27,7 @@ module.exports = (ipcMain, knex, fs, sndMsg) => {
   });
   ipcMain.on("getSupsuc", (evt, uc) => {
     knex("tblSupervisors")
-      .where({uc:uc})
+      .where({uc:uc, is_deleted:0 })
       .then(result => {
         // console.log(result);
         evt.sender.send('haveSupsuc', (result));

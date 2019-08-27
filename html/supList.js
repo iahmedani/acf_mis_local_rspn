@@ -178,12 +178,12 @@ module.exports.SupList = function () {
           // },
           { title: "Code", name: "sup_code", type: "text", },
           { title: "Name", name: "sup_name", type: "text" },
-          {
-            type: "control",
-            modeSwitchButton: false,
-            editButton: false,
-            deleteButton: false
-          }
+          // {
+          //   type: "control",
+          //   modeSwitchButton: false,
+          //   editButton: false,
+          //   deleteButton: false
+          // }
         ],
         rowClick: function (args) {
           var getData = args.item;
@@ -202,10 +202,19 @@ module.exports.SupList = function () {
           // $('#ddUC').val(getData.uc);
           $("#sup_code").val(getData.sup_code);
           $("#sup_name").val(getData.sup_name);
+          if(getData.is_deleted){
+            $('#is_deleted').prop('checked', true)
+          }else{
+            $('#is_deleted').prop('checked', false)
+
+          }
           $("#id").val(getData.id);
           // $("#btnSaveSup").attr("disabled", true);
           // $("#btnUpdateSup").attr("disabled", false);
-        }
+        },
+        rowClass: function(item, itemIndex) {
+          return (item.is_deleted) ? 'bg-red': '';
+      },
       });
     })
   }
@@ -219,6 +228,8 @@ module.exports.SupList = function () {
     $("#supForm").validate();
     if ($("#supForm").valid()) {
       var supData = $("#supForm").serializeFormJSON();
+      supData.is_deleted = $('#is_deleted').prop('checked');
+
       // console.log(supData);
       ipc.send("addSup", supData);
       ipc.removeAllListeners("addSup");

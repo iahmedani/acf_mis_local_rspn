@@ -12,7 +12,7 @@ module.exports = (ipcMain, knex, fs, sndMsg) => {
   });
   ipcMain.on("getStaff", (evt, siteId) => {
     knex("tblLhw")
-      .where({ site: siteId })
+      .where({ site: siteId})
       .then(result => {
         console.log(result);
         evt.sender.send("haveStaff", result);
@@ -24,7 +24,7 @@ module.exports = (ipcMain, knex, fs, sndMsg) => {
   });
   ipcMain.on("getStaffuc", (evt, uc) => {
     knex("tblLhw")
-      .where({ uc: uc })
+      .where({ uc: uc, is_deleted:0  })
       .then(result => {
         console.log(result);
         evt.sender.send("haveStaffuc", result);

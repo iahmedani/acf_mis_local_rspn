@@ -168,12 +168,12 @@ module.exports.StaffList = function () {
           // },
           { title: "Code", name: "staff_code", type: "text" },
           { title: "Name", name: "staff_name", type: "text" },
-          {
-            type: "control",
-            modeSwitchButton: true,
-            editButton: false,
-            deleteButton: false,
-          }
+          // {
+          //   type: "control",
+          //   modeSwitchButton: true,
+          //   editButton: false,
+          //   deleteButton: false,
+          // }
         ],
         rowClick: function (args) {
           var getData = args.item;
@@ -192,8 +192,17 @@ module.exports.StaffList = function () {
           // $('#ddUC').val(getData.uc);
           $("#staff_code").val(getData.staff_code);
           $("#staff_name").val(getData.staff_name);
+          if(getData.is_deleted){
+            $('#is_deleted').prop('checked', true)
+          }else{
+            $('#is_deleted').prop('checked', false)
+
+          }
           $("#id").val(getData.id);
-        }
+        },
+        rowClass: function(item, itemIndex) {
+          return (item.is_deleted) ? 'bg-red': '';
+      },
       });
     })
   }
@@ -207,9 +216,11 @@ module.exports.StaffList = function () {
     // console.log(data);
     $("#staffForm").validate();
     if ($("#staffForm").valid()) {
-      var supData = $("#staffForm").serializeFormJSON();
-      // console.log(supData);
-      ipc.send("addStaff", supData);
+      var staffData = $("#staffForm").serializeFormJSON();
+      staffData.is_deleted = $('#is_deleted').prop('checked');
+
+      // console.log(staffData);
+      ipc.send("addStaff", staffData);
       ipc.removeAllListeners("addStaff");
       $("#staffForm")
         .get(0)

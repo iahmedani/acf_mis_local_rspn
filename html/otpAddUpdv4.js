@@ -1,3 +1,5 @@
+const knex = require('../mainfunc/db');
+
 module.exports.initOtpAddUpdV2 = function () {
   $(":input").inputmask();
   function updateProvinceDD() {
@@ -79,11 +81,13 @@ module.exports.initOtpAddUpdV2 = function () {
         $("#ddUC")
           .children("option:not(:first)")
           .remove();
+        
 
         //   uc.uc.forEach(el=>{
         // $('#ddUC').append(`<option value="${el.id}">${el.ucName}</option>`);
         //   })
         ucListener(uc);
+        // $("#ddUC").val('');
       });
     });
     var ucForHH;
@@ -99,6 +103,7 @@ module.exports.initOtpAddUpdV2 = function () {
         // $('#ddHealthHouse').append(`<option value="${el.id}">${el.siteName}</option>`);
         //   })
         hhListener(hh);
+        // $("#ddHealthHouse").val('');
       });
     });
     $('#ddHealthHouse').on('change', function(){
@@ -110,6 +115,7 @@ module.exports.initOtpAddUpdV2 = function () {
           .children("option:not(:first)")
           .remove();
         villListener(_villages);
+        // $("#ddVillageName").val('');
         
       });
     });
@@ -413,9 +419,9 @@ module.exports.initOtpAddUpdV2 = function () {
         } else {
           $("#ddHealthHouse").attr("disabled", false);
           $("#ddUC").attr("disabled", false);
-          $("#ddHealthHouse").empty()
-          $("#ddUC").empty()
-          $("#ddVillageName").empty();
+          $("#ddHealthHouse").children("option:not(:first)").remove();
+          $("#ddUC").children("option:not(:first)").remove();
+          $("#ddVillageName").children("option:not(:first)").remove();
           $("#ddVillageName").attr('disabled', false);
 
           
@@ -568,12 +574,32 @@ module.exports.initOtpAddUpdV2 = function () {
 
   })
   
-  $("#otpAddUpdSubmit").on("click", e => {
+  $("#otpAddUpdSubmit").on("click", async (e) => {
     console.log("clicked");
     $("#otpAddUpdForm").validate();
+    
     if ($("#otpAddUpdForm").valid()) {
       var otpAddUpdFormData = $("#otpAddUpdForm").serializeFormJSON();
-      console.table(otpAddUpdFormData);
+
+      var chk_dist_teh_uc_otp = await knex('v_geo').where({
+        district_id:$('#ddDistrict').val(),
+        tehsil_id: otpAddUpdFormData.tehsil_id,
+        uc_id: $('#ddUC').val(),
+        site_id: otpAddUpdFormData.site_id
+      });
+      
+      var chk_village = await knex('tblVillages').where({
+        district:$('#ddDistrict').val(),
+        tehsil: otpAddUpdFormData.tehsil_id,
+        uc: $('#ddUC').val(),     
+        site: otpAddUpdFormData.site_id,
+        villageName: otpAddUpdFormData.site_village
+      })
+
+      if (chk_dist_teh_uc_otp.length < 1 || chk_village.length < 1){
+        alert('Please check location details, either districts, tehsil, uc and site are not updated respectively or village does not exist in nutrition site')
+      }else{
+        console.table(otpAddUpdFormData);
       ipc.send("submitOtpAddUpd", otpAddUpdFormData);
       ipc.removeAllListeners("submitOtpAddUpd");
       $("#otpAddUpdForm")
@@ -586,6 +612,9 @@ module.exports.initOtpAddUpdV2 = function () {
         .done(() => {
           console.log("js grid is rendered");
         });
+      }
+
+      
     }
     // addScrChildTemplate()
     e.preventDefault();

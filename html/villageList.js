@@ -114,7 +114,7 @@ module.exports.VillageList = function() {
         result.site.unshift({ siteName: '', id: 0 })
       }
       $("#tblVillageList").jsGrid({
-        height: "400px",
+        height: "450px",
         width: "100%",
         // inserting: true,
         filtering: true,
@@ -172,12 +172,12 @@ module.exports.VillageList = function() {
             textField: "siteName"
           },
           { title: "Village Name", name: "villageName", type: "text" },
-          {
-            type: "control",
-            modeSwitchButton: false,
-            editButton: false,
-            deleteButton: false
-          }
+          // {
+          //   type: "control",
+          //   modeSwitchButton: false,
+          //   editButton: false,
+          //   deleteButton: false
+          // }
         ],
         rowClick: function (args) {
           var getData = args.item;
@@ -203,10 +203,19 @@ module.exports.VillageList = function() {
           var getData = args.item;
           
           $("#villageName").val(getData.villageName);
+          if(getData.is_deleted){
+            $('#is_deleted').prop('checked', true)
+          }else{
+            $('#is_deleted').prop('checked', false)
+
+          }
           // $("#ddsite").val(item.siteName);
           // $("#staff_name").val(item.staff_name);
           $("#id").val(getData.id);
-        }
+        },
+        rowClass: function(item, itemIndex) {
+          return (item.is_deleted) ? 'bg-red': '';
+      },
       });
     });
   }
@@ -220,7 +229,11 @@ module.exports.VillageList = function() {
     $("#villageForm").validate();
     if ($("#villageForm").valid()) {
       var villData = $("#villageForm").serializeFormJSON();
+      villData.is_deleted = $('#is_deleted').prop('checked');
       // console.log(villData);
+      // console.log({
+        // is_deleted: $('#is_deleted').prop('checked')
+      // })
       ipc.send("addVillage", villData);
       ipc.removeAllListeners("addVillage");
       $("#villageForm")

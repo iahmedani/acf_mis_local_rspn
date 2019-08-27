@@ -124,8 +124,8 @@ exports.up = function(knex, Promise) {
         [client_id] VARCHAR NOT NULL, 
         [upload_status] INT NOT NULL DEFAULT 0, 
         [created_at] DATE, 
-        [upload_date] DATE);
-      
+        [upload_date] DATE, 
+        [is_deleted] BOOLEAN NOT NULL DEFAULT 0);      
       `
     )
     .raw(
@@ -532,8 +532,8 @@ exports.up = function(knex, Promise) {
         [upload_status] VARCHAR NOT NULL DEFAULT 0, 
         [created_at] DATE NOT NULL, 
         [upload_date] DATE, 
-        UNIQUE([sup_code], [district]) ON CONFLICT ROLLBACK);      
-      
+        [is_deleted] BOOLEAN NOT NULL DEFAULT 0, 
+        UNIQUE([sup_code], [district]) ON CONFLICT ROLLBACK);  
       `
     )
     .raw(
@@ -557,10 +557,9 @@ exports.up = function(knex, Promise) {
         [upload_status] INT NOT NULL DEFAULT 0, 
         [created_at] DATE, 
         [upload_date] DATE, 
+        [is_deleted] BOOLEAN NOT NULL DEFAULT 0, 
         UNIQUE([uc], [villageName]) ON CONFLICT ROLLBACK);
-      
-
-      `
+          `
     )
     .raw(
       `CREATE VIEW [v_geo]
@@ -1572,10 +1571,98 @@ UNION ALL
 
 SELECT tblSiteStock.stock_out_id, tblSiteStock.program_type, tblSiteStock.item_name, tblSiteStock.stock_release_date, tblSiteStock.quantity_released, tblSiteStock.district_id, tblGeoDistrict.districtName, tblSiteStock.tehsil_id, tblGeoTehsil.tehsilName, tblSiteStock.uc_id, tblGeoUC.ucName, tblSiteStock.site_id, "" AS siteName, tblSiteStock.is_deleted, tblSiteStock.upload_status, tblSiteStock.created_at, tblSiteStock.updated_at, tblSiteStock.stockOutID, tblSiteStock.client_id, tblSiteStock.upload_date, tblLhw.staff_code, tblLhw.staff_name, tblSupervisors.sup_code, tblSupervisors.sup_name, tblGeoProvince.id AS province_id, tblGeoProvince.provinceName
 FROM (tblSupervisors INNER JOIN (tblLhw INNER JOIN (((tblGeoDistrict INNER JOIN tblSiteStock ON tblGeoDistrict.id = tblSiteStock.district_id) INNER JOIN tblGeoTehsil ON tblSiteStock.tehsil_id = tblGeoTehsil.id) INNER JOIN tblGeoUC ON tblSiteStock.uc_id = tblGeoUC.id) ON tblLhw.staff_code = tblSiteStock.CHW_id) ON tblSupervisors.sup_code = tblSiteStock.CHS_id) INNER JOIN tblGeoProvince ON tblGeoDistrict.province_id = tblGeoProvince.id;`)
+.raw(`CREATE VIEW 'v_comm_otp_add_and_followup'
+AS
+SELECT ALL 
+           [main].[tblOtpAdd].[otp_id], 
+           [main].[tblOtpAdd].[muac], 
+           [main].[tblOtpAdd].[weight], 
+           [main].[tblOtpAdd].[ration1], 
+           [main].[tblOtpAdd].[quantity1], 
+           [main].[tblOtpAdd].[ration2], 
+           [main].[tblOtpAdd].[quantity2], 
+           [main].[tblOtpAdd].[ration3], 
+           [main].[tblOtpAdd].[quantity3], 
+           [main].[tblOtpAdd].[reg_date] AS [date], 
+           '' AS [status], 
+           'Admision' AS [record_type]
+FROM   [main].[tblOtpAdd]
+WHERE  [main].[tblOtpAdd].[prog_type] = 'otp'
+       AND [main].[tblOtpAdd].[is_deleted] = 0
+UNION ALL
+SELECT ALL 
+           [main].[tblOtpFollowup].[otp_id], 
+           [main].[tblOtpFollowup].[muac], 
+           [main].[tblOtpFollowup].[weight], 
+           [main].[tblOtpFollowup].[ration1], 
+           [main].[tblOtpFollowup].[quantity1], 
+           [main].[tblOtpFollowup].[ration2], 
+           [main].[tblOtpFollowup].[quantity2], 
+           [main].[tblOtpFollowup].[ration3], 
+           [main].[tblOtpFollowup].[quantity3], 
+           [main].[tblOtpFollowup].[curr_date] AS [date], 
+           [main].[tblOtpFollowup].[status], 
+           'Follow Up' AS [record_type]
+FROM   [main].[tblOtpFollowup]
+WHERE  [main].[tblOtpFollowup].[is_deleted] = 0;
+
+`)
+.raw(`CREATE VIEW 'v_otp_add_followup_report'
+AS
+SELECT ALL 
+           [main].[v_geo].[province], 
+           [main].[v_geo].[province_id], 
+           [main].[v_geo].[district_name], 
+           [main].[v_geo].[district_id], 
+           [main].[v_geo].[tehsil_name], 
+           [main].[v_geo].[tehsil_id], 
+           [main].[v_geo].[uc_name], 
+           [main].[v_geo].[uc_id], 
+           [main].[v_geo].[site_name], 
+           [main].[v_geo].[site_id], 
+           [main].[tblOtpAdd].[reg_id], 
+           [main].[tblOtpAdd].[p_name], 
+           [main].[tblOtpAdd].[f_or_h_name], 
+           [main].[tblOtpAdd].[cnic], 
+           [main].[tblOtpAdd].[cnt_number], 
+           [main].[tblOtpAdd].[address], 
+           [main].[tblOtpAdd].[age], 
+           [main].[tblOtpAdd].[gender], 
+           [main].[tblOtpAdd].[ent_reason], 
+           [main].[tblOtpAdd].[ref_type], 
+           [main].[tblOtpAdd].[oedema], 
+           [main].[tblOtpAdd].[diarrhoea], 
+           [main].[tblOtpAdd].[vomiting], 
+           [main].[tblOtpAdd].[cough], 
+           [main].[tblOtpAdd].[appetite], 
+           [main].[tblOtpAdd].[daily_stool], 
+           [main].[tblOtpAdd].[pass_urine], 
+           [main].[tblOtpAdd].[b_Feeding], 
+           [main].[tblOtpAdd].[is_mother_alive], 
+           [main].[v_comm_otp_add_and_followup].[muac], 
+           [main].[v_comm_otp_add_and_followup].[weight], 
+           [main].[v_comm_otp_add_and_followup].[ration1], 
+           [main].[v_comm_otp_add_and_followup].[quantity1], 
+           [main].[v_comm_otp_add_and_followup].[ration2], 
+           [main].[v_comm_otp_add_and_followup].[quantity2], 
+           [main].[v_comm_otp_add_and_followup].[ration3], 
+           [main].[v_comm_otp_add_and_followup].[quantity3], 
+           [main].[v_comm_otp_add_and_followup].[date], 
+           [main].[v_comm_otp_add_and_followup].[status], 
+           [main].[v_comm_otp_add_and_followup].[record_type]
+FROM   [main].[tblOtpAdd]
+       INNER JOIN [main].[v_geo] ON [main].[v_geo].[site_id] = [main].[tblOtpAdd].[site_id]
+       LEFT JOIN [main].[v_comm_otp_add_and_followup] ON [main].[v_comm_otp_add_and_followup].[otp_id] = [main].[tblOtpAdd].[otp_id]
+WHERE  [main].[tblOtpAdd].[is_deleted] = 0
+       AND [main].[tblOtpAdd].[prog_type] = 'otp';
+
+`)
 };
 
 exports.down = function(knex, Promise) {
   return knex.schema
+  .raw("DROP VIEW v_otp_add_followup_report")
+  .raw("DROP VIEW v_comm_otp_add_and_followup")
   .raw("DROP VIEW v_stockReport")
   .raw("DROP VIEW v_ScrPlwUpd")
   .raw("DROP VIEW v_ScrChildUpd")

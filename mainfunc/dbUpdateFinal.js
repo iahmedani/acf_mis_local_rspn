@@ -299,7 +299,7 @@ module.exports = (knex) => {
                     })
     
            
-           }else if (updateCheck == '3'){
+            }else if (updateCheck == '3'){
 
             knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction]`)
             .then(r=>{
@@ -334,7 +334,7 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                 console.log(e)
             })
 
-           }else if(updateCheck == '4'){
+            }else if(updateCheck == '4'){
                knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
                .then(r=>{
                    return knex.raw(`DROP VIEW IF EXISTS [main].[v_otpExit_full];`)
@@ -436,14 +436,254 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                 .catch(e=>{
                     console.log(e)
                 })
+            }else if (updateCheck == '5'){
+                knex.raw( `PRAGMA [main].legacy_alter_table = 'on';`)
+                .then(r=>{
+                    return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
+                })
+                .then(r=>{
+                    return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                })
+                .then(r=>{
+                    return knex.raw(`ALTER TABLE [main].[tblLhw] RENAME TO [_sqliteexpert_temp_table_1];`)
+                })
+                .then(r=>{
+                    return knex.raw(`CREATE TABLE [main].[tblLhw](
+                        [site] INT, 
+                        [uc] INT NOT NULL, 
+                        [tehsil] INT NOT NULL, 
+                        [district] INT NOT NULL, 
+                        [staff_name] VARCHAR(50) NOT NULL, 
+                        [staff_code] VARCHAR(10) NOT NULL UNIQUE, 
+                        [province] INT NOT NULL, 
+                        [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+                        [client_id] VARCHAR NOT NULL, 
+                        [upload_status] INT NOT NULL DEFAULT 0, 
+                        [created_at] DATE, 
+                        [upload_date] DATE, 
+                        [is_deleted] BOOLEAN NOT NULL DEFAULT 0);`)
+                })
+                .then(r=>{
+                    return knex.raw(`INSERT INTO [main].[tblLhw]([rowid], [site], [uc], [tehsil], [district], [staff_name], [staff_code], [province], [id], [client_id], [upload_status], [created_at], [upload_date])
+                    SELECT [rowid], [site], [uc], [tehsil], [district], [staff_name], [staff_code], [province], [id], [client_id], [upload_status], [created_at], [upload_date]
+                    FROM [main].[_sqliteexpert_temp_table_1];`)
+                })
+                .then(r=>{
+                    return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
+                })
+                .then(r=>{
+                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                })
+                .then(r=>{
+                    return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
+                })
+                .then(r=>{
+                    return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
+                })
+                .then(r=>{
+                    return knex.raw( `PRAGMA [main].legacy_alter_table = 'on';`)
+                })
+                .then(r=>{
+                    return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
+                })
+                .then(r=>{
+                    return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                })
+                .then(r=>{
+                    return knex.raw(`ALTER TABLE [main].[tblSupervisors] RENAME TO [_sqliteexpert_temp_table_1];`)
+                })
+                .then(r=>{
+                    return knex.raw(`CREATE TABLE [main].[tblSupervisors](
+                        [site] INT, 
+                        [uc] INT NOT NULL, 
+                        [tehsil] INT NOT NULL, 
+                        [district] INT NOT NULL, 
+                        [sup_name] varchar(50) NOT NULL, 
+                        [sup_code] VARCHAR(10) NOT NULL UNIQUE, 
+                        [province] INT NOT NULL, 
+                        [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+                        [client_id] VARCHAR NOT NULL, 
+                        [upload_status] VARCHAR NOT NULL DEFAULT 0, 
+                        [created_at] DATE NOT NULL, 
+                        [upload_date] DATE, 
+                        [is_deleted] BOOLEAN NOT NULL DEFAULT 0, 
+                        UNIQUE([sup_code], [district]) ON CONFLICT ROLLBACK);`)
+                })
+                .then(r=>{
+                    return knex.raw(`INSERT INTO [main].[tblSupervisors]([rowid], [site], [uc], [tehsil], [district], [sup_name], [sup_code], [province], [id], [client_id], [upload_status], [created_at], [upload_date])
+                    SELECT [rowid], [site], [uc], [tehsil], [district], [sup_name], [sup_code], [province], [id], [client_id], [upload_status], [created_at], [upload_date]
+                    FROM [main].[_sqliteexpert_temp_table_1];`)
+                })
+                .then(r=>{
+                    return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
+                })
+                .then(r=>{
+                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                })
+                .then(r=>{
+                    return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
+                })
+                .then(r=>{
+                    return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
+                })
+                .then(r=>{
+                    return knex.raw( `PRAGMA [main].legacy_alter_table = 'on';`)
+                })
+                .then(r=>{
+                    return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
+                })
+                .then(r=>{
+                    return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                })
+                .then(r=>{
+                    return knex.raw(`ALTER TABLE [main].[tblVillages] RENAME TO [_sqliteexpert_temp_table_1];`)
+                })
+                .then(r=>{
+                    return knex.raw(`CREATE TABLE [main].[tblVillages](
+                        [site] INT NOT NULL, 
+                        [uc] INT NOT NULL, 
+                        [tehsil] INT NOT NULL, 
+                        [district] INT NOT NULL, 
+                        [villageName] VARCHAR(50) NOT NULL, 
+                        [province] INT NOT NULL, 
+                        [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+                        [client_id] VARCHAR NOT NULL, 
+                        [upload_status] INT NOT NULL DEFAULT 0, 
+                        [created_at] DATE, 
+                        [upload_date] DATE, 
+                        [is_deleted] BOOLEAN NOT NULL DEFAULT 0, 
+                        UNIQUE([uc], [villageName]) ON CONFLICT ROLLBACK);`)
+                })
+                .then(r=>{
+                    return knex.raw(`INSERT INTO [main].[tblVillages]([rowid], [site], [uc], [tehsil], [district], [villageName], [province], [id], [client_id], [upload_status], [created_at], [upload_date])
+                    SELECT [rowid], [site], [uc], [tehsil], [district], [villageName], [province], [id], [client_id], [upload_status], [created_at], [upload_date]
+                    FROM [main].[_sqliteexpert_temp_table_1];`)
+                })
+                .then(r=>{
+                    return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
+                })
+                .then(r=>{
+                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                })
+                .then(r=>{
+                    return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
+                })
+                .then(r=>{
+                    return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
+                })
+                .then(r=>{
+                    fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '6', (err) => {
+                        if (err) throw err;
+                        console.log('updated tblSupervisors tblLHW tblvillages')
+                    })
+                })
+                .catch(e=>{
+                    console.log(e)
+                })
 
-               
-               
 
 
 
 
-         }else {
+            }else if (updateCheck == '6'){
+                knex.raw(`CREATE VIEW 'v_comm_otp_add_and_followup'
+                AS
+                SELECT ALL 
+                           [main].[tblOtpAdd].[otp_id], 
+                           [main].[tblOtpAdd].[muac], 
+                           [main].[tblOtpAdd].[weight], 
+                           [main].[tblOtpAdd].[ration1], 
+                           [main].[tblOtpAdd].[quantity1], 
+                           [main].[tblOtpAdd].[ration2], 
+                           [main].[tblOtpAdd].[quantity2], 
+                           [main].[tblOtpAdd].[ration3], 
+                           [main].[tblOtpAdd].[quantity3], 
+                           [main].[tblOtpAdd].[reg_date] AS [date], 
+                           '' AS [status], 
+                           'Admision' AS [record_type]
+                FROM   [main].[tblOtpAdd]
+                WHERE  [main].[tblOtpAdd].[prog_type] = 'otp'
+                       AND [main].[tblOtpAdd].[is_deleted] = 0
+                UNION ALL
+                SELECT ALL 
+                           [main].[tblOtpFollowup].[otp_id], 
+                           [main].[tblOtpFollowup].[muac], 
+                           [main].[tblOtpFollowup].[weight], 
+                           [main].[tblOtpFollowup].[ration1], 
+                           [main].[tblOtpFollowup].[quantity1], 
+                           [main].[tblOtpFollowup].[ration2], 
+                           [main].[tblOtpFollowup].[quantity2], 
+                           [main].[tblOtpFollowup].[ration3], 
+                           [main].[tblOtpFollowup].[quantity3], 
+                           [main].[tblOtpFollowup].[curr_date] AS [date], 
+                           [main].[tblOtpFollowup].[status], 
+                           'Follow Up' AS [record_type]
+                FROM   [main].[tblOtpFollowup]
+                WHERE  [main].[tblOtpFollowup].[is_deleted] = 0;
+                
+                `)
+                .then(r=>{
+                    return knex.raw(`CREATE VIEW 'v_otp_add_followup_report'
+                    AS
+                    SELECT ALL 
+                               [main].[v_geo].[province], 
+                               [main].[v_geo].[province_id], 
+                               [main].[v_geo].[district_name], 
+                               [main].[v_geo].[district_id], 
+                               [main].[v_geo].[tehsil_name], 
+                               [main].[v_geo].[tehsil_id], 
+                               [main].[v_geo].[uc_name], 
+                               [main].[v_geo].[uc_id], 
+                               [main].[v_geo].[site_name], 
+                               [main].[v_geo].[site_id], 
+                               [main].[tblOtpAdd].[reg_id], 
+                               [main].[tblOtpAdd].[p_name], 
+                               [main].[tblOtpAdd].[f_or_h_name], 
+                               [main].[tblOtpAdd].[cnic], 
+                               [main].[tblOtpAdd].[cnt_number], 
+                               [main].[tblOtpAdd].[address], 
+                               [main].[tblOtpAdd].[age], 
+                               [main].[tblOtpAdd].[gender], 
+                               [main].[tblOtpAdd].[ent_reason], 
+                               [main].[tblOtpAdd].[ref_type], 
+                               [main].[tblOtpAdd].[oedema], 
+                               [main].[tblOtpAdd].[diarrhoea], 
+                               [main].[tblOtpAdd].[vomiting], 
+                               [main].[tblOtpAdd].[cough], 
+                               [main].[tblOtpAdd].[appetite], 
+                               [main].[tblOtpAdd].[daily_stool], 
+                               [main].[tblOtpAdd].[pass_urine], 
+                               [main].[tblOtpAdd].[b_Feeding], 
+                               [main].[tblOtpAdd].[is_mother_alive], 
+                               [main].[v_comm_otp_add_and_followup].[muac], 
+                               [main].[v_comm_otp_add_and_followup].[weight], 
+                               [main].[v_comm_otp_add_and_followup].[ration1], 
+                               [main].[v_comm_otp_add_and_followup].[quantity1], 
+                               [main].[v_comm_otp_add_and_followup].[ration2], 
+                               [main].[v_comm_otp_add_and_followup].[quantity2], 
+                               [main].[v_comm_otp_add_and_followup].[ration3], 
+                               [main].[v_comm_otp_add_and_followup].[quantity3], 
+                               [main].[v_comm_otp_add_and_followup].[date], 
+                               [main].[v_comm_otp_add_and_followup].[status], 
+                               [main].[v_comm_otp_add_and_followup].[record_type]
+                    FROM   [main].[tblOtpAdd]
+                           INNER JOIN [main].[v_geo] ON [main].[v_geo].[site_id] = [main].[tblOtpAdd].[site_id]
+                           LEFT JOIN [main].[v_comm_otp_add_and_followup] ON [main].[v_comm_otp_add_and_followup].[otp_id] = [main].[tblOtpAdd].[otp_id]
+                    WHERE  [main].[tblOtpAdd].[is_deleted] = 0
+                           AND [main].[tblOtpAdd].[prog_type] = 'otp';
+                    
+                    `)
+                })
+                .then(r=>{
+                    fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '7', (err) => {
+                        if (err) throw err;
+                        console.log('created two views to support new report')
+                    })
+                })
+                .catch(e=>{
+                    console.log(e)
+                })
+            }else {
                 console.log('v_otpNotExit already updated')
             }
         }

@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="../css/jquery-ui.min.css">
   <link rel="stylesheet" href="../css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="../css/buttons.dataTables.min.css">
+  <link rel="stylesheet" href="../css/buttons.bootstrap4.min.css">
   <link rel="stylesheet" href="../css/dataTables.checkboxes.css">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/sideNav.css">
@@ -69,6 +70,7 @@
   <link rel="import" href="newSyncAuth.html">
   <!-- origional is v2 -->
   <link rel="import" href="newSyncAuthV3.html">
+  <link rel="import" href="otp_add_followup_report.html">
 
 </head>
 
@@ -115,6 +117,7 @@
               <li><a href="#" id="scrChdNewReport">Children Screening</a></li>
               <li><a href="#" id="scrPlwNewReport">PLW Screening</a></li>
               <li><a href="#" id="otpReport">Admission & Exit</a></li>
+              <li><a href="#" id="otpAddFollowupReport">Admision & Followup</a></li>
               <li><a href="#" id="defReport">Defaulter</a></li>
               <li><a href="#" id="sessionsReport">Sessions</a></li>
               <li><a href="#" id="autoStock">Stock In</a></li>
@@ -389,6 +392,7 @@
   <script src="../js/jszip.min.js"></script>
   <script src="../js/buttons.flash.min.js"></script>
   <script src="../js/buttons.html5.min.js"></script>  
+  <script src="../js/buttons.bootstrap4.min.js"></script>  
   <script src="../js/jquery.inputmask.bundle.min.js"></script>
   <script src="../js/dataTables.bootstrap4.min.js"></script>
   <!-- <script src="../js/charts/highcharts.js"></script> -->
@@ -556,7 +560,17 @@ jsGrid.fields.date = MyDateField;
     var InitNewSyncAuth =require('./newSyncAuth').newSyncAuth;
     // origional is v2
     var InitNewSyncAuthV3 =require('./newSyncAuthV3').newSyncAuthV3;
+    var IniOtpAddFollowupReportV1 =require('./otp_add_followup_report').iniOtpAddFollowupReportV1;
     // var InitDefaulterv2 = require('./defaulterv2').initDefaulterv2;
+
+    function otp_add_followup_report_Template() {
+        var content = document.querySelector('link[href="otp_add_followup_report.html"]');
+        var template = content.import.querySelector('template');
+        var clone = document.importNode(template.content, true);
+        $('#jsContent').empty();
+        document.querySelector('#jsContent').appendChild(clone)
+        IniOtpAddFollowupReportV1();
+      }
 
      function stockOutUpdateTemplate() {
         var content = document.querySelector('link[href="stockOutUpdate.html"]');
@@ -975,6 +989,9 @@ jsGrid.fields.date = MyDateField;
     })
     $('#stockOutUpdate').on('click', function(){
       stockOutUpdateTemplate();
+    })
+    $('#otpAddFollowupReport').on('click', function(){
+      otp_add_followup_report_Template();
     })
   </script>
   <script>
