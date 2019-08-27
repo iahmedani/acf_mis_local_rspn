@@ -1913,8 +1913,13 @@ autoUpdater.on('download-progress', (progressObj) => {
 })
 autoUpdater.on('update-downloaded', (info) => {
   mainWindow.webContents.send('updateDownloaded', 'downloaded')
+
   console.log('Update downloaded');
 });
+
+ipcMain.on('updateNIMS', e=>{
+  autoUpdater.quitAndInstall();
+})
 
 
 app.on('ready', async ()=>{

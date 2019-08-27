@@ -142,9 +142,7 @@
                 <li class="mb-0">Shumaila Nazir &copy; 2019</li>
                 <li class="mb-0" id="updMessage" style="display:none">Update Available</li>
                 <li class="mb-0">
-                    <div class="progress" style="display:none">
-                        <div class="progress-bar" id="dprogress_" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
+                    <button class="btn btn-success btn-sm" id="_updBtn" style="display: none">Update NIMS</button>
                 </li>
                 
             </ul>
@@ -1050,13 +1048,17 @@ jsGrid.fields.date = MyDateField;
       $('.progress').css('display', '');
     })
 
-    ipc.on('__updateProgress', (e, data)=>{
-      console.log({
-        e,data
-      })
+    ipc.on('update-downloaded', (e, data)=>{
+      if(data == 'downloaded'){
+        $('#_updBtn').css('display', '')
+      }
       // $('#dprogress').css('width', data)
       // $('#updMessage').css('display', '');
     })
+    $('#_updBtn').on('click', e=>{
+      ipc.sendSync('updateNIMS')
+    })
+      
     $(function(){
       let x = ipc.sendSync('getVersion')
       $('#appVersion').text(x);
