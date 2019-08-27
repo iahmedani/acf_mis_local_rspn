@@ -1048,9 +1048,12 @@ jsGrid.fields.date = MyDateField;
       $('.progress').css('display', '');
     })
 
-    ipc.on('update-downloaded', (e, data)=>{
+    ipc.on('updateDownloaded', (e, data)=>{
       if(data == 'downloaded'){
         $('#_updBtn').css('display', '')
+      }else{
+        $('#_updBtn').css('display', 'none')
+
       }
       // $('#dprogress').css('width', data)
       // $('#updMessage').css('display', '');
