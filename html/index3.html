@@ -1051,6 +1051,8 @@ jsGrid.fields.date = MyDateField;
     ipc.on('updateDownloaded', (e, data)=>{
       if(data == 'downloaded'){
         $('#_updBtn').css('display', '')
+      $('#updMessage').css('display', 'none');
+
       }else{
         $('#_updBtn').css('display', 'none')
 
