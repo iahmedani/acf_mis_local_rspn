@@ -697,7 +697,7 @@ module.exports.initOtpAddUpdV2 = function () {
   $('#ent_reason').on('change', function (e) {
     var progType = $('#ddProgramType');
     var muac = $('#muac');
-    if(progType.val() == 'otp' && ($(this).val() == 'moved_in' || $(this).val() == 'tranfer_in_other_otp' )){
+    if($(this).val() == 'moved_in' || $(this).val() == 'tranfer_in_other_otp' ){
 
     // if(progType.val() == 'otp' & $(this).val() == 'moved_in'){
       muac.removeAttr('max')

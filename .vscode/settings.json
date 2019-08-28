@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "connectionTimeout": 30,
+            "database": "acf_online",
+            "dialect": "MSSQL",
+            "name": "ACF",
+            "password": "ThisIsMyAwes0meDb",
+            "port": 1433,
+            "server": "165.227.147.183",
+            "username": "sa"
+        }
+    ]
+}
