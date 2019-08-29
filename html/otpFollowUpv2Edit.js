@@ -127,7 +127,7 @@ module.exports.initOtpFollowUpEdit = function () {
     }
     let _followup = async (data)=>{
       try {        
-        var x = await knex('v_otpFollowupUpdate').where({is_deleted:0}).where({site_id:data.site_id, site_village: data.site_village, reg_id:data.reg_id})
+        var x = await knex('v_otpFollowupUpdate').where({is_deleted:0}).where({site_id:data.site_id, reg_id:data.reg_id}).where('site_village', 'like', `%${data.site_village}%`)
         console.log(x)
         return x;
       } catch (error) {

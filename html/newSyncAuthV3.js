@@ -2,7 +2,6 @@ const axios = require('axios');
 const knex = require('../mainfunc/db');
 const fs = require('fs');
 
-
 module.exports.newSyncAuthV3 = function () {
     axios.defaults.timeout = 200000;
     var _Errors = {
@@ -63,7 +62,7 @@ module.exports.newSyncAuthV3 = function () {
         elInfo.text(`Preparing Data - ${title}`)
         var _tData = await knex(table).where({
             upload_status: 0
-        });
+        }).orWhereNull({upload_date});
         if (_tData.length) {
             var newData = [];
             for (data of _tData) {
@@ -114,7 +113,7 @@ module.exports.newSyncAuthV3 = function () {
         elInfo.text(`Preparing updating data - ${title}`)
         var _tData = await knex(table).where({
             upload_status: 2
-        });
+        }).whereNotNull('upload_date');
         if (_tData.length) {
             var newData = [];
             for (data of _tData) {
