@@ -232,7 +232,7 @@ module.exports.initOtpFollowUpEdit = function () {
           {
             name: "weight",
             title: "Weight",
-            type: "number",
+            type: "decimal",
             width: 50,
             editing: true,
             validate: "required"
