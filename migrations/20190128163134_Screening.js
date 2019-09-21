@@ -1657,10 +1657,32 @@ WHERE  [main].[tblOtpAdd].[is_deleted] = 0
        AND [main].[tblOtpAdd].[prog_type] = 'otp';
 
 `)
+.raw(`create view v_geo_active as SELECT 
+[tblGeoProvince].[id] AS [province_id], 
+[tblGeoProvince].[provinceName] AS [province], 
+[tblGeoDistrict].[id] AS [district_id], 
+[tblGeoDistrict].[districtName] AS [district_name], 
+[tblGeoTehsil].[id] AS [tehsil_id], 
+[tblGeoTehsil].[tehsilName] AS [tehsil_name], 
+[tblGeoUC].[id] AS [uc_id], 
+[tblGeoUC].[ucName] AS [uc_name], 
+[tblGeoNutSite].[siteName] AS [site_name], 
+[tblGeoNutSite].[OTP], 
+[tblGeoNutSite].[SFP], 
+[tblGeoNutSite].[SC], 
+[tblGeoNutSite].[id] AS [site_id]
+FROM   [tblGeoDistrict]
+INNER JOIN [tblGeoProvince] ON [tblGeoDistrict].[province_id] = [tblGeoProvince].[id]
+INNER JOIN [tblGeoTehsil] ON [tblGeoDistrict].[id] = [tblGeoTehsil].[district_id]
+INNER JOIN [tblGeoUC] ON [tblGeoTehsil].[id] = [tblGeoUC].[tehsil_id]
+INNER JOIN [tblGeoNutSite] ON [tblGeoUC].[id] = [tblGeoNutSite].[uc_id]
+where tblGeoUC.isActive = 1 and [tblGeoTehsil].isActive = 1 and [tblGeoNutSite].isActive = 1 and [tblGeoDistrict].isActive = 1;
+`);
 };
 
 exports.down = function(knex, Promise) {
   return knex.schema
+  .raw("DROP VIEW v_geo_active")
   .raw("DROP VIEW v_otp_add_followup_report")
   .raw("DROP VIEW v_comm_otp_add_and_followup")
   .raw("DROP VIEW v_stockReport")

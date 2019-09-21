@@ -1,5 +1,13 @@
-const fs = require('fs')
+const fs = require('fs');
+// const {
+//     app
+// } = require('electron');
+
 module.exports = (knex) => {
+    // var _version = app.getVersion();
+    // console.log({
+    //     'Version From Update': _version
+    // })
 
     fs.stat(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, (err, stat) => {
         if (err) {
@@ -140,15 +148,15 @@ module.exports = (knex) => {
                     }).catch(e => {
                         console.log(e)
                     })
-            } else if(updateCheck == '2'){
+            } else if (updateCheck == '2') {
                 knex.raw(`PRAGMA [main].legacy_alter_table = 'on';`)
-                    .then(r=>{
+                    .then(r => {
                         return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`ALTER TABLE [main].[tblGeoDistrict] RENAME TO [_sqliteexpert_temp_table_1];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`CREATE TABLE [main].[tblGeoDistrict](
                             [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
                             [districtName] varchar(255), 
@@ -156,58 +164,58 @@ module.exports = (knex) => {
                             [created_at] datetime, 
                             [updated_at] datetime, 
                             [isActive] BOOLEAN DEFAULT 1);`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`INSERT INTO [main].[tblGeoDistrict]([rowid], [id], [districtName], [province_id], [created_at], [updated_at])
                         SELECT [rowid], [id], [districtName], [province_id], [created_at], [updated_at]
                         FROM [main].[_sqliteexpert_temp_table_1];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].legacy_alter_table = 'on';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`ALTER TABLE [main].[tblGeoProvince] RENAME TO [_sqliteexpert_temp_table_1];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`CREATE TABLE [main].[tblGeoProvince](
                             [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
                             [provinceName] varchar(255), 
                             [created_at] datetime, 
                             [updated_at] datetime, 
                             [isActive] BOOLEAN DEFAULT 1);`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`INSERT INTO [main].[tblGeoProvince]([rowid], [id], [provinceName], [created_at], [updated_at])
                         SELECT [rowid], [id], [provinceName], [created_at], [updated_at]
                         FROM [main].[_sqliteexpert_temp_table_1];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].legacy_alter_table = 'on';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`ALTER TABLE [main].[tblGeoTehsil] RENAME TO [_sqliteexpert_temp_table_1];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`CREATE TABLE [main].[tblGeoTehsil](
                             [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
                             [tehsilName] varchar(255), 
@@ -215,27 +223,27 @@ module.exports = (knex) => {
                             [created_at] datetime, 
                             [updated_at] datetime, 
                             [isActive] BOOLEAN DEFAULT 1);`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`INSERT INTO [main].[tblGeoTehsil]([rowid], [id], [tehsilName], [district_id], [created_at], [updated_at])
                         SELECT [rowid], [id], [tehsilName], [district_id], [created_at], [updated_at]
                         FROM [main].[_sqliteexpert_temp_table_1];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].legacy_alter_table = 'on';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`ALTER TABLE [main].[tblGeoUC] RENAME TO [_sqliteexpert_temp_table_1];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`CREATE TABLE [main].[tblGeoUC](
                             [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
                             [ucName] varchar(255), 
@@ -243,27 +251,27 @@ module.exports = (knex) => {
                             [created_at] datetime, 
                             [updated_at] datetime, 
                             [isActive] BOOLEAN DEFAULT 1);`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`INSERT INTO [main].[tblGeoUC]([rowid], [id], [ucName], [tehsil_id], [created_at], [updated_at])
                         SELECT [rowid], [id], [ucName], [tehsil_id], [created_at], [updated_at]
                         FROM [main].[_sqliteexpert_temp_table_1];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].legacy_alter_table = 'on';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`ALTER TABLE [main].[tblGeoNutSite] RENAME TO [_sqliteexpert_temp_table_1];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`CREATE TABLE [main].[tblGeoNutSite](
                             [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
                             [siteName] varchar(255), 
@@ -277,19 +285,19 @@ module.exports = (knex) => {
                             [created_at] datetime, 
                             [updated_at] datetime, 
                             [isActive] BOOLEAN DEFAULT 1);`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`INSERT INTO [main].[tblGeoNutSite]([rowid], [id], [siteName], [province_id], [district_id], [tehsil_id], [uc_id], [OTP], [SFP], [SC], [created_at], [updated_at])
                         SELECT [rowid], [id], [siteName], [province_id], [district_id], [tehsil_id], [uc_id], [OTP], [SFP], [SC], [created_at], [updated_at]
                         FROM [main].[_sqliteexpert_temp_table_1];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
-                    }).then(r=>{
+                    }).then(r => {
                         return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
-                    }).then(r=>{
+                    }).then(r => {
                         fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '3', (err) => {
                             if (err) throw err;
                             console.log('updated geo tables')
@@ -297,16 +305,16 @@ module.exports = (knex) => {
                     }).catch(e => {
                         console.log(e)
                     })
-    
-           
-            }else if (updateCheck == '3'){
 
-            knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction]`)
-            .then(r=>{
-                return knex.raw(`DROP VIEW IF EXISTS [main].[vSessionsFullForUpdate];`)
-            })
-            .then(r=>{
-                return knex.raw(`CREATE VIEW [main].[vSessionsFullForUpdate]
+
+            } else if (updateCheck == '3') {
+
+                knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction]`)
+                    .then(r => {
+                        return knex.raw(`DROP VIEW IF EXISTS [main].[vSessionsFullForUpdate];`)
+                    })
+                    .then(r => {
+                        return knex.raw(`CREATE VIEW [main].[vSessionsFullForUpdate]
                 AS
                 SELECT 
        [main].[v_geo].[province], 
@@ -321,26 +329,26 @@ module.exports = (knex) => {
 FROM   [main].[tblSessions]
        INNER JOIN [main].[v_geo] ON ([main].[v_geo].[site_id] = [main].[tblSessions].[site_id]) OR ([main].[v_geo].[uc_id] = [main].[tblSessions].[uc_id] and  [main].[tblSessions].[site_id] = '')
 WHERE  [tblsessions].[is_deleted] = 0`)
-            })
-            .then(r=>{
-                return knex.raw('RELEASE [sqlite_expert_apply_design_transaction];')
-            })
-            .then(r=>{
-                fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '4', (err) => {
-                    if (err) throw err;
-                    console.log('updated vSessionsFullForUpdate view')
-                })
-            }).catch(e=>{
-                console.log(e)
-            })
+                    })
+                    .then(r => {
+                        return knex.raw('RELEASE [sqlite_expert_apply_design_transaction];')
+                    })
+                    .then(r => {
+                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '4', (err) => {
+                            if (err) throw err;
+                            console.log('updated vSessionsFullForUpdate view')
+                        })
+                    }).catch(e => {
+                        console.log(e)
+                    })
 
-            }else if(updateCheck == '4'){
-               knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-               .then(r=>{
-                   return knex.raw(`DROP VIEW IF EXISTS [main].[v_otpExit_full];`)
-               })
-               .then(r=>{
-                   return knex.raw(`CREATE VIEW [main].[v_otpExit_full]
+            } else if (updateCheck == '4') {
+                knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    .then(r => {
+                        return knex.raw(`DROP VIEW IF EXISTS [main].[v_otpExit_full];`)
+                    })
+                    .then(r => {
+                        return knex.raw(`CREATE VIEW [main].[v_otpExit_full]
                    AS
                    SELECT 
                           [main].[v_geo].[province_id], 
@@ -368,18 +376,18 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                           INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
                    WHERE  [main].[tblOtpExit].[is_deleted] = 0
                           AND [main].[tblOtpAdd].[is_deleted] = 0;`)
-               })
-               .then(r=>{
-                   return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-               })
-               .then(r=>{
-                return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                })
-               .then(r=>{
-                return knex.raw(`DROP VIEW IF EXISTS [main].[v_otpAdd_full];`)
-                 })
-                .then(r=>{
-                return knex.raw(`CREATE VIEW [main].[v_otpAdd_full]
+                    })
+                    .then(r => {
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    })
+                    .then(r => {
+                        return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    })
+                    .then(r => {
+                        return knex.raw(`DROP VIEW IF EXISTS [main].[v_otpAdd_full];`)
+                    })
+                    .then(r => {
+                        return knex.raw(`CREATE VIEW [main].[v_otpAdd_full]
                 AS
                 SELECT 
                        [main].[v_geo].[province_id], 
@@ -423,32 +431,32 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                 FROM   [main].[v_geo]
                        INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo].[site_id] = [main].[tblOtpAdd].[site_id]
                 WHERE  [main].[tblOtpAdd].[is_deleted] = 0;`)
-                })
-                .then(r=>{
-                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                })
-                .then(r=>{
-                    fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '5', (err) => {
-                        if (err) throw err;
-                        console.log('updated views to remove data eerros')
                     })
-                })
-                .catch(e=>{
-                    console.log(e)
-                })
-            }else if (updateCheck == '5'){
-                knex.raw( `PRAGMA [main].legacy_alter_table = 'on';`)
-                .then(r=>{
-                    return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
-                })
-                .then(r=>{
-                    return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                })
-                .then(r=>{
-                    return knex.raw(`ALTER TABLE [main].[tblLhw] RENAME TO [_sqliteexpert_temp_table_1];`)
-                })
-                .then(r=>{
-                    return knex.raw(`CREATE TABLE [main].[tblLhw](
+                    .then(r => {
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    })
+                    .then(r => {
+                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '5', (err) => {
+                            if (err) throw err;
+                            console.log('updated views to remove data eerros')
+                        })
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    })
+            } else if (updateCheck == '5') {
+                knex.raw(`PRAGMA [main].legacy_alter_table = 'on';`)
+                    .then(r => {
+                        return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
+                    })
+                    .then(r => {
+                        return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    })
+                    .then(r => {
+                        return knex.raw(`ALTER TABLE [main].[tblLhw] RENAME TO [_sqliteexpert_temp_table_1];`)
+                    })
+                    .then(r => {
+                        return knex.raw(`CREATE TABLE [main].[tblLhw](
                         [site] INT, 
                         [uc] INT NOT NULL, 
                         [tehsil] INT NOT NULL, 
@@ -462,38 +470,38 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                         [created_at] DATE, 
                         [upload_date] DATE, 
                         [is_deleted] BOOLEAN NOT NULL DEFAULT 0);`)
-                })
-                .then(r=>{
-                    return knex.raw(`INSERT INTO [main].[tblLhw]([rowid], [site], [uc], [tehsil], [district], [staff_name], [staff_code], [province], [id], [client_id], [upload_status], [created_at], [upload_date])
+                    })
+                    .then(r => {
+                        return knex.raw(`INSERT INTO [main].[tblLhw]([rowid], [site], [uc], [tehsil], [district], [staff_name], [staff_code], [province], [id], [client_id], [upload_status], [created_at], [upload_date])
                     SELECT [rowid], [site], [uc], [tehsil], [district], [staff_name], [staff_code], [province], [id], [client_id], [upload_status], [created_at], [upload_date]
                     FROM [main].[_sqliteexpert_temp_table_1];`)
-                })
-                .then(r=>{
-                    return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
-                })
-                .then(r=>{
-                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                })
-                .then(r=>{
-                    return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
-                })
-                .then(r=>{
-                    return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
-                })
-                .then(r=>{
-                    return knex.raw( `PRAGMA [main].legacy_alter_table = 'on';`)
-                })
-                .then(r=>{
-                    return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
-                })
-                .then(r=>{
-                    return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                })
-                .then(r=>{
-                    return knex.raw(`ALTER TABLE [main].[tblSupervisors] RENAME TO [_sqliteexpert_temp_table_1];`)
-                })
-                .then(r=>{
-                    return knex.raw(`CREATE TABLE [main].[tblSupervisors](
+                    })
+                    .then(r => {
+                        return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
+                    })
+                    .then(r => {
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    })
+                    .then(r => {
+                        return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
+                    })
+                    .then(r => {
+                        return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
+                    })
+                    .then(r => {
+                        return knex.raw(`PRAGMA [main].legacy_alter_table = 'on';`)
+                    })
+                    .then(r => {
+                        return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
+                    })
+                    .then(r => {
+                        return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    })
+                    .then(r => {
+                        return knex.raw(`ALTER TABLE [main].[tblSupervisors] RENAME TO [_sqliteexpert_temp_table_1];`)
+                    })
+                    .then(r => {
+                        return knex.raw(`CREATE TABLE [main].[tblSupervisors](
                         [site] INT, 
                         [uc] INT NOT NULL, 
                         [tehsil] INT NOT NULL, 
@@ -508,38 +516,38 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                         [upload_date] DATE, 
                         [is_deleted] BOOLEAN NOT NULL DEFAULT 0, 
                         UNIQUE([sup_code], [district]) ON CONFLICT ROLLBACK);`)
-                })
-                .then(r=>{
-                    return knex.raw(`INSERT INTO [main].[tblSupervisors]([rowid], [site], [uc], [tehsil], [district], [sup_name], [sup_code], [province], [id], [client_id], [upload_status], [created_at], [upload_date])
+                    })
+                    .then(r => {
+                        return knex.raw(`INSERT INTO [main].[tblSupervisors]([rowid], [site], [uc], [tehsil], [district], [sup_name], [sup_code], [province], [id], [client_id], [upload_status], [created_at], [upload_date])
                     SELECT [rowid], [site], [uc], [tehsil], [district], [sup_name], [sup_code], [province], [id], [client_id], [upload_status], [created_at], [upload_date]
                     FROM [main].[_sqliteexpert_temp_table_1];`)
-                })
-                .then(r=>{
-                    return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
-                })
-                .then(r=>{
-                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                })
-                .then(r=>{
-                    return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
-                })
-                .then(r=>{
-                    return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
-                })
-                .then(r=>{
-                    return knex.raw( `PRAGMA [main].legacy_alter_table = 'on';`)
-                })
-                .then(r=>{
-                    return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
-                })
-                .then(r=>{
-                    return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                })
-                .then(r=>{
-                    return knex.raw(`ALTER TABLE [main].[tblVillages] RENAME TO [_sqliteexpert_temp_table_1];`)
-                })
-                .then(r=>{
-                    return knex.raw(`CREATE TABLE [main].[tblVillages](
+                    })
+                    .then(r => {
+                        return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
+                    })
+                    .then(r => {
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    })
+                    .then(r => {
+                        return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
+                    })
+                    .then(r => {
+                        return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
+                    })
+                    .then(r => {
+                        return knex.raw(`PRAGMA [main].legacy_alter_table = 'on';`)
+                    })
+                    .then(r => {
+                        return knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
+                    })
+                    .then(r => {
+                        return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    })
+                    .then(r => {
+                        return knex.raw(`ALTER TABLE [main].[tblVillages] RENAME TO [_sqliteexpert_temp_table_1];`)
+                    })
+                    .then(r => {
+                        return knex.raw(`CREATE TABLE [main].[tblVillages](
                         [site] INT NOT NULL, 
                         [uc] INT NOT NULL, 
                         [tehsil] INT NOT NULL, 
@@ -553,39 +561,39 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                         [upload_date] DATE, 
                         [is_deleted] BOOLEAN NOT NULL DEFAULT 0, 
                         UNIQUE([uc], [villageName]) ON CONFLICT ROLLBACK);`)
-                })
-                .then(r=>{
-                    return knex.raw(`INSERT INTO [main].[tblVillages]([rowid], [site], [uc], [tehsil], [district], [villageName], [province], [id], [client_id], [upload_status], [created_at], [upload_date])
+                    })
+                    .then(r => {
+                        return knex.raw(`INSERT INTO [main].[tblVillages]([rowid], [site], [uc], [tehsil], [district], [villageName], [province], [id], [client_id], [upload_status], [created_at], [upload_date])
                     SELECT [rowid], [site], [uc], [tehsil], [district], [villageName], [province], [id], [client_id], [upload_status], [created_at], [upload_date]
                     FROM [main].[_sqliteexpert_temp_table_1];`)
-                })
-                .then(r=>{
-                    return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
-                })
-                .then(r=>{
-                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                })
-                .then(r=>{
-                    return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
-                })
-                .then(r=>{
-                    return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
-                })
-                .then(r=>{
-                    fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '6', (err) => {
-                        if (err) throw err;
-                        console.log('updated tblSupervisors tblLHW tblvillages')
                     })
-                })
-                .catch(e=>{
-                    console.log(e)
-                })
+                    .then(r => {
+                        return knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
+                    })
+                    .then(r => {
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    })
+                    .then(r => {
+                        return knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
+                    })
+                    .then(r => {
+                        return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
+                    })
+                    .then(r => {
+                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '6', (err) => {
+                            if (err) throw err;
+                            console.log('updated tblSupervisors tblLHW tblvillages')
+                        })
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    })
 
 
 
 
 
-            }else if (updateCheck == '6'){
+            } else if (updateCheck == '6') {
                 knex.raw(`CREATE VIEW 'v_comm_otp_add_and_followup'
                 AS
                 SELECT ALL 
@@ -622,8 +630,8 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                 WHERE  [main].[tblOtpFollowup].[is_deleted] = 0;
                 
                 `)
-                .then(r=>{
-                    return knex.raw(`CREATE VIEW 'v_otp_add_followup_report'
+                    .then(r => {
+                        return knex.raw(`CREATE VIEW 'v_otp_add_followup_report'
                     AS
                     SELECT ALL 
                                [main].[v_geo].[province], 
@@ -673,17 +681,62 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                            AND [main].[tblOtpAdd].[prog_type] = 'otp';
                     
                     `)
-                })
-                .then(r=>{
-                    fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '7', (err) => {
-                        if (err) throw err;
-                        console.log('created two views to support new report')
                     })
-                })
-                .catch(e=>{
-                    console.log(e)
-                })
-            }else {
+                    .then(r => {
+                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '7', (err) => {
+                            if (err) throw err;
+                            console.log('created two views to support new report')
+                        })
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    })
+            } else if (updateCheck == '7') {
+                knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    .then(r => {
+                        return knex.raw(`DROP VIEW IF EXISTS [main].[v_geo_active];`)
+                    })
+                    .then(r => {
+                        return knex.raw(`CREATE VIEW [main].[v_geo_active]
+                    AS
+                    SELECT 
+                           [tblGeoProvince].[id] AS [province_id], 
+                           [tblGeoProvince].[provinceName] AS [province], 
+                           [tblGeoDistrict].[id] AS [district_id], 
+                           [tblGeoDistrict].[districtName] AS [district_name], 
+                           [tblGeoTehsil].[id] AS [tehsil_id], 
+                           [tblGeoTehsil].[tehsilName] AS [tehsil_name], 
+                           [tblGeoUC].[id] AS [uc_id], 
+                           [tblGeoUC].[ucName] AS [uc_name], 
+                           [tblGeoNutSite].[siteName] AS [site_name], 
+                           [tblGeoNutSite].[OTP], 
+                           [tblGeoNutSite].[SFP], 
+                           [tblGeoNutSite].[SC] , 
+                           [tblGeoNutSite].[id] AS [site_id]
+                    FROM   [tblGeoDistrict]
+                           INNER JOIN [tblGeoProvince] ON [tblGeoDistrict].[province_id] = [tblGeoProvince].[id]
+                           INNER JOIN [tblGeoTehsil] ON [tblGeoDistrict].[id] = [tblGeoTehsil].[district_id]
+                           INNER JOIN [tblGeoUC] ON [tblGeoTehsil].[id] = [tblGeoUC].[tehsil_id]
+                           INNER JOIN [tblGeoNutSite] ON [tblGeoUC].[id] = [tblGeoNutSite].[uc_id]
+                    WHERE  [tblGeoUC].[isActive] = 1
+                           AND [tblGeoTehsil].[isActive] = 1
+                           AND [tblGeoNutSite].[isActive] = 1
+                           AND [tblGeoDistrict].[isActive] = 1;`)
+                    })
+                    .then(r => {
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];
+                    `)
+                    })
+                    .then(r => {
+                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '8', (err) => {
+                            if (err) throw err;
+                            console.log('created new view v_geo_active')
+                        })
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    })
+            } else {
                 console.log('v_otpNotExit already updated')
             }
         }

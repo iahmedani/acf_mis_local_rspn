@@ -1,7 +1,7 @@
 module.exports.initScrChildrenUpd = function () {
   $(() => {
     $('input[type="number"]').attr('min', 0);
-    $('.secondSite').css('display', 'none') 
+    $('.secondSite').css('display', 'none')
   })
   $(function () {
     var datePickerId = document.getElementById('txtScrChildDate');
@@ -44,23 +44,23 @@ module.exports.initScrChildrenUpd = function () {
     $('#ddUC').on('change', function () {
       var ucs = $(this).val();
       ucForHH = ucs
-      ipc.send('getHealthHouse', ucs )
-        ipc.on('hh', async function(evt, hh){
-          // console.log(hh)
-          $('#site_one').children('option:not(:first)').remove();
-          if(hh.hh.length > 1){
-            $('.secondSite').css('display', '')  
-            $('#site_two').children('option:not(:first)').remove();
-            await asyncForEach(hh.hh, async(el)=>{
-              $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);              
-            })            
-          }else{
-            $('.secondSite').css('display', 'none')  
+      ipc.send('getHealthHouse', ucs)
+      ipc.on('hh', async function (evt, hh) {
+        // console.log(hh)
+        $('#site_one').children('option:not(:first)').remove();
+        if (hh.hh.length > 1) {
+          $('.secondSite').css('display', '')
+          $('#site_two').children('option:not(:first)').remove();
+          await asyncForEach(hh.hh, async (el) => {
+            $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);
+          })
+        } else {
+          $('.secondSite').css('display', 'none')
 
-          }
-          hhListener_siteOne(hh);
+        }
+        hhListener_siteOne(hh);
 
-        });
+      });
       ipc.send("getStaffuc", ucs);
       ipc.send("getSupsuc", ucs);
 
@@ -119,53 +119,53 @@ module.exports.initScrChildrenUpd = function () {
     });
     $('.sum_normal_boys').on('change', function () {
       var sum =
-        (($("#normal_boys_623").val()) ? parseInt($("#normal_boys_623").val()) : 0)
-        + (($("#normal_boys_2459").val()) ? parseInt($("#normal_boys_2459").val()) : 0);
+        (($("#normal_boys_623").val()) ? parseInt($("#normal_boys_623").val()) : 0) +
+        (($("#normal_boys_2459").val()) ? parseInt($("#normal_boys_2459").val()) : 0);
       $("#total_normal_boys").empty();
       $("#total_normal_boys").val(sum);
     });
     $(".sum_normal_girls").on("change", function () {
-      var sum = (($("#normal_girls_623").val()) ? parseInt($("#normal_girls_623").val()) : 0)
-        + (($("#normal_girls_2459").val()) ? parseInt($("#normal_girls_2459").val()) : 0);
+      var sum = (($("#normal_girls_623").val()) ? parseInt($("#normal_girls_623").val()) : 0) +
+        (($("#normal_girls_2459").val()) ? parseInt($("#normal_girls_2459").val()) : 0);
       $("#total_normal_girls").empty();
       $("#total_normal_girls").val(sum);
     });
     $('.mam_boys').on('change', function () {
       var sum =
-        (($("#mam_boys_623").val()) ? parseInt($("#mam_boys_623").val()) : 0)
-        + (($("#mam_boys_2459").val()) ? parseInt($("#mam_boys_2459").val()) : 0);
+        (($("#mam_boys_623").val()) ? parseInt($("#mam_boys_623").val()) : 0) +
+        (($("#mam_boys_2459").val()) ? parseInt($("#mam_boys_2459").val()) : 0);
       $("#total_mam_boys").empty();
       $("#total_mam_boys").val(sum);
     });
     $(".mam_girls").on("change", function () {
-      var sum = (($("#mam_girls_623").val()) ? parseInt($("#mam_girls_623").val()) : 0)
-        + (($("#mam_girls_2459").val()) ? parseInt($("#mam_girls_2459").val()) : 0);
+      var sum = (($("#mam_girls_623").val()) ? parseInt($("#mam_girls_623").val()) : 0) +
+        (($("#mam_girls_2459").val()) ? parseInt($("#mam_girls_2459").val()) : 0);
       $("#total_mam_girls").empty();
       $("#total_mam_girls").val(sum);
     });
     $('.sam_boys').on('change', function () {
       var sum =
-        (($("#sam_without_comp_boys_623").val()) ? parseInt($("#sam_without_comp_boys_623").val()) : 0)
-        + (($("#sam_without_comp_boys_2459").val()) ? parseInt($("#sam_without_comp_boys_2459").val()) : 0);
+        (($("#sam_without_comp_boys_623").val()) ? parseInt($("#sam_without_comp_boys_623").val()) : 0) +
+        (($("#sam_without_comp_boys_2459").val()) ? parseInt($("#sam_without_comp_boys_2459").val()) : 0);
       $("#total_sam_boys").empty();
       $("#total_sam_boys").val(sum);
     });
     $(".sam_girls").on("change", function () {
-      var sum = (($("#sam_without_comp_girls_623").val()) ? parseInt($("#sam_without_comp_girls_623").val()) : 0)
-        + (($("#sam_without_comp_girls_2459").val()) ? parseInt($("#sam_without_comp_girls_2459").val()) : 0);
+      var sum = (($("#sam_without_comp_girls_623").val()) ? parseInt($("#sam_without_comp_girls_623").val()) : 0) +
+        (($("#sam_without_comp_girls_2459").val()) ? parseInt($("#sam_without_comp_girls_2459").val()) : 0);
       $("#total_sam_girls").empty();
       $("#total_sam_girls").val(sum);
     });
     $('.comp_boys').on('change', function () {
       var sum =
-        (($("#sam_with_comp_boys_623").val()) ? parseInt($("#sam_with_comp_boys_623").val()) : 0)
-        + (($("#sam_with_comp_boys_2459").val()) ? parseInt($("#sam_with_comp_boys_2459").val()) : 0);
+        (($("#sam_with_comp_boys_623").val()) ? parseInt($("#sam_with_comp_boys_623").val()) : 0) +
+        (($("#sam_with_comp_boys_2459").val()) ? parseInt($("#sam_with_comp_boys_2459").val()) : 0);
       $("#total_comp_boys").empty();
       $("#total_comp_boys").val(sum);
     });
     $(".comp_girls").on("change", function () {
-      var sum = (($("#sam_with_comp_girls_623").val()) ? parseInt($("#sam_with_comp_girls_623").val()) : 0)
-        + (($("#sam_with_comp_girls_2459").val()) ? parseInt($("#sam_with_comp_girls_2459").val()) : 0);
+      var sum = (($("#sam_with_comp_girls_623").val()) ? parseInt($("#sam_with_comp_girls_623").val()) : 0) +
+        (($("#sam_with_comp_girls_2459").val()) ? parseInt($("#sam_with_comp_girls_2459").val()) : 0);
       $("#total_comp_girls").empty();
       $("#total_comp_girls").val(sum);
     });
@@ -194,7 +194,10 @@ module.exports.initScrChildrenUpd = function () {
             reject(result.err);
             ipc.removeAllListeners("allScrChildren");
           } else {
-            var s = { data: result.result.data, itemsCount: result.result.itemsCount[0].total };
+            var s = {
+              data: result.result.data,
+              itemsCount: result.result.itemsCount[0].total
+            };
             // console.log(s);
             resolve(s);
             ipc.removeAllListeners("allScrChildren");
@@ -213,7 +216,7 @@ module.exports.initScrChildrenUpd = function () {
             resolve(result.result);
             $("#jsGridScrChEdit")
               .jsGrid("render")
-              .done(function() {
+              .done(function () {
                 // console.log("rendering completed and data loaded");
               });
             $("#scrChildrenUpdForm")
@@ -278,8 +281,7 @@ module.exports.initScrChildrenUpd = function () {
           return delChScr(item);
         }
       },
-      fields: [
-        {
+      fields: [{
           name: "report_month",
           title: "Report Month",
           type: "text",
@@ -352,15 +354,27 @@ module.exports.initScrChildrenUpd = function () {
           width: 50,
           type: 'select',
           valueType: 'number',
-          items: [{ Name: '', value: '' }, { Name: 'Uploaded', value: 1 }, { Name: 'Not Uploaded', value: 0 }, { Name: 'Edited', value: 2 }],
+          items: [{
+            Name: '',
+            value: ''
+          }, {
+            Name: 'Uploaded',
+            value: 1
+          }, {
+            Name: 'Not Uploaded',
+            value: 0
+          }, {
+            Name: 'Edited',
+            value: 2
+          }],
           readOnly: true,
           valueField: "value",
           textField: "Name",
           editing: false,
           inserting: false,
           filtering: false,
-  
-          },
+
+        },
         {
           name: "upload_date",
           title: "Upload Date",
@@ -370,18 +384,18 @@ module.exports.initScrChildrenUpd = function () {
         },
         {
           width: 80,
-          align:'center',
-          headerTemplate: function() {
+          align: 'center',
+          headerTemplate: function () {
             return "<th class='jsgrid-header-cell'>Days since uploaded </th>";
           },
-          itemTemplate: function(value, item) {
+          itemTemplate: function (value, item) {
             // console.log(item)
             var date1 = new Date(item.upload_date);
-              var date2 = new Date();
-              var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-              var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
-              diffDays = (item.upload_status == 1) ? diffDays : 0;
-              // alert(diffDays);
+            var date2 = new Date();
+            var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            diffDays = (item.upload_status == 1) ? diffDays : 0;
+            // alert(diffDays);
             return diffDays;
           }
         },
@@ -392,23 +406,23 @@ module.exports.initScrChildrenUpd = function () {
           width: 50
         }
       ],
-    //   onItemEditing: function(args) {
-    //     var date1 = new Date(args.item.upload_date);
-    //           var date2 = new Date();
-    //           var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-    //           var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
-    //     // cancel editing of the row of item with field 'ID' = 0
-    //     if(diffDays > 0) {
-    //         args.cancel = true;
-    //     }
-    // },
-      rowClick: function(args) {
+      //   onItemEditing: function(args) {
+      //     var date1 = new Date(args.item.upload_date);
+      //           var date2 = new Date();
+      //           var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+      //           var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+      //     // cancel editing of the row of item with field 'ID' = 0
+      //     if(diffDays > 0) {
+      //         args.cancel = true;
+      //     }
+      // },
+      rowClick: function (args) {
         var date1 = new Date(args.item.upload_date);
-              var date2 = new Date();
-              var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-              var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
-              diffDays = (args.item.upload_status == 1) ? diffDays : 0;
-        if(diffDays < 6){
+        var date2 = new Date();
+        var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        diffDays = (args.item.upload_status == 1) ? diffDays : 0;
+        if (diffDays < 99) {
 
           this.editItem(args.item);
           var data = args.item;
@@ -421,7 +435,7 @@ module.exports.initScrChildrenUpd = function () {
             // }
           });
           $("#ddProvince").val(data.province_id);
-  
+
           $("#ddDistrict")
             .children("option:not(:first)")
             .remove();
@@ -439,7 +453,7 @@ module.exports.initScrChildrenUpd = function () {
             data.tehsil_name
             }</option>`
           );
-  
+
           // $("#ddTehsil").val(data.tehsil_id);
           $("#ddUC")
             .children("option:not(:first)")
@@ -447,7 +461,7 @@ module.exports.initScrChildrenUpd = function () {
           $("#ddUC").append(
             `<option value="${data.uc_id}" selected>${data.uc_name}</option>`
           );
-  
+
           $("#ddUC").val(data.uc_id);
           $("#site_one")
             .children("option:not(:first)")
@@ -457,8 +471,8 @@ module.exports.initScrChildrenUpd = function () {
             data.site_one
             }</option>`
           );
-          if(data.site_two){
-            $('.secondSite').css('display', '')  
+          if (data.site_two) {
+            $('.secondSite').css('display', '')
             $("#site_two")
               .children("option:not(:first)")
               .remove();
@@ -468,8 +482,8 @@ module.exports.initScrChildrenUpd = function () {
               }</option>`
             );
 
-          }else{
-            $('.secondSite').css('display', 'none')  
+          } else {
+            $('.secondSite').css('display', 'none')
 
           }
           $("#ddStaff_code")
@@ -520,7 +534,7 @@ module.exports.initScrChildrenUpd = function () {
             data.site_one
             }</option>`
           );
-  
+
           var normal_boys = data.normal_boys_623 + data.normal_boys_2459;
           var normal_girls = data.normal_girls_623 + data.normal_girls_2459;
           var mam_boys = data.mam_boys_623 + data.mam_boys_2459;
@@ -550,16 +564,16 @@ module.exports.initScrChildrenUpd = function () {
           $("#total_comp_boys").val(sam_comp_boys);
           $("#total_comp_girls").empty();
           $("#total_comp_girls").val(sam_comp_girls);
-  
+
           // $('#p_name').val(data.p_name);
           // $('#gender').val(data.gender);
           // $('#village').val(data.site_village);
           // $('#otp_id').val(data.otp_id);
           // console.log(args.item);
-        } else{
+        } else {
           alert('This could not be edited b/c its been more than 5 days since uploaded')
         }
-        }
+      }
     });
     $(function () {
       $('#ddInterval').on('change', function () {
@@ -574,6 +588,7 @@ module.exports.initScrChildrenUpd = function () {
         }
       })
     })
+
     function scrChilrenData(qry) {
       return new Promise((resolve, reject) => {
         ipc.send('allScrChildren', (qry));
@@ -596,7 +611,7 @@ module.exports.initScrChildrenUpd = function () {
     // var allData = scrChilrenData(prepareQry());
     $('#showDataScrChildren').on('click', (e) => {
       // console.log(prepareQry())
-      
+
     })
   })
   $('#submitScrChildUpdForm').on('click', (e) => {
@@ -606,7 +621,7 @@ module.exports.initScrChildrenUpd = function () {
     if ($('#scrChildrenUpdForm').valid() && $('.highlightInput').length == 0) {
       var scrChildrenUpdData = $('#scrChildrenUpdForm').serializeFormJSON();
       scrChildrenUpdData.reffer_otp_boys = parseInt(scrChildrenUpdData.reffer_otp_boys_s1) + ((parseInt(scrChildrenUpdData.reffer_otp_boys_s2)) ? parseInt(scrChildrenUpdData.reffer_otp_boys_s2) : 0);
-      scrChildrenUpdData.reffer_otp_girls = parseInt(scrChildrenUpdData.reffer_otp_girls_s1) + ((parseInt(scrChildrenUpdData.reffer_otp_girls_s2)) ? parseInt(scrChildrenUpdData.reffer_otp_girls_s2) : 0); 
+      scrChildrenUpdData.reffer_otp_girls = parseInt(scrChildrenUpdData.reffer_otp_girls_s1) + ((parseInt(scrChildrenUpdData.reffer_otp_girls_s2)) ? parseInt(scrChildrenUpdData.reffer_otp_girls_s2) : 0);
       scrChildrenUpdData.reffer_tsfp_boys = parseInt(scrChildrenUpdData.reffer_tsfp_boys_s1) + ((parseInt(scrChildrenUpdData.reffer_tsfp_boys_s2)) ? parseInt(scrChildrenUpdData.reffer_tsfp_boys_s2) : 0);
       scrChildrenUpdData.reffer_tsfp_girls = parseInt(scrChildrenUpdData.reffer_tsfp_girls_s1) + ((parseInt(scrChildrenUpdData.reffer_tsfp_girls_s2)) ? parseInt(scrChildrenUpdData.reffer_tsfp_girls_s2) : 0);
       scrChildrenUpdData.sup_name = $("#ddSup_name option:selected").text();
@@ -656,7 +671,7 @@ module.exports.initScrChildrenUpd = function () {
     $("#total_scr_girls").empty();
     $("#total_scr_girls").val(total);
   })
-  
+
   // let totalCheck = () => {
   //   var totalScrB = parseInt($("#total_scr_boys").val());
   //   var x = 0;
@@ -717,12 +732,12 @@ module.exports.initScrChildrenUpd = function () {
 
   }
 
-  $('#site_one').on('change', function(){
+  $('#site_one').on('change', function () {
     var that = $(this)
-    $('#site_two option').each(function(){
-      if($(this).val() == that.val()){
+    $('#site_two option').each(function () {
+      if ($(this).val() == that.val()) {
         $(this).prop('disabled', true)
-      }else{
+      } else {
         $(this).prop('disabled', false)
 
       }

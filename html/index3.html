@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/sideNav.css">
   <link rel="stylesheet" href="../css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="../css/select2.min.css">
   <!-- <link rel="stylesheet" href="../css/dataTables.jqueryui.min.css"> -->
   
   <title>ACF MIS FOR PINS</title>
@@ -180,6 +181,7 @@
   <script>
     window.$ = window.jQuery = require('jquery');
     require('jquery-validation');
+    require("../js/select2.min.js")(jQuery);  
     // var Highcharts = require('highcharts');
     // require('highcharts/modules/exporting')(Highcharts);
     // require('highcharts/modules/export-data')(Highcharts);
@@ -398,6 +400,7 @@
   <script src="../js/buttons.bootstrap4.min.js"></script>  
   <script src="../js/jquery.inputmask.bundle.min.js"></script>
   <script src="../js/dataTables.bootstrap4.min.js"></script>
+  <!-- <script src="../js/select2.min.js"></script> -->
   <!-- <script src="../js/charts/highcharts.js"></script> -->
   <!-- <script src="../js/charts/exporting.js"></script> -->
   <!-- <script src="../js/charts/export-data.js"></script> -->
@@ -1069,6 +1072,9 @@ jsGrid.fields.date = MyDateField;
       $('#appVersion').text(x);
     })
   </script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script> -->
+ 
+
 </body>
 
 </html>

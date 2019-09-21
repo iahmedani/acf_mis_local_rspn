@@ -1,35 +1,35 @@
-module.exports.initOtpExitEditV2 = function(){  
-    // $('#myForm').validate();
-    $('#exitUpdSubmit').on('click', function (e) {
-      $('#exitUpdForm').validate();
-      if ($('#exitUpdForm').valid()) {
-        var formData = $('#exitUpdForm').serializeFormJSON();
-        var exit_date = $('#exit_date').val();
-        formData.exit_date = exit_date;
-        delete formData.p_name;
-        delete formData.gender;
-        delete formData.village;
-        e.preventDefault();
-        ipc.send('otpExitUpdate', formData);
-        ipc.removeAllListeners('otpExitUpdate');
-        $("#exitUpdForm")
-          .get(0)
-          .reset();
-        $("#exitUpdForm select").val("");
-        $("#jsGrid").jsGrid("render").done(()=>{
-          console.log('Js grid updated')
-        });
-        
-        // location.reload();
-        
-      }
+module.exports.initOtpExitEditV2 = function () {
+  // $('#myForm').validate();
+  $('#exitUpdSubmit').on('click', function (e) {
+    $('#exitUpdForm').validate();
+    if ($('#exitUpdForm').valid()) {
+      var formData = $('#exitUpdForm').serializeFormJSON();
+      var exit_date = $('#exit_date').val();
+      formData.exit_date = exit_date;
+      delete formData.p_name;
+      delete formData.gender;
+      delete formData.village;
       e.preventDefault();
-    })
+      ipc.send('otpExitUpdate', formData);
+      ipc.removeAllListeners('otpExitUpdate');
+      $("#exitUpdForm")
+        .get(0)
+        .reset();
+      $("#exitUpdForm select").val("");
+      $("#jsGrid").jsGrid("render").done(() => {
+        console.log('Js grid updated')
+      });
 
-    $(function () {
-      var datePickerId = document.getElementById('exit_date');
-      datePickerId.max = new Date().toISOString().split("T")[0];
-    });
+      // location.reload();
+
+    }
+    e.preventDefault();
+  })
+
+  $(function () {
+    var datePickerId = document.getElementById('exit_date');
+    datePickerId.max = new Date().toISOString().split("T")[0];
+  });
   $(function () {
     var inDays = function (d1, d2) {
       var date1 = new Date(d1);
@@ -58,116 +58,116 @@ module.exports.initOtpExitEditV2 = function(){
     //   commodity(com, 'exit_ration2');
     //   commodity(com, 'exit_ration3');
     // })
-      ipc.send('getProvince');
-      ipc.on('province', function(evt, province){
-        $('#ddProvince').children('option:not(:first)').remove();   
-        
-        // province.province.forEach(el=>{
-          // $('#ddProvince').append(`<option value="${el.id}">${el.provinceName}</option>`);
-  
-        // })
-        prov(province);
-        })
-        $('#ddProvince').on('change', function(){
-          var prov = $(this).val();
-          ipc.send('getDistrict', prov )
-          ipc.on('district', function(evt, district){
-            $('#ddDistrict').children('option:not(:first)').remove();
-            
-          //   district.district.forEach(el=>{
-          // $('#ddDistrict').append(`<option value="${el.id}">${el.districtName}</option>`);              
-          //   })
-          dist(district);
-          })
-        })
-        $('#ddDistrict').on('change', function(){
-          var dist = $(this).val();
-          ipc.send('getTehsil', dist )
-          ipc.on('tehsil', function(evt, tehsil){
-            $('#ddTehsil').children('option:not(:first)').remove();
-            
-          //   tehsil.tehsil.forEach(el=>{
-          // $('#ddTehsil').append(`<option value="${el.id}">${el.tehsilName}</option>`);              
-          //   })
-          teh(tehsil);
-          })
-        })
-        $('#ddTehsil').on('change', function(){
-          var tehs = $(this).val();
-          ipc.send('getUC', tehs )
-          ipc.on('uc', function(evt, uc){
-            $('#ddUC').children('option:not(:first)').remove();
-          
-          //   uc.uc.forEach(el=>{
-          // $('#ddUC').append(`<option value="${el.id}">${el.ucName}</option>`);              
-          //   })
-          ucListener(uc);
-          })
-        })
-        var ucForHH;
-        $('#ddUC').on('change', function(){
-          var ucs = $(this).val();
-          ucForHH = ucs
-          ipc.send('getHealthHouse', ucs )
-          ipc.on('hh', function(evt, hh){
-            $('#ddHealthHouse').children('option:not(:first)').remove();
-          //   hh.hh.forEach(el=>{
-          // $('#ddHealthHouse').append(`<option value="${el.id}">${el.siteName}</option>`);              
-          //   })
-          hhListener(hh);
-          })
-        })
-        $('#ddHealthHouse').on('change', function(){
-          // var ucs = $('#ddUC').val();
-          var h_id = $(this).val();
-          ipc.send('getHealthHouseType', h_id )
-          ipc.on('hhType', function(evt, hh){
-            // var result = hh.hh.filter(el => el.id == $(this).val());
-            // if(h_id === ""){
-            //   $('#txtSiteType').val().empty();  
-            // } else{
-    
-            //   $('#txtSiteType').val(function(){
-            //     var site = [];
-            //     if(hh.hh[0].OTP === 1){
-            //       site.push('OTP')
-            //     }
-            //     if(hh.hh[0].SFP === 1){
-            //       site.push('SFP')                
-            //     }
-            //     if(hh.hh[0].SC === 1){
-            //       site.push('SC')                
-            //     }
-            //     return site;
-            //   })  
-            // }
-            hhTypeListener(h_id,hh);
-            
-          })
-        })
-      });
-    $(function () {
-      let xx = (site_id)=>{
-        return new Promise((resolve, reject)=>{
-          ipc.send('get', site_id);
-          ipc.on('have', (e, result)=>{
-            var s = {
-              data: result.result,
-              itemsCount: result.result.length
-            }
-            if(result.err){
-              reject(result.err)
-              ipc.removeAllListeners('have')
-              ipc.removeAllListeners('get')
-            }else{
-              resolve(s)
-              ipc.removeAllListeners('have')
-              ipc.removeAllListeners('get')
+    ipc.send('getProvince');
+    ipc.on('province', function (evt, province) {
+      $('#ddProvince').children('option:not(:first)').remove();
 
-            }
-          })
+      // province.province.forEach(el=>{
+      // $('#ddProvince').append(`<option value="${el.id}">${el.provinceName}</option>`);
+
+      // })
+      prov(province);
+    })
+    $('#ddProvince').on('change', function () {
+      var prov = $(this).val();
+      ipc.send('getDistrict', prov)
+      ipc.on('district', function (evt, district) {
+        $('#ddDistrict').children('option:not(:first)').remove();
+
+        //   district.district.forEach(el=>{
+        // $('#ddDistrict').append(`<option value="${el.id}">${el.districtName}</option>`);              
+        //   })
+        dist(district);
+      })
+    })
+    $('#ddDistrict').on('change', function () {
+      var dist = $(this).val();
+      ipc.send('getTehsil', dist)
+      ipc.on('tehsil', function (evt, tehsil) {
+        $('#ddTehsil').children('option:not(:first)').remove();
+
+        //   tehsil.tehsil.forEach(el=>{
+        // $('#ddTehsil').append(`<option value="${el.id}">${el.tehsilName}</option>`);              
+        //   })
+        teh(tehsil);
+      })
+    })
+    $('#ddTehsil').on('change', function () {
+      var tehs = $(this).val();
+      ipc.send('getUC', tehs)
+      ipc.on('uc', function (evt, uc) {
+        $('#ddUC').children('option:not(:first)').remove();
+
+        //   uc.uc.forEach(el=>{
+        // $('#ddUC').append(`<option value="${el.id}">${el.ucName}</option>`);              
+        //   })
+        ucListener(uc);
+      })
+    })
+    var ucForHH;
+    $('#ddUC').on('change', function () {
+      var ucs = $(this).val();
+      ucForHH = ucs
+      ipc.send('getHealthHouse', ucs)
+      ipc.on('hh', function (evt, hh) {
+        $('#ddHealthHouse').children('option:not(:first)').remove();
+        //   hh.hh.forEach(el=>{
+        // $('#ddHealthHouse').append(`<option value="${el.id}">${el.siteName}</option>`);              
+        //   })
+        hhListener(hh);
+      })
+    })
+    $('#ddHealthHouse').on('change', function () {
+      // var ucs = $('#ddUC').val();
+      var h_id = $(this).val();
+      ipc.send('getHealthHouseType', h_id)
+      ipc.on('hhType', function (evt, hh) {
+        // var result = hh.hh.filter(el => el.id == $(this).val());
+        // if(h_id === ""){
+        //   $('#txtSiteType').val().empty();  
+        // } else{
+
+        //   $('#txtSiteType').val(function(){
+        //     var site = [];
+        //     if(hh.hh[0].OTP === 1){
+        //       site.push('OTP')
+        //     }
+        //     if(hh.hh[0].SFP === 1){
+        //       site.push('SFP')                
+        //     }
+        //     if(hh.hh[0].SC === 1){
+        //       site.push('SC')                
+        //     }
+        //     return site;
+        //   })  
+        // }
+        hhTypeListener(h_id, hh);
+
+      })
+    })
+  });
+  $(function () {
+    let xx = (site_id) => {
+      return new Promise((resolve, reject) => {
+        ipc.send('get', site_id);
+        ipc.on('have', (e, result) => {
+          var s = {
+            data: result.result,
+            itemsCount: result.result.length
+          }
+          if (result.err) {
+            reject(result.err)
+            ipc.removeAllListeners('have')
+            ipc.removeAllListeners('get')
+          } else {
+            resolve(s)
+            ipc.removeAllListeners('have')
+            ipc.removeAllListeners('get')
+
+          }
         })
-      }
+      })
+    }
   })
 
   let getOtpExit = filter => {
@@ -175,7 +175,10 @@ module.exports.initOtpExitEditV2 = function(){
       ipc.send("allOtpExit", filter);
       ipc.on("allOtpExit", (e, result) => {
         // console.log(result);
-        var s = { data: result.result.data, itemsCount: result.result.itemsCount[0].total };
+        var s = {
+          data: result.result.data,
+          itemsCount: result.result.itemsCount[0].total
+        };
         if (result.err) {
           reject(result.err);
           ipc.removeAllListeners("allOtpExit");
@@ -209,19 +212,25 @@ module.exports.initOtpExitEditV2 = function(){
       });
     });
   }
-  
-  var prog_type = [
-    { name: 'All', value: '' },
-    {
-      name: 'TSFP', value: 'sfp'
+
+  var prog_type = [{
+      name: 'All',
+      value: ''
     },
     {
-      name: 'TSFP-PLW', value: 'sfp_plw'
+      name: 'TSFP',
+      value: 'sfp'
     },
     {
-      name: 'OTP', value: 'otp'
+      name: 'TSFP-PLW',
+      value: 'sfp_plw'
+    },
+    {
+      name: 'OTP',
+      value: 'otp'
     }, {
-      name: 'NSC', value: 'sc'
+      name: 'NSC',
+      value: 'sc'
     }
   ];
   $("#jsGrid").jsGrid({
@@ -235,22 +244,21 @@ module.exports.initOtpExitEditV2 = function(){
     pageButtonCount: 5,
     deleteConfirm: "Do you really want to delete Exit record?",
     controller: {
-      loadData: function(filter) {
+      loadData: function (filter) {
         return getOtpExit(filter);
       },
-      deleteItem: function(item) {
+      deleteItem: function (item) {
         return delOtpExit(item);
       }
     },
-    fields: [
-      {
+    fields: [{
         name: "prog_type",
-        title:'Program Type',
+        title: 'Program Type',
         type: 'select',
         items: prog_type,
         textField: 'name',
         valueField: 'value',
-        width:50
+        width: 50
       },
       {
         name: "province",
@@ -312,7 +320,19 @@ module.exports.initOtpExitEditV2 = function(){
         width: 50,
         type: 'select',
         valueType: 'number',
-        items: [{ Name: '', value: '' }, { Name: 'Uploaded', value: 1 }, { Name: 'Not Uploaded', value: 0 }, { Name: 'Edited', value: 2 }],
+        items: [{
+          Name: '',
+          value: ''
+        }, {
+          Name: 'Uploaded',
+          value: 1
+        }, {
+          Name: 'Not Uploaded',
+          value: 0
+        }, {
+          Name: 'Edited',
+          value: 2
+        }],
         readOnly: true,
         valueField: "value",
         textField: "Name",
@@ -320,25 +340,25 @@ module.exports.initOtpExitEditV2 = function(){
         inserting: false,
         filtering: false,
 
-        },{
+      }, {
         name: "upload_date",
         title: "Upload Date",
         type: "number",
         filtering: false,
       },
       {
-        align:'center',
-        headerTemplate: function() {
+        align: 'center',
+        headerTemplate: function () {
           return "<th class='jsgrid-header-cell'>Days since uploaded </th>";
         },
-        itemTemplate: function(value, item) {
+        itemTemplate: function (value, item) {
           // console.log(item)
           var date1 = new Date(item.upload_date);
-            var date2 = new Date();
-            var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
-            diffDays = (item.upload_status == 1) ? diffDays : 0;
-            // alert(diffDays);
+          var date2 = new Date();
+          var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+          var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+          diffDays = (item.upload_status == 1) ? diffDays : 0;
+          // alert(diffDays);
           return diffDays;
         }
       },
@@ -348,118 +368,119 @@ module.exports.initOtpExitEditV2 = function(){
         modeSwitchButton: false
       }
     ],
-    rowClick: function(args) {
+    rowClick: function (args) {
       var date1 = new Date(args.item.upload_date);
-              var date2 = new Date();
-              var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-              var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
-              diffDays = (args.item.upload_status == 1) ? diffDays : 0;
-      if(diffDays < 6){
-      this.editItem(args.item);
-      var data = args.item;
-      ipc.send("getCommodity", data.prog_type);
-      ipc.on("commodity", function(evt, com) {
-        $("#exit_ration1")
-          .children("option:not(:first)")
-          .remove();
-        $("#exit_ration2")
-          .children("option:not(:first)")
-          .remove();
-        $("#exit_ration3")
-          .children("option:not(:first)")
-          .remove();
-        commodity(com, "exit_ration1");
-        commodity(com, "exit_ration2");
-        commodity(com, "exit_ration3");
-      });
-      $("#p_name").val(data.p_name);
-      $("#gender").val(data.gender);
-      $("#village").val(data.site_village);
-      $("#otp_id").val(data.otp_id);
-      $("#exit_date").val(data.exit_date);
-      $("#exit_weight").val(data.exit_weight);
-      $("#exit_muac").val(data.exit_muac);
-      
-      $("#exit_other_com_name").val(data.exit_other_com_name);
-      $("#exit_other_com_qty").val(data.exit_other_com_qty);
-      function ration() {
-        $("#exit_ration1").val(data.exit_ration1);
-        $("#exit_ration2").val(data.exit_ration2);
-        $("#exit_ration3").val(data.exit_ration3);
-        $("#exit_quantity1").val(data.exit_quantity1);
-        $("#exit_quantity2").val(data.exit_quantity2);
-        $("#exit_quantity3").val(data.exit_quantity3);        
-      }
-      setTimeout(ration, 200);
-      $("#exit_reason").val(data.exit_reason);
-      $("#weight_gain").val(data.weight_gain);
-      $("#days_in_program").val(data.days_in_program);
-      $("#add_weight").val(data.weight);
-      $("#add_date").val(data.reg_date);
-      $("#ddProvince").val(data.province_id);
-      
+      var date2 = new Date();
+      var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+      var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      diffDays = (args.item.upload_status == 1) ? diffDays : 0;
+      if (diffDays < 99) {
+        this.editItem(args.item);
+        var data = args.item;
+        ipc.send("getCommodity", data.prog_type);
+        ipc.on("commodity", function (evt, com) {
+          $("#exit_ration1")
+            .children("option:not(:first)")
+            .remove();
+          $("#exit_ration2")
+            .children("option:not(:first)")
+            .remove();
+          $("#exit_ration3")
+            .children("option:not(:first)")
+            .remove();
+          commodity(com, "exit_ration1");
+          commodity(com, "exit_ration2");
+          commodity(com, "exit_ration3");
+        });
+        $("#p_name").val(data.p_name);
+        $("#gender").val(data.gender);
+        $("#village").val(data.site_village);
+        $("#otp_id").val(data.otp_id);
+        $("#exit_date").val(data.exit_date);
+        $("#exit_weight").val(data.exit_weight);
+        $("#exit_muac").val(data.exit_muac);
 
-      $("#ddDistrict")
-        .children("option:not(:first)")
-        .remove();
-      $("#ddDistrict").append(
-        `<option value="${data.district_id}" selected>${
+        $("#exit_other_com_name").val(data.exit_other_com_name);
+        $("#exit_other_com_qty").val(data.exit_other_com_qty);
+
+        function ration() {
+          $("#exit_ration1").val(data.exit_ration1);
+          $("#exit_ration2").val(data.exit_ration2);
+          $("#exit_ration3").val(data.exit_ration3);
+          $("#exit_quantity1").val(data.exit_quantity1);
+          $("#exit_quantity2").val(data.exit_quantity2);
+          $("#exit_quantity3").val(data.exit_quantity3);
+        }
+        setTimeout(ration, 200);
+        $("#exit_reason").val(data.exit_reason);
+        $("#weight_gain").val(data.weight_gain);
+        $("#days_in_program").val(data.days_in_program);
+        $("#add_weight").val(data.weight);
+        $("#add_date").val(data.reg_date);
+        $("#ddProvince").val(data.province_id);
+
+
+        $("#ddDistrict")
+          .children("option:not(:first)")
+          .remove();
+        $("#ddDistrict").append(
+          `<option value="${data.district_id}" selected>${
         data.district_name
         }</option>`
-      );
-      // $("#ddDistrict").val(data.district_id);
-      $("#ddTehsil")
-        .children("option:not(:first)")
-        .remove();
-      $("#ddTehsil").append(
-        `<option value="${data.tehsil_id}" selected>${
+        );
+        // $("#ddDistrict").val(data.district_id);
+        $("#ddTehsil")
+          .children("option:not(:first)")
+          .remove();
+        $("#ddTehsil").append(
+          `<option value="${data.tehsil_id}" selected>${
         data.tehsil_name
         }</option>`
-      );
+        );
 
-      // $("#ddTehsil").val(data.tehsil_id);
-      $("#ddUC")
-        .children("option:not(:first)")
-        .remove();
-      $("#ddUC").append(
-        `<option value="${data.uc_id}" selected>${data.uc_name}</option>`
-      );
+        // $("#ddTehsil").val(data.tehsil_id);
+        $("#ddUC")
+          .children("option:not(:first)")
+          .remove();
+        $("#ddUC").append(
+          `<option value="${data.uc_id}" selected>${data.uc_name}</option>`
+        );
 
-      // $("#ddUC").val(data.uc_id);
-      $("#ddHealthHouse")
-        .children("option:not(:first)")
-        .remove();
-      $("#ddHealthHouse").append(
-        `<option value="${data.site_id}" selected>${
+        // $("#ddUC").val(data.uc_id);
+        $("#ddHealthHouse")
+          .children("option:not(:first)")
+          .remove();
+        $("#ddHealthHouse").append(
+          `<option value="${data.site_id}" selected>${
         data.site_name
         }</option>`
-      );
-      }else{
+        );
+      } else {
         alert('This could not be edited b/c its been more than 5 days since uploaded')
-          
-      } 
+
+      }
       // console.log(args.item);
     },
-    onItemDeleting: function(args) {
+    onItemDeleting: function (args) {
       var date1 = new Date(args.item.upload_date);
-            var date2 = new Date();
-            var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
-            diffDays = (args.item.upload_status == 1) ? diffDays : 0;
+      var date2 = new Date();
+      var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+      var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      diffDays = (args.item.upload_status == 1) ? diffDays : 0;
       // cancel deletion of the item with 'protected' field
-      if(diffDays > 5) {
-          args.cancel = true;
-          alert(`Item can't be deleted b/c it been uploaded for more than 5 days`)
+      if (diffDays > 99) {
+        args.cancel = true;
+        alert(`Item can't be deleted b/c it been uploaded for more than 5 days`)
       }
-  }
+    }
   });
-  $('#exit_reason').change(function(){
-    if($(this).val() == 'defaulter'){
+  $('#exit_reason').change(function () {
+    if ($(this).val() == 'defaulter') {
       $('#exit_weight').attr('required', false)
       $('#exit_muac').attr('required', false)
       $('#exit_ration1').attr('required', false)
       $('#exit_quantity1').attr('required', false)
-    }else{
+    } else {
       $('#exit_weight').attr('required', true)
       $('#exit_muac').attr('required', true)
       $('#exit_ration1').attr('required', true)

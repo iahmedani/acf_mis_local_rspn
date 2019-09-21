@@ -5,19 +5,19 @@ module.exports.initScrPlwNewUpd = function () {
     var l = $('.l')
     var pt = $('#total_scr_pragnent')
     var lt = $('#total_scr_lactating')
-   
 
-    p.change(()=>{
-      var total=0;
-      p.each(function(){
-        total += isNaN(parseInt($(this).val())) ?  0 : parseInt($(this).val()) 
+
+    p.change(() => {
+      var total = 0;
+      p.each(function () {
+        total += isNaN(parseInt($(this).val())) ? 0 : parseInt($(this).val())
         pt.val(total);
       })
     })
-    l.change(()=>{
-      var total=0;
-      l.each(function(){
-        total += isNaN(parseInt($(this).val())) ?  0 : parseInt($(this).val()) 
+    l.change(() => {
+      var total = 0;
+      l.each(function () {
+        total += isNaN(parseInt($(this).val())) ? 0 : parseInt($(this).val())
 
 
         lt.val(total);
@@ -25,30 +25,30 @@ module.exports.initScrPlwNewUpd = function () {
     })
   })
 
-  
-  function totalCheck (){
+
+  function totalCheck() {
     var pt = $('#total_scr_pragnent')
     var lt = $('#total_scr_lactating')
     var p1 = $('.p1')
     var l1 = $('.l1')
     var ltotal = parseInt(lt.val());
-    var ptotal =  parseInt(pt.val());
+    var ptotal = parseInt(pt.val());
     var p1Val = 0;
     var l1Val = 0;
-    p1.each(function(){
-      p1Val += ($(this).val())? parseInt($(this).val()) : 0;
+    p1.each(function () {
+      p1Val += ($(this).val()) ? parseInt($(this).val()) : 0;
     })
-    l1.each(function(){
-      l1Val += ($(this).val())? parseInt($(this).val()) : 0;
+    l1.each(function () {
+      l1Val += ($(this).val()) ? parseInt($(this).val()) : 0;
     })
-    if(ltotal != l1Val){
+    if (ltotal != l1Val) {
       l1.addClass('highlightInput')
-    }else{
+    } else {
       l1.removeClass('highlightInput')
     }
-    if(ptotal != p1Val){
+    if (ptotal != p1Val) {
       p1.addClass('highlightInput')
-    }else{
+    } else {
       p1.removeClass('highlightInput')
     }
   }
@@ -210,7 +210,10 @@ module.exports.initScrPlwNewUpd = function () {
             reject(result.err);
             ipc.removeAllListeners("allScrPlw");
           } else {
-            var s = { data: result.result.data, itemsCount: result.result.itemsCount[0].total };
+            var s = {
+              data: result.result.data,
+              itemsCount: result.result.itemsCount[0].total
+            };
             resolve(s);
             ipc.removeAllListeners("allScrPlw");
           }
@@ -242,7 +245,7 @@ module.exports.initScrPlwNewUpd = function () {
       width: '100%',
       height: '300px',
       // editing: true,
-      filtering:true,
+      filtering: true,
       sorting: true,
       paging: true,
       autoload: true,
@@ -256,8 +259,7 @@ module.exports.initScrPlwNewUpd = function () {
           delPlwScr(item)
         }
       },
-      fields: [
-        {
+      fields: [{
           name: "report_month",
           title: "Report Month",
           type: "text",
@@ -310,16 +312,16 @@ module.exports.initScrPlwNewUpd = function () {
           editing: false,
           width: 100
         },
-          {
-        name: 'total_scr_pragnent',
-        title: 'Total Pragnent',
-        type: 'number',
-        filtering: false
-      }, {
-        name: 'total_scr_lactating',
-        title: 'Total Lactating',
-        type: 'number',
-        filtering: false
+        {
+          name: 'total_scr_pragnent',
+          title: 'Total Pragnent',
+          type: 'number',
+          filtering: false
+        }, {
+          name: 'total_scr_lactating',
+          title: 'Total Lactating',
+          type: 'number',
+          filtering: false
         },
         {
           name: 'upload_status',
@@ -327,15 +329,27 @@ module.exports.initScrPlwNewUpd = function () {
           width: 50,
           type: 'select',
           valueType: 'number',
-          items: [{ Name: '', value: '' }, { Name: 'Uploaded', value: 1 }, { Name: 'Not Uploaded', value: 0 }, { Name: 'Edited', value: 2 }],
+          items: [{
+            Name: '',
+            value: ''
+          }, {
+            Name: 'Uploaded',
+            value: 1
+          }, {
+            Name: 'Not Uploaded',
+            value: 0
+          }, {
+            Name: 'Edited',
+            value: 2
+          }],
           readOnly: true,
           valueField: "value",
           textField: "Name",
           editing: false,
           inserting: false,
           filtering: false,
-  
-          },
+
+        },
         {
           name: "upload_date",
           title: "Upload Date",
@@ -343,21 +357,21 @@ module.exports.initScrPlwNewUpd = function () {
           filtering: false,
         },
         {
-          align:'center',
-          headerTemplate: function() {
+          align: 'center',
+          headerTemplate: function () {
             return "<th class='jsgrid-header-cell'>Days since uploaded </th>";
           },
-          itemTemplate: function(value, item) {
+          itemTemplate: function (value, item) {
             // console.log(item)
             var date1 = new Date(item.upload_date);
-              var date2 = new Date();
-              var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-              var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
-              diffDays = (item.upload_status == 1) ? diffDays : 0;
-              // alert(diffDays);
+            var date2 = new Date();
+            var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            diffDays = (item.upload_status == 1) ? diffDays : 0;
+            // alert(diffDays);
             return diffDays;
           }
-        },{
+        }, {
           type: "control",
           editButton: false,
           modeSwitchButton: false,
@@ -366,12 +380,12 @@ module.exports.initScrPlwNewUpd = function () {
       ],
       rowClick: function (args) {
         var date1 = new Date(args.item.upload_date);
-              var date2 = new Date();
-              var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-              var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
-              diffDays = (args.item.upload_status == 1) ? diffDays : 0;
-        if(diffDays < 6){
-          
+        var date2 = new Date();
+        var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        diffDays = (args.item.upload_status == 1) ? diffDays : 0;
+        if (diffDays < 99) {
+
           this.editItem(args.item);
           var data = args.item;
           var dataKeys = Object.keys(data);
@@ -383,7 +397,7 @@ module.exports.initScrPlwNewUpd = function () {
             // }
           })
           $("#ddProvince").val(data.province_id);
-  
+
           $("#ddDistrict")
             .children("option:not(:first)")
             .remove();
@@ -401,7 +415,7 @@ module.exports.initScrPlwNewUpd = function () {
             data.tehsil_name
             }</option>`
           );
-  
+
           // $("#ddTehsil").val(data.tehsil_id);
           $("#ddUC")
             .children("option:not(:first)")
@@ -409,7 +423,7 @@ module.exports.initScrPlwNewUpd = function () {
           $("#ddUC").append(
             `<option value="${data.uc_id}" selected>${data.uc_name}</option>`
           );
-  
+
           // $("#ddUC").val(data.uc_id);
           // $("#ddHealthHouse")
           //   .children("option:not(:first)")
@@ -451,7 +465,7 @@ module.exports.initScrPlwNewUpd = function () {
             data.sup_name
             }</option>`
           );
-        } else{
+        } else {
           alert('This could not be edited b/c its been more than 5 days since uploaded')
 
         }
@@ -497,7 +511,7 @@ module.exports.initScrPlwNewUpd = function () {
     // var allData = scrChilrenData(prepareQry());
     // $('#showDataScrPlwNew').on('click', (e) => {
     //   console.log(prepareQry())
-      
+
     // })
   })
   $('#submitScrPlwNewUpd').on('click', (e) => {
@@ -520,5 +534,5 @@ module.exports.initScrPlwNewUpd = function () {
     e.preventDefault();
   })
 
-  
+
 }
