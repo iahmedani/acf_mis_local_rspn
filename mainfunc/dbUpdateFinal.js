@@ -635,7 +635,7 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                     }).then(r => {
                         return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
                     }).then(r => {
-                        return knew.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                        return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
                     }).then(r => {
                         return knex.raw(`DROP VIEW IF EXISTS [main].[v_otp_add_followup_report];`)
                     }).then(r => {
