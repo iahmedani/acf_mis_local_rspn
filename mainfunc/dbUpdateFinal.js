@@ -594,43 +594,51 @@ WHERE  [tblsessions].[is_deleted] = 0`)
 
 
             } else if (updateCheck == '6') {
-                knex.raw(`CREATE VIEW 'v_comm_otp_add_and_followup'
-                AS
-                SELECT ALL 
-                           [main].[tblOtpAdd].[otp_id], 
-                           [main].[tblOtpAdd].[muac], 
-                           [main].[tblOtpAdd].[weight], 
-                           [main].[tblOtpAdd].[ration1], 
-                           [main].[tblOtpAdd].[quantity1], 
-                           [main].[tblOtpAdd].[ration2], 
-                           [main].[tblOtpAdd].[quantity2], 
-                           [main].[tblOtpAdd].[ration3], 
-                           [main].[tblOtpAdd].[quantity3], 
-                           [main].[tblOtpAdd].[reg_date] AS [date], 
-                           '' AS [status], 
-                           'Admision' AS [record_type]
-                FROM   [main].[tblOtpAdd]
-                WHERE  [main].[tblOtpAdd].[prog_type] = 'otp'
-                       AND [main].[tblOtpAdd].[is_deleted] = 0
-                UNION ALL
-                SELECT ALL 
-                           [main].[tblOtpFollowup].[otp_id], 
-                           [main].[tblOtpFollowup].[muac], 
-                           [main].[tblOtpFollowup].[weight], 
-                           [main].[tblOtpFollowup].[ration1], 
-                           [main].[tblOtpFollowup].[quantity1], 
-                           [main].[tblOtpFollowup].[ration2], 
-                           [main].[tblOtpFollowup].[quantity2], 
-                           [main].[tblOtpFollowup].[ration3], 
-                           [main].[tblOtpFollowup].[quantity3], 
-                           [main].[tblOtpFollowup].[curr_date] AS [date], 
-                           [main].[tblOtpFollowup].[status], 
-                           'Follow Up' AS [record_type]
-                FROM   [main].[tblOtpFollowup]
-                WHERE  [main].[tblOtpFollowup].[is_deleted] = 0;
-                
-                `)
+                knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
                     .then(r => {
+                        return knex.raw(`DROP VIEW IF EXISTS [main].[v_comm_otp_add_and_followup];`)
+                    }).then(r => {
+                        return knex.raw(`CREATE VIEW 'v_comm_otp_add_and_followup'
+                    AS
+                    SELECT ALL 
+                               [main].[tblOtpAdd].[otp_id], 
+                               [main].[tblOtpAdd].[muac], 
+                               [main].[tblOtpAdd].[weight], 
+                               [main].[tblOtpAdd].[ration1], 
+                               [main].[tblOtpAdd].[quantity1], 
+                               [main].[tblOtpAdd].[ration2], 
+                               [main].[tblOtpAdd].[quantity2], 
+                               [main].[tblOtpAdd].[ration3], 
+                               [main].[tblOtpAdd].[quantity3], 
+                               [main].[tblOtpAdd].[reg_date] AS [date], 
+                               '' AS [status], 
+                               'Admision' AS [record_type]
+                    FROM   [main].[tblOtpAdd]
+                    WHERE  [main].[tblOtpAdd].[prog_type] = 'otp'
+                           AND [main].[tblOtpAdd].[is_deleted] = 0
+                    UNION ALL
+                    SELECT ALL 
+                               [main].[tblOtpFollowup].[otp_id], 
+                               [main].[tblOtpFollowup].[muac], 
+                               [main].[tblOtpFollowup].[weight], 
+                               [main].[tblOtpFollowup].[ration1], 
+                               [main].[tblOtpFollowup].[quantity1], 
+                               [main].[tblOtpFollowup].[ration2], 
+                               [main].[tblOtpFollowup].[quantity2], 
+                               [main].[tblOtpFollowup].[ration3], 
+                               [main].[tblOtpFollowup].[quantity3], 
+                               [main].[tblOtpFollowup].[curr_date] AS [date], 
+                               [main].[tblOtpFollowup].[status], 
+                               'Follow Up' AS [record_type]
+                    FROM   [main].[tblOtpFollowup]
+                    WHERE  [main].[tblOtpFollowup].[is_deleted] = 0;`)
+                    }).then(r => {
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    }).then(r => {
+                        return knew.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    }).then(r => {
+                        return knex.raw(`DROP VIEW IF EXISTS [main].[v_otp_add_followup_report];`)
+                    }).then(r => {
                         return knex.raw(`CREATE VIEW 'v_otp_add_followup_report'
                     AS
                     SELECT ALL 
@@ -681,14 +689,14 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                            AND [main].[tblOtpAdd].[prog_type] = 'otp';
                     
                     `)
-                    })
-                    .then(r => {
+                    }).then(r => {
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    }).then(r => {
                         fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '7', (err) => {
                             if (err) throw err;
                             console.log('created two views to support new report')
                         })
-                    })
-                    .catch(e => {
+                    }).catch(e => {
                         console.log(e)
                     })
             } else if (updateCheck == '7') {
