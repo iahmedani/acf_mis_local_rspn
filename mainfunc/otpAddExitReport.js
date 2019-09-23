@@ -3,14 +3,15 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
     console.log(data);
     async.series({
         last: (cb) => {
-          knex("v_otpNotExitInterval")
+          knex("v_otp_remaining_geo")
             .select('age_group', 'gender')
-            .count({
-              a: 'otp_id'
+            .sum({
+              a: 'rem'
             })
-            .whereRaw(`exit_date > '${data.report_month}' OR exit_date is null`)
-            .where('reg_date', '<', data.report_month)
+            // .whereRaw(`exit_date > '${data.report_month}' OR exit_date is null`)
+            // .where('reg_date', '<', data.report_month)
             // .whereNull('exit_date')
+            .where('Year_month', '<', data.report_month)
             .where('site_id', 'like', `%${data.site_id}%`)
             .where('province_id', 'like', `%${data.province_id}%`)
             .where('district_id', 'like', `%${data.district_id}%`)

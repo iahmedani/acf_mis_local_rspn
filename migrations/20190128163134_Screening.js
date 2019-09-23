@@ -1,4 +1,4 @@
-exports.up = function(knex, Promise) {
+exports.up = function (knex, Promise) {
   return knex.schema
     .raw(
       `CREATE TABLE [Screening](
@@ -1517,7 +1517,7 @@ WHERE  [main].[tblOtpAdd].[prog_type] = 'otp'
       t.string("description");
       t.string("value");
     })
-  .raw(`CREATE VIEW [v_otpFollowupUpdate]
+    .raw(`CREATE VIEW [v_otpFollowupUpdate]
   AS
   SELECT 
          [tblOtpFollowup].*, 
@@ -1533,7 +1533,7 @@ WHERE  [main].[tblOtpAdd].[prog_type] = 'otp'
   FROM   [main].[tblOtpAdd]
          INNER JOIN [main].[tblOtpFollowup] ON [main].[tblOtpFollowup].[otp_id] = [main].[tblOtpAdd].[otp_id]
          INNER JOIN [main].[v_geo] ON [main].[tblOtpAdd].[site_id] = [main].[v_geo].[site_id];`)
-  .raw(`CREATE VIEW [v_geo_uc]
+    .raw(`CREATE VIEW [v_geo_uc]
   AS
   SELECT 
          [main].[tblGeoProvince].[provinceName] AS [province], 
@@ -1549,21 +1549,21 @@ WHERE  [main].[tblOtpAdd].[prog_type] = 'otp'
          INNER JOIN [main].[tblGeoTehsil] ON [main].[tblGeoDistrict].[id] = [main].[tblGeoTehsil].[district_id]
          INNER JOIN [main].[tblGeoUC] ON [main].[tblGeoTehsil].[id] = [main].[tblGeoUC].[tehsil_id];
   `)
-  .raw(`CREATE VIEW v_ScrChildUpd as  SELECT 
+    .raw(`CREATE VIEW v_ScrChildUpd as  SELECT 
   [v_geo_uc].*, 
   [tblScrChildren].*
 FROM   [main].[v_geo_uc]
   INNER JOIN [main].[tblScrChildren] ON [main].[v_geo_uc].[uc_id] = [main].[tblScrChildren].[uc_id]
   where [tblScrChildren].[is_deleted]=0;
 `)
-.raw(`CREATE VIEW v_ScrPlwUpd as SELECT 
+    .raw(`CREATE VIEW v_ScrPlwUpd as SELECT 
 [v_geo_uc].*, 
 [tblScrPlw].*
 FROM   [main].[v_geo_uc]
 INNER JOIN [main].[tblScrPlw] ON [main].[v_geo_uc].[uc_id] = [main].[tblScrPlw].[uc_id]
 where tblScrPlw.is_deleted=0;
 `)
-.raw(`create view v_stockReport as
+    .raw(`create view v_stockReport as
 SELECT tblSiteStock.stock_out_id, tblSiteStock.program_type, tblSiteStock.item_name, tblSiteStock.stock_release_date, tblSiteStock.quantity_released, tblSiteStock.district_id, tblGeoDistrict.districtName, tblSiteStock.tehsil_id, tblGeoTehsil.tehsilName, tblSiteStock.uc_id, tblGeoUC.ucName, tblSiteStock.site_id, tblGeoNutSite.siteName, tblSiteStock.is_deleted, tblSiteStock.upload_status, tblSiteStock.created_at, tblSiteStock.updated_at, tblSiteStock.stockOutID, tblSiteStock.client_id, tblSiteStock.upload_date, "" AS staff_code, "" AS staff_name, "" AS sup_code, "" AS sup_name, tblGeoProvince.id AS province_id, tblGeoProvince.provinceName
 FROM ((((tblGeoDistrict INNER JOIN tblSiteStock ON tblGeoDistrict.id = tblSiteStock.district_id) INNER JOIN tblGeoTehsil ON tblSiteStock.tehsil_id = tblGeoTehsil.id) INNER JOIN tblGeoUC ON tblSiteStock.uc_id = tblGeoUC.id) INNER JOIN tblGeoNutSite ON tblSiteStock.site_id = tblGeoNutSite.id) INNER JOIN tblGeoProvince ON tblGeoDistrict.province_id = tblGeoProvince.id
 
@@ -1571,7 +1571,7 @@ UNION ALL
 
 SELECT tblSiteStock.stock_out_id, tblSiteStock.program_type, tblSiteStock.item_name, tblSiteStock.stock_release_date, tblSiteStock.quantity_released, tblSiteStock.district_id, tblGeoDistrict.districtName, tblSiteStock.tehsil_id, tblGeoTehsil.tehsilName, tblSiteStock.uc_id, tblGeoUC.ucName, tblSiteStock.site_id, "" AS siteName, tblSiteStock.is_deleted, tblSiteStock.upload_status, tblSiteStock.created_at, tblSiteStock.updated_at, tblSiteStock.stockOutID, tblSiteStock.client_id, tblSiteStock.upload_date, tblLhw.staff_code, tblLhw.staff_name, tblSupervisors.sup_code, tblSupervisors.sup_name, tblGeoProvince.id AS province_id, tblGeoProvince.provinceName
 FROM (tblSupervisors INNER JOIN (tblLhw INNER JOIN (((tblGeoDistrict INNER JOIN tblSiteStock ON tblGeoDistrict.id = tblSiteStock.district_id) INNER JOIN tblGeoTehsil ON tblSiteStock.tehsil_id = tblGeoTehsil.id) INNER JOIN tblGeoUC ON tblSiteStock.uc_id = tblGeoUC.id) ON tblLhw.staff_code = tblSiteStock.CHW_id) ON tblSupervisors.sup_code = tblSiteStock.CHS_id) INNER JOIN tblGeoProvince ON tblGeoDistrict.province_id = tblGeoProvince.id;`)
-.raw(`CREATE VIEW 'v_comm_otp_add_and_followup'
+    .raw(`CREATE VIEW 'v_comm_otp_add_and_followup'
 AS
 SELECT ALL 
            [main].[tblOtpAdd].[otp_id], 
@@ -1607,7 +1607,7 @@ FROM   [main].[tblOtpFollowup]
 WHERE  [main].[tblOtpFollowup].[is_deleted] = 0;
 
 `)
-.raw(`CREATE VIEW 'v_otp_add_followup_report'
+    .raw(`CREATE VIEW 'v_otp_add_followup_report'
 AS
 SELECT ALL 
            [main].[v_geo].[province], 
@@ -1657,7 +1657,7 @@ WHERE  [main].[tblOtpAdd].[is_deleted] = 0
        AND [main].[tblOtpAdd].[prog_type] = 'otp';
 
 `)
-.raw(`create view v_geo_active as SELECT 
+    .raw(`create view v_geo_active as SELECT 
 [tblGeoProvince].[id] AS [province_id], 
 [tblGeoProvince].[provinceName] AS [province], 
 [tblGeoDistrict].[id] AS [district_id], 
@@ -1677,18 +1677,74 @@ INNER JOIN [tblGeoTehsil] ON [tblGeoDistrict].[id] = [tblGeoTehsil].[district_id
 INNER JOIN [tblGeoUC] ON [tblGeoTehsil].[id] = [tblGeoUC].[tehsil_id]
 INNER JOIN [tblGeoNutSite] ON [tblGeoUC].[id] = [tblGeoNutSite].[uc_id]
 where tblGeoUC.isActive = 1 and [tblGeoTehsil].isActive = 1 and [tblGeoNutSite].isActive = 1 and [tblGeoDistrict].isActive = 1;
-`);
+`)
+    .raw(`create view v_OtpAdd_yearmonth as
+select site_id, strftime('%Y-%m', reg_date) as Year_month, (case when age>5 and age <24 then '6_23' when age>23 and age < 60 then '24_59' end) as age_grp, gender, count(otp_id) as tAdd
+from tblOtpAdd
+where is_deleted = 0 and prog_type = 'otp'
+group by site_id, Year_month, age_grp, gender;`)
+    .raw(`create view v_OtpExit_yearmonth as SELECT 
+[main].[tblOtpAdd].[site_id], 
+strftime('%Y-%m',[main].[tblOtpExit].[exit_date]) as Year_month, 
+(case when [main].[tblOtpAdd].[age] > 6  and [main].[tblOtpAdd].[age] <24 then '6_23' when [main].[tblOtpAdd].[age]> 23 and [main].[tblOtpAdd].[age] < 60 then '24_59' end) as age_grp, 
+[main].[tblOtpAdd].[gender], 
+COUNT ([main].[tblOtpExit].[exit_id]) AS [tExit]
+FROM   [main].[tblOtpExit]
+INNER JOIN [main].[tblOtpAdd] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+WHERE  [main].[tblOtpAdd].[is_deleted] = 0
+  AND [main].[tblOtpExit].[is_deleted] = 0 and [main].[tblOtpAdd].[prog_type] = 'otp'
+GROUP  BY
+   [main].[tblOtpAdd].[site_id], 
+   Year_month, 
+   age_grp, 
+   [main].[tblOtpAdd].[gender]`)
+    .raw(`create view v_otp_remaining as SELECT 
+   [main].[v_OtpAdd_yearmonth].[site_id], 
+   [main].[v_OtpAdd_yearmonth].[Year_month], 
+   [main].[v_OtpAdd_yearmonth].[age_grp], 
+   [main].[v_OtpAdd_yearmonth].[gender], 
+   SUM ([main].[v_OtpAdd_yearmonth].[tAdd]) as tAdd, 
+   SUM ([main].[v_OtpExit_yearmonth].[tExit]) as tExit,
+   (SUM ([main].[v_OtpAdd_yearmonth].[tAdd]) -  case when SUM ([main].[v_OtpExit_yearmonth].[tExit]) is null then 0 else SUM ([main].[v_OtpExit_yearmonth].[tExit]) end) as rem
+FROM   [main].[v_OtpAdd_yearmonth]
+   LEFT JOIN [main].[v_OtpExit_yearmonth] ON [main].[v_OtpAdd_yearmonth].[site_id] = [main].[v_OtpExit_yearmonth].[site_id]
+        AND [main].[v_OtpAdd_yearmonth].[Year_month] = [main].[v_OtpExit_yearmonth].[Year_month]
+        AND [main].[v_OtpAdd_yearmonth].[age_grp] = [main].[v_OtpExit_yearmonth].[age_grp]
+        AND [main].[v_OtpAdd_yearmonth].[gender] = [main].[v_OtpExit_yearmonth].[gender]
+GROUP  BY
+      [main].[v_OtpAdd_yearmonth].[site_id], 
+      [main].[v_OtpAdd_yearmonth].[Year_month], 
+      [main].[v_OtpAdd_yearmonth].[age_grp], 
+      [main].[v_OtpAdd_yearmonth].[gender];`)
+    .raw(`create view v_otp_remaining_geo as SELECT 
+      [main].[v_geo].[province_id], 
+      [main].[v_geo].[district_id], 
+      [main].[v_geo].[tehsil_id], 
+      [main].[v_geo].[uc_id], 
+      [main].[v_geo].[site_id], 
+      [main].[v_otp_remaining].[Year_month], 
+      [main].[v_otp_remaining].[age_grp], 
+      [main].[v_otp_remaining].[gender], 
+      [main].[v_otp_remaining].[tAdd], 
+      [main].[v_otp_remaining].[tExit], 
+      [main].[v_otp_remaining].[rem]
+FROM   [main].[v_geo]
+      INNER JOIN [main].[v_otp_remaining] ON [main].[v_geo].[site_id] = [main].[v_otp_remaining].[site_id];`);
 };
 
-exports.down = function(knex, Promise) {
+exports.down = function (knex, Promise) {
   return knex.schema
-  .raw("DROP VIEW v_geo_active")
-  .raw("DROP VIEW v_otp_add_followup_report")
-  .raw("DROP VIEW v_comm_otp_add_and_followup")
-  .raw("DROP VIEW v_stockReport")
-  .raw("DROP VIEW v_ScrPlwUpd")
-  .raw("DROP VIEW v_ScrChildUpd")
-  .raw("DROP VIEW v_geo_uc")
+    .raw('drop view v_OtpAdd_yearmonth')
+    .raw('drop view v_OtpExit_yearmonth')
+    .raw('drop view v_otp_remaining')
+    .raw('drop view v_otp_remaining_geo')
+    .raw("DROP VIEW v_geo_active")
+    .raw("DROP VIEW v_otp_add_followup_report")
+    .raw("DROP VIEW v_comm_otp_add_and_followup")
+    .raw("DROP VIEW v_stockReport")
+    .raw("DROP VIEW v_ScrPlwUpd")
+    .raw("DROP VIEW v_ScrChildUpd")
+    .raw("DROP VIEW v_geo_uc")
     .dropTable("tblConfig")
     .raw("DROP VIEW v_otpFollowupUpdate")
     .raw("DROP VIEW v_tblScrPlwFull")

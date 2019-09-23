@@ -736,6 +736,96 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                     .catch(e => {
                         console.log(e)
                     })
+            } else if (updateCheck == '8') {
+                knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    .then(r => {
+                        return knex.raw(`DROP VIEW IF EXISTS [main].[v_OtpAdd_yearmonth];`)
+                    }).then(r => {
+                        return knex.raw(`create view v_OtpAdd_yearmonth as
+                    select site_id, strftime('%Y-%m', reg_date) as Year_month, (case when age>5 and age <24 then '6_23' when age>23 and age < 60 then '24_59' end) as age_grp, gender, count(otp_id) as tAdd
+                    from tblOtpAdd
+                    where is_deleted = 0 and prog_type = 'otp'
+                    group by site_id, Year_month, age_grp, gender;
+                    `)
+                    }).then(r => {
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    }).then(r => {
+                        return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    }).then(r => {
+                        return knex.raw(`DROP VIEW IF EXISTS [main].[v_OtpExit_yearmonth];`)
+                    }).then(r => {
+                        return knex.raw(`create view v_OtpExit_yearmonth as SELECT 
+                    [main].[tblOtpAdd].[site_id], 
+                    strftime('%Y-%m',[main].[tblOtpExit].[exit_date]) as Year_month, 
+                    (case when [main].[tblOtpAdd].[age] > 6  and [main].[tblOtpAdd].[age] <24 then '6_23' when [main].[tblOtpAdd].[age]> 23 and [main].[tblOtpAdd].[age] < 60 then '24_59' end) as age_grp, 
+                    [main].[tblOtpAdd].[gender], 
+                    COUNT ([main].[tblOtpExit].[exit_id]) AS [tExit]
+             FROM   [main].[tblOtpExit]
+                    INNER JOIN [main].[tblOtpAdd] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+             WHERE  [main].[tblOtpAdd].[is_deleted] = 0
+                      AND [main].[tblOtpExit].[is_deleted] = 0 and [main].[tblOtpAdd].[prog_type] = 'otp'
+             GROUP  BY
+                       [main].[tblOtpAdd].[site_id], 
+                       Year_month, 
+                       age_grp, 
+                       [main].[tblOtpAdd].[gender]`)
+                    }).then(r => {
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    }).then(r => {
+                        return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    }).then(r => {
+                        return knex.raw(`DROP VIEW IF EXISTS [main].[v_otp_remaining];`)
+                    }).then(r => {
+                        return knex.raw(`create view v_otp_remaining as SELECT 
+                    [main].[v_OtpAdd_yearmonth].[site_id], 
+                    [main].[v_OtpAdd_yearmonth].[Year_month], 
+                    [main].[v_OtpAdd_yearmonth].[age_grp] , 
+                    [main].[v_OtpAdd_yearmonth].[gender], 
+                    SUM ([main].[v_OtpAdd_yearmonth].[tAdd]) as tAdd, 
+                    SUM ([main].[v_OtpExit_yearmonth].[tExit]) as tExit,
+                    (SUM ([main].[v_OtpAdd_yearmonth].[tAdd]) -  case when SUM ([main].[v_OtpExit_yearmonth].[tExit]) is null then 0 else SUM ([main].[v_OtpExit_yearmonth].[tExit]) end) as rem
+             FROM   [main].[v_OtpAdd_yearmonth]
+                    LEFT JOIN [main].[v_OtpExit_yearmonth] ON [main].[v_OtpAdd_yearmonth].[site_id] = [main].[v_OtpExit_yearmonth].[site_id]
+                         AND [main].[v_OtpAdd_yearmonth].[Year_month] = [main].[v_OtpExit_yearmonth].[Year_month]
+                         AND [main].[v_OtpAdd_yearmonth].[age_grp] = [main].[v_OtpExit_yearmonth].[age_grp]
+                         AND [main].[v_OtpAdd_yearmonth].[gender] = [main].[v_OtpExit_yearmonth].[gender]
+             GROUP  BY
+                       [main].[v_OtpAdd_yearmonth].[site_id], 
+                       [main].[v_OtpAdd_yearmonth].[Year_month], 
+                       [main].[v_OtpAdd_yearmonth].[age_grp], 
+                       [main].[v_OtpAdd_yearmonth].[gender];`)
+                    }).then(r => {
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    }).then(r => {
+                        return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    }).then(r => {
+                        return knex.raw(`DROP VIEW IF EXISTS [main].[v_otp_remaining_geo];`)
+                    }).then(r => {
+                        return knex.raw(`create view v_otp_remaining_geo as SELECT 
+                    [main].[v_geo].[province_id], 
+                    [main].[v_geo].[district_id], 
+                    [main].[v_geo].[tehsil_id], 
+                    [main].[v_geo].[uc_id], 
+                    [main].[v_geo].[site_id], 
+                    [main].[v_otp_remaining].[Year_month], 
+                    [main].[v_otp_remaining].[age_grp] as age_group, 
+                    [main].[v_otp_remaining].[gender], 
+                    [main].[v_otp_remaining].[tAdd], 
+                    [main].[v_otp_remaining].[tExit], 
+                    [main].[v_otp_remaining].[rem]
+             FROM   [main].[v_geo]
+                    INNER JOIN [main].[v_otp_remaining] ON [main].[v_geo].[site_id] = [main].[v_otp_remaining].[site_id];`)
+                    }).then(r => {
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    }).then(r => {
+                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '9', (err) => {
+                            if (err) throw err;
+                            console.log('created new view for new  report issues')
+                        })
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    })
             } else {
                 console.log('v_otpNotExit already updated')
             }
