@@ -1,8 +1,8 @@
-module.exports.initOtpAdd = function (){
+module.exports.initOtpAdd = function () {
   var knex = require('../mainfunc/db')
   $(":input").inputmask();
   // $("#phone").inputmask({ "mask": "(999) 999-9999" });
-$(function () {
+  $(function () {
     var datePickerId = document.getElementById('reg_date');
     datePickerId.max = new Date().toISOString().split("T")[0];
   });
@@ -16,66 +16,66 @@ $(function () {
     //   commodity(com, 'ration2');
     //   commodity(com, 'ration3');
     // })
-  ipc.send('getProvince');
-  ipc.on('province', function(evt, province){
-    $('#ddProvince').children('option:not(:first)').remove();   
-    
-    // province.province.forEach(el=>{
+    ipc.send('getProvince');
+    ipc.on('province', function (evt, province) {
+      $('#ddProvince').children('option:not(:first)').remove();
+
+      // province.province.forEach(el=>{
       // $('#ddProvince').append(`<option value="${el.id}">${el.provinceName}</option>`);
 
-    // })
-    prov(province);
+      // })
+      prov(province);
     })
-    $('#ddProvince').on('change', function(){
+    $('#ddProvince').on('change', function () {
       var prov = $(this).val();
-      ipc.send('getDistrict', prov )
-      ipc.on('district', function(evt, district){
+      ipc.send('getDistrict', prov)
+      ipc.on('district', function (evt, district) {
         $('#ddDistrict').children('option:not(:first)').remove();
-        
-      //   district.district.forEach(el=>{
-      // $('#ddDistrict').append(`<option value="${el.id}">${el.districtName}</option>`);              
-      //   })
-      dist(district);
+
+        //   district.district.forEach(el=>{
+        // $('#ddDistrict').append(`<option value="${el.id}">${el.districtName}</option>`);              
+        //   })
+        dist(district);
       })
     })
-    $('#ddDistrict').on('change', function(){
+    $('#ddDistrict').on('change', function () {
       var dist = $(this).val();
-      ipc.send('getTehsil', dist )
-      ipc.on('tehsil', function(evt, tehsil){
+      ipc.send('getTehsil', dist)
+      ipc.on('tehsil', function (evt, tehsil) {
         $('#ddTehsil').children('option:not(:first)').remove();
-        
-      //   tehsil.tehsil.forEach(el=>{
-      // $('#ddTehsil').append(`<option value="${el.id}">${el.tehsilName}</option>`);              
-      //   })
-      teh(tehsil);
+
+        //   tehsil.tehsil.forEach(el=>{
+        // $('#ddTehsil').append(`<option value="${el.id}">${el.tehsilName}</option>`);              
+        //   })
+        teh(tehsil);
       })
     })
-    $('#ddTehsil').on('change', function(){
+    $('#ddTehsil').on('change', function () {
       var tehs = $(this).val();
-      ipc.send('getUC', tehs )
-      ipc.on('uc', function(evt, uc){
+      ipc.send('getUC', tehs)
+      ipc.on('uc', function (evt, uc) {
         $('#ddUC').children('option:not(:first)').remove();
-      
-      //   uc.uc.forEach(el=>{
-      // $('#ddUC').append(`<option value="${el.id}">${el.ucName}</option>`);              
-      //   })
-      ucListener(uc);
+
+        //   uc.uc.forEach(el=>{
+        // $('#ddUC').append(`<option value="${el.id}">${el.ucName}</option>`);              
+        //   })
+        ucListener(uc);
       })
     })
     var ucForHH;
-    $('#ddUC').on('change', function(){
+    $('#ddUC').on('change', function () {
       var ucs = $(this).val();
       ucForHH = ucs
-      ipc.send('getHealthHouse', ucs )
-      ipc.on('hh', function(evt, hh){
+      ipc.send('getHealthHouse', ucs)
+      ipc.on('hh', function (evt, hh) {
         $('#ddHealthHouse').children('option:not(:first)').remove();
-      //   hh.hh.forEach(el=>{
-      // $('#ddHealthHouse').append(`<option value="${el.id}">${el.siteName}</option>`);              
-      //   })
-      hhListener(hh);
+        //   hh.hh.forEach(el=>{
+        // $('#ddHealthHouse').append(`<option value="${el.id}">${el.siteName}</option>`);              
+        //   })
+        hhListener(hh);
       })
     })
-    $('#ddHealthHouse').on('change', function(){
+    $('#ddHealthHouse').on('change', function () {
       // var ucs = $('#ddUC').val();
       var h_id = $(this).val();
       ipc.send("getVillage", h_id);
@@ -84,10 +84,10 @@ $(function () {
           .children("option:not(:first)")
           .remove();
         villListener(_villages);
-        
+
       });
       ipc.send('getHealthHouseType', h_id)
-      ipc.on('hhType', function(evt, hh){
+      ipc.on('hhType', function (evt, hh) {
         // var result = hh.hh.filter(el => el.id == $(this).val());
         // if(h_id === ""){
         //   $('#txtSiteType').val().empty();  
@@ -107,8 +107,8 @@ $(function () {
         //     return site;
         //   })  
         // }
-        hhTypeListener(h_id,hh);
-        
+        hhTypeListener(h_id, hh);
+
       })
     })
   });
@@ -129,7 +129,7 @@ $(function () {
       $("#nsc_tranfer_from_otp_div").css("display", "");
       $('#nsc_otp_id').attr("required", true);
       // $('#ddUC').attr('disabled', false).attr('required', true);
-    } else if (prog == "sc" && entReason != "transfer_in_from_otp"){
+    } else if (prog == "sc" && entReason != "transfer_in_from_otp") {
       $("#ddUC")
         .attr("disabled", true)
         .attr("required", false);
@@ -147,21 +147,21 @@ $(function () {
     }
   });
 
-$(function(){
-  $('#ddProgramType').on('change', function(){
-    var prog = $(this).val();    
-    ipc.send('getCommodity', prog)
-    ipc.on('commodity', function (evt, com) {
+  $(function () {
+    $('#ddProgramType').on('change', function () {
+      var prog = $(this).val();
+      ipc.send('getCommodity', prog)
+      ipc.on('commodity', function (evt, com) {
         $('#ration1').children('option:not(:first)').remove();
         $('#ration2').children('option:not(:first)').remove();
         $('#ration3').children('option:not(:first)').remove();
-      commodity(com, 'ration1');
-      commodity(com, 'ration2');
-      commodity(com, 'ration3');
-    })
-    if (prog !== 'sc') {
-      $("#ent_reason").children('option:not(:first)').remove();
-      $("#ent_reason").append(`
+        commodity(com, 'ration1');
+        commodity(com, 'ration2');
+        commodity(com, 'ration3');
+      })
+      if (prog !== 'sc') {
+        $("#ent_reason").children('option:not(:first)').remove();
+        $("#ent_reason").append(`
         <option value="no_prv_pro">New Admission</option>
                       <option value="relapse">Relapse</option>
                       <option value="return_def">Return After Defaulter</option>
@@ -178,10 +178,10 @@ $(function(){
 
                       <option value="other">Other</option>
         `);
-      $("#ref_type")
-        .children("option:not(:first)")
-        .remove();
-      $("#ref_type").append(`
+        $("#ref_type")
+          .children("option:not(:first)")
+          .remove();
+        $("#ref_type").append(`
         <option value="self">Self</option>
                       <option value="peer">Peer to Peer</option>
                       <option value="chw">CHW</option>
@@ -194,147 +194,151 @@ $(function(){
                       <option value="by_tsfp">By TSFP</option>
                       <option value="other">Other</option>
         `);
-    }
-    if (prog === 'otp' || prog === 'sc'){
-      $('#age option[value="above59"]').attr('disabled', true)
-      $('#age option[value="below_6"]').attr('disabled', false)      
-      $('#plw_type').attr('disabled', true);
-      $('#muac').attr('max','11.4');
-      $('#muac').attr('min','0');
-      $('#oedema').empty();
-      $('#oedema').append(`<option selected disabled>Choose</option>
+      }
+      if (prog === 'otp' || prog === 'sc') {
+        $('#age option[value="above59"]').attr('disabled', true)
+        $('#age option[value="below_6"]').attr('disabled', false)
+        $('#plw_type').attr('disabled', true);
+        $('#muac').attr('max', '11.4');
+        $('#muac').attr('min', '0');
+        $('#oedema').empty();
+        $('#oedema').append(`<option selected disabled>Choose</option>
       <option value="absent">absent</option>
       <option value="plus_1">&plus;(1)</option>
       <option value="plus_2">&plus;&plus;(2)</option>
       <option value="plus_3">&plus;&plus;&plus;(3)</option>`)
-                        if(prog === 'otp'){
-                          $('#oedema').val('absent');
-                        }
-      $("#nsc_tranfer_from_otp_div").css("display", "none");
-      $("#nsc_otp_id").attr("required", false);
-      if (prog == 'sc') {
-        $("#ent_reason").children('option:not(:first)').remove();
-        $("#ent_reason").append(`
+        if (prog === 'otp') {
+          $('#oedema').val('absent');
+        }
+        $("#nsc_tranfer_from_otp_div").css("display", "none");
+        $("#nsc_otp_id").attr("required", false);
+        if (prog == 'sc') {
+          $("#ent_reason").children('option:not(:first)').remove();
+          $("#ent_reason").append(`
         <option value="new_add"> New Admission</option>
         <option value="transfer_in"> Transfer In</option>
         <option value="transfer_in_from_otp"> Transfer In From OTP </option>
         <option value="readnission"> Readmission</option>
         <option value="defaulted"> Defaulted</option> 
         `);
-        $("#ref_type").children('option:not(:first)').remove();
-        $("#ref_type").append(`
+          $("#ref_type").children('option:not(:first)').remove();
+          $("#ref_type").append(`
         <option value="ref_by_otp">OTP</option>
         <option value="opd">OPD</option>
         <option value="ped_wards">Pediatric Wards</option>
         <option value="other">Other</option>
         `);
-      }
-       
-      
+        }
 
-     } else if(prog === 'sfp'){
-      $('#age option[value="above59"]').attr('disabled', true)
-      $('#age option[value="below_6"]').attr('disabled', true)
-       $('#plw_type').attr('disabled', true);
-       $('#muac').attr('max','12.5');
-       $('#muac').attr('min','11.5');
-       $('#oedema').children('option:not(:eq(1))').remove();
-      
-      //  $('#oedema option:not(:second)').remove();
-     } else {
-      var age = $('#age').val();
-      $('#age option[value="above59"]').attr('disabled', true)
-       $('#plw_type').attr('disabled', false);
-       $('#muac').attr('max','30');
-       $('#muac').attr('min','0');
-       $('#age option[value="above59"]').attr('disabled', false)
-      $('#age option[value="below_6"]').attr('disabled', false)
-      $('#oedema').empty();
-      $('#oedema').append(`<option selected disabled>Choose</option>
+
+
+      } else if (prog === 'sfp') {
+        $('#age option[value="above59"]').attr('disabled', true)
+        $('#age option[value="below_6"]').attr('disabled', true)
+        $('#plw_type').attr('disabled', true);
+        $('#muac').attr('max', '12.5');
+        $('#muac').attr('min', '11.5');
+        $('#oedema').children('option:not(:eq(1))').remove();
+
+        //  $('#oedema option:not(:second)').remove();
+      } else {
+        var age = $('#age').val();
+        $('#age option[value="above59"]').attr('disabled', true)
+        $('#plw_type').attr('disabled', false);
+        $('#muac').attr('max', '30');
+        $('#muac').attr('min', '0');
+        $('#age option[value="above59"]').attr('disabled', false)
+        $('#age option[value="below_6"]').attr('disabled', false)
+        $('#oedema').empty();
+        $('#oedema').append(`<option selected disabled>Choose</option>
                     <option value="absent">absent</option>
                     <option value="plus_1">&plus;(1)</option>
                     <option value="plus_2">&plus;&plus;(2)</option>
                     <option value="plus_3">&plus;&plus;&plus;(3)</option>`)
 
-     }
-  })
-  
-
-  // $('#ent_reason').on('change', function (e) {
-  //   var progType = $('#ddProgramType');
-  //   var muac = $('#muac');
-  //   if(progType.val() == 'otp' & $(this).val() == 'moved_in'){
-  //     muac.removeAttr('max')
-  //     muac.attr('min', 0)
-  //   }else{
-  //     muac.attr('max', 11.4)
-  //     muac.attr('min', 0)
-  //   }
-  // })
-  $('#oedema').on('change', function (e) {
-    var progType = $('#ddProgramType');
-    var muac = $('#muac');
-    if(progType.val() == 'otp' && $(this).val() !== 'absent'){
-      muac.removeAttr('max')
-      muac.attr('min', 0)
-    }else{
-      muac.attr('max', 11.4)
-      muac.attr('min', 0)
-    }
-  })
-  
-})
-
-$('#otpAddForm').on('submit', async (e)=>{
-  e.preventDefault();
-  $('#otpAddForm').validate();
-  if($('#otpAddForm').valid() ){
-    var otpAddFormData = $('#otpAddForm').serializeFormJSON();
-    if( $('#ddProgramType').val() == 'otp'){
-      
-      var check = await knex('tblOtpAdd').where({site_id: otpAddFormData.site_id, reg_id: otpAddFormData.reg_id, is_deleted:0})
-      if(check.length > 0){
-        
-        $('#regIdInfo').css('display', '')
-      }else{
-        $('#regIdInfo').css('display', 'none')
-      console.log(otpAddFormData)
-
-      ipc.send('submitOtpAdd', otpAddFormData);
-      ipc.removeAllListeners('submitOtpAdd');
-  
-      $('.clr').val("");
-      $(".cld").val("")
       }
-    }else{
-      $('#regIdInfo').css('display', 'none')
-      console.log(otpAddFormData)
+    })
 
-      ipc.send('submitOtpAdd', otpAddFormData);
-      ipc.removeAllListeners('submitOtpAdd');
-  
-      $('.clr').val("");
-      $(".cld").val("")
+
+    // $('#ent_reason').on('change', function (e) {
+    //   var progType = $('#ddProgramType');
+    //   var muac = $('#muac');
+    //   if(progType.val() == 'otp' & $(this).val() == 'moved_in'){
+    //     muac.removeAttr('max')
+    //     muac.attr('min', 0)
+    //   }else{
+    //     muac.attr('max', 11.4)
+    //     muac.attr('min', 0)
+    //   }
+    // })
+    $('#oedema').on('change', function (e) {
+      var progType = $('#ddProgramType');
+      var muac = $('#muac');
+      if (progType.val() == 'otp' && $(this).val() !== 'absent') {
+        muac.removeAttr('max')
+        muac.attr('min', 0)
+      } else {
+        muac.attr('max', 11.4)
+        muac.attr('min', 0)
+      }
+    })
+
+  })
+
+  $('#otpAddForm').on('submit', async (e) => {
+    e.preventDefault();
+    $('#otpAddForm').validate();
+    if ($('#otpAddForm').valid()) {
+      var otpAddFormData = $('#otpAddForm').serializeFormJSON();
+      if ($('#ddProgramType').val() == 'otp') {
+
+        var check = await knex('tblOtpAdd').where({
+          site_id: otpAddFormData.site_id,
+          reg_id: otpAddFormData.reg_id,
+          is_deleted: 0
+        })
+        if (check.length > 0) {
+
+          $('#regIdInfo').css('display', '')
+        } else {
+          $('#regIdInfo').css('display', 'none')
+          console.log(otpAddFormData)
+
+          ipc.send('submitOtpAdd', otpAddFormData);
+          ipc.removeAllListeners('submitOtpAdd');
+
+          $('.clr').val("");
+          $(".cld").val("")
+        }
+      } else {
+        $('#regIdInfo').css('display', 'none')
+        console.log(otpAddFormData)
+
+        ipc.send('submitOtpAdd', otpAddFormData);
+        ipc.removeAllListeners('submitOtpAdd');
+
+        $('.clr').val("");
+        $(".cld").val("")
+      }
+      // if( $('#ddProgramType').val() == 'otp'){
+
+      // }else{
+      //   $('#regIdInfo').css('display', 'none')
+      //   console.log(otpAddFormData)
+
+      //   ipc.send('submitOtpAdd', otpAddFormData);
+      //   ipc.removeAllListeners('submitOtpAdd');
+
+      //   $('.clr').val("");
+      //   $(".cld").val("")
+
+      // }
+      // setTimeout(otpAddTemplate, 3000);
     }
-    // if( $('#ddProgramType').val() == 'otp'){
-      
-    // }else{
-    //   $('#regIdInfo').css('display', 'none')
-    //   console.log(otpAddFormData)
-
-    //   ipc.send('submitOtpAdd', otpAddFormData);
-    //   ipc.removeAllListeners('submitOtpAdd');
-  
-    //   $('.clr').val("");
-    //   $(".cld").val("")
-
-    // }
-    // setTimeout(otpAddTemplate, 3000);
-  }
 
     // addScrChildTemplate()
   })
-  
+
   function rusfOnWeigth(_weight) {
     console.log(_weight);
     if ($('#ddProgramType').val() == 'otp') {
@@ -357,13 +361,13 @@ $('#otpAddForm').on('submit', async (e)=>{
       } else if (_weight >= 12) {
         qty.val(35)
       }
-    } 
+    }
   }
 
   $('#weight').on('change', function (e) {
     var _weight = $(this).val();
     rusfOnWeigth(_weight);
-     })
+  })
   $('#ddProgramType').on('change', function () {
     var progType = $(this).val();
     if (progType == 'sfp_Plw') {
@@ -371,12 +375,12 @@ $('#otpAddForm').on('submit', async (e)=>{
       $("#labAge").text('(in years)');
       $("#age").attr('min', false);
       $("#age").attr('max', false);
-      
+
     } else {
       $("#labAge").empty();
       $("#labAge").text('(in months)');
-      $("#age").attr('min','6');
-      $("#age").attr('max','59');
+      $("#age").attr('min', '6');
+      $("#age").attr('max', '59');
     }
   })
   $("#oedema").on('change', function () {
@@ -391,7 +395,7 @@ $('#otpAddForm').on('submit', async (e)=>{
       } else if (progType == 'sfp') {
         muacEl.attr("max", "12.4");
         muacEl.attr("min", "11.5");
-      } else { 
+      } else {
         muacEl.attr("max", "21");
         muacEl.attr("min", "0");
       }
@@ -401,12 +405,12 @@ $('#otpAddForm').on('submit', async (e)=>{
     }
   });
   // $('#ent_reason').on('change', function () {
-   
+
 
 
   // })
 
-  $("#ent_reason").on('change', function() {
+  $("#ent_reason").on('change', function () {
     if ($(this).val() == 'other') {
       $("#entry_reason_other_div").css('display', '');
       $("#entry_reason_other").attr('required', true);
@@ -417,15 +421,15 @@ $('#otpAddForm').on('submit', async (e)=>{
 
     var progType = $('#ddProgramType');
     var muac = $('#muac');
-    if(progType.val() == 'otp' && ($(this).val() == 'moved_in' || $(this).val() == 'tranfer_in_other_otp' )){
+    if (progType.val() == 'otp' && ($(this).val() == 'moved_in' || $(this).val() == 'tranfer_in_other_otp')) {
       muac.removeAttr('max')
       muac.attr('min', 0)
-    }else{
+    } else {
       muac.attr('max', 11.4)
       muac.attr('min', 0)
     }
 
-    if ($(this).val() == "transfer_in_from_nsc") {
+    if ($(this).val() == "transfer_in_from_nsc" || $(this).val() == "return_def") {
       $("#nsc_old_otp_id_div").css('display', '');
       $("#nsc_old_otp_id").attr("hidden", false);
     } else {
@@ -436,7 +440,7 @@ $('#otpAddForm').on('submit', async (e)=>{
 
 
   });
-  $("#ref_type").on("change", function() {
+  $("#ref_type").on("change", function () {
     if ($(this).val() == "other") {
       $("#ref_type_other_div").css("display", "");
       $("#ref_type_other").attr("required", true);
@@ -457,7 +461,7 @@ $('#otpAddForm').on('submit', async (e)=>{
 
     }
   });
-  $('#ddVillageName').on("change", function(){
+  $('#ddVillageName').on("change", function () {
     var village = $(this).val();
     $('#address').val(village);
   })

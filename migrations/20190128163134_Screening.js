@@ -1729,11 +1729,20 @@ GROUP  BY
       [main].[v_otp_remaining].[tExit], 
       [main].[v_otp_remaining].[rem]
 FROM   [main].[v_geo]
-      INNER JOIN [main].[v_otp_remaining] ON [main].[v_geo].[site_id] = [main].[v_otp_remaining].[site_id];`);
+      INNER JOIN [main].[v_otp_remaining] ON [main].[v_geo].[site_id] = [main].[v_otp_remaining].[site_id];`)
+    .raw(`create view vSessionForReportNew as 
+      SELECT 
+             [vSessionsFullForUpdate].*, 
+             [main].[tblSupervisors].[sup_name], 
+             [main].[tblLhw].[staff_name]
+      FROM   [main].[vSessionsFullForUpdate]
+             LEFT JOIN [main].[tblSupervisors] ON [main].[vSessionsFullForUpdate].[CHS_id] = [main].[tblSupervisors].[sup_code]
+             LEFT JOIN [main].[tblLhw] ON [main].[vSessionsFullForUpdate].[CHW_id] = [main].[tblLhw].[staff_code];`);
 };
 
 exports.down = function (knex, Promise) {
   return knex.schema
+    .raw(`drop view vSessionForReportNew`)
     .raw('drop view v_OtpAdd_yearmonth')
     .raw('drop view v_OtpExit_yearmonth')
     .raw('drop view v_otp_remaining')

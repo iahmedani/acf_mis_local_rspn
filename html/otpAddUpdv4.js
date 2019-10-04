@@ -521,7 +521,7 @@ module.exports.initOtpAddUpdV2 = function () {
             $("#ration3").val(data.ration3);
             $("#quantity3").val(data.quantity3);
           }
-          if (data.ent_reason == "transfer_in_from_nsc") {
+          if (data.ent_reason == "transfer_in_from_nsc" || data.ent_reason == "return_def") {
             $("#nsc_old_otp_id_div").css('display', '');
             $("#nsc_old_otp_id").attr("hidden", false);
           } else {
@@ -690,7 +690,7 @@ module.exports.initOtpAddUpdV2 = function () {
       $("#nsc_tranfer_from_otp_div").css("display", "");
       $("#nsc_otp_id").attr("required", true);
 
-    } else if ($(this).val() != "transfer_in_from_otp") {
+    } else if ($(this).val() == "transfer_in_from_nsc" || $(this).val() == "return_def") {
       $("#nsc_tranfer_from_otp_div").css("display", "none");
       $("#nsc_otp_id").attr("required", false);
     } else {
@@ -729,6 +729,7 @@ module.exports.initOtpAddUpdV2 = function () {
       muac.attr('max', 11.4)
       muac.attr('min', 0)
     }
+
   })
   $('#oedema').on('change', function (e) {
     var progType = $('#ddProgramType');

@@ -57,13 +57,13 @@ module.exports.initScrPlwNewReport = function () {
       ipc.send("getStaffuc", ucs);
       ipc.send("getSupsuc", ucs);
 
-      ipc.on("haveStaffuc", function(evt, staffs) {
+      ipc.on("haveStaffuc", function (evt, staffs) {
         $("#ddStaff_code")
           .children("option:not(:first)")
           .remove();
         staffListeneruc(staffs);
       });
-      ipc.on("haveSupsuc", function(evt, _sups) {
+      ipc.on("haveSupsuc", function (evt, _sups) {
         $("#ddSup_code")
           .children("option:not(:first)")
           .remove();
@@ -81,7 +81,7 @@ module.exports.initScrPlwNewReport = function () {
     var staff_code = $(this).val();
     $("#ddStaff_name").val(staff_code);
   });
-  $("#ddStaff_name").on("change", function() {
+  $("#ddStaff_name").on("change", function () {
     var staff_code = $(this).val();
     $("#ddStaff_code").val(staff_code);
   });
@@ -89,7 +89,7 @@ module.exports.initScrPlwNewReport = function () {
     var sup_code = $(this).val();
     $("#ddSup_name").val(sup_code);
   });
-  $("#ddSup_name").on("change", function() {
+  $("#ddSup_name").on("change", function () {
     var sup_code = $(this).val();
     $("#ddSup_code").val(sup_code);
   });
@@ -154,19 +154,19 @@ module.exports.initScrPlwNewReport = function () {
     }
     $('#showDataScrPlwReport').on('click', function (e) {
       e.preventDefault();
-      var fullTextPlw = ["Province", "District", "Tehsil", "UC", "Total Catchement Population", "Total HH Visited",  "Reporting Month", "Staff Name", "Staff Code", "Supervisor Name", "Supervisor Code", "Total Screened (Pragnent)", "Total Screened (Lectating)", "First time Screened (Pragnent)", "First time Screened (Lectating)", "Re-Screened (Pragnent)", "Re-Screened (Lactating)", "MUAC >=21 (Pragnent)", "MUAC >=21 (Lectating)", "MUAC <21 (Pragnent)", "MUAC <21 (Lectating)", "PLW Received IFA Tablets First Time (Pragnent)", "PLW Received IFA Tablets First Time (Lectating)", "Total Follow ups", "Total Exits"];
-      var colNamePlw = ["province", "district_name", "tehsil_name", "uc_name", "catchment_population","total_hh",  "report_month", "staff_name", "staff_code", "sup_name", "sup_code", "total_scr_pragnent", "total_scr_lactating", "new_scr_pragnent", "new_scr_lactating", "reScreened_scr_pragnent", "reScreened_scr_lactating", "ifa_first_time_pragnent", "ifa_first_time_lactating","muac_gt_21_pragnent", "muac_gt_21_lactating", "muac_le_21_pragnent", "muac_le_21_lactating",  "total_followup", "total_exits"];
+      var fullTextPlw = ["Province", "District", "Tehsil", "UC", "Total Catchement Population", "Total HH Visited", "Reporting Month", "Staff Name", "Staff Code", "Supervisor Name", "Supervisor Code", "Total Screened (Pragnent)", "Total Screened (Lectating)", "First time Screened (Pragnent)", "First time Screened (Lectating)", "Re-Screened (Pragnent)", "Re-Screened (Lactating)", "MUAC >=21 (Pragnent)", "MUAC >=21 (Lectating)", "MUAC <21 (Pragnent)", "MUAC <21 (Lectating)", "PLW Received IFA Tablets First Time (Pragnent)", "PLW Received IFA Tablets First Time (Lectating)", "Total Follow ups", "Total Exits"];
+      var colNamePlw = ["province", "district_name", "tehsil_name", "uc_name", "catchment_population", "total_hh", "report_month", "staff_name", "staff_code", "sup_name", "sup_code", "total_scr_pragnent", "total_scr_lactating", "new_scr_pragnent", "new_scr_lactating", "reScreened_scr_pragnent", "reScreened_scr_lactating", "muac_gt_21_pragnent", "muac_gt_21_lactating", "muac_le_21_pragnent", "muac_le_21_lactating", "ifa_first_time_pragnent", "ifa_first_time_lactating", "total_followup", "total_exits"];
       if ($('#filterDate').valid()) {
-      scrChildReport(prepareQry())
-        .then(result => {
-          // console.log(result)
-          putSummaryDataToTable('scrPlwNewSum', result.summary)
-          createSingleEntryTable('scrPlwNewSingle', result.single, fullTextPlw, colNamePlw)
+        scrChildReport(prepareQry())
+          .then(result => {
+            // console.log(result)
+            putSummaryDataToTable('scrPlwNewSum', result.summary)
+            createSingleEntryTable('scrPlwNewSingle', result.single, fullTextPlw, colNamePlw)
 
-        })
-        .catch(e => {
-          // console.log('error occured during summary table creation')
-        })
+          })
+          .catch(e => {
+            // console.log('error occured during summary table creation')
+          })
       }
     });
     $('#exportScrPlwReport').on('click', function () {

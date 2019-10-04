@@ -834,6 +834,30 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                     .catch(e => {
                         console.log(e)
                     })
+            } else if (updateCheck == '9') {
+                knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    .then(r => {
+                        return knex.raw(`DROP VIEW IF EXISTS [main].[vSessionForReportNew];`)
+                    }).then(r => {
+                        return knex.raw(`create view vSessionForReportNew as 
+                        SELECT 
+                               [vSessionsFullForUpdate].*, 
+                               [main].[tblSupervisors].[sup_name], 
+                               [main].[tblLhw].[staff_name]
+                        FROM   [main].[vSessionsFullForUpdate]
+                               LEFT JOIN [main].[tblSupervisors] ON [main].[vSessionsFullForUpdate].[CHS_id] = [main].[tblSupervisors].[sup_code]
+                               LEFT JOIN [main].[tblLhw] ON [main].[vSessionsFullForUpdate].[CHW_id] = [main].[tblLhw].[staff_code];`)
+                    }).then(r => {
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    }).then(r => {
+                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '10', (err) => {
+                            if (err) throw err;
+                            console.log('created new view for vSessionForReportNew')
+                        })
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    })
             } else {
                 console.log('v_otpNotExit already updated')
             }

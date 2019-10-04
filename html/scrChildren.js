@@ -26,7 +26,6 @@ module.exports.initGrid = function () {
       ipc.send('getDistrict', prov)
       ipc.on('district', function (evt, district) {
         $('#ddDistrict').children('option:not(:first)').remove();
-
         dist(district);
       })
     })
@@ -36,6 +35,15 @@ module.exports.initGrid = function () {
       ipc.on('tehsil', function (evt, tehsil) {
         $('#ddTehsil').children('option:not(:first)').remove();
         teh(tehsil);
+        $('#site_two').children('option:not(:first)').remove();
+        ipc.send('getAddSitesByDistrict', dist);
+        ipc.on('getAddSitesByDistrict', (e, r) => {
+
+          for (site of r.r) {
+            $('#site_two').append(`<option value="${site.site_name}">${site.site_name}</option>`);
+          }
+        })
+
         // knex('v_geo_active')
         // .columns('site_name')
         // .where({district_id: dist})
@@ -75,16 +83,16 @@ module.exports.initGrid = function () {
       ipc.on('hh', async function (evt, hh) {
         // console.log(hh)
         $('#site_one').children('option:not(:first)').remove();
-        if (hh.hh.length > 1) {
-          $('.secondSite').css('display', '')
-          $('#site_two').children('option:not(:first)').remove();
-          await asyncForEach(hh.hh, async (el) => {
-            $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);
-          })
-        } else {
-          $('.secondSite').css('display', 'none')
+        // if (hh.hh.length > 1) {
+        //   $('.secondSite').css('display', '')
+        //   $('#site_two').children('option:not(:first)').remove();
+        //   await asyncForEach(hh.hh, async (el) => {
+        //     $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);
+        //   })
+        // } else {
+        //   $('.secondSite').css('display', 'none')
 
-        }
+        // }
         hhListener_siteOne(hh);
 
       });
@@ -186,6 +194,7 @@ module.exports.initGrid = function () {
     // totalCheck(totalScrB, totalScrG);
     // console.log(totalCheck(totalScrB, totalScrG))
     totalCheck();
+    samTotalCheck();
     if ($('#scrChildrenForm').valid() && $('.highlightInput').length == 0) {
       var scrChildrenData = $('#scrChildrenForm').serializeFormJSON();
       // console.log(scrChildrenData);
@@ -292,6 +301,66 @@ module.exports.initGrid = function () {
 
   }
 
+  let samTotalCheck = () => {
+    var samTotalB = parseInt($('#total_sam_boys').val()) + parseInt($('#total_comp_boys').val())
+    var samTotalG = parseInt($('#total_sam_girls').val()) + parseInt($('#total_comp_girls').val())
+    var mamTotalB = parseInt($('#total_mam_boys').val())
+    var mamTotalG = parseInt($('#total_mam_girls').val())
+
+    var s_sam_g = 0
+    $('.s_sam_g').each(function (i, el) {
+      s_sam_g = s_sam_g + ($(el).val() ? parseInt($(el).val()) : 0);
+      if ($(".s_sam_g").length - 1 == i) {
+        if (s_sam_g != samTotalG) {
+          $(".s_sam_g").addClass('highlightInput');
+          // alert('Value not allowed')
+        } else {
+          $(".s_sam_g").removeClass('highlightInput');
+        }
+      }
+    })
+
+    var s_sam_b = 0
+    $('.s_sam_b').each(function (i, el) {
+      s_sam_b = s_sam_b + ($(el).val() ? parseInt($(el).val()) : 0);
+      if ($(".s_sam_b").length - 1 == i) {
+        if (s_sam_b != samTotalB) {
+          $(".s_sam_b").addClass('highlightInput');
+          // alert('Value not allowed')
+        } else {
+          $(".s_sam_b").removeClass('highlightInput');
+        }
+      }
+    })
+    var s_mam_g = 0
+    $('.s_mam_g').each(function (i, el) {
+      s_mam_g = s_mam_g + ($(el).val() ? parseInt($(el).val()) : 0);
+      if ($(".s_mam_g").length - 1 == i) {
+        if (s_mam_g != mamTotalG) {
+          $(".s_mam_g").addClass('highlightInput');
+          // alert('Value not allowed')
+        } else {
+          $(".s_mam_g").removeClass('highlightInput');
+        }
+      }
+    })
+
+    var s_mam_b = 0
+    $('.s_mam_b').each(function (i, el) {
+      s_mam_b = s_mam_b + ($(el).val() ? parseInt($(el).val()) : 0);
+      if ($(".s_mam_b").length - 1 == i) {
+        if (s_mam_b != mamTotalB) {
+          $(".s_mam_b").addClass('highlightInput');
+          // alert('Value not allowed')
+        } else {
+          $(".s_mam_b").removeClass('highlightInput');
+        }
+      }
+    })
+
+
+
+  }
   // $('.tchkb').on('change', function () {
   //   var totalScrB = parseInt($("#total_scr_boys").val());
   //   // var totalScrG = parseInt($("#total_scr_girls").val());
@@ -325,6 +394,6 @@ module.exports.initGrid = function () {
   //   });
   // })
 
-  $('.secondSite').css('display', 'none')
+  // $('.secondSite').css('display', 'none')
 
 }
