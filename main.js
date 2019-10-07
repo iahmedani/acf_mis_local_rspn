@@ -18,13 +18,13 @@ var fs = require('fs');
 //       console.log(err)
 //       _launch.updateVersion().then(()=>{
 //         console.log('done')
-        
+
 //       }).catch(err=>console.log(err))
 //     }else{
 //       console.log(stat)
 //     }
 //   })
-  
+
 // }
 
 // require('electron-reload')(__dirname);
@@ -42,15 +42,19 @@ const {
 var async = require('async');
 const knex = require('./mainfunc/db');
 
-let _urlBugRemove = async ()=>{
+let _urlBugRemove = async () => {
   try {
-    
+
     var x = await knex('tblConfig')
-    if(x.length){
-      
+    if (x.length) {
+
       console.log(x)
-      if(x[0].value == 'https://training.paka.cf'){
-        await knex('tblConfig').update({value:'http://training.paka.cf'}).where({value: 'https://training.paka.cf'})
+      if (x[0].value == 'https://training.paka.cf') {
+        await knex('tblConfig').update({
+          value: 'http://training.paka.cf'
+        }).where({
+          value: 'https://training.paka.cf'
+        })
       }
     }
   } catch (error) {
@@ -60,22 +64,22 @@ let _urlBugRemove = async ()=>{
 
 _urlBugRemove();
 // let _testVar 
-async function _serverUrl (){
-  var  x = await knex('tblConfig'); 
+async function _serverUrl() {
+  var x = await knex('tblConfig');
   return x;
 }
 
 
-function toJSONLocal (date) {
-	var local = new Date(date);
-	local.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-	return local.toJSON().slice(0, 10);
+function toJSONLocal(date) {
+  var local = new Date(date);
+  local.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+  return local.toJSON().slice(0, 10);
 }
 
 function localDate() {
   var x = new Date();
- 
-  return  toJSONLocal(x);
+
+  return toJSONLocal(x);
 }
 let sucMsg = function (event, listenChannel, message) {
   event.sender.send('success', {
@@ -154,7 +158,9 @@ function otpAddDataSave(event, addOtpData, config, client) {
 }
 // followup interm data share
 function followupIntermData(event, filter) {
-  console.log({filter})
+  console.log({
+    filter
+  })
   var _limit = (filter.pageSize) ? filter.pageSize : 10;
   var _offset = (filter.pageIndex == 1) ? 0 : (filter.pageIndex - 1) * _limit;
   console.log('site_id from html', filter.site_id);
@@ -163,40 +169,42 @@ function followupIntermData(event, filter) {
     .where({
       site_id: filter.site_id,
       status: 'open',
-      'tblInterimOtp.is_deleted':0
+      'tblInterimOtp.is_deleted': 0
     })
-    .where('tblOtpAdd.reg_id','like', `%${filter.reg_id ? filter.reg_id :''}%`)
-    .where('tblOtpAdd.p_name','like', `%${filter.p_name ? filter.p_name :''}%`)
-    .where('tblOtpAdd.f_or_h_name','like', `%${filter.f_or_h_name ? filter.f_or_h_name :''}%`)
-    .where('tblOtpAdd.site_village','like', `%${filter.site_village ? filter.site_village :''}%`)
-    .where('tblOtpAdd.gender','like', `%${filter.gender ? filter.gender :''}%`)
+    .where('tblOtpAdd.reg_id', 'like', `%${filter.reg_id ? filter.reg_id :''}%`)
+    .where('tblOtpAdd.p_name', 'like', `%${filter.p_name ? filter.p_name :''}%`)
+    .where('tblOtpAdd.f_or_h_name', 'like', `%${filter.f_or_h_name ? filter.f_or_h_name :''}%`)
+    .where('tblOtpAdd.site_village', 'like', `%${filter.site_village ? filter.site_village :''}%`)
+    .where('tblOtpAdd.gender', 'like', `%${filter.gender ? filter.gender :''}%`)
     .limit(_limit)
     .offset(_offset)
     .then(result => {
       // result.location = 'Follow up interim call'
       return knex.from('tblOtpAdd')
-      .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
-      .where({
-        site_id: filter.site_id,
-        status: 'open',
-      'tblInterimOtp.is_deleted':0
-      })
-      .where('tblOtpAdd.reg_id','like', `%${filter.reg_id ? filter.reg_id :''}%`)
-      .where('tblOtpAdd.p_name','like', `%${filter.p_name ? filter.p_name :''}%`)
-      .where('tblOtpAdd.f_or_h_name','like', `%${filter.f_or_h_name ? filter.f_or_h_name :''}%`)
-      .where('tblOtpAdd.site_village','like', `%${filter.site_village ? filter.site_village :''}%`)
-      .where('tblOtpAdd.gender','like', `%${filter.gender ? filter.gender :''}%`)
-      .count({total:'tblOtpAdd.reg_id' })
-      // .limit(_limit)
-      // .offset(_offset)
-      .then(totalCount=>{
-        return {
-          result,
-          totalCount
-        }
-      })
-      
-    }).then(result=>{
+        .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
+        .where({
+          site_id: filter.site_id,
+          status: 'open',
+          'tblInterimOtp.is_deleted': 0
+        })
+        .where('tblOtpAdd.reg_id', 'like', `%${filter.reg_id ? filter.reg_id :''}%`)
+        .where('tblOtpAdd.p_name', 'like', `%${filter.p_name ? filter.p_name :''}%`)
+        .where('tblOtpAdd.f_or_h_name', 'like', `%${filter.f_or_h_name ? filter.f_or_h_name :''}%`)
+        .where('tblOtpAdd.site_village', 'like', `%${filter.site_village ? filter.site_village :''}%`)
+        .where('tblOtpAdd.gender', 'like', `%${filter.gender ? filter.gender :''}%`)
+        .count({
+          total: 'tblOtpAdd.reg_id'
+        })
+        // .limit(_limit)
+        // .offset(_offset)
+        .then(totalCount => {
+          return {
+            result,
+            totalCount
+          }
+        })
+
+    }).then(result => {
       console.log(result)
       event.sender.send('getInterim', ({
         result: result.result,
@@ -276,79 +284,81 @@ function followupAddData(event, item) {
       otp_id: item.otp_id,
       next_followup: date_
     })
-    .then(result=>{
-      if(result.length){
-        event.sender.send('error', ({msg: 'Duplicate Followup is not allowed'}))
+    .then(result => {
+      if (result.length) {
+        event.sender.send('error', ({
+          msg: 'Duplicate Followup is not allowed'
+        }))
         knex.from('tblOtpAdd')
-        .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
-        .where({
-          'tblInterimOtp.otp_id': item.otp_id,
-          status: 'open'
-        })
-        .then(result => {
-    
-          // result.location = 'Follow up interim call'
-          console.log(result)
-          event.sender.send('addFollowup', ({
-            result: result
-          }))
-        })
-        .catch(e => {
-          // e.location = 'Follow up interim call'
-          console.log(e);
-          event.sender.send('addFollowup', ({
-            err: e
-          }))
-        })
-      }else{
+          .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
+          .where({
+            'tblInterimOtp.otp_id': item.otp_id,
+            status: 'open'
+          })
+          .then(result => {
+
+            // result.location = 'Follow up interim call'
+            console.log(result)
+            event.sender.send('addFollowup', ({
+              result: result
+            }))
+          })
+          .catch(e => {
+            // e.location = 'Follow up interim call'
+            console.log(e);
+            event.sender.send('addFollowup', ({
+              err: e
+            }))
+          })
+      } else {
         knex.from('tblInterimOtp')
-        .where({
-          otp_id: item.otp_id
-        })
-        .update(interimUpd)
-        .then(result => {
-          console.log(result)
-        })
-        .catch(e => {
-          console.log(e)
-        })
-      knex.from('tblOtpAdd')
-        .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
-        .where({
-          'tblInterimOtp.otp_id': item.otp_id,
-          status: 'open'
-        })
-        .then(result => {
-    
-          // result.location = 'Follow up interim call'
-          console.log(result)
-          event.sender.send('addFollowup', ({
-            result: result
-          }))
-        })
-        .catch(e => {
-          // e.location = 'Follow up interim call'
-          console.log(e);
-          event.sender.send('addFollowup', ({
-            err: e
-          }))
-        })
-      knex('tblOtpFollowup')
-        .insert(followupData)
-        .then(result => {
-          console.log({
-            msg: 'Follow up added',
-            result: result
+          .where({
+            otp_id: item.otp_id
           })
-        })
-        .catch(e => {
-          console.log({
-            msg: 'Error during followup record add',
-            err: e
+          .update(interimUpd)
+          .then(result => {
+            console.log(result)
           })
-        })
+          .catch(e => {
+            console.log(e)
+          })
+        knex.from('tblOtpAdd')
+          .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
+          .where({
+            'tblInterimOtp.otp_id': item.otp_id,
+            status: 'open'
+          })
+          .then(result => {
+
+            // result.location = 'Follow up interim call'
+            console.log(result)
+            event.sender.send('addFollowup', ({
+              result: result
+            }))
+          })
+          .catch(e => {
+            // e.location = 'Follow up interim call'
+            console.log(e);
+            event.sender.send('addFollowup', ({
+              err: e
+            }))
+          })
+        knex('tblOtpFollowup')
+          .insert(followupData)
+          .then(result => {
+            console.log({
+              msg: 'Follow up added',
+              result: result
+            })
+          })
+          .catch(e => {
+            console.log({
+              msg: 'Error during followup record add',
+              err: e
+            })
+          })
       }
-      })
+    })
 
 
 
@@ -393,10 +403,12 @@ ipcMain.on('otpExitUpdate', (e, data) => {
 function otpAddDataForExit(event, filter) {
   var _limit = (filter.pageSize) ? filter.pageSize : 10;
   var _offset = (filter.pageIndex == 1) ? 0 : (filter.pageIndex - 1) * _limit;
-  if(filter.site_id){
-    var myFilter = {site_id:filter.site_id}
-  }else{
-    var myFilter = ['site_id','like','%%']
+  if (filter.site_id) {
+    var myFilter = {
+      site_id: filter.site_id
+    }
+  } else {
+    var myFilter = ['site_id', 'like', '%%']
   }
 
   knex.from('tblOtpAdd')
@@ -404,40 +416,42 @@ function otpAddDataForExit(event, filter) {
     .where({
       site_id: filter.site_id,
       status: 'open',
-      'tblInterimOtp.is_deleted':0
+      'tblInterimOtp.is_deleted': 0
     })
-    .where('tblOtpAdd.reg_id','like', `%${filter.reg_id ? filter.reg_id :''}%`)
-    .where('tblOtpAdd.p_name','like', `%${filter.p_name ? filter.p_name :''}%`)
-    .where('tblOtpAdd.f_or_h_name','like', `%${filter.f_or_h_name ? filter.f_or_h_name :''}%`)
-    .where('tblOtpAdd.site_village','like', `%${filter.site_village ? filter.site_village :''}%`)
-    .where('tblOtpAdd.gender','like', `%${filter.gender ? filter.gender :''}%`)
+    .where('tblOtpAdd.reg_id', 'like', `%${filter.reg_id ? filter.reg_id :''}%`)
+    .where('tblOtpAdd.p_name', 'like', `%${filter.p_name ? filter.p_name :''}%`)
+    .where('tblOtpAdd.f_or_h_name', 'like', `%${filter.f_or_h_name ? filter.f_or_h_name :''}%`)
+    .where('tblOtpAdd.site_village', 'like', `%${filter.site_village ? filter.site_village :''}%`)
+    .where('tblOtpAdd.gender', 'like', `%${filter.gender ? filter.gender :''}%`)
     .limit(_limit)
     .offset(_offset)
     .then(result => {
       // result.location = 'Follow up interim call'
       return knex.from('tblOtpAdd')
-      .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
-      .where({
-        site_id: filter.site_id,
-        status: 'open',
-      'tblInterimOtp.is_deleted':0
-      })
-      .where('tblOtpAdd.reg_id','like', `%${filter.reg_id ? filter.reg_id :''}%`)
-      .where('tblOtpAdd.p_name','like', `%${filter.p_name ? filter.p_name :''}%`)
-      .where('tblOtpAdd.f_or_h_name','like', `%${filter.f_or_h_name ? filter.f_or_h_name :''}%`)
-      .where('tblOtpAdd.site_village','like', `%${filter.site_village ? filter.site_village :''}%`)
-      .where('tblOtpAdd.gender','like', `%${filter.gender ? filter.gender :''}%`)
-      .count({total:'tblOtpAdd.reg_id' })
-      // .limit(_limit)
-      // .offset(_offset)
-      .then(totalCount=>{
-        return {
-          result,
-          totalCount
-        }
-      })
-      
-    }).then(result=>{
+        .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
+        .where({
+          site_id: filter.site_id,
+          status: 'open',
+          'tblInterimOtp.is_deleted': 0
+        })
+        .where('tblOtpAdd.reg_id', 'like', `%${filter.reg_id ? filter.reg_id :''}%`)
+        .where('tblOtpAdd.p_name', 'like', `%${filter.p_name ? filter.p_name :''}%`)
+        .where('tblOtpAdd.f_or_h_name', 'like', `%${filter.f_or_h_name ? filter.f_or_h_name :''}%`)
+        .where('tblOtpAdd.site_village', 'like', `%${filter.site_village ? filter.site_village :''}%`)
+        .where('tblOtpAdd.gender', 'like', `%${filter.gender ? filter.gender :''}%`)
+        .count({
+          total: 'tblOtpAdd.reg_id'
+        })
+        // .limit(_limit)
+        // .offset(_offset)
+        .then(totalCount => {
+          return {
+            result,
+            totalCount
+          }
+        })
+
+    }).then(result => {
       console.log(result)
       event.sender.send('getOtpAll', ({
         result: result.result,
@@ -483,12 +497,15 @@ function otpExitAddDataSave(event, data, client) {
   data.client_id = client;
   data.upload_status = 0;
   const otpExitAddData = data;
-  console.log({ location: 'OTP ADD EXIT', data });
+  console.log({
+    location: 'OTP ADD EXIT',
+    data
+  });
   const followup = {
     otp_id: data.otp_id,
     client_id: data.client_id,
     weight: data.exit_weight,
-    ration1: (data.exit_ration1) ? data.exit_ration1 : '' ,
+    ration1: (data.exit_ration1) ? data.exit_ration1 : '',
     quantity1: (data.exit_quantity1) ? data.exit_quantity1 : '',
     ration2: (data.exit_ration2) ? data.exit_ration2 : '',
     quantity2: (data.exit_quantity2) ? data.exit_quantity2 : '',
@@ -518,7 +535,7 @@ function otpExitAddDataSave(event, data, client) {
       })
       console.log(followup)
       return knex('tblOtpFollowup')
-              .insert(followup)
+        .insert(followup)
     })
     .then(result => {
       console.log({
@@ -612,6 +629,7 @@ function sessionsDataSave(event, item, config, client) {
 ipcMain.on('stocks', (e, data) => {
   stockMovement(e);
 })
+
 function stockMovement(event) {
   knex('v_StockMovementv2')
     .orderBy('year', 'asc')
@@ -623,9 +641,10 @@ function stockMovement(event) {
       errMsg(event, '', 'Data Fetch error')
     })
 }
-ipcMain.on('enterRequest', (event, data)=>{
+ipcMain.on('enterRequest', (event, data) => {
   stockRequest(event, data);
 })
+
 function stockRequest(event, data) {
   data.client_id = client_id;
   knex('tblStockRequest')
@@ -642,7 +661,7 @@ function stockRequest(event, data) {
 // })
 
 // function rusfStockDetails(event) {
-  
+
 //   async.series({
 //     dist: cb => {
 //       knex.select('*').from('v_total_dist')
@@ -672,31 +691,34 @@ function stockRequest(event, data) {
 // Save Stock Entry
 function stockSave(event, data) {
   // console.log(data)
-  const {client, mac } = JSON.parse(fs.readFileSync( `${process.env.APPDATA}/ACF MIS Local app/config.json`, 'utf8'));
-  const newData =[];
-   data.forEach((el, i)=>{
-    el.client_id = client; 
+  const {
+    client,
+    mac
+  } = JSON.parse(fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, 'utf8'));
+  const newData = [];
+  data.forEach((el, i) => {
+    el.client_id = client;
     newData.push(el)
-    if(data.length -1 == i){
+    if (data.length - 1 == i) {
       console.log(newData)
       knex('tblStock')
         .insert(newData)
         .then(result => {
-          sucMsg(event,'','Stock Entry Save')
+          sucMsg(event, '', 'Stock Entry Save')
         }).catch(e => {
           console.log(e)
-          errMsg(event,'','Stock entry db error')
+          errMsg(event, '', 'Stock entry db error')
         })
     }
-   })
-  
+  })
+
 }
 ipcMain.on('geoList', (evt, data) => {
   async.series({
     province: (cb) => {
       knex('tblGeoProvince')
         .then(result => {
-          cb(null,result)
+          cb(null, result)
         })
         .catch(e => {
           cb(e);
@@ -740,7 +762,7 @@ ipcMain.on('geoList', (evt, data) => {
     }
   }, (err, results) => {
     evt.sender.send("geoList", (results));
-    
+
   })
 })
 
@@ -935,7 +957,7 @@ function childrenScrAddSave(event, data, client, username, project) {
       sucMsg(event, '', 'Record Successfully added')
       // console.log('func childrenScrAddSave success', result)
     }).catch(e => {
-      if(e.errno == 19){
+      if (e.errno == 19) {
 
         errMsg(event, '', 'Duplicate registration ID is not allowed')
       }
@@ -990,11 +1012,11 @@ function plwNewScrAddSave(event, data, client, username, project) {
 //     })
 // }
 
-async function _firstRunDb (knex, Promise){
+async function _firstRunDb(knex, Promise) {
   try {
     // var x =  require('./migrations/20190128163134_Screening')   
     // await  require('./migrations/20190128163134_Screening').down(knex, Promise);
-    await  require('./migrations/20190128163134_Screening').up(knex, Promise);
+    await require('./migrations/20190128163134_Screening').up(knex, Promise);
   } catch (error) {
     console.log(error)
     // await  require('./migrations/20190128163134_Screening').up(knex, Promise);    
@@ -1062,42 +1084,42 @@ function firstRun() {
 
   ipcMain.on('firstRun', (e, firstRunInfo) => {
     require('getmac').getMac((e, mac) => {
-    console.log(firstRunInfo);
-    var usernameL = firstRunInfo.username.toLowerCase();
-    usernameL = usernameL.replace(/\s+/g, '');
+      console.log(firstRunInfo);
+      var usernameL = firstRunInfo.username.toLowerCase();
+      usernameL = usernameL.replace(/\s+/g, '');
 
-    var org_nameL = firstRunInfo.org_name.toLowerCase();
-    org_nameL = org_nameL.replace(/\s+/g, '');
+      var org_nameL = firstRunInfo.org_name.toLowerCase();
+      org_nameL = org_nameL.replace(/\s+/g, '');
 
-    var project_nameL = firstRunInfo.project_name.toLowerCase();
-    project_nameL = project_nameL.replace(/\s+/g, '');
+      var project_nameL = firstRunInfo.project_name.toLowerCase();
+      project_nameL = project_nameL.replace(/\s+/g, '');
 
-    var passwordL = firstRunInfo.password.toLowerCase();
-    passwordL = passwordL.replace(/\s+/g, '');
+      var passwordL = firstRunInfo.password.toLowerCase();
+      passwordL = passwordL.replace(/\s+/g, '');
 
-    var client = firstRunInfo.client.toLowerCase();
-    client = client.replace(/\s+/g, '');
-    
-    var configInformation = {
-      usernameL,
-      org_nameL,
-      project_nameL,
-      passwordL,
-      client,
-    }
-    
+      var client = firstRunInfo.client.toLowerCase();
+      client = client.replace(/\s+/g, '');
+
+      var configInformation = {
+        usernameL,
+        org_nameL,
+        project_nameL,
+        passwordL,
+        client,
+      }
+
       configInformation.mac = mac
       console.log(mac)
-    
 
 
-    
-    console.log(configInformation)
+
+
+      console.log(configInformation)
 
       var thisJson = JSON.stringify(configInformation);
       var regData = {
         client_id: client,
-        mac:mac
+        mac: mac
       }
       request({
         url: serverUrl + '/app_register',
@@ -1106,42 +1128,42 @@ function firstRun() {
           client_id: client,
           mac: mac
         },
-        json:true
+        json: true
       }, function (err, response, body) {
         console.log(body)
-          if(err) {
-            runFirst.webContents.send('firstRunResponse', ({
-              err:err
-            }))
-          } else  {
-             console.log(body)
-            fs.writeFile('config.json', thisJson, 'utf8', (err) => {
-              if (err) {
-                runFirst.webContents.send('firstRunResponse', ({
-                  err: err
-                }))
-              } else {
-                runFirst.webContents.send('firstRunResponse', ({
-                  success: 1,
-                  msg: 'Your configuration is saved, thanks!!'
-                }))
-              }
-            });
-          } 
+        if (err) {
+          runFirst.webContents.send('firstRunResponse', ({
+            err: err
+          }))
+        } else {
+          console.log(body)
+          fs.writeFile('config.json', thisJson, 'utf8', (err) => {
+            if (err) {
+              runFirst.webContents.send('firstRunResponse', ({
+                err: err
+              }))
+            } else {
+              runFirst.webContents.send('firstRunResponse', ({
+                success: 1,
+                msg: 'Your configuration is saved, thanks!!'
+              }))
+            }
+          });
+        }
       })
-      
-    // fs.writeFile('config.json', thisJson, 'utf8', (err) => {
-    //   if (err) {
-    //     runFirst.webContents.send('firstRunResponse', ({
-    //       err: err
-    //     }))
-    //   } else {
-    //     runFirst.webContents.send('firstRunResponse', ({
-    //       success: 1,
-    //       msg: 'Your configuration is saved, thanks!!'
-    //     }))
-    //   }
-    //   });
+
+      // fs.writeFile('config.json', thisJson, 'utf8', (err) => {
+      //   if (err) {
+      //     runFirst.webContents.send('firstRunResponse', ({
+      //       err: err
+      //     }))
+      //   } else {
+      //     runFirst.webContents.send('firstRunResponse', ({
+      //       success: 1,
+      //       msg: 'Your configuration is saved, thanks!!'
+      //     }))
+      //   }
+      //   });
     })
   })
 
@@ -1156,14 +1178,14 @@ function firstRun() {
 let mainWindow;
 
 function creatWindow() {
-//   fs.stat(`${process.env.APPDATA}/ACF MIS Local app/.nv`, async (err, stat)=>{
-//     console.log(err)
-//     if(err && err.code == 'ENOENT'){
-//       await require('./mainfunc/updateDb').dbCreate();
-//     }else{
-//         console.log('Db Updated')
-//     }
-// })
+  //   fs.stat(`${process.env.APPDATA}/ACF MIS Local app/.nv`, async (err, stat)=>{
+  //     console.log(err)
+  //     if(err && err.code == 'ENOENT'){
+  //       await require('./mainfunc/updateDb').dbCreate();
+  //     }else{
+  //         console.log('Db Updated')
+  //     }
+  // })
   var config = {};
   const {
     width,
@@ -1194,7 +1216,7 @@ function creatWindow() {
       var regex = /([/./])/g;
       version.replace(regex, '');
       fs.writeFileSync(`${process.env.APPDATA}/ACF MIS Local app/.nv`, version, 'utf8')
-      
+
     } else {
       console.log('Some other error: ', err.code);
     }
@@ -1215,7 +1237,7 @@ function creatWindow() {
     geo.commodityv2(evt, prog_type);
     // console.log(ipcMain.getMaxListeners())
   })
-  ipcMain.on('getCommodityAll', (evt ) => {
+  ipcMain.on('getCommodityAll', (evt) => {
     // geo.commodity(evt)
     geo.commodity(evt);
     // console.log(ipcMain.getMaxListeners())
@@ -1282,8 +1304,8 @@ function creatWindow() {
   // app.on('ready', async()=>{
   //   require('./mainfunc/updateDb').dbCreate();
   // })
-///////////////TEST PORTION
- 
+  ///////////////TEST PORTION
+
   // ipcMain.on('allOtpExit', (event, filter) => {
   //   console.log(filter);
   //   var _limit = (filter.pageSize) ? filter.pageSize : 10;
@@ -1383,7 +1405,7 @@ function creatWindow() {
   //         .where('sup_name', 'like', `%${filter.sup_name}%`)
   //         .where('staff_name', 'like', `%${filter.staff_name}%`)
   //         // .where('report_month', 'like', `%${filter.report_month}%`)
-          
+
   //         .where({ is_deleted: 0 })
   //         .limit(_limit)
   //         .offset(_offset)
@@ -1453,7 +1475,7 @@ function creatWindow() {
   //         .where('sup_name', 'like', `%${filter.sup_name}%`)
   //         .where('staff_name', 'like', `%${filter.staff_name}%`)
   //         // .where('report_month', 'like', `%${filter.report_month}%`)
-          
+
   //         .where({ is_deleted: 0 })
   //         .limit(_limit)
   //         .offset(_offset)
@@ -1506,7 +1528,7 @@ function creatWindow() {
   //     }
   //   });
   // });
-  
+
   // ipcMain.on('allOtpTest', (event, filter) => {
   //   console.log(filter);
   //   var _limit = (filter.pageSize) ? filter.pageSize : 10;
@@ -1544,7 +1566,7 @@ function creatWindow() {
   //         .count("otp_id as total")
   //         .then(result => cb(null, result))
   //         .catch(e => cb(e));       
-      
+
   //     }
   //   }, (e, result) => {
   //     if (e) {
@@ -1715,7 +1737,7 @@ function creatWindow() {
     stockSave(e, data);
   })
 
-//  console.log(app.getVersion());
+  //  console.log(app.getVersion());
 
   // children Screening add Data 
   ipcMain.on('scrChildren', (e, data) => {
@@ -1871,8 +1893,7 @@ function creatWindow() {
           console.log(err)
           errMsg(e, '', 'DB error please try again or contact admin')
         } else {
-          console.log(results
-          )
+          console.log(results)
           e.sender.send('addExitReport', results)
         }
       })
@@ -1917,19 +1938,19 @@ autoUpdater.on('update-downloaded', (info) => {
   console.log('Update downloaded');
 });
 
-ipcMain.on('updateNIMS', e=>{
+ipcMain.on('updateNIMS', e => {
   autoUpdater.quitAndInstall();
 })
 
 
-app.on('ready', async ()=>{
-  
+app.on('ready', async () => {
+
   autoUpdater.checkForUpdatesAndNotify();
 
 })
 
-ipcMain.on('getVersion', (e)=>{
-  e.returnValue =app.getVersion();
+ipcMain.on('getVersion', (e) => {
+  e.returnValue = app.getVersion();
 })
 
 // function sessions() {
@@ -4312,7 +4333,7 @@ function runDemo() {
 const mac = '01:02:03:0a:0b:0c';
 const appKey = 'A4C74FBD-2375-496E-97BA-C4C3E4D3F868';
 // Creating Admin : sync Refference
-async function  newSync() {
+async function newSync() {
   const {
     width,
     height
@@ -4332,7 +4353,7 @@ async function  newSync() {
     protocol: 'file:',
     slashes: true
   }));
-  
+
   syncNew.on('close', function () {
     var myChan = ['err', 'success',
       'updateServer',
@@ -4371,50 +4392,62 @@ const mainMenuTemplate = [
   {
     label: 'Tools',
     submenu: [{
-      label: 'Backup',
-      accelerator: process.platform == 'darwin' ? 'Command+B' : 'Ctrl+B',
-      click() {
-        dialog.showOpenDialog(mainWindow,{ properties: ['openFile', 'openDirectory'] }, (file)=>{
-          if(file){
-            var _filedate = new Date();
-            // _filedate.toISOString().split('T')[0]
-                fs.copyFile(`${process.env.APPDATA}/ACF MIS Local app/acf_mis_local.sqlite3`, `${file[0]}\\acf_backup_${_filedate.toISOString().split('T')[0]}`, (err)=>{
-                  if(err) throw err;
-                  fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/__backupPath`,`${file[0]}\\acf_backup_${_filedate.toISOString().split('T')[0]}`,(err)=>{
-                  if(err) throw err;
+        label: 'Backup',
+        accelerator: process.platform == 'darwin' ? 'Command+B' : 'Ctrl+B',
+        click() {
+          dialog.showOpenDialog(mainWindow, {
+            properties: ['openFile', 'openDirectory']
+          }, (file) => {
+            if (file) {
+              var _filedate = new Date();
+              // _filedate.toISOString().split('T')[0]
+              fs.copyFile(`${process.env.APPDATA}/ACF MIS Local app/acf_mis_local.sqlite3`, `${file[0]}\\acf_backup_${_filedate.toISOString().split('T')[0]}`, (err) => {
+                if (err) throw err;
+                fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/__backupPath`, `${file[0]}\\acf_backup_${_filedate.toISOString().split('T')[0]}`, (err) => {
+                  if (err) throw err;
                   console.log('File coppied and path is saved')
-                  })
                 })
-              }else{
-                dialog.showMessageBox(mainWindow,{type:'info', title:'Backup', message:'Backup not created as you canceled the process'})
-              }
-        })
-      }
-    },
-    {
-      label: 'Restore',
-      click() {
-        var _filedate = new Date();
-        dialog.showOpenDialog(mainWindow, {properties: ['openFile']}, (file)=>{
-          if(file){
-            console.log(file)
-            app.quit();
-            fs.copyFile(`${process.env.APPDATA}/ACF MIS Local app/acf_mis_local.sqlite3`, `${file[0]}_old`, (err)=>{
-              if(err) throw err;
-              fs.copyFile(file[0], `${process.env.APPDATA}/ACF MIS Local app/acf_mis_local.sqlite3`, (err)=>{
-                if(err) throw err;
-                console.log('System restoted')
               })
-            })            
-          }else{
-            dialog.showMessageBox(mainWindow,{type:'info', title:'Restore', message:'System not restored'})
-          }
-        })
-        
+            } else {
+              dialog.showMessageBox(mainWindow, {
+                type: 'info',
+                title: 'Backup',
+                message: 'Backup not created as you canceled the process'
+              })
+            }
+          })
+        }
+      },
+      {
+        label: 'Restore',
+        click() {
+          var _filedate = new Date();
+          dialog.showOpenDialog(mainWindow, {
+            properties: ['openFile']
+          }, (file) => {
+            if (file) {
+              console.log(file)
+              app.quit();
+              fs.copyFile(`${process.env.APPDATA}/ACF MIS Local app/acf_mis_local.sqlite3`, `${file[0]}_old`, (err) => {
+                if (err) throw err;
+                fs.copyFile(file[0], `${process.env.APPDATA}/ACF MIS Local app/acf_mis_local.sqlite3`, (err) => {
+                  if (err) throw err;
+                  console.log('System restoted')
+                })
+              })
+            } else {
+              dialog.showMessageBox(mainWindow, {
+                type: 'info',
+                title: 'Restore',
+                message: 'System not restored'
+              })
+            }
+          })
+
+        }
       }
-    }
-  
-  ]
+
+    ]
   },
   // {
   //   label: 'Screening',
@@ -4462,40 +4495,42 @@ const mainMenuTemplate = [
   //     }
   //   ]
   // },
-  
+
 ];
 
 var new_menu = {
   label: 'View',
   submenu: [{
-      label:'Reload',
+      label: 'Reload',
       // role: 'reload',
       accelerator: process.platform == 'darwin' ? 'Command+R' : 'Ctrl+R',
-      click (item, focusedWindow) {
+      click(item, focusedWindow) {
         if (focusedWindow) focusedWindow.reload()
       }
-    },    
-     {  label: 'Toggle Developer Tools',
-     accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-     click (item, focusedWindow) {
-       if (focusedWindow) focusedWindow.webContents.toggleDevTools()
-     }
     }
+    // },    
+    //  {  label: 'Toggle Developer Tools',
+    //  accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+    //  click (item, focusedWindow) {
+    //    if (focusedWindow) focusedWindow.webContents.toggleDevTools()
+    //  }
+    // }
     ,
     {
       type: 'separator'
     },
     {
-      label:'Actual Zoom',
+      label: 'Actual Zoom',
       role: 'resetzoom',
-      accelerator: false    },
+      accelerator: false
+    },
     {
-      label:'Zoom In',
+      label: 'Zoom In',
       role: 'zoomin',
       accelerator: false
     },
     {
-      label:'Zoom Out',
+      label: 'Zoom Out',
       role: 'zoomout',
       accelerator: false,
     },
@@ -4503,9 +4538,9 @@ var new_menu = {
       type: 'separator'
     },
     {
-      label:'Full Screen',
+      label: 'Full Screen',
       role: 'togglefullscreen',
-      
+
       accelerator: false,
 
     }
