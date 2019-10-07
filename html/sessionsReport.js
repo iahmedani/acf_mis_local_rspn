@@ -187,6 +187,7 @@ module.exports.sessionsReport = () => {
           .DataTable({
             data: data.result.data,
             dom: "Bfrtip",
+            // "dom": '<"dttopcustom"lfr>t<"dtbottomcustom"ip>',
             buttons: ["copy", {
               extend: "csv",
               title: 'Sessions Report_' + new Date().toDateString()
@@ -245,10 +246,6 @@ module.exports.sessionsReport = () => {
                 render: function (data, type, row) {
                   return data ? data.toUpperCase() : '';
                 }
-              },
-              {
-                title: "Site",
-                data: "site_name"
               },
               {
                 title: 'Group Sessions',

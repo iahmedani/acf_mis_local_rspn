@@ -1,45 +1,46 @@
 <template>
-    <div>
-      <div class="form-group row">
-            <div class="col-sm-2">
-                    <label for="ddProvince" class="col-form-label">Province:</label>
-                    <select id="ddProvince" class="form-control form-control-sm">
-                      <option value="">All</option>
-                    </select>
-                  </div>
-                  <div class="col-sm-2">
-                    <label for="ddDistrict" class="col-form-label">District:</label>
-                    <select id="ddDistrict" class="form-control form-control-sm">
-                      <option value="">All</option>
-                    </select>
-                  </div>
-                  <div class="col-sm-2">
-                    <label for="ddTehsil" class="col-form-label">Tehsil:</label>
-                    <select id="ddTehsil" class="form-control form-control-sm">
-                      <option value="">All</option>
-                    </select>
-                  </div>
-                  <div class="col-sm-2">
-                    <label for="ddUC" class="col-form-label">UC:</label>
-                    <select id="ddUC" class="form-control form-control-sm">
-                      <option value="">All</option>
-                    </select>
-                  </div>
-                  <!-- </div> -->
-                  <!-- <div class="form-group row"> -->
-                  <div class="col-sm-2">
-                    <label for="site_id" class="col-form-label">Site Name:</label>
-                    <select id="ddHealthHouse" class="form-control form-control-sm" required>
-                      <option value="">All</option>
-                    </select>
-                  </div>
-                  <div class="col-sm-2 ">
-                    <label class="col-form-label text-white">Show Data</label>
-                      <button class="btn btn-success btn-sm btn-block form-control form-control-sm" id="makeDefTable" > Show Data</button>
-                </div>
+  <div>
+    <div class="form-group row">
+      <div class="col-sm-2">
+        <label for="ddProvince" class="col-form-label">Province:</label>
+        <select id="ddProvince" class="form-control form-control-sm">
+          <option value="">All</option>
+        </select>
       </div>
+      <div class="col-sm-2">
+        <label for="ddDistrict" class="col-form-label">District:</label>
+        <select id="ddDistrict" class="form-control form-control-sm">
+          <option value="">All</option>
+        </select>
+      </div>
+      <div class="col-sm-2">
+        <label for="ddTehsil" class="col-form-label">Tehsil:</label>
+        <select id="ddTehsil" class="form-control form-control-sm">
+          <option value="">All</option>
+        </select>
+      </div>
+      <div class="col-sm-2">
+        <label for="ddUC" class="col-form-label">UC:</label>
+        <select id="ddUC" class="form-control form-control-sm">
+          <option value="">All</option>
+        </select>
+      </div>
+      <!-- </div> -->
+      <!-- <div class="form-group row"> -->
+      <div class="col-sm-2">
+        <label for="site_id" class="col-form-label">Site Name:</label>
+        <select id="ddHealthHouse" class="form-control form-control-sm" required>
+          <option value="">All</option>
+        </select>
+      </div>
+      <div class="col-sm-2 ">
+        <label class="col-form-label text-white">Show Data</label>
+        <button class="btn btn-success btn-sm btn-block form-control form-control-sm" id="makeDefTable"> Show
+          Data</button>
+      </div>
+    </div>
 
-    
-      </div>
-      <table id="defaulter" class="table table-bordered rounded table-sm" ></table>
+
+  </div>
+  <table id="defaulter" class="table table-striped table-bordered display compact dtcustom"></table>
 </template>

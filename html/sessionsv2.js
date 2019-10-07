@@ -1,29 +1,29 @@
 module.exports.initSessionsV2 = function () {
-  $('#ddProgramType').change(()=>{
+  $('#ddProgramType').change(() => {
     $('.prgChange').val("")
   })
-  $(function() {
+  $(function () {
     ipc.send("getProvince");
-    ipc.on("province", function(evt, province) {
+    ipc.on("province", function (evt, province) {
       $("#ddProvince")
         .children("option:not(:first)")
         .remove();
       prov(province);
     });
-    $("#ddProvince").on("change", function() {
+    $("#ddProvince").on("change", function () {
       var prov = $(this).val();
       ipc.send("getDistrict", prov);
-      ipc.on("district", function(evt, district) {
+      ipc.on("district", function (evt, district) {
         $("#ddDistrict")
           .children("option:not(:first)")
           .remove();
         dist(district);
       });
     });
-    $("#ddDistrict").on("change", function() {
+    $("#ddDistrict").on("change", function () {
       var dist = $(this).val();
       ipc.send("getTehsil", dist);
-      ipc.on("tehsil", function(evt, tehsil) {
+      ipc.on("tehsil", function (evt, tehsil) {
         $("#ddTehsil")
           .children("option:not(:first)")
           .remove();
@@ -31,10 +31,10 @@ module.exports.initSessionsV2 = function () {
         teh(tehsil);
       });
     });
-    $("#ddTehsil").on("change", function() {
+    $("#ddTehsil").on("change", function () {
       var tehs = $(this).val();
       ipc.send("getUC", tehs);
-      ipc.on("uc", function(evt, uc) {
+      ipc.on("uc", function (evt, uc) {
         $("#ddUC")
           .children("option:not(:first)")
           .remove();
@@ -42,49 +42,49 @@ module.exports.initSessionsV2 = function () {
       });
     });
     var ucForHH;
-    $('#ddUC').on('change', function(){
+    $('#ddUC').on('change', function () {
       var ucs = $(this).val();
       ucForHH = ucs
-      ipc.send('getHealthHouse', ucs )
-      ipc.on('hh', async function(evt, hh){
+      ipc.send('getHealthHouse', ucs)
+      ipc.on('hh', async function (evt, hh) {
         // console.log(hh)
         $('#site_one').children('option:not(:first)').remove();
-        if(hh.hh.length > 1){
-          $('.secondSite').css('display', '')  
+        if (hh.hh.length > 1) {
+          $('.secondSite').css('display', '')
           $('#site_two').children('option:not(:first)').remove();
-          await asyncForEach(hh.hh, async(el)=>{
-            $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);              
-          })            
-        }else{
-          $('.secondSite').css('display', 'none')  
+          await asyncForEach(hh.hh, async (el) => {
+            $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);
+          })
+        } else {
+          $('.secondSite').css('display', 'none')
 
         }
         hhListener_siteOne(hh);
 
       });
-    ipc.send("getStaffuc", ucs);
-    ipc.send("getSupsuc", ucs);
+      ipc.send("getStaffuc", ucs);
+      ipc.send("getSupsuc", ucs);
 
-    ipc.on("haveStaffuc", function(evt, staffs) {
-      $("#ddStaff_code")
-        .children("option:not(:first)")
-        .remove();
-      staffListeneruc(staffs);
-    });
-    ipc.on("haveSupsuc", function(evt, _sups) {
-      $("#ddSup_code")
-        .children("option:not(:first)")
-        .remove();
-      supListeneruc(_sups);
-    });
-  })
-    $("#ddUC").on("change", function() {
+      ipc.on("haveStaffuc", function (evt, staffs) {
+        $("#ddStaff_code")
+          .children("option:not(:first)")
+          .remove();
+        staffListeneruc(staffs);
+      });
+      ipc.on("haveSupsuc", function (evt, _sups) {
+        $("#ddSup_code")
+          .children("option:not(:first)")
+          .remove();
+        supListeneruc(_sups);
+      });
+    })
+    $("#ddUC").on("change", function () {
       var ucs = $(this).val();
       ucForHH = ucs;
-      if($('#ddProgramType').val() == 'otp'){
+      if ($('#ddProgramType').val() == 'otp') {
 
         ipc.send("getHealthHouse", ucs);
-        ipc.on("hh", function(evt, hh) {
+        ipc.on("hh", function (evt, hh) {
           $("#ddHealthHouse")
             .children("option:not(:first)")
             .remove();
@@ -92,38 +92,38 @@ module.exports.initSessionsV2 = function () {
         });
       }
     });
-    $("#ddHealthHouse").on("change", function() {
+    $("#ddHealthHouse").on("change", function () {
       var siteId = $(this).val();
       // ucForHH = ucs;
       ipc.send("getStaff", siteId);
       ipc.send("getSups", siteId);
 
-      ipc.on("haveStaff", function(evt, staffs) {
+      ipc.on("haveStaff", function (evt, staffs) {
         $("#ddStaff_code")
           .children("option:not(:first)")
           .remove();
         staffListener(staffs);
       });
-      ipc.on("haveSups", function(evt, _sups) {
+      ipc.on("haveSups", function (evt, _sups) {
         $("#ddSup_code")
           .children("option:not(:first)")
           .remove();
         supListener(_sups);
       });
     });
-    $("#ddStaff_code").on("change", function() {
+    $("#ddStaff_code").on("change", function () {
       var staff_code = $(this).val();
       $("#ddStaff_name").val(staff_code);
     });
-    $("#ddStaff_name").on("change", function() {
+    $("#ddStaff_name").on("change", function () {
       var staff_code = $(this).val();
       $("#ddStaff_code").val(staff_code);
     });
-    $("#ddSup_code").on("change", function() {
+    $("#ddSup_code").on("change", function () {
       var sup_code = $(this).val();
       $("#ddSup_name").val(sup_code);
     });
-    $("#ddSup_name").on("change", function() {
+    $("#ddSup_name").on("change", function () {
       var sup_code = $(this).val();
       $("#ddSup_code").val(sup_code);
     });
@@ -144,7 +144,7 @@ module.exports.initSessionsV2 = function () {
         $('.nsc').show();
         $('.nsc input').attr('required', true);
         $('.noOutreach').hide();
-      }  else {
+      } else {
         $('.outreach').hide();
         $('.nsc').show();
         $('.nsc input').attr('required', true);
@@ -157,7 +157,7 @@ module.exports.initSessionsV2 = function () {
   //   ipc.send('getProvince');
   //   ipc.on('province', function(evt, province){
   //     $('#ddProvince').children('option:not(:first)').remove();   
-      
+
   //     // province.province.forEach(el=>{
   //       // $('#ddProvince').append(`<option value="${el.id}">${el.provinceName}</option>`);
 
@@ -169,7 +169,7 @@ module.exports.initSessionsV2 = function () {
   //       ipc.send('getDistrict', prov )
   //       ipc.on('district', function(evt, district){
   //         $('#ddDistrict').children('option:not(:first)').remove();
-          
+
   //       //   district.district.forEach(el=>{
   //       // $('#ddDistrict').append(`<option value="${el.id}">${el.districtName}</option>`);              
   //       //   })
@@ -181,7 +181,7 @@ module.exports.initSessionsV2 = function () {
   //       ipc.send('getTehsil', dist )
   //       ipc.on('tehsil', function(evt, tehsil){
   //         $('#ddTehsil').children('option:not(:first)').remove();
-          
+
   //       //   tehsil.tehsil.forEach(el=>{
   //       // $('#ddTehsil').append(`<option value="${el.id}">${el.tehsilName}</option>`);              
   //       //   })
@@ -193,7 +193,7 @@ module.exports.initSessionsV2 = function () {
   //       ipc.send('getUC', tehs )
   //       ipc.on('uc', function(evt, uc){
   //         $('#ddUC').children('option:not(:first)').remove();
-        
+
   //       //   uc.uc.forEach(el=>{
   //       // $('#ddUC').append(`<option value="${el.id}">${el.ucName}</option>`);              
   //       //   })
@@ -229,7 +229,7 @@ module.exports.initSessionsV2 = function () {
 
       $("#jsGrid")
         .jsGrid("loadData", x)
-        .done(function() {
+        .done(function () {
           console.log("data loaded");
         });
     })
@@ -249,11 +249,11 @@ module.exports.initSessionsV2 = function () {
       deleteConfirm: "Do you really want to delete Session?",
       controller: {
         loadData: function (filter) {
-          filter.province_id = ($("#ddProvince").val())?  $("#ddProvince").val() : ''  ;
-          filter.prog_type = ($("#ddProgramType").val())?  $("#ddProgramType").val() : ''  ;
-          filter.district_id = ($("#ddDistrict").val())?  $("#ddDistrict").val() : ''  ;
-          filter.tehsil_id = ($("#ddTehsil").val())?  $("#ddTehsil").val() : ''  ;
-          filter.uc_id = ($("#ddUC").val())?  $("#ddUC").val() : ''  ;
+          filter.province_id = ($("#ddProvince").val()) ? $("#ddProvince").val() : '';
+          filter.prog_type = ($("#ddProgramType").val()) ? $("#ddProgramType").val() : '';
+          filter.district_id = ($("#ddDistrict").val()) ? $("#ddDistrict").val() : '';
+          filter.tehsil_id = ($("#ddTehsil").val()) ? $("#ddTehsil").val() : '';
+          filter.uc_id = ($("#ddUC").val()) ? $("#ddUC").val() : '';
           filter.site_id = ($("#ddHealthHouse").val()) ? $("#ddHealthHouse").val() : '';
           filter.CHW_id = ($("#ddStaff_code").val()) ? $("#ddStaff_code").val() : '';
           filter.CHS_id = ($("#ddSup_code").val()) ? $("#ddSup_code").val() : '';
@@ -307,209 +307,245 @@ module.exports.initSessionsV2 = function () {
 
       },
       fields: [{
-        name: 'session_date',
-        title: 'Date',
-        filtering: false,
-        type: 'date',
-        validate: 'required',
-        width:50,
-      }, {
-        name: "session_type",
-        title: "Session Type",
-        width:100,
-        type: "select",
-        items: [
-          { Name: '', value: '' },
-          { Name: 'Nutrition, Health and Hygene', value: 'nut_health_hygene' },
-          { Name: 'IYCF', value: 'iycf' },
-          // { Name: 'Breast Feeding Counseling', value: 'breastFeeding' },
-          { Name: 'Cooking Demonstration', value: 'cooking' },
-          { Name: 'Other', value: 'other' },
-        ],
-        valueField: "value",
-        textField: "Name",
-        validate: 'required'
-      }, {
-        name: 'session_location',
+          name: 'session_date',
+          title: 'Date',
+          filtering: false,
+          type: 'date',
+          validate: 'required',
+          width: 50,
+        }, {
+          name: "session_type",
+          title: "Session Type",
+          width: 100,
+          type: "select",
+          items: [{
+              Name: '',
+              value: ''
+            },
+            {
+              Name: 'Nutrition, Health and Hygene',
+              value: 'nut_health_hygene'
+            },
+            {
+              Name: 'IYCF',
+              value: 'iycf'
+            },
+            // { Name: 'Breast Feeding Counseling', value: 'breastFeeding' },
+            {
+              Name: 'Cooking Demonstration',
+              value: 'cooking'
+            },
+            {
+              Name: 'Other',
+              value: 'other'
+            },
+          ],
+          valueField: "value",
+          textField: "Name",
+          validate: 'required'
+        }, {
+          name: 'session_location',
           title: 'Session Location',
-        width:80,
-        type: 'select',
-        items: [
-          { Name: '', value: '' },
-          { Name: 'In CMAM Site', value: 'cmam_site' },
-          { Name: 'In Community', value: 'community' }
-        ], valueField: "value",
-        textField: "Name",
-        validate: 'required',
-      },
-      
-      {
-        name: "total_session",
-        width:50,
-        title: "Total Sessions",
-        type: "number",
-        filtering: false,
-        inserting: false,
-        editing:false,
-        readOnly: true,
-        itemTemplate: function(value, item){
-          var x = ((item.ind_session) ? parseInt(item.ind_session) : 0 ) + ((item.grp_sessions) ? parseInt(item.grp_sessions) : 0 ) 
-          return x;
-        }
-      },
-      {
-        name: "grp_sessions",
-        width:50,
-        title: "Group Sessions:",
-        type: "number",
-        filtering: false,
-        validate: {
-          validator: 'min',
-          param: 0
-        }
-      },
-      {
-        name: "ind_session",
-        width:50,
-        title: "Individual Sessions",
-        type: "number",
-        filtering: false,
-        validate: {
-          validator: 'min',
-          param: 0
-        }
-      },
-     
-      {
-        name: "male_participants",
-        width:50,
-        title: "Male Part:",
-        type: "number",
-        filtering: false,
-        validate: {
-          validator: 'min',
-          param: 0
-        }
-      },
-      {
-        name: "female_participants",
-        title: "Female Part:",
-        width: 50,
-        type: "number",
-        validate: {
-          validator: 'min',
-          param: 0
+          width: 80,
+          type: 'select',
+          items: [{
+              Name: '',
+              value: ''
+            },
+            {
+              Name: 'In CMAM Site',
+              value: 'cmam_site'
+            },
+            {
+              Name: 'In Community',
+              value: 'community'
+            }
+          ],
+          valueField: "value",
+          textField: "Name",
+          validate: 'required',
         },
-        filtering: false,
-      },
-      {
-        name: "pragnent",
-        width: 50,
-        title: "Pragnent",
-        type: "number",
-        validate: {
-          validator: 'min',
-          param: 0
+
+        {
+          name: "total_session",
+          width: 50,
+          title: "Total Sessions",
+          type: "number",
+          filtering: false,
+          inserting: false,
+          editing: false,
+          readOnly: true,
+          itemTemplate: function (value, item) {
+            var x = ((item.ind_session) ? parseInt(item.ind_session) : 0) + ((item.grp_sessions) ? parseInt(item.grp_sessions) : 0)
+            return x;
+          }
         },
-        filtering: false
-      },
-      {
-        name: "lactating",
-        title: "Lactating",
-        width: 50,
-        type: "number",
-        validate: {
-          validator: 'min',
-          param: 0
+        {
+          name: "grp_sessions",
+          width: 50,
+          title: "Group Sessions:",
+          type: "number",
+          filtering: false,
+          validate: {
+            validator: 'min',
+            param: 0
+          }
         },
-        filtering: false
-      },
-      {
-        name: "new_participants",
-        title: "New Part:",
-        width: 50,
-        type: "number",
-        validate: {
-          validator: 'min',
-          param: 0
+        {
+          name: "ind_session",
+          width: 50,
+          title: "Individual Sessions",
+          type: "number",
+          filtering: false,
+          validate: {
+            validator: 'min',
+            param: 0
+          }
         },
-        filtering: false,
-      },
-      {
-        name: "old_participants",
-        title: "Old Part:",
-        width: 50,
-        type: "number",
-        validate: {
-          validator: 'min',
-          param: 0
+
+        {
+          name: "male_participants",
+          width: 50,
+          title: "Male Part:",
+          type: "number",
+          filtering: false,
+          validate: {
+            validator: 'min',
+            param: 0
+          }
         },
-        filtering: false
-      },
-      {
-        name: 'upload_status',
-        title: 'Upload Status',
-        width: 50,
-        type: 'select',
-        valueType: 'number',
-        items: [{ Name: '', value: '' }, { Name: 'Uploaded', value: 1 }, { Name: 'Not Uploaded', value: 0 }, { Name: 'Edited', value: 2 }],
-        readOnly: true,
-        valueField: "value",
-        textField: "Name",
-        editing: false,
-        inserting: false,
-        filtering: false,
+        {
+          name: "female_participants",
+          title: "Female Part:",
+          width: 50,
+          type: "number",
+          validate: {
+            validator: 'min',
+            param: 0
+          },
+          filtering: false,
+        },
+        {
+          name: "pragnent",
+          width: 50,
+          title: "Pragnent",
+          type: "number",
+          validate: {
+            validator: 'min',
+            param: 0
+          },
+          filtering: false
+        },
+        {
+          name: "lactating",
+          title: "Lactating",
+          width: 50,
+          type: "number",
+          validate: {
+            validator: 'min',
+            param: 0
+          },
+          filtering: false
+        },
+        {
+          name: "new_participants",
+          title: "New Part:",
+          width: 50,
+          type: "number",
+          validate: {
+            validator: 'min',
+            param: 0
+          },
+          filtering: false,
+        },
+        {
+          name: "old_participants",
+          title: "Old Part:",
+          width: 50,
+          type: "number",
+          validate: {
+            validator: 'min',
+            param: 0
+          },
+          filtering: false
+        },
+        {
+          name: 'upload_status',
+          title: 'Upload Status',
+          width: 50,
+          type: 'select',
+          valueType: 'number',
+          items: [{
+            Name: '',
+            value: ''
+          }, {
+            Name: 'Uploaded',
+            value: 1
+          }, {
+            Name: 'Not Uploaded',
+            value: 0
+          }, {
+            Name: 'Edited',
+            value: 2
+          }],
+          readOnly: true,
+          valueField: "value",
+          textField: "Name",
+          editing: false,
+          inserting: false,
+          filtering: false,
 
         }, {
-        name: 'remarks',
-        width: 50,        
-        title: 'Remarks',
-        type: 'text',
-        filtering:false,
-      },
-      {
-        name: "upload_date",
-        title: "Upload Date",
-        width: 50,        
-        type: "number",
-        filtering: false,
-        editing: false,
-        inserting: false,
-      },
-      {
-        align:'center',
-        width: 50,        
-        headerTemplate: function() {
-          return "<th class='jsgrid-header-cell'>Days since uploaded </th>";
+          name: 'remarks',
+          width: 50,
+          title: 'Remarks',
+          type: 'text',
+          filtering: false,
         },
-        itemTemplate: function(value, item) {
-          // console.log(item)
-          var date1 = new Date(item.upload_date);
+        {
+          name: "upload_date",
+          title: "Upload Date",
+          width: 50,
+          type: "number",
+          filtering: false,
+          editing: false,
+          inserting: false,
+        },
+        {
+          align: 'center',
+          width: 50,
+          headerTemplate: function () {
+            return "<th class='jsgrid-header-cell'>Days since uploaded </th>";
+          },
+          itemTemplate: function (value, item) {
+            // console.log(item)
+            var date1 = new Date(item.upload_date);
             var date2 = new Date();
             var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
             diffDays = (item.upload_status == 1 && item.upload_date != null) ? diffDays : 0;
             // alert(diffDays);
-          return diffDays;
-        }
-      }, 
+            return diffDays;
+          }
+        },
         {
-        type: 'control',
-        // modeSwitchButton: false,
+          type: 'control',
+          // modeSwitchButton: false,
 
-        // deleteButton: false,
-      }],
+          // deleteButton: false,
+        }
+      ],
       rowClick: function (args) {
         var date1 = new Date(args.item.upload_date);
-              var date2 = new Date();
-              var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-              var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
-              diffDays = (args.item.upload_status == 1) ? diffDays : 0;
-          if(diffDays < 6){
-            this.editItem(args.item)
-          }else{
+        var date2 = new Date();
+        var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        diffDays = (args.item.upload_status == 1) ? diffDays : 0;
+        if (diffDays < 6) {
+          this.editItem(args.item)
+        } else {
           alert('This could not be edited b/c its been more than 5 days since uploaded')
-          }
+        }
       }
 
       // ,
@@ -524,56 +560,59 @@ module.exports.initSessionsV2 = function () {
 
       // }, // on done of controller.updateItem
     });
-      $('#ddHealthHouse').on('change', function () {
-        var site_id = $(this).val();
-        // 
-        
-      })
-    })
+    $('#ddHealthHouse').on('change', function () {
+      var site_id = $(this).val();
+      // 
 
-    // var MyDateField = function(config) {
-    //   jsGrid.Field.call(this, config);
-    //   };
-    
-    // MyDateField.prototype = new jsGrid.Field({
-    
-    // css: "date-field",            // redefine general property 'css'
-    // align: "center",              // redefine general property 'align'
-    
-     
-    // sorter: function(date1, date2) {
-    //     return new Date(date1) - new Date(date2);
-    // },
-    
-    // itemTemplate: function(value) {
-    //     return new Date(value).toDateString();
-    // },
-    
-    // insertTemplate: function(value) {
-    //     return this._insertPicker = $("<input>").datepicker({ defaultDate: new Date() });
-    // },
-    
-    // editTemplate: function(value) {
-    //     return this._editPicker = $("<input>").datepicker().datepicker("setDate", new Date(value));
-    // },
-    
-    // insertValue: function() {
-    //     return this._insertPicker.datepicker("getDate").toISOString();
-    // },
-    
-    // editValue: function() {
-    //     return this._editPicker.datepicker("getDate").toISOString();
-    // }
-    // });
-    // jsGrid.fields.date = MyDateField;
-  
-    
+    })
+  })
+
+  // var MyDateField = function(config) {
+  //   jsGrid.Field.call(this, config);
+  //   };
+
+  // MyDateField.prototype = new jsGrid.Field({
+
+  // css: "date-field",            // redefine general property 'css'
+  // align: "center",              // redefine general property 'align'
+
+
+  // sorter: function(date1, date2) {
+  //     return new Date(date1) - new Date(date2);
+  // },
+
+  // itemTemplate: function(value) {
+  //     return new Date(value).toDateString();
+  // },
+
+  // insertTemplate: function(value) {
+  //     return this._insertPicker = $("<input>").datepicker({ defaultDate: new Date() });
+  // },
+
+  // editTemplate: function(value) {
+  //     return this._editPicker = $("<input>").datepicker().datepicker("setDate", new Date(value));
+  // },
+
+  // insertValue: function() {
+  //     return this._insertPicker.datepicker("getDate").toISOString();
+  // },
+
+  // editValue: function() {
+  //     return this._editPicker.datepicker("getDate").toISOString();
+  // }
+  // });
+  // jsGrid.fields.date = MyDateField;
+
+
   let loadData = (data) => {
     return new Promise((resolve, reject) => {
       ipc.send('getSessionsAll', data);
       ipc.on('getSessionsAll', (e, result) => {
         // console.log(result);
-        var s = { data: result.result.data, itemsCount: result.result.itemsCount[0].total };
+        var s = {
+          data: result.result.data,
+          itemsCount: result.result.itemsCount[0].total
+        };
         if (result.err) {
           reject(result.err)
           ipc.removeAllListeners('getSessionsAll')
@@ -585,11 +624,11 @@ module.exports.initSessionsV2 = function () {
     })
   }
 
-  let insertData = (item)=>{
+  let insertData = (item) => {
     return new Promise((resolve, reject) => {
       $("#sessionForm").validate();
       if ($("#sessionForm").valid()) {
-        
+
         ipc.send("insertSessionsSingle", item);
         ipc.on("insertSessionsSingle", (e, result) => {
           if (result.err) {
@@ -601,7 +640,7 @@ module.exports.initSessionsV2 = function () {
             ipc.removeAllListeners("insertSessionsSingle");
             $("#jsGrid")
               .jsGrid("render")
-              .done(function() {
+              .done(function () {
                 console.log("rendering completed and data loaded");
               });
           }
@@ -612,12 +651,12 @@ module.exports.initSessionsV2 = function () {
     })
   }
 
-  let updateData = (item)=>{
+  let updateData = (item) => {
     delete item["uc_id:1"]
-    return new Promise((resolve, reject)=>{
+    return new Promise((resolve, reject) => {
       ipc.send('updateSessionsSingle', item);
-      ipc.on('updateSessionsSingle', (e, result)=>{
-        if(result.err){
+      ipc.on('updateSessionsSingle', (e, result) => {
+        if (result.err) {
           reject(result.err)
           ipc.removeAllListeners('updateSessionsSingle')
         } else {
@@ -632,7 +671,7 @@ module.exports.initSessionsV2 = function () {
       })
     })
   }
-  
+
   let deleteData = (item) => {
     return new Promise((resolve, reject) => {
       ipc.send("deleteSessionsSingle", item.session_id);
@@ -655,4 +694,3 @@ module.exports.initSessionsV2 = function () {
   }
 
 }
-
