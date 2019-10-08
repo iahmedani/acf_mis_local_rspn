@@ -85,6 +85,7 @@ p.list-group-item {
   position: sticky;
   top: 0;
   overflow-y: auto;
+  /* width: 300px */
   /* background-color: #4C9CB8; */
   /* color: white !important; */
 }

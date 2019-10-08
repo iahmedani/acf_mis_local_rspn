@@ -74,6 +74,9 @@
   <link rel="import" href="newSyncAuthV3.html">
   <link rel="import" href="otp_add_followup_report.html">
 
+  <!-- new outreach -->
+  <link rel="import" href="outreach_ind.html">
+
 </head>
 
 
@@ -81,9 +84,9 @@
   <div class="container-fluid">
     <div class="row">
       <div class="p-l-0 p-r-0 col-sm-2" style="padding-left:0;padding-right:0" id="sidebar">
-        <div class="col-sm-10 mb-0 mr-o ml-0 my-0">
-          <a class="navbar-brand" href="#" id="homeDashboard">
-            <img src="../img/acf-logo.svg" style="height: 50px;" alt="">
+        <div class="col-sm-12 mb-0 mr-o ml-0 my-0 bg-white">
+          <a class="navbar-brand  " href="#" id="homeDashboard">
+            <img src="../img/aap_health.svg" style="height: 50px;" alt="">
           </a>
 
         </div>
@@ -91,15 +94,16 @@
         <ul id="nav" class="list-unstyled">
           <li><a href="#"><strong class="display-6"><i class="fas fa-clipboard-list "></i> Data Entry</strong></a>
             <ul class="list-unstyled">
+              <li><a href="#" id="outreachInd">Outreach Entry <small>Individual</small></a></li>
               <li><a href="#" id="childScr">Children Screening</a></li>
               <li><a href="#" id="plwScr">PLW Screening</a></li>
               <li><a href="#" id="otpAdd">Admission</a></li>
               <li><a href="#" id="addFollowupOtp">Follow Up</a></li>
               <li><a href="#" id="otpExit">Exits</a></li>
               <li><a href="#" id="sessions">Sessions</a></li>
-              <li><a href="#" id="stockEntry">Stock In</a></li>
-              <li><a href="#" id="stockOutEntry">Stock Out </a></li>
-              <li><a href="#" id="scrStock">Stock Distribution</a></li>
+              <!-- <li><a href="#" id="stockEntry">Stock In</a></li> -->
+              <!-- <li><a href="#" id="stockOutEntry">Stock Out </a></li> -->
+              <!-- <li><a href="#" id="scrStock">Stock Distribution</a></li> -->
             </ul>
           </li>
           <li><a href="#"><strong class="display-6"><i class="fas fa-edit"></i> Edit</strong></a>
@@ -109,9 +113,9 @@
               <li><a href="#" id="otpAddUpdate">Admissions</a></li>
               <li><a href="#" id="editFollowupOtp">Follow Up</a></li>
               <li><a href="#" id="otpExitEdit">Exits</a></li>
-              <li><a href="#" id="stockEntryUpdate">Stock In</a></li>
-              <li><a href="#" id="stockOutUpdate">Stock Out</a></li>
-              <li><a href="#" id="stockDistUpd">Stock Distribution</a></li>
+              <!-- <li><a href="#" id="stockEntryUpdate">Stock In</a></li> -->
+              <!-- <li><a href="#" id="stockOutUpdate">Stock Out</a></li> -->
+              <!-- <li><a href="#" id="stockDistUpd">Stock Distribution</a></li> -->
             </ul>
           </li>
           <li><a href="#"><strong class="display-6"><i class="fas fa-print"></i> Reports</strong></a>
@@ -122,9 +126,9 @@
               <li><a href="#" id="otpAddFollowupReport">Admision & Followup</a></li>
               <li><a href="#" id="defReport">Defaulter</a></li>
               <li><a href="#" id="sessionsReport">Sessions</a></li>
-              <li><a href="#" id="autoStock">Stock In</a></li>
-              <li><a href="#" id="stockOutReport">Stock Out</a></li>
-              <li><a href="#" id="stockDistReport">Stock Distribution </a></li>
+              <!-- <li><a href="#" id="autoStock">Stock In</a></li> -->
+              <!-- <li><a href="#" id="stockOutReport">Stock Out</a></li> -->
+              <!-- <li><a href="#" id="stockDistReport">Stock Distribution </a></li> -->
             </ul>
           </li>
           <li><a href="#"><strong class="display-6"><i class="fas fa-cogs"></i> Admin Tools</strong></a>
@@ -138,10 +142,38 @@
           </li>
         </ul>
         <!-- <div class="col-sm-10 text-white mb-0 my-auto" style="margin-bottom:0px" > -->
-        <ul class="text-white my-auto list-unstyled" style="font-size:14px; margin-bottom: 0px;">
-          <li class="mb-0">Version: <span id="appVersion"></span></li>
-          <li class="mb-0">Developed By:</li>
-          <li class="mb-0">Shumaila Nazir &copy; 2019</li>
+        <ul class="text-white my-auto list-unstyled" style="font-size:12px; margin-bottom: 0px;">
+          <li class="mb-0 text-center"" id=" updMessage">Contributed by: ACF Pakistan</li>
+          <li class="mb-0">
+            <!-- <div diclass="row my-auto list-unstyled"> -->
+            <table>
+              <tbody>
+                <tr>
+                  <td>
+                    <img src="../img/acf-logo.svg" style="height: 60px;" alt="">
+                  </td>
+                  <td style="padding-left: 5px">
+                    Version: <span id="appVersion"></span>
+                    <br>Developed By:
+                    <br>Shumaila Nazir &copy; 2019
+                  </td>
+                </tr>
+                <!-- <tr>
+                  <td colspan="2">
+                    
+                </tr> -->
+              </tbody>
+            </table>
+            <!-- <div style="width: 100%">
+              <div>
+
+              </div>
+              <div>
+
+              </div>
+            </div> -->
+          </li>
+          <!-- <li class="mb-0"></li> -->
           <li class="mb-0" id="updMessage" style="display:none">Update Available</li>
           <li class="mb-0">
             <button class="btn btn-success btn-sm" id="_updBtn" style="display: none">Update NIMS</button>
@@ -576,6 +608,21 @@
     var IniOtpAddFollowupReportV1 = require('./otp_add_followup_report').iniOtpAddFollowupReportV1;
     // var InitDefaulterv2 = require('./defaulterv2').initDefaulterv2;
 
+    // outreach ind
+    var InitGridOutreach_ind = require('./outreach_ind').initGridOutreach_ind;
+
+
+
+    function Outreach_ind_Template() {
+      var content = document.querySelector('link[href="outreach_ind.html"]');
+      var template = content.import.querySelector('template');
+      var clone = document.importNode(template.content, true);
+      $('#jsContent').empty();
+      document.querySelector('#jsContent').appendChild(clone)
+      InitGridOutreach_ind();
+    }
+
+
     function otp_add_followup_report_Template() {
       var content = document.querySelector('link[href="otp_add_followup_report.html"]');
       var template = content.import.querySelector('template');
@@ -584,6 +631,7 @@
       document.querySelector('#jsContent').appendChild(clone)
       IniOtpAddFollowupReportV1();
     }
+
 
     function stockOutUpdateTemplate() {
       var content = document.querySelector('link[href="stockOutUpdate.html"]');
@@ -906,6 +954,9 @@
     })
     $('#autoStock').on('click', function () {
       autoStockTemplate()
+    })
+    $('#outreachInd').on('click', function () {
+      Outreach_ind_Template()
     })
     $('#supList').on('click', function () {
       supListTemplate();

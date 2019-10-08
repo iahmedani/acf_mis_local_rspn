@@ -1,0 +1,218 @@
+<template>
+    <style>
+        .highlightInput {
+            color: red;
+            border: 1px solid red;
+        }
+
+        .scrTable {
+            overflow-y: scroll;
+            height: 400px;
+        }
+    </style>
+    <!-- Basic information about location -->
+    <div class="container-fluid">
+        <form id="scrChildrenForm">
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label for="entry_type" class=" col-form-label">Entry Type:</label>
+                    <select name="entry_type" class="form-control form-control-sm " required>
+                        <option selected value="">Choose</option>
+                        <option value="child_screening">Child Screening</option>
+                        <option value="plw_screenind">PLW Screening</option>
+                        <option value="session_entry">Session Entry</option>
+                    </select>
+
+                </div>
+                <div class="col-sm-2">
+                    <label for="ddProvince" class="col-form-label">Province:</label>
+                    <select id="ddProvince" class="form-control form-control-sm" tabindex="2">
+                        <option value="">Select One</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="ddDistrict" class="col-form-label">District:</label>
+                    <select id="ddDistrict" class="form-control form-control-sm" tabindex="3">
+                        <option value="">Select One</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="ddTehsil" class="col-form-label">Tehsil:</label>
+                    <select id="ddTehsil" class="form-control form-control-sm" tabindex="4">
+                        <option value="">Select One</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="ddUC" class="col-form-label">UC:</label>
+                    <select id="ddUC" name="uc_id" class="form-control form-control-sm" tabindex="5" required>
+                        <option value="">Select One</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-2">
+                    <label for="sup_code" class=" col-form-label">Supervisor Code:</label>
+                    <select id="ddSup_code" name="sup_code" class="form-control form-control-sm " tabindex="7" required>
+                        <option value="">Select One</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="sup_name" class=" col-form-label">Supervisor Name:</label>
+                    <select id="ddSup_name" name="sup_name" class="form-control form-control-sm " tabindex="8" required>
+                        <option value="">Select One</option>
+                    </select>
+                </div>
+                <!-- <div class="col-sm-2">
+                <label for="catchment_population" class="col-form-label">Catchment Population</label>
+                <input type="number" name="catchment_population" id="catchment_population"
+                    class="form-control form-control-sm " tabindex="9" required>
+            </div>
+            <div class="col-sm-2">
+                <label for="total_hh" class=" col-form-label">Total Houses Visited</label>
+                <input type="number" name="total_hh" id="total_hh" class="form-control form-control-sm clr"
+                    tabindex="10" required>
+            </div> -->
+                <div class="col-sm-2">
+                    <label for="staff_code" class="col-form-label">Staff Code:</label>
+                    <select id="ddStaff_code" name="staff_code" class="form-control form-control-sm cld" tabindex="11"
+                        required>
+                        <option value="">Select One</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="staff_name" class="col-form-label">Staff Name:</label>
+                    <select id="ddStaff_name" name="staff_name" class="form-control form-control-sm cld" tabindex="12"
+                        required>
+                        <option value="">Select One</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="type" class="col-form-label">Entry Type</label>
+                    <select id="type" name="type" class="form-control form-control-sm cld" tabindex="12" required>
+                        <option value="">Select One</option>
+                        <option value="new">New</option>
+                        <option value="old">Old</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="old_id" class=" col-form-label">Old Id</label>
+                    <input type="text" name="old_id" id="old_id" class="form-control form-control-sm clr" tabindex="13"
+                        required>
+                </div>
+
+                <div class="col-sm-2">
+                    <label for="screening_date" class=" col-form-label">Entry Date</label>
+                    <input type="date" name="screening_date" id="txtScrChildDate"
+                        class="form-control form-control-sm clr" tabindex="13" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label for="p_name" class=" col-form-label">Name</label>
+                    <input type="text" name="p_name" id="p_name" class="form-control form-control-sm clr" required>
+                </div>
+                <div class="col-sm-2">
+                    <label for="h_or_f_name" class=" col-form-label">Husband/Father Name</label>
+                    <input type="text" name="h_or_f_name" id="h_or_f_name" class="form-control form-control-sm clr"
+                        required>
+                </div>
+                <div class="col-sm-2">
+                    <label for="cnic" class=" col-form-label">Husband/Father/Self CNIC</label>
+                    <input type="text" name="cnic" id="cnic" class="form-control form-control-sm clr" required>
+                    <!-- <small id="emailHelp" class="form-text text-muted"></small> -->
+                </div>
+
+                <div class="col-sm-2">
+                    <label for="contact" class=" col-form-label">Contact Number</label>
+                    <input type="text" name="contact" id="contact" class="form-control form-control-sm clr" required>
+                    <!-- <small id="emailHelp" class="form-text text-muted"></small> -->
+                </div>
+                <div class="col-sm-2">
+                    <label for="age" class=" col-form-label">Age in Months</label>
+                    <input type="number" step="0.1" name="age" id="age" class="form-control form-control-sm clr"
+                        required>
+                    <!-- <small id="emailHelp" class="form-text text-muted">For Child in Months for elders in years</small> -->
+                </div>
+                <div class="col-sm-2">
+                    <label for="contact" class=" col-form-label">Address</label>
+                    <input type="text" name="contact" id="contact" class="form-control form-control-sm clr" required>
+                    <!-- <small id="emailHelp" class="form-text text-muted"></small> -->
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label for="p_type" class=" col-form-label">Participant Type</label>
+                    <select name="p_type" id="p_type" class="form-control form-control-sm " required>
+                        <option selected value="">Choose</option>
+                        <option value="children">Children</option>
+                        <option value="pregnant">Pregnant</option>
+                        <option value="lactating">Lactating</option>
+                        <option value="plw">PLW</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="gender" class=" col-form-label">Gender</label>
+                    <select name="gender" id="gender" class="form-control form-control-sm " required>
+                        <option selected value="">Choose</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="trans">Trans</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="muac" class=" col-form-label">MUAC</label>
+                    <input type="number" step="0.1" name="muac" id="muac" class="form-control form-control-sm clr"
+                        required>
+                    <!-- <small id="emailHelp" class="form-text text-muted">For Child in Months for elders in years</small> -->
+                </div>
+                <div class="col-sm-2">
+                    <label for="muac" class=" col-form-label">Pregnancy Month</label>
+                    <select name="muac" id="muac" class="form-control form-control-sm clr" required>
+                        <option value="">Choose</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+
+                    <!-- <small id="emailHelp" class="form-text text-muted">For Child in Months for elders in years</small> -->
+                </div>
+                <div class="col-sm-2">
+                    <label for="session_given" class=" col-form-label">Session Given</label>
+                    <select name="session_given" id="session_given" class="form-control form-control-sm " required>
+                        <option selected value="">Choose</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="session_type" class=" col-form-label">Session Type</label>
+                    <select name="session_type" id="session_type" class="form-control form-control-sm " required>
+                        <option selected value="">Choose</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row" style="padding-top:0;">
+
+                <div class="col-sm-2 offset-sm-8">
+                    <label for="" class="text-white col-form-label">Save</label>
+                    <button type="submit" id="submitOutReachForm" class="btn btn-sm btn-block btn-info"
+                        tabindex="68">Save</button>
+                </div>
+                <div class="col-sm-2">
+                    <label for="" class="text-white col-form-label">Reset</label>
+                    <button id="resetOutReachForm" class="btn btn-sm btn-block btn-warning" tabindex="69">Reset</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</template>
