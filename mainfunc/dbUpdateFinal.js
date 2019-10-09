@@ -858,6 +858,68 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                     .catch(e => {
                         console.log(e)
                     })
+            } else if (updateCheck == '10') {
+                knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    .then(r => {
+                        return knex.raw(`DROP VIEW IF EXISTS [main].[v_geo_lhw];`)
+                    }).then(r => {
+                        return knex.raw(`CREATE VIEW [v_geo_lhw]
+                            AS
+                            SELECT 
+                                   [v_geo_uc].*, 
+                                   [main].[tblLhw].[staff_name], 
+                                   [main].[tblLhw].[staff_code]
+                            FROM   [main].[v_geo_uc]
+                                   INNER JOIN [main].[tblLhw] ON [main].[tblLhw].[uc] = [main].[v_geo_uc].[uc_id];`)
+                    }).then(r => {
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    }).then(r => {
+                        return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                    }).then(r => {
+                        return knex.raw(`DROP VIEW IF EXISTS [main].[vSessionsFullForUpdate];`)
+                    }).then(r => {
+                        return knex.raw(`CREATE VIEW [main].[vSessionsFullForUpdate]
+                        AS
+                        SELECT 
+                               [main].[v_geo].[province], 
+                               [main].[v_geo].[province_id], 
+                               [main].[v_geo].[district_id], 
+                               [main].[v_geo].[district_name], 
+                               [main].[v_geo].[tehsil_id], 
+                               [main].[v_geo].[tehsil_name], 
+                               [main].[v_geo].[uc_name], 
+                               [main].[v_geo].[site_name] as site_name, 
+                               [tblSessions].*
+                        FROM   [main].[tblSessions]
+                               INNER JOIN [main].[v_geo] ON ([main].[v_geo].[site_id] = [main].[tblSessions].[site_id])
+                        WHERE  [tblsessions].[is_deleted] = 0
+                        UNION ALL
+                        SELECT 
+                               [main].[v_geo_lhw].[province], 
+                               [main].[v_geo_lhw].[province_id], 
+                               [main].[v_geo_lhw].[district_id], 
+                               [main].[v_geo_lhw].[district_name], 
+                               [main].[v_geo_lhw].[tehsil_id], 
+                               [main].[v_geo_lhw].[tehsil_name], 
+                               [main].[v_geo_lhw].[uc_name],
+                               '' as site_name, 
+                               [tblSessions].*
+                        FROM   [main].[tblSessions]
+                               INNER JOIN [main].[v_geo_lhw] ON ([main].[v_geo_lhw].[uc_id] = [main].[tblSessions].[uc_id]
+                                    AND [main].[tblSessions].[CHW_id] = [main].[v_geo_lhw].[staff_code])
+                        WHERE  [tblsessions].[is_deleted] = 0;
+                        `)
+                    }).then(r => {
+                        return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                    }).then(r => {
+                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '11', (err) => {
+                            if (err) throw err;
+                            console.log('created new view for sessions to correct report and entry')
+                        })
+                    })
+                    .catch(e => {
+                        console.log(e)
+                    })
             } else {
                 console.log('v_otpNotExit already updated')
             }
