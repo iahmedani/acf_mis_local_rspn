@@ -19,20 +19,24 @@
       "perMachine": true,
       "allowToChangeInstallationDirectory": true
     },
-    "publish": [{
-      "provider": "github",
-      "owner": "iahmedani",
-      "repo": "acf_mis_local"
-    }],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "iahmedani",
+        "repo": "acf_mis_local"
+      }
+    ],
     "appId": "com.github.iahmedani.aahmislocalapp",
     "win": {
       "icon": "build/win/logo.ico",
-      "target": [{
-        "target": "nsis",
-        "arch": [
-          "ia32"
-        ]
-      }]
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "ia32"
+          ]
+        }
+      ]
     }
   },
   "keywords": [],
