@@ -5,29 +5,33 @@ module.exports.initOtpReportsV2 = async function () {
   var ddReportType = $('#reportType');
   $('#singles').hide();
 
-  let dateMinMax = async()=>{
+  let dateMinMax = async () => {
     var strDate = $('#startMonth')
     var endDate = $('#endMonth')
 
     // var minDate = await knex.select('otp_id', 'reg_date').from('tblOtpAdd').limit(1).orderBy('otp_id', 'asc').where({is_deleted:0});
-    var minDate = await knex.select('otp_id', 'reg_date').from('tblOtpAdd').limit(1).orderBy('reg_date', 'asc').where({is_deleted:0});
-    var maxDate = await knex.select('interim_id', 'created_at').from('tblInterimOtp').limit(1).orderBy('interim_id', 'desc').where({is_deleted:0});
-console.log({
-  minDate,
-  maxDate
-})
+    var minDate = await knex.select('otp_id', 'reg_date').from('tblOtpAdd').limit(1).orderBy('reg_date', 'asc').where({
+      is_deleted: 0
+    });
+    var maxDate = await knex.select('interim_id', 'created_at').from('tblInterimOtp').limit(1).orderBy('interim_id', 'desc').where({
+      is_deleted: 0
+    });
+    console.log({
+      minDate,
+      maxDate
+    })
     // let date_min = new Date(minDate[0].regDate);
     // date_min.toJSON();
-    
-    strDate.prop('min', new Date(minDate[0].reg_date.substring(0,7)).toISOString().substring(0,7));
-    endDate.prop('min', new Date(minDate[0].reg_date.substring(0,7)).toISOString().substring(0,7));
+
+    strDate.prop('min', new Date(minDate[0].reg_date.substring(0, 7)).toISOString().substring(0, 7));
+    endDate.prop('min', new Date(minDate[0].reg_date.substring(0, 7)).toISOString().substring(0, 7));
     // console.log( strDate.min)
     // endDate.min =  maxDate[0].created_at.substring(0,7);
     // let date_max = new Date(maxDate[0].created_at);
     // date_max.toJSON();
     // date_max.substring(0,7); 
-    strDate.prop('max',maxDate[0].created_at.substring(0,7));
-    endDate.prop('max', maxDate[0].created_at.substring(0,7));
+    strDate.prop('max', maxDate[0].created_at.substring(0, 7));
+    endDate.prop('max', maxDate[0].created_at.substring(0, 7));
 
     console.log(strDate.min)
     // var maxDate = await knex('tblOtp').limit(1).orderBy('otp_id', 'desc').where({id_deleted:0});
@@ -35,7 +39,7 @@ console.log({
 
   dateMinMax();
 
-  ddReportType.on('change', (e)=>{
+  ddReportType.on('change', (e) => {
     var strDate = $('#strDateDiv')
     var endDate = $('#endDateDiv')
     var btn = $('#btnIntervalDiv')
@@ -44,7 +48,7 @@ console.log({
     var show = $('#btnShowDiv')
     var table = $('#addmisionReport')
     var tableInerval = $('#myId')
-    if(ddReportType.val() == 'interval'){
+    if (ddReportType.val() == 'interval') {
       strDate.css('display', '')
       endDate.css('display', '')
       btn.css('display', '')
@@ -57,7 +61,7 @@ console.log({
       $('#endMonth').attr('required', true)
       $('#report_month').attr('required', false)
 
-      
+
     } else {
       strDate.css('display', 'none')
       endDate.css('display', 'none')
@@ -71,23 +75,23 @@ console.log({
       $('#endMonth').attr('required', false)
       $('#report_month').attr('required', true)
       // $('#example').DataTable().destroy();
- 
+
       // table1
-// $('#tableDestroy').on( 'click', function () {
-// } );
+      // $('#tableDestroy').on( 'click', function () {
+      // } );
     }
   })
   ipc.send("getProvince");
-  ipc.on("province", function(evt, province) {
+  ipc.on("province", function (evt, province) {
     $("#ddProvince")
       .children("option:not(:first)")
       .remove();
     prov(province);
   });
-  $("#ddProvince").on("change", function() {
+  $("#ddProvince").on("change", function () {
     var prov = $(this).val();
     ipc.send("getDistrict", prov);
-    ipc.on("district", function(evt, district) {
+    ipc.on("district", function (evt, district) {
       $("#ddDistrict")
         .children("option:not(:first)")
         .remove();
@@ -95,10 +99,10 @@ console.log({
       dist(district);
     });
   });
-  $("#ddDistrict").on("change", function() {
+  $("#ddDistrict").on("change", function () {
     var dist = $(this).val();
     ipc.send("getTehsil", dist);
-    ipc.on("tehsil", function(evt, tehsil) {
+    ipc.on("tehsil", function (evt, tehsil) {
       $("#ddTehsil")
         .children("option:not(:first)")
         .remove();
@@ -106,10 +110,10 @@ console.log({
       teh(tehsil);
     });
   });
-  $("#ddTehsil").on("change", function() {
+  $("#ddTehsil").on("change", function () {
     var tehs = $(this).val();
     ipc.send("getUC", tehs);
-    ipc.on("uc", function(evt, uc) {
+    ipc.on("uc", function (evt, uc) {
       $("#ddUC")
         .children("option:not(:first)")
         .remove();
@@ -118,47 +122,40 @@ console.log({
     });
   });
   var ucForHH;
-  $("#ddUC").on("change", function() {
+  $("#ddUC").on("change", function () {
     var ucs = $(this).val();
     ucForHH = ucs;
     ipc.send("getHealthHouse", ucs);
-    ipc.on("hh", function(evt, hh) {
+    ipc.on("hh", function (evt, hh) {
       $("#ddHealthHouse")
         .children("option:not(:first)")
         .remove();
       hhListener(hh);
     });
   });
+  $('#ddProgramType').on('change', async function () {
+    var prog_type = $(this).val();
+    if (prog_type == 'sc') {
+      $('#ddUc').attr('disabled', true)
+      $('#ddHealthHouse').attr('disabled', true)
+      $('#nsc_report').css('display', 'block')
+      $('#otp_report').css('display', 'none')
+      // await nscSumReport('');
+    } else {
+      $('#ddUc').attr('disabled', false)
+      $('#ddHealthHouse').attr('disabled', false)
+      $('#nsc_report').css('display', 'none')
+      $('#otp_report').css('display', 'block')
+    }
+  })
 
-  $("#showAddExitReport").on("click", function(e) {
-    e.preventDefault();
-    ipc.send("getReport", prepareQry());
-    $('#tblMonthCol').empty()
-    $('#tblMonthCol').text($('#report_month').val())
-    $('#reportMonthT').empty();
-    $('#reportMonthT').text(`Province:${$('#ddProvince option:selected').text()},District:${$('#ddDistrict option:selected').text()},Tehsil:${$('#ddTehsil option:selected').text()},UC:${$('#ddUC option:selected').text()},Reporting Site:${$('#ddHealthHouse option:selected').text()}`);
-    ipc.on("getReport", (e, data) => {
-      myPushData(data);
-    //   $('#DataTable').DataTable( {
-    //     dom: 'Bfrtip',
-    //     buttons: [
-    //         'copy', 'csv', 'excel'
-    //     ]
-    // } );
-      // $("#addExitSummary td:empty").each(function(el, y) {
-      //   $(y).text("0");
-      // });
-      // createTblAdd(data.addTable, "tblAdd");
-      // createTblExit(data.exitTable, "tblExit");
-      ipc.removeAllListeners('getReport');
-    });
-  });
-  
+
+
   function myPushData(x) {
     console.log(x)
     var a_male_623 = (x.result.last.filter(el => el.age_group == '6_23' && el.gender == 'male').length > 0) ? x.result.last.filter(el => el.age_group == '6_23' && el.gender == 'male')[0].a : 0;
-    var a_female_623 = (x.result.last.filter(el => el.age_group == "6_23" && el.gender == "female").length > 0 )? x.result.last.filter(el => el.age_group == "6_23" && el.gender == "female")[0].a : 0;
-    var a_male_24_59 = (x.result.last.filter(el => el.age_group == '24_59' && el.gender == 'male').length > 0 )? x.result.last.filter(el => el.age_group == '24_59' && el.gender == 'male')[0].a : 0;
+    var a_female_623 = (x.result.last.filter(el => el.age_group == "6_23" && el.gender == "female").length > 0) ? x.result.last.filter(el => el.age_group == "6_23" && el.gender == "female")[0].a : 0;
+    var a_male_24_59 = (x.result.last.filter(el => el.age_group == '24_59' && el.gender == 'male').length > 0) ? x.result.last.filter(el => el.age_group == '24_59' && el.gender == 'male')[0].a : 0;
     var a_female_24_59 = (x.result.last.filter(el => el.age_group == '24_59' && el.gender == 'female').length > 0) ? x.result.last.filter(el => el.age_group == '24_59' && el.gender == 'female')[0].a : 0;
     var total_a = a_male_623 + a_female_623 + a_male_24_59 + a_female_24_59;
     $('#6_23-male-a').empty()
@@ -299,13 +296,13 @@ console.log({
     d_male_623 = d_male_623 + a_male_623;
     d_male_24_59 = d_male_24_59 + a_male_24_59;
     d_female_24_59 = d_female_24_59 + a_female_24_59;
-    var total_d = d_male_623  + d_female_623  + d_male_24_59  + d_female_24_59 ;
+    var total_d = d_male_623 + d_female_623 + d_male_24_59 + d_female_24_59;
     $("#6_23-male-d").empty();
     $("#6_23-male-d").text(d_male_623);
     $("#6_23-female-d").empty();
-    $("#6_23-female-d").text(d_female_623 );
+    $("#6_23-female-d").text(d_female_623);
     $("#24_59-male-d").empty();
-    $("#24_59-male-d").text(d_male_24_59 );
+    $("#24_59-male-d").text(d_male_24_59);
     $("#24_59-female-d").empty();
     $("#24_59-female-d").text(d_female_24_59);
     $("#total-d").empty();
@@ -402,7 +399,7 @@ console.log({
     $("#total-f1").empty();
     $("#total-f1").text(total_f1);
     var f2_male_623 = x.result.exit.filter(el => el.age_group == "6_23" && el.gender == "male").length > 0 ? x.result.exit.filter(el => el.age_group == "6_23" && el.gender == "male")[0].f2 : 0;
-    var f2_female_623 = x.result.exit.filter(el => el.age_group == "6_23" && el.gender == "female").length > 0 ? x.result.exit.filter(el => el.age_group == "6_23" && el.gender == "female")[0].f2: 0;
+    var f2_female_623 = x.result.exit.filter(el => el.age_group == "6_23" && el.gender == "female").length > 0 ? x.result.exit.filter(el => el.age_group == "6_23" && el.gender == "female")[0].f2 : 0;
     var f2_male_24_59 = x.result.exit.filter(el => el.age_group == "24_59" && el.gender == "male").length > 0 ? x.result.exit.filter(el => el.age_group == "24_59" && el.gender == "male")[0].f2 : 0;
     var f2_female_24_59 = x.result.exit.filter(el => el.age_group == "24_59" && el.gender == "female").length > 0 ? x.result.exit.filter(el => el.age_group == "24_59" && el.gender == "female")[0].f2 : 0;
     var total_f2 = f2_male_623 + f2_female_623 + f2_male_24_59 + f2_female_24_59;
@@ -462,11 +459,11 @@ console.log({
     $("#24_59-female-g").text(g_female_24_59);
     $("#total-g").empty();
     $("#total-g").text(total_g);
-    
-    var h_male_623 = (d_male_623 - g_male_623) ? (d_male_623 - g_male_623) : 0; 
-    var h_female_623 = (d_female_623 - g_female_623) ? (d_female_623 - g_female_623) : 0; 
-    var h_male_24_59 = d_male_24_59 - g_male_24_59; 
-    var h_female_24_59 = d_female_24_59 - g_female_24_59; 
+
+    var h_male_623 = (d_male_623 - g_male_623) ? (d_male_623 - g_male_623) : 0;
+    var h_female_623 = (d_female_623 - g_female_623) ? (d_female_623 - g_female_623) : 0;
+    var h_male_24_59 = d_male_24_59 - g_male_24_59;
+    var h_female_24_59 = d_female_24_59 - g_female_24_59;
     var total_h = h_male_623 + h_female_623 + h_male_24_59 + h_female_24_59;
     $("#6_23-male-h").empty();
     $("#6_23-male-h").text(h_male_623);
@@ -488,13 +485,13 @@ console.log({
     //   Object.keys(el).forEach((fl, j) => {
     //     temp.push(fl);
     //     if (temp.length - 1 == j) {
-          
+
     //     }
     //   })
     //   lastKeys.forEach(function (fl, j) {
     //     temp.push(el)
     //   })
-      
+
     // })
     // x.add.forEach(el => {
     //   if (el.age == "range6to23" && el.gender == "male") {
@@ -503,7 +500,7 @@ console.log({
     //       $(`#623_boys_add_${add}`).empty();
     //       $(`#623_boys_add_${add}`).text(el[add] ? el[add] : 0);
     //     }
-        
+
     //   } else if ((el.age == "range6to23" && el.gender == "female")) {
     //     console.log("range6to23" + "female")
 
@@ -535,7 +532,7 @@ console.log({
     //       $(`#623_boys_exit_${exit}`).empty();
     //       $(`#623_boys_exit_${exit}`).text(el[exit] ? el[exit] : 0);
     //     }
-        
+
     //   } else if ((el.eAge == "range6to23" && el.eGender == "female")) {
     //     for (exit in el) {
     //       $(`#623_girls_exit_${exit}`).empty();
@@ -561,25 +558,26 @@ console.log({
 
   function prepareQry() {
     var qry = {};
-    $("#ddProvince").val() ? (qry.province_id = $("#ddProvince").val()) : qry.province_id= "";
+    $("#ddProvince").val() ? (qry.province_id = $("#ddProvince").val()) : qry.province_id = "";
     $("#ddDistrict").val() ? (qry.district_id = $("#ddDistrict").val()) : qry.district_id = "";
     $("#ddTehsil").val() ? (qry.tehsil_id = $("#ddTehsil").val()) : qry.tehsil_id = "";
     $("#ddUc").val() ? (qry.uc_id = $("#ddTehsil").val()) : qry.uc_id = "";
-    $("#ddHealthHouse").val() ? (qry.site_id = $("#ddHealthHouse").val()) : qry.site_id= "";
-    $("#report_month").val() ? (qry.report_month = $("#report_month").val())  : qry.report_month ="";
+    $("#ddHealthHouse").val() ? (qry.site_id = $("#ddHealthHouse").val()) : qry.site_id = "";
+    $("#report_month").val() ? (qry.report_month = $("#report_month").val()) : qry.report_month = "";
     // $("#prog_type").val() ? (qry.prog_type = $("#ddProgramType").val()) : "";
     // console.log(qry);
     return qry;
   }
+
   function prepareQryInterval() {
     var qry = {};
-    $("#ddProvince").val() ? (qry.province_id = $("#ddProvince").val()) : qry.province_id= "";
+    $("#ddProvince").val() ? (qry.province_id = $("#ddProvince").val()) : qry.province_id = "";
     $("#ddDistrict").val() ? (qry.district_id = $("#ddDistrict").val()) : qry.district_id = "";
     $("#ddTehsil").val() ? (qry.tehsil_id = $("#ddTehsil").val()) : qry.tehsil_id = "";
     $("#ddUc").val() ? (qry.uc_id = $("#ddTehsil").val()) : qry.uc_id = "";
-    $("#ddHealthHouse").val() ? (qry.site_id = $("#ddHealthHouse").val()) : qry.site_id="";
-    $("#startMonth").val() ? (qry.startMonth = $("#startMonth").val())  : qry.startMonth="";
-    $("#endMonth").val() ? (qry.endMonth = $("#endMonth").val())  : qry.endMonth = "";
+    $("#ddHealthHouse").val() ? (qry.site_id = $("#ddHealthHouse").val()) : qry.site_id = "";
+    $("#startMonth").val() ? (qry.startMonth = $("#startMonth").val()) : qry.startMonth = "";
+    $("#endMonth").val() ? (qry.endMonth = $("#endMonth").val()) : qry.endMonth = "";
     // $("#prog_type").val() ? (qry.prog_type = $("#ddProgramType").val()) : "";
     // console.log(qry);
     // if(qry.startMonth == ""|| qry.endMonth ==""){
@@ -598,43 +596,43 @@ console.log({
     months = (d2.getFullYear() - d1.getFullYear()) * 12;
     months -= d1.getMonth();
     months += d2.getMonth();
-    return months <= 0 ? 0 : months+1;
+    return months <= 0 ? 0 : months + 1;
   }
- 
-  function prepareMonth (start, end, cb){
+
+  function prepareMonth(start, end, cb) {
     // console.log(start, end)
     // return new Promise(resolve =>{
-      var x = [];
-      var totalMonth = monthDiff(new Date(start), new Date(end));
-      // console.log(totalMonth)
-      if(totalMonth == 0){
-        alert('To view report there should be difference of atleast one month b/w Start and End Month')
-        cb(0)
-      }else {
+    var x = [];
+    var totalMonth = monthDiff(new Date(start), new Date(end));
+    // console.log(totalMonth)
+    if (totalMonth == 0) {
+      alert('To view report there should be difference of atleast one month b/w Start and End Month')
+      cb(0)
+    } else {
 
-        var i = 0;
-        while (i < totalMonth ){
-          var dt = new Date(start);
-          dt.setMonth( dt.getMonth() + i)
-          x.push(`${dt.getFullYear()+ '-' + (dt.getMonth() < 9 ? '0'+(dt.getMonth()+1) : dt.getMonth()+1) }`)
-          i ++;
-          // console.log(i)
-          if( totalMonth -1 == i){
-            // console.log(x)
-            cb(null, x)
-          }
+      var i = 0;
+      while (i < totalMonth) {
+        var dt = new Date(start);
+        dt.setMonth(dt.getMonth() + i)
+        x.push(`${dt.getFullYear()+ '-' + (dt.getMonth() < 9 ? '0'+(dt.getMonth()+1) : dt.getMonth()+1) }`)
+        i++;
+        // console.log(i)
+        if (totalMonth - 1 == i) {
+          // console.log(x)
+          cb(null, x)
         }
       }
-    
+    }
+
     // })
     // console.log(totalMonth)  
   }
-  let prepareMonthPromise = (start, end)=>{
-    return new Promise((resolve, reject)=>{
-      prepareMonth(start, end, (err, test)=>{
-        if(err){
+  let prepareMonthPromise = (start, end) => {
+    return new Promise((resolve, reject) => {
+      prepareMonth(start, end, (err, test) => {
+        if (err) {
           reject()
-        }else{
+        } else {
           resolve(test)
         }
       })
@@ -643,21 +641,23 @@ console.log({
 
 
 
-  async function IntervalReportData(qry, month){
-    var last = await  knex("v_otpNotExitInterval")
-                      .select('age_group', 'gender')
-                      .count({ a: 'otp_id' })
-                      .whereRaw(`exit_date > ${month} OR exit_date is null`)
-                      .where('reg_date', '<', month)
-                      .where('site_id', 'like', `%${qry.site_id}%`)
-                      .where('province_id', 'like', `%${qry.province_id}%`)
-                      .where('district_id', 'like', `%${qry.district_id}%`)
-                      .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
-                      .where('uc_id', 'like', `%${qry.uc_id}%`)
-                      .groupBy("age_group", "gender")
+  async function IntervalReportData(qry, month) {
+    var last = await knex("v_otpNotExitInterval")
+      .select('age_group', 'gender')
+      .count({
+        a: 'otp_id'
+      })
+      .whereRaw(`exit_date > ${month} OR exit_date is null`)
+      .where('reg_date', '<', month)
+      .where('site_id', 'like', `%${qry.site_id}%`)
+      .where('province_id', 'like', `%${qry.province_id}%`)
+      .where('district_id', 'like', `%${qry.district_id}%`)
+      .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
+      .where('uc_id', 'like', `%${qry.uc_id}%`)
+      .groupBy("age_group", "gender")
 
-  var otpAdd = await knex("v_otpAddInterval")
-  .select(knex.raw(`(case when age > 23 then '24_59' when age <24 then '6_23' end) as age_group,
+    var otpAdd = await knex("v_otpAddInterval")
+      .select(knex.raw(`(case when age > 23 then '24_59' when age <24 then '6_23' end) as age_group,
 gender,
 count(case when muac < 11.5  and ent_reason = 'no_prv_pro' and oedema = 'absent' then 1 end) as b1,  
 count(case when oedema <> 'absent' and ent_reason = 'no_prv_pro' then 1 end) as b2,
@@ -668,18 +668,18 @@ count(case when (ent_reason <> 'transfer_in_from_nsc' and  ent_reason <> 'return
 count(case when ent_reason = 'relapse' then 1 end) as cc,
 (  count(case when ent_reason = 'return_def' then 1 end) + count(case when ent_reason = 'transfer_in_from_nsc' then 1 end) + count(case when ent_reason <> 'transfer_in_from_nsc' and  ent_reason <> 'return_def' and ent_reason <> 'relapse' and ent_reason <> 'no_prv_pro' then 1 end) )  as c,
 (( count(case when muac < 11.5  and ent_reason = 'no_prv_pro' and oedema = 'absent' then 1 end) + count(case when oedema <> 'absent' and ent_reason = 'no_prv_pro' then 1 end)) + (count(case when ent_reason = 'relapse' then 1 end)) + (count(case when ent_reason = 'return_def' then 1 end) + count(case when ent_reason = 'transfer_in_from_nsc' then 1 end) + count(case when ent_reason <> 'transfer_in_from_nsc' and  ent_reason <> 'return_def' and ent_reason <> 'relapse' and ent_reason <> 'no_prv_pro' then 1 end))) as d`))
-  .where("reg_date", "like", `${month}%`)
-  .where('site_id', 'like', `%${qry.site_id}%`)
-  .where('province_id', 'like', `%${qry.province_id}%`)
-  .where('district_id', 'like', `%${qry.district_id}%`)
-  .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
-  .where('uc_id', 'like', `%${qry.uc_id}%`)
-  .groupBy("age_group", "gender")
+      .where("reg_date", "like", `${month}%`)
+      .where('site_id', 'like', `%${qry.site_id}%`)
+      .where('province_id', 'like', `%${qry.province_id}%`)
+      .where('district_id', 'like', `%${qry.district_id}%`)
+      .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
+      .where('uc_id', 'like', `%${qry.uc_id}%`)
+      .groupBy("age_group", "gender")
 
-  // console.log(otpAdd)
+    // console.log(otpAdd)
 
-var otpExit = await  knex('v_exitOtpReportInterval')
-.select(knex.raw(`(case when age > 23 then '24_59' when age <24 then '6_23' end) as age_group,
+    var otpExit = await knex('v_exitOtpReportInterval')
+      .select(knex.raw(`(case when age > 23 then '24_59' when age <24 then '6_23' end) as age_group,
 gender,
 count(case when exit_reason = 'cured' then 1 end) as e1,
 count(case when exit_reason = 'death' then 1 end) as e2,
@@ -691,372 +691,755 @@ count(case when exit_reason = 'medical_transfer_sc' then 1 end) as f2,
 count(case when exit_reason <> 'cured' and exit_reason <> 'death' and exit_reason <> 'defaulter' and exit_reason <> 'non_respondent' and exit_reason <> 'medical_transfer' and exit_reason <> 'medical_transfer_sc' then 1 end) as f3,
 (count(case when exit_reason = 'medical_transfer' then 1 end) + count(case when exit_reason = 'medical_transfer_sc' then 1 end) + count(case when exit_reason <> 'cured' and exit_reason <> 'death' and exit_reason <> 'defaulter' and exit_reason <> 'non_respondent' and exit_reason <> 'medical_transfer' and exit_reason <> 'medical_transfer_sc' then 1 end)) as f,
 ((count(case when exit_reason = 'medical_transfer' then 1 end) + count(case when exit_reason = 'medical_transfer_sc' then 1 end) + count(case when exit_reason <> 'cured' and exit_reason <> 'death' and exit_reason <> 'defaulter' and exit_reason <> 'non_respondent' and exit_reason <> 'medical_transfer' and exit_reason <> 'medical_transfer_sc' then 1 end)) +(count(case when exit_reason = 'cured' then 1 end)+ count(case when exit_reason = 'death' then 1 end) + count(case when exit_reason = 'defaulter' then 1 end) + count(case when exit_reason = 'non_respondent' then 1 end))) as g `))
-.where("exit_date", "like", `${month}%`)
-.where('site_id', 'like', `%${qry.site_id}%`)
-  .where('province_id', 'like', `%${qry.province_id}%`)
-  .where('district_id', 'like', `%${qry.district_id}%`)
-  .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
-  .where('uc_id', 'like', `%${qry.uc_id}%`)         
-.groupBy('age_group', 'gender')
-console.log(month, last, otpAdd, otpExit)
+      .where("exit_date", "like", `${month}%`)
+      .where('site_id', 'like', `%${qry.site_id}%`)
+      .where('province_id', 'like', `%${qry.province_id}%`)
+      .where('district_id', 'like', `%${qry.district_id}%`)
+      .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
+      .where('uc_id', 'like', `%${qry.uc_id}%`)
+      .groupBy('age_group', 'gender')
+    console.log(month, last, otpAdd, otpExit)
     return ({
       month,
       last,
       otpAdd,
       otpExit
-    }
-    )
-}
-
-async function reFormateArray(data, cb){
-  var intervalData = await IntervalReportData();
-  console.log(intervalData)
-}
-  async function runReport (qry){
-  //  console.log(qry)
-   var months = await prepareMonthPromise(qry.startMonth, qry.endMonth)
-   console.log(months)
-  
- }
-
-async function SingleEntriesMonthly (qry){
-  const addDataSingle = await knex('v_otpAdd_full')
-  .where('site_id', 'like', `%${qry.site_id}%`)
-  .where('province_id', 'like', `%${qry.province_id}%`)
-  .where('district_id', 'like', `%${qry.district_id}%`)
-  .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
-  .where('uc_id', 'like', `%${qry.uc_id}%`)
-  .where('reg_date', 'like', `%${qry.report_month}%`)
-  const exitDataSingle = await knex('v_otpExit_full')
-  .where('site_id', 'like', `%${qry.site_id}%`)
-  .where('province_id', 'like', `%${qry.province_id}%`)
-  .where('district_id', 'like', `%${qry.district_id}%`)
-  .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
-  .where('uc_id', 'like', `%${qry.uc_id}%`)
-  .where('exit_date', 'like', `%${qry.report_month}%`)
-
-  return {addDataSingle, exitDataSingle}
-}
-async function SingleEntriesInterval (qry){
-  // console.log(qry)
-  $('#otpReportFilerForm').validate();
-  if($('#otpReportFilerForm').valid()){
-    try {
-      const addDataSingle = await knex('v_otpAdd_full')
-      .where('site_id', 'like', `%${qry.site_id}%`)
-      .where('province_id', 'like', `%${qry.province_id}%`)
-      .where('district_id', 'like', `%${qry.district_id}%`)
-      .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
-      .where('uc_id', 'like', `%${qry.uc_id}%`)
-      .whereBetween('reg_date',[qry.startMonth, qry.endMonth])
-      // .where('reg_date', 'like', `%${qry.report_month}%`)
-      const exitDataSingle = await knex('v_otpExit_full')
-      .where('site_id', 'like', `%${qry.site_id}%`)
-      .where('province_id', 'like', `%${qry.province_id}%`)
-      .where('district_id', 'like', `%${qry.district_id}%`)
-      .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
-      .where('uc_id', 'like', `%${qry.uc_id}%`)
-      .whereBetween('reg_date',[qry.startMonth, qry.endMonth])
-      // console.log({addDataSingle, exitDataSingle})
-     return {addDataSingle, exitDataSingle}
-
-    } catch (error) {
-      console.log(error)
-    } 
-  }else{
-    
+    })
   }
-}
 
-function prepareDataForTable (data, cb){
-  // console.log(data)
-  // var lines = 4;
-  var genders =['male', 'female'];
-  var age_groups = ['6_23', '24_59'];
-  // var totalMonths = data.length;
-  var y = [];
-  if(data.length == 0){
-    cb('No data')
-  }else {
-    for ( month of data){
-      var last = month.last;
-      var otpAdd = month.otpAdd;
-      var otpExit = month.otpExit;
-      for (age of age_groups){
-        for(gender of genders){
-          var z = {};
-          z.month = month.month;
-          z.age_group = age;
-          z.gender = gender;
-          if(last.length > 0){
-            var newLast = last.filter(el=> el.gender == gender && el.age_group == age)[0];
-            if(newLast){
-              z.a = newLast.a;
+  async function reFormateArray(data, cb) {
+    var intervalData = await IntervalReportData();
+    console.log(intervalData)
+  }
+  async function runReport(qry) {
+    //  console.log(qry)
+    var months = await prepareMonthPromise(qry.startMonth, qry.endMonth)
+    console.log(months)
+
+  }
+
+  async function SingleEntriesMonthly(qry) {
+    const addDataSingle = await knex('v_otpAdd_full')
+      .where('site_id', 'like', `%${qry.site_id}%`)
+      .where('province_id', 'like', `%${qry.province_id}%`)
+      .where('district_id', 'like', `%${qry.district_id}%`)
+      .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
+      .where('uc_id', 'like', `%${qry.uc_id}%`)
+      .where('reg_date', 'like', `%${qry.report_month}%`)
+    const exitDataSingle = await knex('v_otpExit_full')
+      .where('site_id', 'like', `%${qry.site_id}%`)
+      .where('province_id', 'like', `%${qry.province_id}%`)
+      .where('district_id', 'like', `%${qry.district_id}%`)
+      .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
+      .where('uc_id', 'like', `%${qry.uc_id}%`)
+      .where('exit_date', 'like', `%${qry.report_month}%`)
+
+    return {
+      addDataSingle,
+      exitDataSingle
+    }
+  }
+  async function SingleEntriesInterval(qry) {
+    // console.log(qry)
+    $('#otpReportFilerForm').validate();
+    if ($('#otpReportFilerForm').valid()) {
+      try {
+        const addDataSingle = await knex('v_otpAdd_full')
+          .where('site_id', 'like', `%${qry.site_id}%`)
+          .where('province_id', 'like', `%${qry.province_id}%`)
+          .where('district_id', 'like', `%${qry.district_id}%`)
+          .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
+          .where('uc_id', 'like', `%${qry.uc_id}%`)
+          .whereBetween('reg_date', [qry.startMonth, qry.endMonth])
+        // .where('reg_date', 'like', `%${qry.report_month}%`)
+        const exitDataSingle = await knex('v_otpExit_full')
+          .where('site_id', 'like', `%${qry.site_id}%`)
+          .where('province_id', 'like', `%${qry.province_id}%`)
+          .where('district_id', 'like', `%${qry.district_id}%`)
+          .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
+          .where('uc_id', 'like', `%${qry.uc_id}%`)
+          .whereBetween('reg_date', [qry.startMonth, qry.endMonth])
+        // console.log({addDataSingle, exitDataSingle})
+        return {
+          addDataSingle,
+          exitDataSingle
+        }
+
+      } catch (error) {
+        console.log(error)
+      }
+    } else {
+
+    }
+  }
+
+  function prepareDataForTable(data, cb) {
+    // console.log(data)
+    // var lines = 4;
+    var genders = ['male', 'female'];
+    var age_groups = ['6_23', '24_59'];
+    // var totalMonths = data.length;
+    var y = [];
+    if (data.length == 0) {
+      cb('No data')
+    } else {
+      for (month of data) {
+        var last = month.last;
+        var otpAdd = month.otpAdd;
+        var otpExit = month.otpExit;
+        for (age of age_groups) {
+          for (gender of genders) {
+            var z = {};
+            z.month = month.month;
+            z.age_group = age;
+            z.gender = gender;
+            if (last.length > 0) {
+              var newLast = last.filter(el => el.gender == gender && el.age_group == age)[0];
+              if (newLast) {
+                z.a = newLast.a;
+              } else {
+                z.a = 0;
+              }
             } else {
-              z.a =0;
+              z.a = 0;
             }
-          } else {
-            z.a =0;
-          }
-  
-          if(otpAdd.length > 0){
-            var newOtp = otpAdd.filter(el=> el.gender == gender && el.age_group == age)[0];
-            // console.log(newOtp)
-            if(newOtp){
-              z.b=newOtp.b,
-              z.b1=newOtp.b1
-              z.b2=newOtp.b2
-              z.c=newOtp.c
-              z.c1=newOtp.c1
-              z.c2=newOtp.c2
-              z.c3=newOtp.c3
-              z.cc=newOtp.cc
-              z.d=newOtp.d
-            }else {
-              z.b=0,
-              z.b1=0
-              z.b2=0
-              z.c=0,
-              z.c1=0,
-              z.c2=0,
-              z.c3=0,
-              z.cc=0,
-              z.d=0  
-            }  
-          } else {
-            z.b=0,
-            z.b1=0
-            z.b2=0
-            z.c=0,
-            z.c1=0,
-            z.c2=0,
-            z.c3=0,
-            z.cc=0,
-            z.d=0 
-  
-          }  
-          if(otpExit.length > 0 ){
-            var newExit = otpExit.filter(el=> el.gender == gender && el.age_group == age)[0];
-            // console.log({gender, age, newExit})
-            if(newExit){
-              z.e = newExit.e;
-              z.e1 = newExit.e1;
-              z.e2 = newExit.e2;
-              z.e3 = newExit.e3;
-              z.e4 = newExit.e4;
-              z.f = newExit.f;
-              z.f1 = newExit.f1;
-              z.f2 = newExit.f2;
-              z.f3 = newExit.f3;
-              z.g = newExit.g
-            }else{
-              z.e  = 0;
+
+            if (otpAdd.length > 0) {
+              var newOtp = otpAdd.filter(el => el.gender == gender && el.age_group == age)[0];
+              // console.log(newOtp)
+              if (newOtp) {
+                z.b = newOtp.b,
+                  z.b1 = newOtp.b1
+                z.b2 = newOtp.b2
+                z.c = newOtp.c
+                z.c1 = newOtp.c1
+                z.c2 = newOtp.c2
+                z.c3 = newOtp.c3
+                z.cc = newOtp.cc
+                z.d = newOtp.d
+              } else {
+                z.b = 0,
+                  z.b1 = 0
+                z.b2 = 0
+                z.c = 0,
+                  z.c1 = 0,
+                  z.c2 = 0,
+                  z.c3 = 0,
+                  z.cc = 0,
+                  z.d = 0
+              }
+            } else {
+              z.b = 0,
+                z.b1 = 0
+              z.b2 = 0
+              z.c = 0,
+                z.c1 = 0,
+                z.c2 = 0,
+                z.c3 = 0,
+                z.cc = 0,
+                z.d = 0
+
+            }
+            if (otpExit.length > 0) {
+              var newExit = otpExit.filter(el => el.gender == gender && el.age_group == age)[0];
+              // console.log({gender, age, newExit})
+              if (newExit) {
+                z.e = newExit.e;
+                z.e1 = newExit.e1;
+                z.e2 = newExit.e2;
+                z.e3 = newExit.e3;
+                z.e4 = newExit.e4;
+                z.f = newExit.f;
+                z.f1 = newExit.f1;
+                z.f2 = newExit.f2;
+                z.f3 = newExit.f3;
+                z.g = newExit.g
+              } else {
+                z.e = 0;
+                z.e1 = 0;
+                z.e2 = 0;
+                z.e2 = 0;
+                z.e3 = 0;
+                z.e4 = 0;
+                z.f = 0;
+                z.f1 = 0;
+                z.f2 = 0;
+                z.f3 = 0;
+                z.g = 0;
+              }
+            } else {
+              z.e = 0;
               z.e1 = 0;
               z.e2 = 0;
               z.e2 = 0;
               z.e3 = 0;
               z.e4 = 0;
-              z.f  = 0;
+              z.f = 0;
               z.f1 = 0;
               z.f2 = 0;
               z.f3 = 0;
-              z.g  = 0;
+              z.g = 0;
             }
-           }else{
-            z.e  = 0;
-            z.e1 = 0;
-            z.e2 = 0;
-            z.e2 = 0;
-            z.e3 = 0;
-            z.e4 = 0;
-            z.f  = 0;
-            z.f1 = 0;
-            z.f2 = 0;
-            z.f3 = 0;
-            z.g  = 0;
+            y.push(z)
           }
-          y.push(z)
+        }
+        if (y.length / 4 == data.length) {
+          cb(null, y);
         }
       }
-      if(y.length / 4 == data.length){
-        cb(null, y);
-      }
     }
-  } 
-  
-}
 
-function prepareDataForTablePromise (data){
-  return new Promise((resolve, reject)=>{
-    prepareDataForTable(data, (err, data)=>{
-      if(err){
-        reject()
-      }else{
-        resolve(data);
-      }
+  }
+
+  function prepareDataForTablePromise(data) {
+    return new Promise((resolve, reject) => {
+      prepareDataForTable(data, (err, data) => {
+        if (err) {
+          reject()
+        } else {
+          resolve(data);
+        }
+      })
     })
-  })
-}
-
-const singleTables = (data)=>{
-  if ( $.fn.DataTable.isDataTable('#tblAdd') ) {
-    $('#tblAdd').DataTable().destroy();
   }
-  $('#tblAdd tbody').empty();
-  $('#tblAdd').DataTable({
-    data :data.addDataSingle,
-    "paging":   false,
-    "scrollY": 380,
-    "scrollX": true,
-    columns:[
-      {title:'Province', data:'province'},
-      {title:'District', data:'district_name'},
-      {title:'Tehsil', data:'tehsil_name'},
-      {title:'UC', data:'uc_name'},
-      {title:'Site Name', data:'site_name'},
-      {title:'Registration Date', data:'reg_date'},
-      {title:'Registration ID', data:'reg_id'},
-      {title:'Name', data:'p_name'},
-      {title:'Age', data:'age'},
-      {title:'Gender', data:'gender'},
-      {title:'Father/Husband Name', data:'f_or_h_name'},
-      {title:'CNIC', data:'cnic'},
-      {title:'Contact Number', data:'cnt_number'},
-      {title:'Address', data:'address'},
-      {title:'Entry Reason', data:'ent_reason'},
-      {title:'Referral Type', data:'ref_type'},
-      {title:'Oedema', data:'oedema'},
-      {title:'MUAC', data:'muac'},
-      {title:'Weight', data:'weight'},
-      {title:'Height', data:'height'},
-      {title:'Diarrhoea', data:'diarrhoea'},
-      {title:'vomiting', data:'vomiting'},
-      {title:'cough', data:'cough'},
-      {title:'Appetite', data:'appetite'},
-      {title:'Daily Stool', data:'daily_stool'},
-      {title:'Urine', data:'pass_urine'},
-      {title:'Breast Fed', data:'b_Feeding'}
-    ]
-  })
 
-  if ( $.fn.DataTable.isDataTable('#tblExit') ) {
-    $('#tblExit').DataTable().destroy();
-  }
-  $('#tblExit tbody').empty();
-  $('#tblExit').DataTable({
-    data : data.exitDataSingle,
-    "paging":   false,
-    "scrollY": 380,
-    "scrollX": true,
-    columns:[
-      {title:'Province', data:'province'},
-      {title:'District', data:'district_name'},
-      {title:'Tehsil', data:'tehsil_name'},
-      {title:'UC', data:'uc_name'},
-      {title:'Site Name', data:'site_name'},
-      {title:'Registration Date', data:'reg_date'},
-      {title:'Exit Date', data:'exit_date'},
-      {title:'Registration ID', data:'reg_id'},
-      {title:'Name', data:'p_name'},
-      {title:'Gender', data:'gender'},
-      {title:'Father/Husband Name', data:'f_or_h_name'},
-      {title:'Exit Reason', data:'exit_reason'}
-    ]
-  })
-}
-
-
-
-
-$('#exportScrChReportInterval').on('click', async (e)=>{
-  var qry = prepareQryInterval()
-  var singleData = await SingleEntriesInterval(qry);
-  singleTables(singleData);
-  // console.log(singleData)
-    var x = await prepareMonthPromise(qry.startMonth, qry.endMonth);
-    var g = [];
-    for (i of x){
-      var a = await IntervalReportData(qry, i)
-      g.push(a);
-      // console.log(g)
-      if(x.length == g.length){
-        const tableData = await prepareDataForTablePromise(g);
-        // console.log(tableData)
-
-        if ( $.fn.DataTable.isDataTable('#example') ) {
-          $('#example').DataTable().destroy();
-        }
-        $('#example tbody').empty();
-        $('#example').DataTable( {
-          data:tableData,
-          dom: 'Bfrtip',
-                buttons: [
-                  'copy', { extend:'csv', title:`OTP Addministion and Exit Report_${Date.now()}`}, {extend:'excel', title:`OTP Addministion and Exit Report_${Date.now()}`}
-                ],
-                "scrollY": 380,
-        "scrollX": true,
-          columns:[
-            {title: 'Month', data:'month'},
-            {title: 'Age Group', data:null, render: function(data, type, row){
-              return ((data.age_group == '6_23'? '6-23 Months': '24-59 Months'))
-            }},
-            {title:'Gender', data:null, render: function(data, type, row){
-              return data.gender.toUpperCase();
-            }},
-            {title: `Total in OTP beginning of the month (A)`, data:'a'},
-            {title: `MUAC < 11.5 cm (B1)`, data:'b1'},
-            {title: `ODEMA(B2)`, data:'b2'},
-            {title: 'Total New Admission (B=B1+B2)', data:'b'},
-            {title: 'Return After Default(C1)', data:'c1'},
-            {title: 'Transfer from SC (C2)', data:'c2'},
-            {title: 'Other (C3)', data:'c3'},
-            {title: 'Relapse After Cure (CC)', data:'cc'},
-            {title: 'Total Moved In (C=C2+C2+C3)', data:'c3'},
-            {title: 'Total In (D=A+B+C+CC)', data:null, render: function(data, type, row){
-              return (data.a + data.d)
-            }},
-            {title: 'Cured (E1)', data:'e1'},
-            {title: 'Death (E2)', data:'e2'},
-            {title: 'Defaulter (E3)', data:'e3'},
-            {title: 'No Recovered (E4)', data:'e4'},
-            {title: 'Total Discharged (E=E1+E2+E3+E4)', data:'e'},
-            {title: 'Medical Transfer (F1)', data:'f1'},
-            {title: 'Transfer to In patient (F2)', data:'f2'},
-            {title: 'Other (F3)', data:'f3'},
-            {title: 'Total Moved Out (F=F1+F2+F3)', data:'f'},
-            {title: 'Total Exit (G=E+F)', data:'g'},
-            {title: 'Total In OTP end of the month (H=D-G)', data:null, render:function(data, type, row){
-              // console.log(data);
-              return ((data.a + data.d) - data.g) 
-            }},
-          ]
-      } );
-        // mydataTable.clear().draw();
-      }
+  const singleTables = (data) => {
+    if ($.fn.DataTable.isDataTable('#tblAdd')) {
+      $('#tblAdd').DataTable().destroy();
     }
-   
-})
+    $('#tblAdd tbody').empty();
+    $('#tblAdd').DataTable({
+      data: data.addDataSingle,
+      "paging": false,
+      "scrollY": 380,
+      "scrollX": true,
+      columns: [{
+          title: 'Province',
+          data: 'province'
+        },
+        {
+          title: 'District',
+          data: 'district_name'
+        },
+        {
+          title: 'Tehsil',
+          data: 'tehsil_name'
+        },
+        {
+          title: 'UC',
+          data: 'uc_name'
+        },
+        {
+          title: 'Site Name',
+          data: 'site_name'
+        },
+        {
+          title: 'Registration Date',
+          data: 'reg_date'
+        },
+        {
+          title: 'Registration ID',
+          data: 'reg_id'
+        },
+        {
+          title: 'Name',
+          data: 'p_name'
+        },
+        {
+          title: 'Age',
+          data: 'age'
+        },
+        {
+          title: 'Gender',
+          data: 'gender'
+        },
+        {
+          title: 'Father/Husband Name',
+          data: 'f_or_h_name'
+        },
+        {
+          title: 'CNIC',
+          data: 'cnic'
+        },
+        {
+          title: 'Contact Number',
+          data: 'cnt_number'
+        },
+        {
+          title: 'Address',
+          data: 'address'
+        },
+        {
+          title: 'Entry Reason',
+          data: 'ent_reason'
+        },
+        {
+          title: 'Referral Type',
+          data: 'ref_type'
+        },
+        {
+          title: 'Oedema',
+          data: 'oedema'
+        },
+        {
+          title: 'MUAC',
+          data: 'muac'
+        },
+        {
+          title: 'Weight',
+          data: 'weight'
+        },
+        {
+          title: 'Height',
+          data: 'height'
+        },
+        {
+          title: 'Diarrhoea',
+          data: 'diarrhoea'
+        },
+        {
+          title: 'vomiting',
+          data: 'vomiting'
+        },
+        {
+          title: 'cough',
+          data: 'cough'
+        },
+        {
+          title: 'Appetite',
+          data: 'appetite'
+        },
+        {
+          title: 'Daily Stool',
+          data: 'daily_stool'
+        },
+        {
+          title: 'Urine',
+          data: 'pass_urine'
+        },
+        {
+          title: 'Breast Fed',
+          data: 'b_Feeding'
+        }
+      ]
+    })
+
+    if ($.fn.DataTable.isDataTable('#tblExit')) {
+      $('#tblExit').DataTable().destroy();
+    }
+    $('#tblExit tbody').empty();
+    $('#tblExit').DataTable({
+      data: data.exitDataSingle,
+      "paging": false,
+      "scrollY": 380,
+      "scrollX": true,
+      columns: [{
+          title: 'Province',
+          data: 'province'
+        },
+        {
+          title: 'District',
+          data: 'district_name'
+        },
+        {
+          title: 'Tehsil',
+          data: 'tehsil_name'
+        },
+        {
+          title: 'UC',
+          data: 'uc_name'
+        },
+        {
+          title: 'Site Name',
+          data: 'site_name'
+        },
+        {
+          title: 'Registration Date',
+          data: 'reg_date'
+        },
+        {
+          title: 'Exit Date',
+          data: 'exit_date'
+        },
+        {
+          title: 'Registration ID',
+          data: 'reg_id'
+        },
+        {
+          title: 'Name',
+          data: 'p_name'
+        },
+        {
+          title: 'Gender',
+          data: 'gender'
+        },
+        {
+          title: 'Father/Husband Name',
+          data: 'f_or_h_name'
+        },
+        {
+          title: 'Exit Reason',
+          data: 'exit_reason'
+        }
+      ]
+    })
+  }
+
+  const singleTablesNSC = (data) => {
+    if ($.fn.DataTable.isDataTable('#tblAddNSC')) {
+      $('#tblAddNSC').DataTable().destroy();
+    }
+    $('#tblAddNSC tbody').empty();
+    $('#tblAddNSC').DataTable({
+      data: data.nscAddSingle,
+      "paging": false,
+      "scrollY": 380,
+      "scrollX": true,
+      columns: [{
+          title: 'Province',
+          data: 'province'
+        },
+        {
+          title: 'District',
+          data: 'district_name'
+        },
+        {
+          title: 'Tehsil',
+          data: 'tehsil_name'
+        },
+
+        {
+          title: 'Registration Date',
+          data: 'reg_date'
+        },
+        {
+          title: 'Registration ID',
+          data: 'reg_id'
+        },
+        {
+          title: 'Name',
+          data: 'p_name'
+        },
+        {
+          title: 'Age',
+          data: 'age'
+        },
+        {
+          title: 'Gender',
+          data: 'gender'
+        },
+        {
+          title: 'Father/Husband Name',
+          data: 'f_or_h_name'
+        },
+        {
+          title: 'CNIC',
+          data: 'cnic'
+        },
+        {
+          title: 'Contact Number',
+          data: 'cnt_number'
+        },
+        {
+          title: 'Address',
+          data: 'address'
+        },
+        {
+          title: 'Entry Reason',
+          data: 'ent_reason'
+        },
+        {
+          title: 'Referral Type',
+          data: 'ref_type'
+        },
+        {
+          title: 'Oedema',
+          data: 'oedema'
+        },
+        {
+          title: 'MUAC',
+          data: 'muac'
+        },
+        {
+          title: 'Weight',
+          data: 'weight'
+        },
+        {
+          title: 'Height',
+          data: 'height'
+        },
+        {
+          title: 'Diarrhoea',
+          data: 'diarrhoea'
+        },
+        {
+          title: 'vomiting',
+          data: 'vomiting'
+        },
+        {
+          title: 'cough',
+          data: 'cough'
+        },
+        {
+          title: 'Appetite',
+          data: 'appetite'
+        },
+        {
+          title: 'Daily Stool',
+          data: 'daily_stool'
+        },
+        {
+          title: 'Urine',
+          data: 'pass_urine'
+        },
+        {
+          title: 'Breast Fed',
+          data: 'b_Feeding'
+        }
+      ]
+    })
+
+    if ($.fn.DataTable.isDataTable('#tblExitNSC')) {
+      $('#tblExitNSC').DataTable().destroy();
+    }
+    $('#tblExitNSC tbody').empty();
+    $('#tblExitNSC').DataTable({
+      data: data.nscExitSingle,
+      "paging": false,
+      "scrollY": 380,
+      "scrollX": true,
+      columns: [{
+          title: 'Province',
+          data: 'province'
+        },
+        {
+          title: 'District',
+          data: 'district_name'
+        },
+        {
+          title: 'Tehsil',
+          data: 'tehsil_name'
+        },
+
+        {
+          title: 'Registration Date',
+          data: 'reg_date'
+        },
+        {
+          title: 'Exit Date',
+          data: 'exit_date'
+        },
+        {
+          title: 'Registration ID',
+          data: 'reg_id'
+        },
+        {
+          title: 'Name',
+          data: 'p_name'
+        },
+        {
+          title: 'Gender',
+          data: 'gender'
+        },
+        {
+          title: 'Father/Husband Name',
+          data: 'f_or_h_name'
+        },
+        {
+          title: 'Exit Reason',
+          data: 'exit_reason'
+        }
+      ]
+    })
+  }
+
+
+  $('#exportScrChReportInterval').on('click', async (e) => {
+    var qry = prepareQryInterval()
+    if ($('#ddProgramType').val() == 'otp') {
+      var singleData = await SingleEntriesInterval(qry);
+      singleTables(singleData);
+      // console.log(singleData)
+      var x = await prepareMonthPromise(qry.startMonth, qry.endMonth);
+      var g = [];
+      for (i of x) {
+        var a = await IntervalReportData(qry, i)
+        g.push(a);
+        // console.log(g)
+        if (x.length == g.length) {
+          const tableData = await prepareDataForTablePromise(g);
+          // console.log(tableData)
+
+          if ($.fn.DataTable.isDataTable('#example')) {
+            $('#example').DataTable().destroy();
+          }
+          $('#example tbody').empty();
+          $('#example').DataTable({
+            data: tableData,
+            dom: 'Bfrtip',
+            buttons: [
+              'copy', {
+                extend: 'csv',
+                title: `OTP Addministion and Exit Report_${Date.now()}`
+              }, {
+                extend: 'excel',
+                title: `OTP Addministion and Exit Report_${Date.now()}`
+              }
+            ],
+            "scrollY": 380,
+            "scrollX": true,
+            columns: [{
+                title: 'Month',
+                data: 'month'
+              },
+              {
+                title: 'Age Group',
+                data: null,
+                render: function (data, type, row) {
+                  return ((data.age_group == '6_23' ? '6-23 Months' : '24-59 Months'))
+                }
+              },
+              {
+                title: 'Gender',
+                data: null,
+                render: function (data, type, row) {
+                  return data.gender.toUpperCase();
+                }
+              },
+              {
+                title: `Total in OTP beginning of the month (A)`,
+                data: 'a'
+              },
+              {
+                title: `MUAC < 11.5 cm (B1)`,
+                data: 'b1'
+              },
+              {
+                title: `ODEMA(B2)`,
+                data: 'b2'
+              },
+              {
+                title: 'Total New Admission (B=B1+B2)',
+                data: 'b'
+              },
+              {
+                title: 'Return After Default(C1)',
+                data: 'c1'
+              },
+              {
+                title: 'Transfer from SC (C2)',
+                data: 'c2'
+              },
+              {
+                title: 'Other (C3)',
+                data: 'c3'
+              },
+              {
+                title: 'Relapse After Cure (CC)',
+                data: 'cc'
+              },
+              {
+                title: 'Total Moved In (C=C2+C2+C3)',
+                data: 'c3'
+              },
+              {
+                title: 'Total In (D=A+B+C+CC)',
+                data: null,
+                render: function (data, type, row) {
+                  return (data.a + data.d)
+                }
+              },
+              {
+                title: 'Cured (E1)',
+                data: 'e1'
+              },
+              {
+                title: 'Death (E2)',
+                data: 'e2'
+              },
+              {
+                title: 'Defaulter (E3)',
+                data: 'e3'
+              },
+              {
+                title: 'No Recovered (E4)',
+                data: 'e4'
+              },
+              {
+                title: 'Total Discharged (E=E1+E2+E3+E4)',
+                data: 'e'
+              },
+              {
+                title: 'Medical Transfer (F1)',
+                data: 'f1'
+              },
+              {
+                title: 'Transfer to In patient (F2)',
+                data: 'f2'
+              },
+              {
+                title: 'Other (F3)',
+                data: 'f3'
+              },
+              {
+                title: 'Total Moved Out (F=F1+F2+F3)',
+                data: 'f'
+              },
+              {
+                title: 'Total Exit (G=E+F)',
+                data: 'g'
+              },
+              {
+                title: 'Total In OTP end of the month (H=D-G)',
+                data: null,
+                render: function (data, type, row) {
+                  // console.log(data);
+                  return ((data.a + data.d) - data.g)
+                }
+              },
+            ]
+          });
+          // mydataTable.clear().draw();
+        }
+      }
+
+    } else if ($('#ddProgramType').val() == 'sc') {
+      var dataNSCReport = await nscSumReportIntv(qry)
+      myPushDataNSC(dataNSCReport);
+      // export_xlsx_nsc();
+    }
+
+
+
+  })
 
 
 
 
   $("#exportScrChReport").on("click", async (e) => {
-    e.preventDefault();
-    const monthlySingleData = await SingleEntriesMonthly(prepareQry())
-    singleTables(monthlySingleData)
-    export_xlsx();
+    if ($('#ddProgramType').val() == 'sc') {
+      // var dataNSCReport = await nscSumReport(prepareQry())
+      // myPushDataNSC(dataNSCReport);
+      export_xlsx_nsc();
+    } else if ($('#ddProgramType').val() == 'otp') {
+      e.preventDefault();
+      const monthlySingleData = await SingleEntriesMonthly(prepareQry())
+      singleTables(monthlySingleData)
+      export_xlsx();
+    }
+
   });
   var XLSX = require("xlsx");
   var electron = require("electron").remote;
 
-  var export_xlsx = (function() {
+  var export_xlsx = (function () {
     // var HTMLOUT = document.getElementById('htmlout');
     var XTENSION = "xls|xlsx|xlsm|xlsb|xml|csv|txt|dif|sylk|slk|prn|ods|fods|htm|html".split(
       "|"
     );
-    return function() {
+    return function () {
       var addExitReport = XLSX.utils.book_new();
-      var addExitSumary = ($('#reportType').val() == 'monthly')? XLSX.utils.table_to_sheet(document.getElementById("addmisionReport")) : XLSX.utils.table_to_sheet(document.getElementById("example"))
+      var addExitSumary = ($('#reportType').val() == 'monthly') ? XLSX.utils.table_to_sheet(document.getElementById("addmisionReport")) : XLSX.utils.table_to_sheet(document.getElementById("example"))
       XLSX.utils.book_append_sheet(addExitReport, addExitSumary, "Summary");
       // console.log(addExitSumary);
 
@@ -1068,12 +1451,10 @@ $('#exportScrChReportInterval').on('click', async (e)=>{
       // var wb = XLSX.utils.table_to_book(HTMLOUT);
       var o = electron.dialog.showSaveDialog({
         title: "Save file as",
-        filters: [
-          {
-            name: "Spreadsheets",
-            extensions: XTENSION
-          }
-        ]
+        filters: [{
+          name: "Spreadsheets",
+          extensions: XTENSION
+        }]
       });
       // console.log(o);
       XLSX.writeFile(addExitReport, o);
@@ -1084,4 +1465,420 @@ $('#exportScrChReportInterval').on('click', async (e)=>{
     };
   })();
   void export_xlsx;
+
+  var export_xlsx_nsc = (function () {
+    // var HTMLOUT = document.getElementById('htmlout');
+    var XTENSION = "xls|xlsx|xlsm|xlsb|xml|csv|txt|dif|sylk|slk|prn|ods|fods|htm|html".split(
+      "|"
+    );
+    return function () {
+      var addExitReportNSC = XLSX.utils.book_new();
+      var addExitSumaryNSC = ($('#reportType').val() == 'monthly') ? XLSX.utils.table_to_sheet(document.getElementById("NSCMonthly")) : XLSX.utils.table_to_sheet(document.getElementById("example"))
+      XLSX.utils.book_append_sheet(addExitReportNSC, addExitSumaryNSC, "Summary");
+      // console.log(addExitSumary);
+
+      /* convert table 'table2' to worksheet named "Sheet2" */
+      var Addmissions = XLSX.utils.table_to_sheet(document.getElementById("tblAddNSC"));
+      XLSX.utils.book_append_sheet(addExitReportNSC, Addmissions, "Addmisions");
+      var Exits = XLSX.utils.table_to_sheet(document.getElementById("tblExitNSC"));
+      XLSX.utils.book_append_sheet(addExitReportNSC, Exits, "Exits");
+      // var wb = XLSX.utils.table_to_book(HTMLOUT);
+      var o = electron.dialog.showSaveDialog({
+        title: "Save file as",
+        filters: [{
+          name: "Spreadsheets",
+          extensions: XTENSION
+        }]
+      });
+      // console.log(o);
+      XLSX.writeFile(addExitReportNSC, o);
+      electron.dialog.showMessageBox({
+        message: "Exported data to " + o,
+        buttons: ["OK"]
+      });
+    };
+  })();
+  void export_xlsx_nsc;
+
+  async function nscSumReport(qry) {
+
+    try {
+      var begin = await knex("v_nsc_remaining_geo")
+        .select('age_group', 'gender')
+        .sum({
+          a: 'rem'
+        })
+        .where('Year_month', '<', qry.report_month)
+        .where('province_id', 'like', `%${qry.province_id}%`)
+        .where('district_id', 'like', `%${qry.district_id}%`)
+        .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
+        .groupBy('age_group', 'gender')
+
+      var nscAdd = await knex('v_otpAddmision2')
+        .select(knex.raw(`(case when age < 7 then '06' when age > 6 and age < 24 then '623' when age > 23 then '2459' end) as age_group, gender,
+      count(case when muac < 11.5 and ent_reason = 'new_add' and oedema = 'absent' then 1 end) as b1,
+      count(case when oedema <> 'absent' and ent_reason = 'new_add' then 1 end) as b2,
+      ( count(case when muac < 11.5  and ent_reason = 'new_add' and oedema = 'absent' then 1 end) + count(case when oedema <> 'absent' and ent_reason = 'new_add' then 1 end)) as b,
+      count( case when ent_reason = 'relapse' then 1 end) as c1,
+      count( case when ent_reason = 'return_after_lama' then 1 end) as c2,
+      count( case when ent_reason = 'transfer_from_ward' then 1 end) as c3,
+      count( case when ent_reason = 'transfer_in_from_otp' then 1 end) as c4,
+      count( case when ent_reason = 'other' then 1 end) as c5,
+      count( case when ent_reason <> 'new_add' then 1 end) as c`))
+        .where("reg_date", "like", `${qry.report_month}%`)
+        .where('province_id', 'like', `%${qry.province_id}%`)
+        .where('district_id', 'like', `%${qry.district_id}%`)
+        .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
+        .where('prog_type', 'sc')
+        .groupBy("age_group", "gender")
+      var nscExit = await knex('v_exitNSCReportInterval')
+        .select(knex.raw(`(case when age < 7 then '06' when age > 6 and age < 24 then '623' when age > 23 then '2459' end) as age_group, gender,
+count(case when exit_reason = 'cured' then 1 end) as e1,
+count(case when exit_reason = 'death' then 1 end) as e2,
+count(case when exit_reason = 'lama' then 1 end) as e3,
+count(case when exit_reason = 'non_recovered' then 1 end) as e4,
+(count(case when exit_reason = 'cured' then 1 end)+ count(case when exit_reason = 'death' then 1 end) + count(case when exit_reason = 'lama' then 1 end) + count(case when exit_reason = 'non_recovered' then 1 end)) as e,
+count(case when exit_reason = 'medical_transfer' then 1 end) as f1,
+count(case when exit_reason = 'medical_transfer_otp' then 1 end) as f2,
+count(case when exit_reason = 'other' then 1 end) as f3,
+(count(case when exit_reason = 'medical_transfer' then 1 end) + count(case when exit_reason = 'medical_transfer_otp' then 1 end) + count(case when exit_reason = 'other' then 1 end)) as f,
+((count(case when exit_reason = 'cured' then 1 end)+ count(case when exit_reason = 'death' then 1 end) + count(case when exit_reason = 'lama' then 1 end) + count(case when exit_reason = 'non_recovered' then 1 end)) + (count(case when exit_reason = 'medical_transfer' then 1 end) + count(case when exit_reason = 'medical_transfer_otp' then 1 end) + count(case when exit_reason = 'other' then 1 end))) as g `))
+        .where("exit_date", "like", `${qry.report_month}%`)
+        .where('province_id', 'like', `%${qry.province_id}%`)
+        .where('district_id', 'like', `%${qry.district_id}%`)
+        .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
+        .groupBy('age_group', 'gender');
+
+      var nscAddSingle = await knex('v_otpAddmision2')
+        .where("reg_date", "like", `${qry.report_month}%`)
+        .where('province_id', 'like', `%${qry.province_id}%`)
+        .where('district_id', 'like', `%${qry.district_id}%`)
+        .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
+        .where('prog_type', 'sc')
+
+      var nscExitSingle = await knex('v_nscExit_full')
+        .where("exit_date", "like", `${qry.report_month}%`)
+        .where('province_id', 'like', `%${qry.province_id}%`)
+        .where('district_id', 'like', `%${qry.district_id}%`)
+        .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
+
+      return {
+        begin,
+        nscAdd,
+        nscExit,
+        nscAddSingle,
+        nscExitSingle
+      }
+
+    } catch (error) {
+      console.log(error)
+      return [];
+    }
+  }
+
+  async function nscSumReportIntv(qry) {
+
+    var getDaysInMonth = function (date) {
+      // Here January is 1 based
+      //Day 0 is the last day in the previous month
+
+      return new Date(date.split('-')[0], date.split('-')[1], 0).getDate();
+      // Here January is 0 based
+      // return new Date(year, month+1, 0).getDate();
+    };
+    qry.startMonth = qry.startMonth + '-01';
+    qry.endMonth = qry.endMonth + '-' + getDaysInMonth(qry.endMonth)
+
+    try {
+      var begin = await knex("v_nsc_remaining_geo")
+        .select('age_group', 'gender')
+        .sum({
+          a: 'rem'
+        })
+        .where('Year_month', '<', qry.startMonth)
+        .where('province_id', 'like', `%${qry.province_id}%`)
+        .where('district_id', 'like', `%${qry.district_id}%`)
+        .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
+        .groupBy('age_group', 'gender')
+
+      var nscAdd = await knex('v_otpAddmision2')
+        .select(knex.raw(`(case when age < 7 then '06' when age > 6 and age < 24 then '623' when age > 23 then '2459' end) as age_group, gender,
+      count(case when muac < 11.5 and ent_reason = 'new_add' and oedema = 'absent' then 1 end) as b1,
+      count(case when oedema <> 'absent' and ent_reason = 'new_add' then 1 end) as b2,
+      ( count(case when muac < 11.5  and ent_reason = 'new_add' and oedema = 'absent' then 1 end) + count(case when oedema <> 'absent' and ent_reason = 'new_add' then 1 end)) as b,
+      count( case when ent_reason = 'relapse' then 1 end) as c1,
+      count( case when ent_reason = 'return_after_lama' then 1 end) as c2,
+      count( case when ent_reason = 'transfer_from_ward' then 1 end) as c3,
+      count( case when ent_reason = 'transfer_in_from_otp' then 1 end) as c4,
+      count( case when ent_reason = 'other' then 1 end) as c5,
+      count( case when ent_reason <> 'new_add' then 1 end) as c`))
+        .whereBetween("reg_date", [qry.startMonth, qry.endMonth])
+        .where('province_id', 'like', `%${qry.province_id}%`)
+        .where('district_id', 'like', `%${qry.district_id}%`)
+        .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
+        .where('prog_type', 'sc')
+        .groupBy("age_group", "gender")
+
+      var nscExit = await knex('v_exitNSCReportInterval')
+        .select(knex.raw(`(case when age < 7 then '06' when age > 6 and age < 24 then '623' when age > 23 then '2459' end) as age_group, gender,
+  count(case when exit_reason = 'cured' then 1 end) as e1,
+  count(case when exit_reason = 'death' then 1 end) as e2,
+  count(case when exit_reason = 'lama' then 1 end) as e3,
+  count(case when exit_reason = 'non_recovered' then 1 end) as e4,
+  (count(case when exit_reason = 'cured' then 1 end)+ count(case when exit_reason = 'death' then 1 end) + count(case when exit_reason = 'lama' then 1 end) + count(case when exit_reason = 'non_recovered' then 1 end)) as e,
+  count(case when exit_reason = 'medical_transfer' then 1 end) as f1,
+  count(case when exit_reason = 'medical_transfer_otp' then 1 end) as f2,
+  count(case when exit_reason = 'other' then 1 end) as f3,
+  (count(case when exit_reason = 'medical_transfer' then 1 end) + count(case when exit_reason = 'medical_transfer_otp' then 1 end) + count(case when exit_reason = 'other' then 1 end)) as f,
+  ((count(case when exit_reason = 'cured' then 1 end)+ count(case when exit_reason = 'death' then 1 end) + count(case when exit_reason = 'lama' then 1 end) + count(case when exit_reason = 'non_recovered' then 1 end)) + (count(case when exit_reason = 'medical_transfer' then 1 end) + count(case when exit_reason = 'medical_transfer_otp' then 1 end) + count(case when exit_reason = 'other' then 1 end))) as g `))
+        .whereBetween("exit_date", [qry.startMonth, qry.endMonth])
+        .where('province_id', 'like', `%${qry.province_id}%`)
+        .where('district_id', 'like', `%${qry.district_id}%`)
+        .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
+        .groupBy('age_group', 'gender');
+
+      var nscExitString = knex('v_exitNSCReportInterval')
+        .select(knex.raw(`(case when age < 7 then '06' when age > 6 and age < 24 then '623' when age > 23 then '2459' end) as age_group, gender,
+  count(case when exit_reason = 'cured' then 1 end) as e1,
+  count(case when exit_reason = 'death' then 1 end) as e2,
+  count(case when exit_reason = 'lama' then 1 end) as e3,
+  count(case when exit_reason = 'non_recovered' then 1 end) as e4,
+  (count(case when exit_reason = 'cured' then 1 end)+ count(case when exit_reason = 'death' then 1 end) + count(case when exit_reason = 'lama' then 1 end) + count(case when exit_reason = 'non_recovered' then 1 end)) as e,
+  count(case when exit_reason = 'medical_transfer' then 1 end) as f1,
+  count(case when exit_reason = 'medical_transfer_otp' then 1 end) as f2,
+  count(case when exit_reason = 'other' then 1 end) as f3,
+  (count(case when exit_reason = 'medical_transfer' then 1 end) + count(case when exit_reason = 'medical_transfer_otp' then 1 end) + count(case when exit_reason = 'other' then 1 end)) as f,
+  ((count(case when exit_reason = 'cured' then 1 end)+ count(case when exit_reason = 'death' then 1 end) + count(case when exit_reason = 'lama' then 1 end) + count(case when exit_reason = 'non_recovered' then 1 end)) + (count(case when exit_reason = 'medical_transfer' then 1 end) + count(case when exit_reason = 'medical_transfer_otp' then 1 end) + count(case when exit_reason = 'other' then 1 end))) as g `))
+        .whereBetween("exit_date", [qry.startMonth, qry.endMonth])
+        .where('province_id', 'like', `%${qry.province_id}%`)
+        .where('district_id', 'like', `%${qry.district_id}%`)
+        .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
+        .groupBy('age_group', 'gender').toString();
+
+      var nscAddSingle = await knex('v_otpAddmision2')
+        .whereBetween("reg_date", [qry.startMonth, qry.endMonth])
+        .where('province_id', 'like', `%${qry.province_id}%`)
+        .where('district_id', 'like', `%${qry.district_id}%`)
+        .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
+        .where('prog_type', 'sc')
+
+      var nscExitSingle = await knex('v_nscExit_full')
+        .whereBetween("exit_date", [qry.startMonth, qry.endMonth])
+        .where('province_id', 'like', `%${qry.province_id}%`)
+        .where('district_id', 'like', `%${qry.district_id}%`)
+        .where('tehsil_id', 'like', `%${qry.tehsil_id}%`)
+      // .groupBy('age_group', 'gender');
+      console.log(nscExitString)
+      return {
+        begin,
+        nscAdd,
+        nscExit,
+        nscAddSingle,
+        nscExitSingle,
+      }
+
+    } catch (error) {
+      console.log(error)
+      return;
+    }
+  }
+
+  async function myPushDataNSC(x) {
+    console.log(x)
+    try {
+      await pushLineDataCatLoop(x.begin)
+      await pushLineDataCatLoop(x.nscAdd)
+      await pushLineDataCatLoop(x.nscExit);
+      singleTablesNSC(x);
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
+  async function pushLineData(group, data) {
+    var MyKeys = Object.keys(data)
+
+    for (el of MyKeys) {
+      var elId = group + el;
+      $(`#${elId}`).empty();
+      $(`#${elId}`).text(data[el] ? data[el] : 0)
+      // console.log(elId)
+    }
+
+  }
+
+  async function pushLineDataCatLoop(data) {
+    console.log(data)
+    if (data.length) {
+      for (dataum of data) {
+        if (dataum.age_group == '06' && dataum.gender == 'male') {
+          console.log(dataum)
+          await pushLineData('06_m_', dataum)
+        } else if (dataum.age_group == '06' && dataum.gender == 'female') {
+          console.log(dataum)
+          await pushLineData('06_f_', dataum)
+        } else if (dataum.age_group == '623' && dataum.gender == 'male') {
+          console.log(dataum)
+          await pushLineData('623_m_', dataum)
+        } else if (dataum.age_group == '623' && dataum.gender == 'female') {
+          console.log(dataum)
+          await pushLineData('623_f_', dataum)
+        } else if (dataum.age_group == '2459' && dataum.gender == 'male') {
+          console.log(dataum)
+          await pushLineData('2459_m_', dataum)
+        } else if (dataum.age_group == '2459' && dataum.gender == 'female') {
+          console.log(dataum)
+          await pushLineData('2459_f_', dataum)
+        }
+
+        var makeZero = $('.nscSum');
+        for (el of makeZero) {
+          if ($(el).text() == '') {
+            $(el).text(0);
+          }
+        }
+      }
+      await ageGenderGroup();
+    }
+
+  }
+
+  function pushTotals(begin, add, exit) {
+    var d = {
+      't_d': 0,
+      '06_m_d': 0,
+      '06_f_d': 0,
+      '623_m_d': 0,
+      '623_f_d': 0,
+      '2459_m_d': 0,
+      '2459_f_d': 0
+    };
+    var h = {
+      't_h': 0,
+      '06_m_h': 0,
+      '06_f_h': 0,
+      '623_m_h': 0,
+      '623_f_h': 0,
+      '2459_m_h': 0,
+      '2459_f_h': 0
+    };
+    var beginEl = Object.keys(begin)
+    var addEl = Object.keys(add)
+    var exitEl = Object.keys(exit)
+    for (a of beginEl) {
+      $(`#t_${a}`).text(begin[a] ? beginEl[a] : 0);
+      if (a == 'a') {
+        d['t_d'] = +a['a'];
+      }
+    }
+    for (a of addEl) {
+      $(`#t_${a}`).text(add[a] ? addEl[a] : 0);
+      if (a == 'b') {
+        d['t_d'] = +add[a]
+      } else if (a == 'c') {
+        d['t_d'] = +add[c]
+      }
+    }
+    for (a of exitEl) {
+      $(`#t_${a}`).text(exit[a] ? addEl[a] : 0);
+      if (a == 'g') {
+        d['t_h'] = +exit[a]
+      }
+      if (d['t_h'] > 0) {
+        d['t_h'] = d['t_h'] - d['t_d'];
+      }
+    }
+
+  }
+
+  async function ageGenderGroup() {
+
+    $('#06_m_d').text(
+      function () {
+        return parseInt($('#06_m_a').text()) + parseInt($('#06_m_b').text()) + parseInt($('#06_m_c').text()) ? parseInt($('#06_m_a').text()) + parseInt($('#06_m_b').text()) + parseInt($('#06_m_c').text()) : 0
+      })
+    $('#06_f_d').text(
+      function () {
+        return parseInt($('#06_f_a').text()) + parseInt($('#06_f_b').text()) + parseInt($('#06_f_c').text()) ? parseInt($('#06_f_a').text()) + parseInt($('#06_f_b').text()) + parseInt($('#06_f_c').text()) : 0
+      })
+    $('#623_m_d').text(
+      function () {
+        return parseInt($('#623_m_a').text()) + parseInt($('#623_m_b').text()) + parseInt($('#623_m_c').text()) ? parseInt($('#623_m_a').text()) + parseInt($('#623_m_b').text()) + parseInt($('#623_m_c').text()) : 0
+      })
+    $('#623_f_d').text(
+      function () {
+        return parseInt($('#623_f_a').text()) + parseInt($('#623_f_b').text()) + parseInt($('#623_f_c').text()) ? parseInt($('#623_f_a').text()) + parseInt($('#623_f_b').text()) + parseInt($('#623_f_c').text()) : 0
+      })
+    $('#2459_m_d').text(
+      function () {
+        return parseInt($('#2459_m_a').text()) + parseInt($('#2459_m_b').text()) + parseInt($('#2459_m_c').text()) ? parseInt($('#2459_m_a').text()) + parseInt($('#2459_m_b').text()) + parseInt($('#2459_m_c').text()) : 0
+      })
+    $('#2459_f_d').text(
+      function () {
+        return parseInt($('#2459_f_b').text()) + parseInt($('#2459_f_b').text()) + parseInt($('#2459_f_c').text()) ? parseInt($('#2459_f_b').text()) + parseInt($('#2459_f_b').text()) + parseInt($('#2459_f_c').text()) : 0
+      })
+
+    $('#06_m_h').text(
+      function () {
+        return parseInt($('#06_m_d').text()) - parseInt($('#06_m_g').text()) ? parseInt($('#06_m_d').text()) - parseInt($('#06_m_g').text()) : 0
+      })
+    $('#06_f_h').text(
+      function () {
+        return parseInt($('#06_f_d').text()) - parseInt($('#06_f_g').text()) ? parseInt($('#06_f_d').text()) - parseInt($('#06_f_g').text()) : 0
+      })
+    $('#623_m_h').text(
+      function () {
+        return parseInt($('#623_m_d').text()) - parseInt($('#623_m_g').text()) ? parseInt($('#623_m_d').text()) - parseInt($('#623_m_g').text()) : 0
+      })
+    $('#623_f_h').text(
+      function () {
+        return parseInt($('#623_f_d').text()) - parseInt($('#623_f_g').text()) ? parseInt($('#623_f_d').text()) - parseInt($('#623_f_g').text()) : 0
+      })
+    $('#2459_m_h').text(
+      function () {
+        return parseInt($('#2459_m_d').text()) + parseInt($('#2459_m_g').text()) ? parseInt($('#2459_m_d').text()) - parseInt($('#2459_m_g').text()) : 0
+      })
+    $('#2459_f_h').text(
+      function () {
+        return parseInt($('#2459_f_d').text()) - parseInt($('#2459_f_g').text()) ? parseInt($('#2459_f_d').text()) - parseInt($('#2459_f_g').text()) : 0
+      })
+
+    var types = ['06_m_', '06_f_', '623_m_', '623_f_', '2459_m_', '2459_f_'];
+    var cels = ['a', 'b1', 'b2', 'b', 'c1', 'c2', 'c3', 'c4', 'c5', 'c', 'd', 'e1', 'e2', 'e3', 'e4', 'e', 'f1', 'f2', 'f3', 'f', 'g', 'h'];
+
+    for (cel of cels) {
+      var x = 0;
+      for (type of types) {
+        // console.log(type[cel])
+        x += parseInt($(`#${type+cel}`).text());
+      }
+      $(`#t_${cel}`).empty()
+      $(`#t_${cel}`).text(x);
+    }
+
+  }
+
+
+
+  $("#showAddExitReport").on("click", async function (e) {
+    e.preventDefault();
+    if ($('#ddProgramType').val() == 'otp') {
+      ipc.send("getReport", prepareQry());
+      $('#tblMonthCol').empty()
+      $('#tblMonthCol').text($('#report_month').val())
+      $('#reportMonthT').empty();
+      $('#reportMonthT').text(`Province:${$('#ddProvince option:selected').text()},District:${$('#ddDistrict option:selected').text()},Tehsil:${$('#ddTehsil option:selected').text()},UC:${$('#ddUC option:selected').text()},Reporting Site:${$('#ddHealthHouse option:selected').text()}`);
+      ipc.on("getReport", (e, data) => {
+        myPushData(data);
+
+        ipc.removeAllListeners('getReport');
+      });
+    } else if ($('#ddProgramType').val() == 'sc') {
+      var dataNSCReport = await nscSumReport(prepareQry())
+      await myPushDataNSC(dataNSCReport);
+    }
+
+  });
+
 };

@@ -416,7 +416,9 @@ module.exports.initOtpAddUpdV2 = function () {
             $("#ddHealthHouse").attr("disabled", true);
             $("#ddUC").attr("disabled", true);
             $("#ddVillageName").attr('disabled', true);
-            $("#ddVillageName").val(site_village);
+            $("#ddVillageName").val(data.site_village);
+            $('#nsc_otp_id').val(data.nsc_otp_id);
+            $('#entryref_type_other').val(data.ref_type_other);
             $("#ddHealthHouse").val(data.site_id);
             $("#ddUC").val(data.uc_id);
             $("#ent_reason").children('option:not(:first)').remove();
@@ -603,25 +605,43 @@ module.exports.initOtpAddUpdV2 = function () {
 
     if ($("#otpAddUpdForm").valid()) {
       var otpAddUpdFormData = $("#otpAddUpdForm").serializeFormJSON();
+      if ($("#ddProgramType").val() == 'otp') {
 
-      var chk_dist_teh_uc_otp = await knex('v_geo').where({
-        district_id: $('#ddDistrict').val(),
-        tehsil_id: otpAddUpdFormData.tehsil_id,
-        uc_id: $('#ddUC').val(),
-        site_id: otpAddUpdFormData.site_id
-      });
+        var chk_dist_teh_uc_otp = await knex('v_geo').where({
+          district_id: $('#ddDistrict').val(),
+          tehsil_id: otpAddUpdFormData.tehsil_id,
+          uc_id: $('#ddUC').val(),
+          site_id: otpAddUpdFormData.site_id
+        });
 
-      var chk_village = await knex('tblVillages').where({
-        district: $('#ddDistrict').val(),
-        tehsil: otpAddUpdFormData.tehsil_id,
-        uc: $('#ddUC').val(),
-        site: otpAddUpdFormData.site_id,
-        villageName: otpAddUpdFormData.site_village
-      })
+        var chk_village = await knex('tblVillages').where({
+          district: $('#ddDistrict').val(),
+          tehsil: otpAddUpdFormData.tehsil_id,
+          uc: $('#ddUC').val(),
+          site: otpAddUpdFormData.site_id,
+          villageName: otpAddUpdFormData.site_village
+        })
 
-      if (chk_dist_teh_uc_otp.length < 1 || chk_village.length < 1) {
-        alert('Please check location details, either districts, tehsil, uc and site are not updated respectively or village does not exist in nutrition site')
-      } else {
+        if (chk_dist_teh_uc_otp.length < 1 || chk_village.length < 1) {
+          alert('Please check location details, either districts, tehsil, uc and site are not updated respectively or village does not exist in nutrition site')
+        } else {
+          console.table(otpAddUpdFormData);
+          ipc.send("submitOtpAddUpd", otpAddUpdFormData);
+          ipc.removeAllListeners("submitOtpAddUpd");
+          $("#otpAddUpdForm")
+            .get(0)
+            .reset();
+          $("#otpAddUpdForm select").val('');
+
+          $("#jsGrid")
+            .jsGrid("render")
+            .done(() => {
+              console.log("js grid is rendered");
+            });
+        }
+
+
+      } else if ($("#ddProgramType").val() == 'sc') {
         console.table(otpAddUpdFormData);
         ipc.send("submitOtpAddUpd", otpAddUpdFormData);
         ipc.removeAllListeners("submitOtpAddUpd");
@@ -636,9 +656,8 @@ module.exports.initOtpAddUpdV2 = function () {
             console.log("js grid is rendered");
           });
       }
-
-
     }
+
     // addScrChildTemplate()
     e.preventDefault();
   });

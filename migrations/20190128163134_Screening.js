@@ -1746,11 +1746,233 @@ FROM   [main].[v_geo]
              [main].[tblLhw].[staff_name]
       FROM   [main].[vSessionsFullForUpdate]
              LEFT JOIN [main].[tblSupervisors] ON [main].[vSessionsFullForUpdate].[CHS_id] = [main].[tblSupervisors].[sup_code]
-             LEFT JOIN [main].[tblLhw] ON [main].[vSessionsFullForUpdate].[CHW_id] = [main].[tblLhw].[staff_code];`);
+             LEFT JOIN [main].[tblLhw] ON [main].[vSessionsFullForUpdate].[CHW_id] = [main].[tblLhw].[staff_code];`)
+    .raw(`CREATE VIEW [v_exitNSCReport]
+    AS
+    SELECT 
+           [main].[tblOtpExit].[exit_id], 
+           [main].[tblOtpAdd].[otp_id], 
+           [main].[tblOtpAdd].[tehsil_id], 
+           [main].[tblOtpAdd].[age], 
+           [main].[tblOtpAdd].[gender], 
+           [main].[tblOtpAdd].[prog_type], 
+           [main].[tblOtpExit].[exit_reason], 
+           [main].[tblOtpExit].[exit_date]
+    FROM   [main].[tblOtpAdd]
+           INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+    WHERE  [main].[tblOtpAdd].[prog_type] = 'sc'
+             AND [main].[tblOtpAdd].[is_deleted] = 0
+             AND [main].[tblOtpExit].[is_deleted] = 0;`)
+    .raw(`CREATE VIEW [v_geo_tehsil]
+             AS
+             SELECT 
+                    [main].[tblGeoProvince].[provinceName] AS [province_name], 
+                    [main].[tblGeoDistrict].[province_id], 
+                    [main].[tblGeoDistrict].[districtName] AS [district_name], 
+                    [main].[tblGeoTehsil].[district_id], 
+                    [main].[tblGeoTehsil].[tehsilName] AS [tehsil_name], 
+                    [main].[tblGeoTehsil].[id] AS [tehsil_id]
+             FROM   [main].[tblGeoProvince]
+                    INNER JOIN [main].[tblGeoDistrict] ON [main].[tblGeoProvince].[id] = [main].[tblGeoDistrict].[province_id]
+                    INNER JOIN [main].[tblGeoTehsil] ON [main].[tblGeoDistrict].[id] = [main].[tblGeoTehsil].[district_id]
+             WHERE  [main].[tblGeoProvince].[isActive] = 1
+                      AND [main].[tblGeoDistrict].[isActive] = 1
+                      AND [main].[tblGeoTehsil].[isActive] = 1;`)
+    .raw(`CREATE VIEW [v_exitNSCReportInterval]
+                        AS
+                        SELECT 
+                               [vnc].*, 
+                               [vg].[province_id], 
+                               [vg].[district_id]
+                        FROM   [v_exitNSCReport] [vnc]
+                               INNER JOIN [v_geo_tehsil] [vg] ON [vnc].[tehsil_id] = [vg].[tehsil_id];`)
+    .raw(`CREATE VIEW [v_NSCAdd_yearmonth]
+                        AS
+                        SELECT 
+                               [tehsil_id], 
+                               STRFTIME ('%Y-%m', [reg_date]) AS [Year_month], 
+                               (CASE WHEN [age] < 7 THEN '06' WHEN [age] > 6
+                                 AND [age] < 24 THEN '623' WHEN [age] > 23 THEN '2459' END) AS [age_group], 
+                               [gender], 
+                               COUNT ([otp_id]) AS [tAdd]
+                        FROM   [tblOtpAdd]
+                        WHERE  [is_deleted] = 0 AND [prog_type] = 'sc'
+                        GROUP  BY
+                                  [tehsil_id], 
+                                  [Year_month], 
+                                  [age_group], 
+                                  [gender];`)
+    .raw(`CREATE VIEW [v_nscExit_full]
+                        AS
+                        SELECT 
+                               [main].[v_geo_tehsil].[province_id], 
+                               [main].[v_geo_tehsil].[province_name] AS [province], 
+                               [main].[v_geo_tehsil].[district_id], 
+                               [main].[v_geo_tehsil].[district_name], 
+                               [main].[v_geo_tehsil].[tehsil_id], 
+                               [main].[v_geo_tehsil].[tehsil_name], 
+                               [main].[tblOtpAdd].[address], 
+                               [main].[tblOtpExit].[exit_date], 
+                               [main].[tblOtpExit].[exit_reason], 
+                               [main].[tblOtpAdd].[p_name], 
+                               [main].[tblOtpAdd].[f_or_h_name], 
+                               [main].[tblOtpAdd].[gender], 
+                               [main].[tblOtpAdd].[reg_id], 
+                               [main].[tblOtpAdd].[reg_date]
+                        FROM   [main].[v_geo_tehsil]
+                               INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo_tehsil].[tehsil_id] = [main].[tblOtpAdd].[tehsil_id]
+                               INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+                        WHERE  [main].[tblOtpExit].[is_deleted] = 0
+                                 AND [main].[tblOtpAdd].[is_deleted] = 0  AND [main].[tblOtpAdd].[prog_type] = 'sc';`)
+    .raw(`CREATE VIEW [v_NSCExit_yearmonth]
+                                 AS
+                                 SELECT 
+                                        [main].[tblOtpAdd].[tehsil_id], 
+                                        STRFTIME ('%Y-%m', [main].[tblOtpExit].[exit_date]) AS [Year_month], 
+                                        (CASE WHEN [age] < 7 THEN '06' WHEN [age] > 6
+                                          AND [age] < 24 THEN '623' WHEN [age] > 23 THEN '2459' END) AS [age_group], 
+                                        [main].[tblOtpAdd].[gender], 
+                                        COUNT ([main].[tblOtpExit].[exit_id]) AS [tExit]
+                                 FROM   [main].[tblOtpExit]
+                                        INNER JOIN [main].[tblOtpAdd] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+                                 WHERE  [main].[tblOtpAdd].[is_deleted] = 0
+                                          AND [main].[tblOtpExit].[is_deleted] = 0
+                                          AND [main].[tblOtpAdd].[prog_type] = 'sc'
+                                 GROUP  BY
+                                           [main].[tblOtpAdd].[tehsil_id], 
+                                           [Year_month], 
+                                           [age_group], 
+                                           [main].[tblOtpAdd].[gender];
+                                 `)
+    .raw(`CREATE VIEW [v_nsc_remaining]
+                        AS
+                        SELECT 
+                               [main].[v_NSCAdd_yearmonth].[tehsil_id], 
+                               [main].[v_NSCAdd_yearmonth].[Year_month], 
+                               [main].[v_NSCAdd_yearmonth].[age_group], 
+                               [main].[v_NSCAdd_yearmonth].[gender], 
+                               SUM ([main].[v_NSCAdd_yearmonth].[tAdd]) AS [tAdd], 
+                               SUM ([main].[v_NSCExit_yearmonth].[tExit]) AS [tExit], 
+                               (SUM ([main].[v_NSCAdd_yearmonth].[tAdd]) - CASE WHEN SUM ([main].[v_NSCExit_yearmonth].[tExit]) IS NULL THEN 0 ELSE SUM ([main].[v_NSCExit_yearmonth].[tExit]) END) AS [rem]
+                        FROM   [main].[v_NSCAdd_yearmonth]
+                               LEFT JOIN [main].[v_NSCExit_yearmonth] ON [main].[v_NSCAdd_yearmonth].[tehsil_id] = [main].[v_NSCExit_yearmonth].[tehsil_id]
+                                    AND [main].[v_NSCAdd_yearmonth].[Year_month] = [main].[v_NSCExit_yearmonth].[Year_month]
+                                    AND [main].[v_NSCAdd_yearmonth].[age_group] = [main].[v_NSCExit_yearmonth].[age_group]
+                                    AND [main].[v_NSCAdd_yearmonth].[gender] = [main].[v_NSCExit_yearmonth].[gender]
+                        GROUP  BY
+                                  [main].[v_NSCAdd_yearmonth].[tehsil_id], 
+                                  [main].[v_NSCAdd_yearmonth].[Year_month], 
+                                  [main].[v_NSCAdd_yearmonth].[age_group], 
+                                  [main].[v_NSCAdd_yearmonth].[gender];
+                        
+                        `)
+    .raw(`CREATE VIEW [v_nsc_remaining_geo]
+                        AS
+                        SELECT 
+                               [main].[v_geo_tehsil].[province_id], 
+                               [main].[v_geo_tehsil].[district_id], 
+                               [main].[v_geo_tehsil].[tehsil_id], 
+                               [main].[v_nsc_remaining].[Year_month], 
+                               [main].[v_nsc_remaining].[age_group] AS [age_group], 
+                               [main].[v_nsc_remaining].[gender], 
+                               [main].[v_nsc_remaining].[tAdd], 
+                               [main].[v_nsc_remaining].[tExit], 
+                               [main].[v_nsc_remaining].[rem]
+                        FROM   [main].[v_geo_tehsil]
+                               INNER JOIN [main].[v_nsc_remaining] ON [main].[v_geo_tehsil].[tehsil_id] = [main].[v_nsc_remaining].[tehsil_id];
+                        `)
+    .raw(`CREATE VIEW 'v_otpAddmision2'
+                        AS
+                        SELECT 
+                               [main].[v_geo].[province_id], 
+                               [main].[v_geo].[province], 
+                               [main].[v_geo].[district_id], 
+                               [main].[v_geo].[district_name], 
+                               [main].[v_geo].[tehsil_id], 
+                               [main].[v_geo].[tehsil_name], 
+                               [main].[v_geo].[uc_id], 
+                               [main].[v_geo].[uc_name], 
+                               [main].[v_geo].[site_name], 
+                               [tblOtpAdd].*
+                        FROM   [main].[v_geo]
+                               INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo].[site_id] = [main].[tblOtpAdd].[site_id]
+                        WHERE  [main].[tblOtpAdd].[is_deleted] = 0
+                        UNION ALL
+                        SELECT 
+                               [v_geo_tehsil].[province_id], 
+                               [v_geo_tehsil].[province_name] AS [province], 
+                               [v_geo_tehsil].[district_id], 
+                               [v_geo_tehsil].[district_name], 
+                               [v_geo_tehsil].[tehsil_id], 
+                               [v_geo_tehsil].[tehsil_name], 
+                               '' AS [uc_id], 
+                               '' AS [uc_name], 
+                               '' AS [site_name], 
+                               [tblOtpAdd].*
+                        FROM   [main].[v_geo_tehsil]
+                               INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo_tehsil].[tehsil_id] = [main].[tblOtpAdd].[tehsil_id]
+                        WHERE  [main].[tblOtpAdd].[is_deleted] = 0
+                                 AND [main].[tblOtpAdd].[prog_type] = 'sc';
+                        `)
+    .raw(`CREATE VIEW 'v_otpExitFullForUpdateNSC'
+                        AS
+                        SELECT 
+                               [main].[tblOtpAdd].[site_id], 
+                               [main].[tblOtpAdd].[p_name], 
+                               [main].[tblOtpAdd].[reg_id], 
+                               [main].[tblOtpAdd].[site_village], 
+                               [main].[tblOtpAdd].[prog_type], 
+                               [main].[v_geo].[province_id], 
+                               [main].[v_geo].[province], 
+                               [main].[v_geo].[district_id], 
+                               [main].[v_geo].[district_name], 
+                               [main].[v_geo].[tehsil_id], 
+                               [main].[v_geo].[tehsil_name], 
+                               [main].[v_geo].[uc_id], 
+                               [main].[v_geo].[uc_name], 
+                               [main].[v_geo].[site_name], 
+                               [tblOtpExit].*
+                        FROM   [main].[tblOtpAdd]
+                               INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+                               INNER JOIN [main].[v_geo] ON [main].[tblOtpAdd].[site_id] = [main].[v_geo].[site_id]
+                        WHERE  [tblOtpExit].[is_deleted] = 0
+                        UNION ALL
+                        SELECT 
+                               [main].[tblOtpAdd].[site_id], 
+                               [main].[tblOtpAdd].[p_name], 
+                               [main].[tblOtpAdd].[reg_id], 
+                               [main].[tblOtpAdd].[site_village], 
+                               [main].[tblOtpAdd].[prog_type], 
+                               [main].[v_geo_tehsil].[province_id], 
+                               [main].[v_geo_tehsil].[province_name] AS [province], 
+                               [main].[v_geo_tehsil].[district_id], 
+                               [main].[v_geo_tehsil].[district_name], 
+                               [main].[v_geo_tehsil].[tehsil_id], 
+                               [main].[v_geo_tehsil].[tehsil_name], 
+                               '' AS [uc_id], 
+                               '' AS [uc_name], 
+                               '' AS [site_name], 
+                               [tblOtpExit].*
+                        FROM   [main].[tblOtpAdd]
+                               INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+                               INNER JOIN [main].[v_geo_tehsil] ON [main].[tblOtpAdd].[tehsil_id] = [main].[v_geo_tehsil].[tehsil_id]
+                        WHERE  [tblOtpExit].[is_deleted] = 0
+                                 AND [tblOtpAdd].[prog_type] = 'sc';
+                        `)
 };
 
 exports.down = function (knex, Promise) {
   return knex.schema
+    .raw(`drop view v_otpExitFullForUpdateNSC`)
+    .raw(`drop view v_otpAddmision2`)
+    .raw(`drop view v_nsc_remaining_geo`)
+    .raw(`drop view v_nsc_remaining`)
+    .raw(`drop view v_NSCExit_yearmonth`)
+    .raw(`drop view v_nscExit_full`)
+    .raw(`drop view v_NSCAdd_yearmonth`)
+    .raw(`drop view v_exitNSCReportInterval`)
+    .raw(`drop view v_geo_tehsil`)
+    .raw(`drop view v_exitNSCReport`)
     .raw(`drop view vSessionForReportNew`)
     .raw('drop view v_OtpAdd_yearmonth')
     .raw('drop view v_OtpExit_yearmonth')

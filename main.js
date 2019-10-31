@@ -158,24 +158,39 @@ function otpAddDataSave(event, addOtpData, config, client) {
 }
 // followup interm data share
 function followupIntermData(event, filter) {
-  console.log({
+  console.log(
     filter
-  })
+  )
   var _limit = (filter.pageSize) ? filter.pageSize : 10;
   var _offset = (filter.pageIndex == 1) ? 0 : (filter.pageIndex - 1) * _limit;
   console.log('site_id from html', filter.site_id);
   knex.from('tblOtpAdd')
     .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
     .where({
-      site_id: filter.site_id,
+      // site_id: filter.site_id,
       status: 'open',
       'tblInterimOtp.is_deleted': 0
+    })
+    .where((builder) => {
+      if (filter.prog_type == "sc") {
+        builder.where('tehsil_id', filter.tehsil_id)
+        // .andWhere('tblOtpAdd.site_village', 'like', `%${filter.site_village ? filter.site_village :''}%`).orWhereNull('tblOtpAdd.site_village')
+      } else {
+        // builder.where('tehsil_id', 'like', '% %')
+        builder.where({
+            site_id: filter.site_id
+          })
+          .where('tblOtpAdd.site_village', 'like', `%${filter.site_village ? filter.site_village :''}%`)
+      }
     })
     .where('tblOtpAdd.reg_id', 'like', `%${filter.reg_id ? filter.reg_id :''}%`)
     .where('tblOtpAdd.p_name', 'like', `%${filter.p_name ? filter.p_name :''}%`)
     .where('tblOtpAdd.f_or_h_name', 'like', `%${filter.f_or_h_name ? filter.f_or_h_name :''}%`)
-    .where('tblOtpAdd.site_village', 'like', `%${filter.site_village ? filter.site_village :''}%`)
+
+
+    // .where('tblOtpAdd.site_village', 'like', `%${filter.site_village ? filter.site_village :''}%`)
     .where('tblOtpAdd.gender', 'like', `%${filter.gender ? filter.gender :''}%`)
+    .where('tblOtpAdd.prog_type', 'like', `%${filter.prog_type}%`)
     .limit(_limit)
     .offset(_offset)
     .then(result => {
@@ -183,15 +198,30 @@ function followupIntermData(event, filter) {
       return knex.from('tblOtpAdd')
         .innerJoin('tblInterimOtp', 'tblInterimOtp.otp_id', 'tblOtpAdd.otp_id')
         .where({
-          site_id: filter.site_id,
+          // site_id: filter.site_id,
           status: 'open',
           'tblInterimOtp.is_deleted': 0
         })
+        .where((builder) => {
+          if (filter.prog_type == "sc") {
+            builder.where('tehsil_id', filter.tehsil_id)
+            // .andWhere('tblOtpAdd.site_village', 'like', `%${filter.site_village ? filter.site_village :''}%`).orWhereNull('tblOtpAdd.site_village')
+          } else {
+            // builder.where('tehsil_id', 'like', '% %')
+            builder.where({
+                site_id: filter.site_id
+              })
+              .where('tblOtpAdd.site_village', 'like', `%${filter.site_village ? filter.site_village :''}%`)
+          }
+        })
+        // .where('tblOtpAdd.site_id', 'like', `%${filter.site_id ? filter.site_id : ''}%`)
+        // .where('tblOtpAdd.tehsil_id', 'like', `%${filter.tehsil_id ? filter.tehsil_id : ''}%`)
         .where('tblOtpAdd.reg_id', 'like', `%${filter.reg_id ? filter.reg_id :''}%`)
         .where('tblOtpAdd.p_name', 'like', `%${filter.p_name ? filter.p_name :''}%`)
         .where('tblOtpAdd.f_or_h_name', 'like', `%${filter.f_or_h_name ? filter.f_or_h_name :''}%`)
-        .where('tblOtpAdd.site_village', 'like', `%${filter.site_village ? filter.site_village :''}%`)
+
         .where('tblOtpAdd.gender', 'like', `%${filter.gender ? filter.gender :''}%`)
+        .where('tblOtpAdd.prog_type', 'like', `%${filter.prog_type}%`)
         .count({
           total: 'tblOtpAdd.reg_id'
         })
@@ -4507,15 +4537,15 @@ var new_menu = {
       click(item, focusedWindow) {
         if (focusedWindow) focusedWindow.reload()
       }
-    }
+    },
     // },    
-    //  {  label: 'Toggle Developer Tools',
-    //  accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-    //  click (item, focusedWindow) {
-    //    if (focusedWindow) focusedWindow.webContents.toggleDevTools()
-    //  }
-    // }
-    ,
+    {
+      label: 'Toggle Developer Tools',
+      accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+      click(item, focusedWindow) {
+        if (focusedWindow) focusedWindow.webContents.toggleDevTools()
+      }
+    },
     {
       type: 'separator'
     },

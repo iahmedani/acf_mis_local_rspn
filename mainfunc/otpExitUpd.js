@@ -1,17 +1,16 @@
 module.exports = (ipcMain, knex, fs, sndMsg, async) => {
   //  Calling all data in table  
   ipcMain.on("allOtpExit", (event, filter) => {
-    // console.log(filter);
+    console.log(filter);
     var _limit = filter.pageSize ? filter.pageSize : 10;
     var _offset = filter.pageIndex == 1 ? 0 : (filter.pageIndex - 1) * _limit;
     // console.log({ _limit, _offset });
     // console.log(`%${filter.site_village}%`);
-    async.series(
-      {
+    async.series({
         data: cb => {
-          knex("v_otpExitFullForUpdate")
+          knex("v_otpExitFullForUpdateNSC")
             .where("p_name", "like", `%${filter.p_name}%`)
-            .where("site_village", "like", `%${filter.site_village}%`)
+            // .where("site_village", "like", `%${filter.site_village}%`)
             .where("reg_id", "like", `%${filter.reg_id}%`)
             .where("province", "like", `%${filter.province}%`)
             .where("district_name", "like", `%${filter.district_name}%`)
@@ -20,23 +19,27 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
             .where("prog_type", "like", `%${filter.prog_type}%`)
             // .where('report_month', 'like', `%${filter.report_month}%`)
 
-            .where({ is_deleted: 0 })
+            .where({
+              is_deleted: 0
+            })
             .limit(_limit)
             .offset(_offset)
             .then(result => cb(null, result))
             .catch(e => cb(e));
         },
         itemsCount: cb => {
-          knex("v_otpExitFullForUpdate")
+          knex("v_otpExitFullForUpdateNSC")
             .where("p_name", "like", `%${filter.p_name}%`)
-            .where("site_village", "like", `%${filter.site_village}%`)
+            // .where("site_village", "like", `%${filter.site_village}%`)
             .where("reg_id", "like", `%${filter.reg_id}%`)
             .where("province", "like", `%${filter.province}%`)
             .where("district_name", "like", `%${filter.district_name}%`)
             .where("uc_name", "like", `%${filter.uc_name}%`)
             .where("tehsil_name", "like", `%${filter.tehsil_name}%`)
             .where("prog_type", "like", `%${filter.prog_type}%`)
-            .where({ is_deleted: 0 })
+            .where({
+              is_deleted: 0
+            })
             .count("exit_id as total")
             .then(result => cb(null, result))
             .catch(e => cb(e));
@@ -44,10 +47,14 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
       },
       (e, result) => {
         if (e) {
-          event.sender.send("allOtpExit", { err: e });
+          event.sender.send("allOtpExit", {
+            err: e
+          });
           // console.log(e);
         } else {
-          event.sender.send("allOtpExit", { result });
+          event.sender.send("allOtpExit", {
+            result
+          });
           // console.log(result);
         }
       }
@@ -56,17 +63,24 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
   // Method to delete (is_deleted = 1) for required tables (tblOtpExit and tblInterimOtp)
   ipcMain.on("deleteOtpExit", (event, item) => {
     // console.log(item);
-    async.series(
-      {
+    async.series({
         delSOtpExit: cb => {
           knex("tblOtpExit")
-            .where({ exit_id: item.exit_id })
-            .update({ is_deleted: 1 })
+            .where({
+              exit_id: item.exit_id
+            })
+            .update({
+              is_deleted: 1
+            })
             .then(result => {
               if (result) {
                 knex("tblInterimOtp")
-                  .where({ otp_id: item.otp_id })
-                  .update({ status: "open" })
+                  .where({
+                    otp_id: item.otp_id
+                  })
+                  .update({
+                    status: "open"
+                  })
                   .then(result => {
                     cb(null, result);
                   });
@@ -78,15 +92,19 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
       (err, result) => {
         if (err) {
           // console.log(err);
-          event.sender.send("deleteOtpExit", { err });
+          event.sender.send("deleteOtpExit", {
+            err
+          });
           sndMsg.errMsg(event, "", "Unable to delte record");
         } else {
           // console.log(result);
-          event.sender.send("deleteOtpExit", { result });
+          event.sender.send("deleteOtpExit", {
+            result
+          });
           sndMsg.sucMsg(event, "", `Patient with id: ${item.exit_id} is sucessfully delted`);
         }
       }
     );
   });
- 
+
 };

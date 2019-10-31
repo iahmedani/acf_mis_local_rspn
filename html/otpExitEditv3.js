@@ -289,7 +289,8 @@ module.exports.initOtpExitEditV2 = function () {
         title: "Village",
         type: "text",
         width: 50,
-        editing: false
+        editing: false,
+        filtering: false
       },
 
       {
@@ -412,7 +413,30 @@ module.exports.initOtpExitEditV2 = function () {
           $("#exit_quantity3").val(data.exit_quantity3);
         }
         setTimeout(ration, 200);
+        if (data.prog_type == 'sc') {
+          $('#exit_reason').children('option:not(:first)').remove();
+          $('#exit_reason').append(`
+            <option value="cured">Cured</option>
+                      <option value="lama">Defaulter (LAMA)</option>
+                      <option value="non_recovered">Non Recovered</option>
+                      <option value="death">Death</option>
+                      <option value="medical_transfer">Medical Transfer</option>
+                      <option value="transfer_to_otp">Transfer to OTP</option>
+                      <option value="other">Other</option>
+            `)
+        } else if (data.prog_type == 'otp') {
+          var _otp = `<option value="cured">Cured</option>
+            <option value="defaulter">Defaulter</option>
+            <option value="non_respondent">Non Respondent</option>
+            <option value="death">Death</option>
+            <option value="medical_transfer_sc">Transfer To NSC</option>
+            <option value="medical_transfer">Medical Transfer</option>
+            <option value="transfer_out_to_other_otp">Transfer Out to other OTP</option>
+            <option value="other">Other</option>`
+          $('#exit_reason').append(_otp);
+        }
         $("#exit_reason").val(data.exit_reason);
+
         $("#weight_gain").val(data.weight_gain);
         $("#days_in_program").val(data.days_in_program);
         $("#add_weight").val(data.weight);
@@ -455,6 +479,8 @@ module.exports.initOtpExitEditV2 = function () {
         data.site_name
         }</option>`
         );
+
+
       } else {
         alert('This could not be edited b/c its been more than 5 days since uploaded')
 

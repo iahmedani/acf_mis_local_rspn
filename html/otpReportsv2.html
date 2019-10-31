@@ -12,6 +12,19 @@
             </select>
           </div>
           <div class="col-sm-2">
+
+            <label for="ddProgramType" class="col-form-label">Program Type:</label>
+
+            <select id="ddProgramType" class="form-control form-control-sm ptype" required>
+              <option selected value="">Select One</option>
+              <option disabled value="sfp">TSFP</option>
+              <option disabled value="sfp_Plw">TSFP-PLW</option>
+              <option value="otp">OTP</option>
+              <option value="sc">NSC</option>
+            </select>
+
+          </div>
+          <div class="col-sm-2">
             <label for="ddProvince" class="col-form-label">Province:</label>
             <select id="ddProvince" class="form-control form-control-sm">
               <option value="">All</option>
@@ -75,7 +88,7 @@
     </div>
     </form>
 
-    <div class="row">
+    <div class="row" id="otp_report">
       <div class="col-sm-12">
         <!-- <div class="table-responsive"> -->
         <table class="table table-sm table-bordered repTitle text-wrap myTableOtp text-center" id="addmisionReport">
@@ -251,6 +264,242 @@
       <div class="col-sm-12" id="addExitReport"></div>
     </div>
 
+    <div class="row" id="nsc_report" style="display: none;">
+      <table class="table table-sm table-bordered repTitle text-wrap myTableOtp text-center" id="NSCMonthly">
+        <tbody>
+          <tr>
+            <th class="align-middle" rowspan="2">Age Group</th>
+            <th class="align-middle" rowspan="2">Sex</th>
+            <th class="align-middle" rowspan="2">Total in NSC beginning of the month
+              (A)</th>
+            <th class="align-middle" colspan="2">New Admissions (B)</th>
+            <th class="align-middle" rowspan="2">TOTAL NEW ADMISSIONS
+              (B=B1+B2)</th>
+            <th class="align-middle" colspan="5">Moved In (C)</th>
+            <th class="align-middle" rowspan="2">Total Moved in
+              (C=C1+C2+C3+C4+C5)</th>
+            <th class="align-middle" rowspan="2">TOTAL IN
+              (D= A+B+C)</th>
+            <th class="align-middle" colspan="4">Discharged (E)</th>
+            <th class="align-middle" rowspan="2">TOTAL DISCHARGED
+              (E=E1+E2+E3+E4)</th>
+            <th class="align-middle" colspan="3">Moved out (F)</th>
+            <th class="align-middle" rowspan="2">Total Moved out
+              (F=f1+f2+f3)</th>
+            <th class="align-middle" rowspan="2">TOTAL EXIT
+              (G= E+F)</th>
+            <th class="align-middle" rowspan="2">Total in NSC end of the month (H=D-G)</th>
+          </tr>
+          <tr>
+            <th class="align-middle"> MUAC < 11.5cm (B1) </th> <th class="align-middle">OEDEMA
+                (B2)</th>
+            <th class="align-middle">Relapse after cured</th>
+            <th class="align-middle">Return after LAMA
+            </th>
+            <th class="align-middle">Transfer from Ward</th>
+            <th class="align-middle">Transfer from OTP
+            </th>
+            <th class="align-middle">Other
+            </th>
+
+            <th class="align-middle">CURED
+              (E1)</th>
+            <th class="align-middle">DEATH
+              (E2)</th>
+            <th class="align-middle">LAMA
+              (E3)</th>
+            <th class="align-middle">NON-RECOVERED
+              (E4)</th>
+            <th class="align-middle">MEDICAL TRANSFER
+              (F1)</th>
+            <th class="align-middle">TRANSFER TO OTP (F2)</th>
+            <th class="align-middle">Other
+              (F3)</th>
+          </tr>
+          <!-- </thead>
+        <tbody> -->
+          <tr>
+            <th class="align-middle" rowspan="2">0 to 6 months</th>
+            <th class="align-middle">M</th>
+            <td class="align-middle nscSum" id="06_m_a"></td>
+            <td class="align-middle nscSum" id="06_m_b1"></td>
+            <td class="align-middle nscSum" id="06_m_b2"></td>
+            <td class="align-middle nscSum" id="06_m_b"></td>
+            <td class="align-middle nscSum" id="06_m_c1"></td>
+            <td class="align-middle nscSum" id="06_m_c2"></td>
+            <td class="align-middle nscSum" id="06_m_c3"></td>
+            <td class="align-middle nscSum" id="06_m_c4"></td>
+            <td class="align-middle nscSum" id="06_m_c5"></td>
+            <td class="align-middle nscSum" id="06_m_c"></td>
+            <td class="align-middle " id="06_m_d"></td>
+            <td class="align-middle nscSum" id="06_m_e1"></td>
+            <td class="align-middle nscSum" id="06_m_e2"></td>
+            <td class="align-middle nscSum" id="06_m_e3"></td>
+            <td class="align-middle nscSum" id="06_m_e4"></td>
+            <td class="align-middle nscSum" id="06_m_e"></td>
+            <td class="align-middle nscSum" id="06_m_f1"></td>
+            <td class="align-middle nscSum" id="06_m_f2"></td>
+            <td class="align-middle nscSum" id="06_m_f3"></td>
+            <td class="align-middle nscSum" id="06_m_f"></td>
+            <td class="align-middle nscSum" id="06_m_g"></td>
+            <td class="align-middle " id="06_m_h"></td>
+          </tr>
+          <tr>
+            <th class="align-middle">F</th>
+            <td class="align-middle nscSum" id="06_f_a"></td>
+            <td class="align-middle nscSum" id="06_f_b1"></td>
+            <td class="align-middle nscSum" id="06_f_b2"></td>
+            <td class="align-middle nscSum" id="06_f_b"></td>
+            <td class="align-middle nscSum" id="06_f_c1"></td>
+            <td class="align-middle nscSum" id="06_f_c2"></td>
+            <td class="align-middle nscSum" id="06_f_c3"></td>
+            <td class="align-middle nscSum" id="06_f_c4"></td>
+            <td class="align-middle nscSum" id="06_f_c5"></td>
+            <td class="align-middle nscSum" id="06_f_c"></td>
+            <td class="align-middle " id="06_f_d"></td>
+            <td class="align-middle nscSum" id="06_f_e1"></td>
+            <td class="align-middle nscSum" id="06_f_e2"></td>
+            <td class="align-middle nscSum" id="06_f_e3"></td>
+            <td class="align-middle nscSum" id="06_f_e4"></td>
+            <td class="align-middle nscSum" id="06_f_e"></td>
+            <td class="align-middle nscSum" id="06_f_f1"></td>
+            <td class="align-middle nscSum" id="06_f_f2"></td>
+            <td class="align-middle nscSum" id="06_f_f3"></td>
+            <td class="align-middle nscSum" id="06_f_f"></td>
+            <td class="align-middle nscSum" id="06_f_g"></td>
+            <td class="align-middle " id="06_f_h"></td>
+          </tr>
+          <tr>
+            <th class="align-middle" rowspan="2">6 to 23 months</th>
+            <th class="align-middle">M</th>
+            <td class="align-middle nscSum" id="623_m_a"></td>
+            <td class="align-middle nscSum" id="623_m_b1"></td>
+            <td class="align-middle nscSum" id="623_m_b2"></td>
+            <td class="align-middle nscSum" id="623_m_b"></td>
+            <td class="align-middle nscSum" id="623_m_c1"></td>
+            <td class="align-middle nscSum" id="623_m_c2"></td>
+            <td class="align-middle nscSum" id="623_m_c3"></td>
+            <td class="align-middle nscSum" id="623_m_c4"></td>
+            <td class="align-middle nscSum" id="623_m_c5"></td>
+            <td class="align-middle nscSum" id="623_m_c"></td>
+            <td class="align-middle " id="623_m_d"></td>
+            <td class="align-middle nscSum" id="623_m_e1"></td>
+            <td class="align-middle nscSum" id="623_m_e2"></td>
+            <td class="align-middle nscSum" id="623_m_e3"></td>
+            <td class="align-middle nscSum" id="623_m_e4"></td>
+            <td class="align-middle nscSum" id="623_m_e"></td>
+            <td class="align-middle nscSum" id="623_m_f1"></td>
+            <td class="align-middle nscSum" id="623_m_f2"></td>
+            <td class="align-middle nscSum" id="623_m_f3"></td>
+            <td class="align-middle nscSum" id="623_m_f"></td>
+            <td class="align-middle nscSum" id="623_m_g"></td>
+            <td class="align-middle " id="623_m_h"></td>
+          </tr>
+          <tr>
+            <th class="align-middle">F</th>
+            <td class="align-middle nscSum" id="623_f_a"></td>
+            <td class="align-middle nscSum" id="623_f_b1"></td>
+            <td class="align-middle nscSum" id="623_f_b2"></td>
+            <td class="align-middle nscSum" id="623_f_b"></td>
+            <td class="align-middle nscSum" id="623_f_c1"></td>
+            <td class="align-middle nscSum" id="623_f_c2"></td>
+            <td class="align-middle nscSum" id="623_f_c3"></td>
+            <td class="align-middle nscSum" id="623_f_c4"></td>
+            <td class="align-middle nscSum" id="623_f_c5"></td>
+            <td class="align-middle nscSum" id="623_f_c"></td>
+            <td class="align-middle " id="623_f_d"></td>
+            <td class="align-middle nscSum" id="623_f_e1"></td>
+            <td class="align-middle nscSum" id="623_f_e2"></td>
+            <td class="align-middle nscSum" id="623_f_e3"></td>
+            <td class="align-middle nscSum" id="623_f_e4"></td>
+            <td class="align-middle nscSum" id="623_f_e"></td>
+            <td class="align-middle nscSum" id="623_f_f1"></td>
+            <td class="align-middle nscSum" id="623_f_f2"></td>
+            <td class="align-middle nscSum" id="623_f_f3"></td>
+            <td class="align-middle nscSum" id="623_f_f"></td>
+            <td class="align-middle nscSum" id="623_f_g"></td>
+            <td class="align-middle " id="623_f_h"></td>
+          </tr>
+          <tr>
+            <th class="align-middle " rowspan="2">23 to 59 months</th>
+            <th class="align-middle ">M</th>
+            <td class="align-middle nscSum" id="2459_m_a"></td>
+            <td class="align-middle nscSum" id="2459_m_b1"></td>
+            <td class="align-middle nscSum" id="2459_m_b2"></td>
+            <td class="align-middle nscSum" id="2459_m_b"></td>
+            <td class="align-middle nscSum" id="2459_m_c1"></td>
+            <td class="align-middle nscSum" id="2459_m_c2"></td>
+            <td class="align-middle nscSum" id="2459_m_c3"></td>
+            <td class="align-middle nscSum" id="2459_m_c4"></td>
+            <td class="align-middle nscSum" id="2459_m_c5"></td>
+            <td class="align-middle nscSum" id="2459_m_c"></td>
+            <td class="align-middle " id="2459_m_d"></td>
+            <td class="align-middle nscSum" id="2459_m_e1"></td>
+            <td class="align-middle nscSum" id="2459_m_e2"></td>
+            <td class="align-middle nscSum" id="2459_m_e3"></td>
+            <td class="align-middle nscSum" id="2459_m_e4"></td>
+            <td class="align-middle nscSum" id="2459_m_e"></td>
+            <td class="align-middle nscSum" id="2459_m_f1"></td>
+            <td class="align-middle nscSum" id="2459_m_f2"></td>
+            <td class="align-middle nscSum" id="2459_m_f3"></td>
+            <td class="align-middle nscSum" id="2459_m_f"></td>
+            <td class="align-middle nscSum" id="2459_m_g"></td>
+            <td class="align-middle " id="2459_m_h"></td>
+          </tr>
+          <tr>
+            <th class="align-middle ">F</th>
+            <td class="align-middle nscSum" id="2459_f_a"></td>
+            <td class="align-middle nscSum" id="2459_f_b1"></td>
+            <td class="align-middle nscSum" id="2459_f_b2"></td>
+            <td class="align-middle nscSum" id="2459_f_b"></td>
+            <td class="align-middle nscSum" id="2459_f_c1"></td>
+            <td class="align-middle nscSum" id="2459_f_c2"></td>
+            <td class="align-middle nscSum" id="2459_f_c3"></td>
+            <td class="align-middle nscSum" id="2459_f_c4"></td>
+            <td class="align-middle nscSum" id="2459_f_c5"></td>
+            <td class="align-middle nscSum" id="2459_f_c"></td>
+            <td class="align-middle " id="2459_f_d"></td>
+            <td class="align-middle nscSum" id="2459_f_e1"></td>
+            <td class="align-middle nscSum" id="2459_f_e2"></td>
+            <td class="align-middle nscSum" id="2459_f_e3"></td>
+            <td class="align-middle nscSum" id="2459_f_e4"></td>
+            <td class="align-middle nscSum" id="2459_f_e"></td>
+            <td class="align-middle nscSum" id="2459_f_f1"></td>
+            <td class="align-middle nscSum" id="2459_f_f2"></td>
+            <td class="align-middle nscSum" id="2459_f_f3"></td>
+            <td class="align-middle nscSum" id="2459_f_f"></td>
+            <td class="align-middle nscSum" id="2459_f_g"></td>
+            <td class="align-middle " id="2459_f_h"></td>
+          </tr>
+          <tr>
+            <th class="align-middle" colspan="2">Total</th>
+            <td class="align-middle" id="t_a"></td>
+            <td class="align-middle" id="t_b1"></td>
+            <td class="align-middle" id="t_b2"></td>
+            <td class="align-middle" id="t_b"></td>
+            <td class="align-middle" id="t_c1"></td>
+            <td class="align-middle" id="t_c2"></td>
+            <td class="align-middle" id="t_c3"></td>
+            <td class="align-middle" id="t_c4"></td>
+            <td class="align-middle" id="t_c5"></td>
+            <td class="align-middle" id="t_c"></td>
+            <td class="align-middle" id="t_d"></td>
+            <td class="align-middle" id="t_e1"></td>
+            <td class="align-middle" id="t_e2"></td>
+            <td class="align-middle" id="t_e3"></td>
+            <td class="align-middle" id="t_e4"></td>
+            <td class="align-middle" id="t_e"></td>
+            <td class="align-middle" id="t_f1"></td>
+            <td class="align-middle" id="t_f2"></td>
+            <td class="align-middle" id="t_f3"></td>
+            <td class="align-middle" id="t_f"></td>
+            <td class="align-middle " id="t_g"></td>
+            <td class="align-middle " id="t_h"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <div id="myId" class="col col-sm-12">
 
       <table id="example" class="table table-striped table-bordered table-sm"></table>
@@ -260,6 +509,11 @@
       <table id="tblAdd" class="table table-bordered "></table>
       <!-- </table> -->
       <table id="tblExit" class="table table-bordered "></table>
+    </div>
+    <div style="display:none">
+      <table id="tblAddNSC" class="table table-bordered "></table>
+      <!-- </table> -->
+      <table id="tblExitNSC" class="table table-bordered "></table>
     </div>
 
   </div>
