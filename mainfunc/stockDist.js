@@ -1,3 +1,4 @@
+var uuid = require('uuid/v4')
 module.exports = (ipcMain, knex, fs, sndMsg, async) => {
 
   // ipcMain.on("getAvailableCommodity", (event) => {
@@ -13,31 +14,35 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
   // });
   ipcMain.on("stockDistEntry", async (event, data) => {
     // console.log(data);
-    const { client, mac } = JSON.parse(
+    const {
+      client,
+      mac
+    } = JSON.parse(
       fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, "utf8")
     );
-    async.waterfall([function(cb) {
-        var n = new Date().valueOf();
-        data.forEach((el, i, allData) => {
-          el.stockDistId = n;
-          el.client_id= client;
-          // delete el.avalable_stock;
-          delete el.disp_sub_unit;
-          delete el.item_desc;
-          delete el.disp_unit;
-          el.program_type = el.prog_type;
-          delete el.prog_type;
-          if (allData.length - 1 == i) {
-            cb(null, allData);
-          }
-        });
-      }, function(newdata, cb) {
-        console.log(newdata);
-        knex("tblStokDistv2")
-          .insert(newdata)
-          .then(result => cb(null, result))
-          .catch(e => cb(e));
-      }], function(err, result) {
+    async.waterfall([function (cb) {
+      var n = new Date().valueOf();
+      data.forEach((el, i, allData) => {
+        el.stockDistId = n;
+        el.client_id = client;
+        el.dist_id = uuid();
+        // delete el.avalable_stock;
+        delete el.disp_sub_unit;
+        delete el.item_desc;
+        delete el.disp_unit;
+        el.program_type = el.prog_type;
+        delete el.prog_type;
+        if (allData.length - 1 == i) {
+          cb(null, allData);
+        }
+      });
+    }, function (newdata, cb) {
+      console.log(newdata);
+      knex("tblStokDistv2")
+        .insert(newdata)
+        .then(result => cb(null, result))
+        .catch(e => cb(e));
+    }], function (err, result) {
       if (err) {
         console.log(err);
         sndMsg.errMsg(event, "", "Unable to save stock Distribution");
@@ -51,35 +56,43 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
     var _limit = filter.pageSize ? filter.pageSize : 10;
     var _offset = filter.pageIndex == 1 ? 0 : (filter.pageIndex - 1) * _limit;
     console.log(filter);
-    async.series({ data: cb => {
-      knex("tblStokDistv2")
-        .sum({ total_distribution: "distributed" })
-        .column("stockDistId", "dist_month", "upload_status", "program_type","upload_date")
-        .where({ is_deleted: 0 })
-        .where("program_type", "like", `%${filter.program_type}%`)
-        .where("district_id", "like", `%${filter.district_id}%`)
-        .where("tehsil_id", "like", `%${filter.tehsil_id}%`)
-        .where("uc_id", "like", `%${filter.uc_id}%`)
-        .where("site_id", "like", `%${filter.site_id}%`)
-        .where("dist_month", "like", `%${filter.dist_month}%`)
-        .where("CHW_id", "like", `%${filter.CHW_id}%`)
-        .where("CHS_id", "like", `%${filter.CHS_id}%`)
-        .groupBy("stockDistId", "dist_month", "upload_status", "program_type", "upload_date")
-        .offset(_offset)
-        .limit(_limit)
-        .then(result => {
-          cb(null, result);
-          // event.sender.send("getSessionsAll", { result: result });
-        })
-        .catch(e => {
-          cb(e);
-          // event.sender.send("getSessionsAll", { err: e });
-        });
-      }, itemsCount: cb => {
+    async.series({
+      data: cb => {
+        knex("tblStokDistv2")
+          .sum({
+            total_distribution: "distributed"
+          })
+          .column("stockDistId", "dist_month", "upload_status", "program_type", "upload_date")
+          .where({
+            is_deleted: 0
+          })
+          .where("program_type", "like", `%${filter.program_type}%`)
+          .where("district_id", "like", `%${filter.district_id}%`)
+          .where("tehsil_id", "like", `%${filter.tehsil_id}%`)
+          .where("uc_id", "like", `%${filter.uc_id}%`)
+          .where("site_id", "like", `%${filter.site_id}%`)
+          .where("dist_month", "like", `%${filter.dist_month}%`)
+          .where("CHW_id", "like", `%${filter.CHW_id}%`)
+          .where("CHS_id", "like", `%${filter.CHS_id}%`)
+          .groupBy("stockDistId", "dist_month", "upload_status", "program_type", "upload_date")
+          .offset(_offset)
+          .limit(_limit)
+          .then(result => {
+            cb(null, result);
+            // event.sender.send("getSessionsAll", { result: result });
+          })
+          .catch(e => {
+            cb(e);
+            // event.sender.send("getSessionsAll", { err: e });
+          });
+      },
+      itemsCount: cb => {
         // knex("tblSessions")
         knex("tblStokDistv2")
-          .column("stockDistId", "dist_month", "upload_status", "program_type","upload_date")
-          .where({ is_deleted: 0 })
+          .column("stockDistId", "dist_month", "upload_status", "program_type", "upload_date")
+          .where({
+            is_deleted: 0
+          })
           .where("program_type", "like", `%${filter.program_type}%`)
           .where("district_id", "like", `%${filter.district_id}%`)
           .where("tehsil_id", "like", `%${filter.tehsil_id}%`)
@@ -89,7 +102,9 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
           .where("CHW_id", "like", `%${filter.CHW_id}%`)
           .where("CHS_id", "like", `%${filter.CHS_id}%`)
           .groupBy("stockDistId", "dist_month", "upload_status", "program_type", "upload_date")
-          .countDistinct({ total: "stockDistId" })
+          .countDistinct({
+            total: "stockDistId"
+          })
           // .groupBy("stockReportID", "dist_month")
           .then(result => {
             cb(null, result);
@@ -99,12 +114,17 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
             cb(e);
             // event.sender.send("getSessionsAll", { err: e });
           });
-      } }, (e, result) => {
+      }
+    }, (e, result) => {
       if (e) {
-        event.sender.send("getAllStockDist", { err: e });
+        event.sender.send("getAllStockDist", {
+          err: e
+        });
         console.log(e);
       } else {
-        event.sender.send("getAllStockDist", { result });
+        event.sender.send("getAllStockDist", {
+          result
+        });
         console.log(result);
       }
     });
@@ -118,8 +138,12 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
     async.series({
       data: cb => {
         knex("tblStokDistv2")
-          .where({ is_deleted: 0 })
-          .where({ stockDistId: filter})
+          .where({
+            is_deleted: 0
+          })
+          .where({
+            stockDistId: filter
+          })
           .offset(_offset)
           .limit(_limit)
           .then(result => {
@@ -128,12 +152,19 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
           .catch(e => {
             cb(e);
           });
-      }, itemsCount: cb => {
+      },
+      itemsCount: cb => {
         // knex("tblSessions")
         knex("tblStokDistv2")
-          .where({ is_deleted: 0 })
-          .where({ stockDistId: filter })
-          .count({total: 'dist_id'})
+          .where({
+            is_deleted: 0
+          })
+          .where({
+            stockDistId: filter
+          })
+          .count({
+            total: 'dist_id'
+          })
           .then(result => {
             cb(null, result);
           })
@@ -143,10 +174,14 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
       }
     }, (err, result) => {
       if (err) {
-        event.sender.send("getStockDist", { err });
+        event.sender.send("getStockDist", {
+          err
+        });
         console.log(e);
       } else {
-        event.sender.send("getStockDist", { result });
+        event.sender.send("getStockDist", {
+          result
+        });
         console.log(result);
       }
     });
@@ -161,28 +196,34 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
       function (cb) {
         knex("tblStokDistv2")
           .insert(item)
-          .then(result => { 
-            console.log(result+'157')
+          .then(result => {
+            console.log(result + '157')
             cb(null, result[0])
           })
-          .catch(e=>cb(e));
+          .catch(e => cb(e));
       },
       function (id, cb) {
         knex("tblStokDistv2")
-          .where({dist_id: id})
+          .where({
+            dist_id: id
+          })
           .then(result => {
-            console.log(result+'169')
+            console.log(result + '169')
             cb(null, result[0]);
-          } )
+          })
           .catch(e => cb(e));
       }
     ], (err, result) => {
-        if (err) {
-          console.log(err)
-          event.sender.send("addItemToStockDist", {err});
-        } else {
-          event.sender.send("addItemToStockDist", { result });
-        }
+      if (err) {
+        console.log(err)
+        event.sender.send("addItemToStockDist", {
+          err
+        });
+      } else {
+        event.sender.send("addItemToStockDist", {
+          result
+        });
+      }
     })
   });
   ipcMain.on("updateSingleItem", (event, item) => {
@@ -194,51 +235,80 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
       function (cb) {
         knex("tblStokDistv2")
           .update(item)
-          .where({ dist_id: item.dist_id, stockDistId: item.stockDistId })
-          .then(result => { 
-            console.log(result+'194')
+          .where({
+            dist_id: item.dist_id,
+            stockDistId: item.stockDistId
+          })
+          .then(result => {
+            console.log(result + '194')
             cb(null, result)
           })
-          .catch(e=> cb(e));
+          .catch(e => cb(e));
       },
       function (id, cb) {
         knex("tblStokDistv2")
-          .where({ dist_id: id })
+          .where({
+            dist_id: id
+          })
           .then(result => cb(null, result[0]))
           .catch(e => cb(e));
       }
     ], (err, result) => {
       if (err) {
         console.log(err)
-        event.sender.send("updateSingleItem", { err });
+        event.sender.send("updateSingleItem", {
+          err
+        });
       } else {
-        event.sender.send("updateSingleItem", { result });
+        event.sender.send("updateSingleItem", {
+          result
+        });
       }
     })
   });
   ipcMain.on("deleteStockDistItem", (event, item) => {
-    console.log({msg:215, item})
+    console.log({
+      msg: 215,
+      item
+    })
     knex("tblStokDistv2")
-      .where({ stockDistId: item.stockDistId, dist_id: item.dist_id })
-      .update({ is_deleted: 1 })
+      .where({
+        stockDistId: item.stockDistId,
+        dist_id: item.dist_id
+      })
+      .update({
+        is_deleted: 1
+      })
       .then(result => {
         // console.log(result + "219");
-        event.sender.send("deleteStockDistItem", { result });
+        event.sender.send("deleteStockDistItem", {
+          result
+        });
       })
       .catch(err => {
-        event.sender.send("deleteStockDistItem", { err });
+        event.sender.send("deleteStockDistItem", {
+          err
+        });
       });
   });
   ipcMain.on('deleteStockDist', (event, report) => {
     knex('tblStokDistv2')
-      .where({ stockDistId: report.stockDistId })
-      .update({is_deleted: 1})
+      .where({
+        stockDistId: report.stockDistId
+      })
+      .update({
+        is_deleted: 1
+      })
       .then(result => {
-        event.sender.send("deleteStockDist", { result });
-        sndMsg.sucMsg(event,'','Stock report deleted successfully')
+        event.sender.send("deleteStockDist", {
+          result
+        });
+        sndMsg.sucMsg(event, '', 'Stock report deleted successfully')
       })
       .catch(e => {
-        event.sender.send("deleteStockDistItem", { err });
+        event.sender.send("deleteStockDistItem", {
+          err
+        });
         sndMsg.errMsg(event, '', 'Stock report could not be deleted')
       })
   })
@@ -256,7 +326,9 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
       .where('CHS', 'like', `%${data.chs}%`)
       .then(result => {
         console.log(result)
-        event.sender.send("getAllDistReports", { result });
+        event.sender.send("getAllDistReports", {
+          result
+        });
       })
       .catch(e => {
         console.log(e)

@@ -1,3 +1,4 @@
+var uuid = require('uuid/v4');
 module.exports = (ipcMain, knex, fs, sndMsg) => {
   ipcMain.on("villagelist", (evt, data) => {
     knex("tblVillages")
@@ -6,19 +7,27 @@ module.exports = (ipcMain, knex, fs, sndMsg) => {
         evt.sender.send("villagelist", result);
       })
       .catch(e => {
-        console.log({ msg: "villagelist fetching error", e });
+        console.log({
+          msg: "villagelist fetching error",
+          e
+        });
         sndMsg.errMsg(evt, "", "Unable to fetch village list, please contact administrator");
       });
   });
   ipcMain.on("getVillage", (evt, siteId) => {
     knex("tblVillages")
-      .where({site: siteId})
+      .where({
+        site: siteId
+      })
       .then(result => {
         console.log(result);
         evt.sender.send("haveVillage", result);
       })
       .catch(e => {
-        console.log({ msg: "villagelist fetching error", e });
+        console.log({
+          msg: "villagelist fetching error",
+          e
+        });
         sndMsg.errMsg(evt, "", "Unable to fetch village list, please contact administrator");
       });
   });
@@ -40,7 +49,7 @@ module.exports = (ipcMain, knex, fs, sndMsg) => {
           sndMsg.errMsg(evt, "", "Village not updated");
         });
     } else {
-      delete data.id;
+      data.id = uuid();
       console.log(data);
       knex("tblVillages")
         .insert(data)

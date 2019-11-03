@@ -1,5 +1,6 @@
+var uuid = require('uuid/v4')
 module.exports = (ipcMain, knex, fs, sndMsg) => {
-  
+
   ipcMain.on("supervisorlist", (evt, data) => {
     knex("tblSupervisors")
       // .where({is_deleted:0})
@@ -9,35 +10,49 @@ module.exports = (ipcMain, knex, fs, sndMsg) => {
       })
       .catch(e => {
         sndMsg.errMsg(evt, '', 'Unable to fetch supervior list, please contact administrator')
-        console.log({ msg: "supervisors fetching error", e });
+        console.log({
+          msg: "supervisors fetching error",
+          e
+        });
       });
   });
-  
+
   ipcMain.on("getSups", (evt, siteId) => {
     knex("tblSupervisors")
-      .where({site:siteId})
+      .where({
+        site: siteId
+      })
       .then(result => {
         // console.log(result);
         evt.sender.send('haveSups', (result));
       })
       .catch(e => {
         sndMsg.errMsg(evt, '', 'Unable to fetch supervior list, please contact administrator')
-        console.log({ msg: "supervisors fetching error", e });
+        console.log({
+          msg: "supervisors fetching error",
+          e
+        });
       });
   });
   ipcMain.on("getSupsuc", (evt, uc) => {
     knex("tblSupervisors")
-      .where({uc:uc, is_deleted:0 })
+      .where({
+        uc: uc,
+        is_deleted: 0
+      })
       .then(result => {
         // console.log(result);
         evt.sender.send('haveSupsuc', (result));
       })
       .catch(e => {
         sndMsg.errMsg(evt, '', 'Unable to fetch supervior list, please contact administrator')
-        console.log({ msg: "supervisors fetching error", e });
+        console.log({
+          msg: "supervisors fetching error",
+          e
+        });
       });
   });
-  ipcMain.on("addSup", async(evt, data) => {
+  ipcMain.on("addSup", async (evt, data) => {
     data.created_at = new Date(Date.now()).toLocaleDateString();
     data.client_id = await JSON.parse(fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, 'utf8')).client;
     console.log(data);
@@ -51,11 +66,11 @@ module.exports = (ipcMain, knex, fs, sndMsg) => {
           sndMsg.sucMsg(evt, '', 'Supervisor Updated')
         })
         .catch(e => {
-          console.log("Supervisor not updated"); 
+          console.log("Supervisor not updated");
           sndMsg.errMsg(evt, '', 'Supervisor not updated');
         });
     } else {
-      delete data.id;
+      data.id = uuid();
       console.log(data);
       knex("tblSupervisors")
         .insert(data)

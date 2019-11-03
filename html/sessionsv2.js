@@ -1,3 +1,4 @@
+var uuid = require('uuid/v4');
 module.exports.initSessionsV2 = function () {
   $('#ddProgramType').change(() => {
     $('.prgChange').val("")
@@ -628,6 +629,7 @@ module.exports.initSessionsV2 = function () {
     return new Promise((resolve, reject) => {
       $("#sessionForm").validate();
       if ($("#sessionForm").valid()) {
+        item.session_id = uuid();
 
         ipc.send("insertSessionsSingle", item);
         ipc.on("insertSessionsSingle", (e, result) => {

@@ -1,3 +1,4 @@
+var uuid = require('uuid/v4');
 module.exports.stockEntry = function () {
   let data = new Array;
   $(function () {
@@ -13,20 +14,20 @@ module.exports.stockEntry = function () {
       item.dn_number = $('#dn_number').val();
       item.dn_date = $('#dn_date').val();
       $('#stockEntryForm').validate();
-      if ($('#stockEntryForm').valid() ) {
-        var __x = data.filter(el=> el.item_name == item.item_name && el.expiry_date == item.expiry_date)
-        if(__x.length < 1){
+      if ($('#stockEntryForm').valid()) {
+        var __x = data.filter(el => el.item_name == item.item_name && el.expiry_date == item.expiry_date)
+        if (__x.length < 1) {
 
           data.push(item);
-        }else{
+        } else {
           alert('Error: Duplicate Items are not allowed')
         }
 
       }
-        // console.log(data);
+      // console.log(data);
       // data.push(item);
       // console.log(data);
-      if (length == data.length && $('#stockEntryForm').valid() && __x.length < 1 ) {
+      if (length == data.length && $('#stockEntryForm').valid() && __x.length < 1) {
         resolve(data[data.length]);
       } else {
         reject()
@@ -59,9 +60,9 @@ module.exports.stockEntry = function () {
           tempVar = true
         }
       })
-      var __x = data.filter(el=> el.item_name == item.item_name && el.expiry_date == item.expiry_date)
+      var __x = data.filter(el => el.item_name == item.item_name && el.expiry_date == item.expiry_date)
 
-      if (tempVar  && __x.length < 1) {
+      if (tempVar && __x.length < 1) {
         // delIndex.splice(index, 1);
         // console.log(data);
         resolve(item)
@@ -78,12 +79,27 @@ module.exports.stockEntry = function () {
       // console.log(xx)
       return xx;
     }
-    ipc.send("getCommodityAll",);
+    ipc.send("getCommodityAll", );
     ipc.on('commodityAll', (evt, com) => {
-      var Description  = [{ Name: '', Id: 0, item: '' }];
-      var Unit  = [{ Name: '', Id: 0, item: '' }];
-      var SubUnit  = [{ Name: '', Id: 0, item: '' }];
-      var items = [{ Name: "", Id: 0, }];
+      var Description = [{
+        Name: '',
+        Id: 0,
+        item: ''
+      }];
+      var Unit = [{
+        Name: '',
+        Id: 0,
+        item: ''
+      }];
+      var SubUnit = [{
+        Name: '',
+        Id: 0,
+        item: ''
+      }];
+      var items = [{
+        Name: "",
+        Id: 0,
+      }];
       com.commodity.forEach((el, i) => {
         Description.push({
           Name: el.item_desc,
@@ -140,7 +156,7 @@ module.exports.stockEntry = function () {
     //   }
     // ]
     // // var itemId = '';
-    
+
     function stockGrid(Description, Unit, items, SubUnit) {
       $("#jsGridStockInEntry").jsGrid({
         width: "100%",
@@ -175,8 +191,14 @@ module.exports.stockEntry = function () {
           // {name:'proc_req', title:'Proc: Req: #', type:'text'},
           // {name:'proc_line', title:'Proc: Line', type:'text'},
           {
-            name: 'item_name', title: 'Item', type: 'select', items: items, valueField: "Name",
-            textField: "Name", valueType: 'string', insertTemplate: function () {
+            name: 'item_name',
+            title: 'Item',
+            type: 'select',
+            items: items,
+            valueField: "Name",
+            textField: "Name",
+            valueType: 'string',
+            insertTemplate: function () {
               var descField = this._grid.fields[1];
               var unitField = this._grid.fields[2];
               var subUnitField = this._grid.fields[3];
@@ -215,47 +237,95 @@ module.exports.stockEntry = function () {
             }
           },
           {
-            name: 'item_desc', title: 'Description', type: 'select', items: Description
-            , valueField: "Name", valueType: 'string',
-            textField: "Name", insertcss: 'item_desc-insert', updatecss: 'item_desc-update', itemTemplate: function (item_desc) {
+            name: 'item_desc',
+            title: 'Description',
+            type: 'select',
+            items: Description,
+            valueField: "Name",
+            valueType: 'string',
+            textField: "Name",
+            insertcss: 'item_desc-insert',
+            updatecss: 'item_desc-update',
+            itemTemplate: function (item_desc) {
               return item_desc;
             }
           },
           {
-            name: 'disp_unit', title: 'Unit', type: 'select', items: Unit, valueField: "Name", valueType: 'string',
-            textField: "Name", insertcss: 'disp_unit-insert', updatecss: 'disp_unit-update', itemTemplate: function (disp_unit) {
+            name: 'disp_unit',
+            title: 'Unit',
+            type: 'select',
+            items: Unit,
+            valueField: "Name",
+            valueType: 'string',
+            textField: "Name",
+            insertcss: 'disp_unit-insert',
+            updatecss: 'disp_unit-update',
+            itemTemplate: function (disp_unit) {
               return disp_unit;
             }
           },
           {
-            name: 'disp_sub_unit', title: 'Sub Unit', type: 'select', items: SubUnit, valueField: "Name", valueType: 'string',
-            textField: "Name", insertcss: 'disp_sub_unit-insert', updatecss: 'disp_sub_unit-update', itemTemplate: function (disp_sub_unit) {
+            name: 'disp_sub_unit',
+            title: 'Sub Unit',
+            type: 'select',
+            items: SubUnit,
+            valueField: "Name",
+            valueType: 'string',
+            textField: "Name",
+            insertcss: 'disp_sub_unit-insert',
+            updatecss: 'disp_sub_unit-update',
+            itemTemplate: function (disp_sub_unit) {
               return disp_sub_unit;
             }
           },
-          { name: 'disp_qty', title: 'Quantity Dispatched', type: 'decimal', validate: "required"  },
-          { name: 'rec_qty', title: 'Received  Quantity (*)', type: 'decimal', validate: "required"  },
-          { name: 'rec_obs', title: 'Quality, observations', type: 'text' },
-          { name: 'lost_and_damage', title: 'Lost and Damage Qty', type: 'decimal', validate: "required" },
-          { name: 'expiry_date', title: 'Expiry Date', type: 'date', validate: "required" },
+          {
+            name: 'disp_qty',
+            title: 'Quantity Dispatched',
+            type: 'decimal',
+            validate: "required"
+          },
+          {
+            name: 'rec_qty',
+            title: 'Received  Quantity (*)',
+            type: 'decimal',
+            validate: "required"
+          },
+          {
+            name: 'rec_obs',
+            title: 'Quality, observations',
+            type: 'text'
+          },
+          {
+            name: 'lost_and_damage',
+            title: 'Lost and Damage Qty',
+            type: 'decimal',
+            validate: "required"
+          },
+          {
+            name: 'expiry_date',
+            title: 'Expiry Date',
+            type: 'date',
+            validate: "required"
+          },
           {
             type: "control",
-            editButton: false, modeSwitchButton: false
+            editButton: false,
+            modeSwitchButton: false
           }
         ],
 
       });
     }
-    
+
   });
 
   $('#stockEntrySubmit').on('click', async (e) => {
     // console.log(data);
     // if(data.length>0){
-      
+
     e.preventDefault();
     var stockEntryArr = [];
-    for (stock of data){
+    for (stock of data) {
       delete stock.id;
       stockEntryArr.push(stock);
     }

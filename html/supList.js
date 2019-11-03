@@ -1,8 +1,9 @@
+var uuid = require('uuid/v4');
 module.exports.SupList = function () {
   function reRenderGrid() {
     $("#tblSupList")
       .jsGrid("render")
-      .done(function() {
+      .done(function () {
         console.log("rendering completed and data loaded");
       });
   }
@@ -49,38 +50,39 @@ module.exports.SupList = function () {
   //   })
   // })
 
-  
+
   // $(() => {
-    function _supListFunc (cb) {
-      // return new Promise((resolve, reject) => {
-        ipc.send("supervisorlist");
-        ipc.on("supervisorlist", (evt, sups) => {
-          // console.log(sups)
-          // supervisors = data;
-          ipc.send("geoList");
-          ipc.on("geoList", (evt, data) => {
-            // console.log(data);
-            var supervisors = sups;
-            var province = data.province;
-            var district = data.district;
-            var tehsil = data.tehsil;
-            var uc = data.uc;
-            // var site = data.site;
-            cb(null,{
-              supervisors,
-              province,
-              district,
-              tehsil,
-              uc,
-              // site
-            })
-            ipc.removeAllListeners('geoList')
-          });
-          
-          ipc.removeAllListeners('supervisorlist')
-        });
-      // })
+  function _supListFunc(cb) {
+    // return new Promise((resolve, reject) => {
+    ipc.send("supervisorlist");
+    ipc.on("supervisorlist", (evt, sups) => {
+      // console.log(sups)
+      // supervisors = data;
+      ipc.send("geoList");
+      ipc.on("geoList", (evt, data) => {
+        // console.log(data);
+        var supervisors = sups;
+        var province = data.province;
+        var district = data.district;
+        var tehsil = data.tehsil;
+        var uc = data.uc;
+        // var site = data.site;
+        cb(null, {
+          supervisors,
+          province,
+          district,
+          tehsil,
+          uc,
+          // site
+        })
+        ipc.removeAllListeners('geoList')
+      });
+
+      ipc.removeAllListeners('supervisorlist')
+    });
+    // })
   }
+
   function initSupList() {
     _supListFunc((x, result) => {
       // console.log(result);
@@ -88,7 +90,7 @@ module.exports.SupList = function () {
       var _supData = {
         loadData: function (filter) {
           return $.grep(result.supervisors, function (client) {
-            return (!filter.sup_code || client.sup_code.indexOf(filter.sup_code)>-1) && (!filter.sup_name || client.sup_name.indexOf(filter.sup_name) >-1) && (!filter.province || client.province == filter.province) && (!filter.district || client.district === filter.district) && (!filter.tehsil || client.tehsil === filter.tehsil) && (!filter.uc || client.uc === filter.uc);
+            return (!filter.sup_code || client.sup_code.indexOf(filter.sup_code) > -1) && (!filter.sup_name || client.sup_name.indexOf(filter.sup_name) > -1) && (!filter.province || client.province == filter.province) && (!filter.district || client.district === filter.district) && (!filter.tehsil || client.tehsil === filter.tehsil) && (!filter.uc || client.uc === filter.uc);
             //  && (!filter.site || client.site === filter.site);
             // && (filter.Married === undefined || client.Married === filter.Married);
           });
@@ -98,7 +100,7 @@ module.exports.SupList = function () {
           // this.clients.push(insertingClient);
         },
 
-        updateItem: function (updatingClient) { },
+        updateItem: function (updatingClient) {},
 
         deleteItem: function (deletingClient) {
           // var clientIndex = $.inArray(deletingClient, this.clients);
@@ -108,10 +110,22 @@ module.exports.SupList = function () {
       };
 
       if (!result.province.filter(el => el.id == 0).length > 0) {
-        result.province.unshift({ provinceName: '', id: 0 })
-        result.district.unshift({ districtName: '', id: 0 })
-        result.tehsil.unshift({ tehsilName: '', id: 0 })
-        result.uc.unshift({ ucName: '', id: 0 })
+        result.province.unshift({
+          provinceName: '',
+          id: 0
+        })
+        result.district.unshift({
+          districtName: '',
+          id: 0
+        })
+        result.tehsil.unshift({
+          tehsilName: '',
+          id: 0
+        })
+        result.uc.unshift({
+          ucName: '',
+          id: 0
+        })
         // result.site.unshift({ siteName: '', id: 0 })
       }
 
@@ -127,8 +141,11 @@ module.exports.SupList = function () {
         pageSize: 15,
         pageButtonCount: 5,
         controller: _supData,
-        fields: [
-          { name: 'id', type: 'number', visible: false },
+        fields: [{
+            name: 'id',
+            type: 'number',
+            visible: false
+          },
           {
             title: "Province",
             name: "province",
@@ -176,8 +193,16 @@ module.exports.SupList = function () {
           //   valueField: "id",
           //   textField: "siteName"
           // },
-          { title: "Code", name: "sup_code", type: "text", },
-          { title: "Name", name: "sup_name", type: "text" },
+          {
+            title: "Code",
+            name: "sup_code",
+            type: "text",
+          },
+          {
+            title: "Name",
+            name: "sup_name",
+            type: "text"
+          },
           // {
           //   type: "control",
           //   modeSwitchButton: false,
@@ -202,9 +227,9 @@ module.exports.SupList = function () {
           // $('#ddUC').val(getData.uc);
           $("#sup_code").val(getData.sup_code);
           $("#sup_name").val(getData.sup_name);
-          if(getData.is_deleted){
+          if (getData.is_deleted) {
             $('#is_deleted').prop('checked', true)
-          }else{
+          } else {
             $('#is_deleted').prop('checked', false)
 
           }
@@ -212,22 +237,26 @@ module.exports.SupList = function () {
           // $("#btnSaveSup").attr("disabled", true);
           // $("#btnUpdateSup").attr("disabled", false);
         },
-        rowClass: function(item, itemIndex) {
-          return (item.is_deleted) ? 'bg-red': '';
-      },
+        rowClass: function (item, itemIndex) {
+          return (item.is_deleted) ? 'bg-red' : '';
+        },
       });
     })
   }
-  
-    // _kamran.then(result => {
+
+  // _kamran.then(result => {
   initSupList();
-    // })  
+  // })  
   // });
   $("#btnSaveSup").on("click", e => {
     // console.log(data);
     $("#supForm").validate();
     if ($("#supForm").valid()) {
       var supData = $("#supForm").serializeFormJSON();
+      // if (!supData.id || supData.id == '') {
+
+      //   supData.id = uuid();
+      // }
       supData.is_deleted = $('#is_deleted').prop('checked');
 
       // console.log(supData);
@@ -245,9 +274,9 @@ module.exports.SupList = function () {
       $('#ddUC').children('option:not(:first)').remove();
       $("#ddHealthHouse").children("option:not(:first)").remove();
 
-     
+
     }
     e.preventDefault();
   });
- 
+
 }

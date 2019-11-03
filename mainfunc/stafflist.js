@@ -1,3 +1,4 @@
+var uuid = require('uuid/v4')
 module.exports = (ipcMain, knex, fs, sndMsg) => {
   ipcMain.on("stafflist", (evt, data) => {
     knex("tblLhw")
@@ -6,31 +7,45 @@ module.exports = (ipcMain, knex, fs, sndMsg) => {
         evt.sender.send("stafflist", result);
       })
       .catch(e => {
-        console.log({ msg: "stafflist fetching error", e });
+        console.log({
+          msg: "stafflist fetching error",
+          e
+        });
         sndMsg.errMsg(evt, "", "Unable to fetch staff list, please contact administrator");
       });
   });
   ipcMain.on("getStaff", (evt, siteId) => {
     knex("tblLhw")
-      .where({ site: siteId})
+      .where({
+        site: siteId
+      })
       .then(result => {
         console.log(result);
         evt.sender.send("haveStaff", result);
       })
       .catch(e => {
-        console.log({ msg: "stafflist fetching error", e });
+        console.log({
+          msg: "stafflist fetching error",
+          e
+        });
         sndMsg.errMsg(evt, "", "Unable to fetch staff list, please contact administrator");
       });
   });
   ipcMain.on("getStaffuc", (evt, uc) => {
     knex("tblLhw")
-      .where({ uc: uc, is_deleted:0  })
+      .where({
+        uc: uc,
+        is_deleted: 0
+      })
       .then(result => {
         console.log(result);
         evt.sender.send("haveStaffuc", result);
       })
       .catch(e => {
-        console.log({ msg: "stafflist fetching error", e });
+        console.log({
+          msg: "stafflist fetching error",
+          e
+        });
         sndMsg.errMsg(evt, "", "Unable to fetch staff list, please contact administrator");
       });
   });
@@ -55,7 +70,7 @@ module.exports = (ipcMain, knex, fs, sndMsg) => {
 
         });
     } else {
-      delete data.id;
+      data.id = uuid();
       console.log(data);
       knex("tblLhw")
         .insert(data)

@@ -1,4 +1,5 @@
 const knex = require('../mainfunc/db');
+var uuid = require('uuid/v4');
 
 module.exports.initOtpExit = function () {
 
@@ -350,6 +351,7 @@ module.exports.initOtpExit = function () {
     $('#exitAddForm').validate();
     if ($('#exitAddForm').valid()) {
       var formData = $('#exitAddForm').serializeFormJSON();
+      formData.exit_id = uuid();
       console.log(formData)
       // var exit_date = $('#exit_date').val();
       // formData.exit_date = exit_date;

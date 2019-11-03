@@ -1,7 +1,7 @@
 const fs = require('fs');
-// const {
-//     app
-// } = require('electron');
+const {
+    app
+} = require('electron');
 
 module.exports = (knex) => {
     // var _version = app.getVersion();
@@ -108,6 +108,7 @@ module.exports = (knex) => {
                     fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '1', (err) => {
                         if (err) throw err;
                         console.log('Table OtpAdd remove reg_id unique contraint')
+                        // app.relaunch();
                     })
                 }).catch(e => {
                     console.log(e)
@@ -1152,8 +1153,6 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                         return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
                     }).then(r => {
                         return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                    }).then(r => {}).then(r => {
-                        return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
                     }).then(r => {
                         return knex.raw(`DROP VIEW IF EXISTS [main].[v_nsc_remaining_geo];`)
                     }).then(r => {
@@ -1175,8 +1174,6 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                     }).then(r => {
                         return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
                     }).then(r => {
-                        return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                    }).then(r => {}).then(r => {
                         return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
                     }).then(r => {
                         return knex.raw(`DROP VIEW IF EXISTS [main].[v_otpAddmision2];`)
@@ -1264,7 +1261,7 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                                INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
                                INNER JOIN [main].[v_geo_tehsil] ON [main].[tblOtpAdd].[tehsil_id] = [main].[v_geo_tehsil].[tehsil_id]
                         WHERE  [tblOtpExit].[is_deleted] = 0
-                                 AND [tblOtpAdd].[prog_type] = 'sc';
+                                 AND [tblOtpAdd].[prog_type] = 'sc';                        
                         `)
                     }).then(r => {
                         return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)

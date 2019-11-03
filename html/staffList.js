@@ -1,3 +1,4 @@
+var uuid = require('uuid/v4')
 module.exports.StaffList = function () {
   ipc.send('getProvince');
   ipc.on('province', function (evt, province) {
@@ -73,6 +74,7 @@ module.exports.StaffList = function () {
     });
     // })
   }
+
   function initStaffListGrid() {
     _staffList((x, result) => {
       // console.log(result);
@@ -81,7 +83,7 @@ module.exports.StaffList = function () {
         loadData: function (filter) {
           return $.grep(result._staff, function (client) {
             return (!filter.staff_code || client.staff_code.indexOf(filter.staff_code) > -1) &&
-              (!filter.staff_name || client.staff_name.indexOf(filter.staff_name) > -1) && (!filter.province || client.province == filter.province) && (!filter.district || client.district === filter.district) && (!filter.tehsil || client.tehsil === filter.tehsil) && (!filter.uc || client.uc === filter.uc) ;
+              (!filter.staff_name || client.staff_name.indexOf(filter.staff_name) > -1) && (!filter.province || client.province == filter.province) && (!filter.district || client.district === filter.district) && (!filter.tehsil || client.tehsil === filter.tehsil) && (!filter.uc || client.uc === filter.uc);
             // && (filter.Married === undefined || client.Married === filter.Married);
           });
         },
@@ -90,7 +92,7 @@ module.exports.StaffList = function () {
           // this.clients.push(insertingClient);
         },
 
-        updateItem: function (updatingClient) { },
+        updateItem: function (updatingClient) {},
 
         deleteItem: function (deletingClient) {
           // var clientIndex = $.inArray(deletingClient, this.clients);
@@ -99,10 +101,22 @@ module.exports.StaffList = function () {
 
       };
       if (!result.province.filter(el => el.id == 0).length > 0) {
-        result.province.unshift({ provinceName: '', id: 0 })
-        result.district.unshift({ districtName: '', id: 0 })
-        result.tehsil.unshift({ tehsilName: '', id: 0 })
-        result.uc.unshift({ ucName: '', id: 0 })
+        result.province.unshift({
+          provinceName: '',
+          id: 0
+        })
+        result.district.unshift({
+          districtName: '',
+          id: 0
+        })
+        result.tehsil.unshift({
+          tehsilName: '',
+          id: 0
+        })
+        result.uc.unshift({
+          ucName: '',
+          id: 0
+        })
         // result.site.unshift({ siteName: '', id: 0 })
       }
       $("#tblStaffList").jsGrid({
@@ -117,8 +131,11 @@ module.exports.StaffList = function () {
         pageSize: 15,
         pageButtonCount: 5,
         controller: _staffData,
-        fields: [
-          { name: 'id', type: 'number', visible: false },
+        fields: [{
+            name: 'id',
+            type: 'number',
+            visible: false
+          },
           {
             title: "Province",
             name: "province",
@@ -166,8 +183,16 @@ module.exports.StaffList = function () {
           //   valueField: "id",
           //   textField: "siteName"
           // },
-          { title: "Code", name: "staff_code", type: "text" },
-          { title: "Name", name: "staff_name", type: "text" },
+          {
+            title: "Code",
+            name: "staff_code",
+            type: "text"
+          },
+          {
+            title: "Name",
+            name: "staff_name",
+            type: "text"
+          },
           // {
           //   type: "control",
           //   modeSwitchButton: true,
@@ -192,22 +217,22 @@ module.exports.StaffList = function () {
           // $('#ddUC').val(getData.uc);
           $("#staff_code").val(getData.staff_code);
           $("#staff_name").val(getData.staff_name);
-          if(getData.is_deleted){
+          if (getData.is_deleted) {
             $('#is_deleted').prop('checked', true)
-          }else{
+          } else {
             $('#is_deleted').prop('checked', false)
 
           }
           $("#id").val(getData.id);
         },
-        rowClass: function(item, itemIndex) {
-          return (item.is_deleted) ? 'bg-red': '';
-      },
+        rowClass: function (item, itemIndex) {
+          return (item.is_deleted) ? 'bg-red' : '';
+        },
       });
     })
   }
   initStaffListGrid();
-  
+
   // _kamran.then(result => {
 
   // })  
@@ -217,6 +242,7 @@ module.exports.StaffList = function () {
     $("#staffForm").validate();
     if ($("#staffForm").valid()) {
       var staffData = $("#staffForm").serializeFormJSON();
+      // staffData.id = uuid();
       staffData.is_deleted = $('#is_deleted').prop('checked');
 
       // console.log(staffData);

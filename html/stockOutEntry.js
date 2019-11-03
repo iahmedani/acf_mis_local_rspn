@@ -1,5 +1,6 @@
+var uuid = require('uuid/v4')
 module.exports.stockOutEntry = function () {
-  $('#ddProgramType').change(()=>{
+  $('#ddProgramType').change(() => {
     $('.prgChange').val("")
   })
   $(function () {
@@ -36,46 +37,46 @@ module.exports.stockOutEntry = function () {
       })
     })
     var ucForHH;
-    $('#ddUC').on('change', function(){
+    $('#ddUC').on('change', function () {
       var ucs = $(this).val();
       ucForHH = ucs
-      ipc.send('getHealthHouse', ucs )
-      ipc.on('hh', async function(evt, hh){
+      ipc.send('getHealthHouse', ucs)
+      ipc.on('hh', async function (evt, hh) {
         // console.log(hh)
         $('#site_one').children('option:not(:first)').remove();
-        if(hh.hh.length > 1){
-          $('.secondSite').css('display', '')  
+        if (hh.hh.length > 1) {
+          $('.secondSite').css('display', '')
           $('#site_two').children('option:not(:first)').remove();
-          await asyncForEach(hh.hh, async(el)=>{
-            $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);              
-          })            
-        }else{
-          $('.secondSite').css('display', 'none')  
+          await asyncForEach(hh.hh, async (el) => {
+            $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);
+          })
+        } else {
+          $('.secondSite').css('display', 'none')
 
         }
         hhListener_siteOne(hh);
 
       });
-    ipc.send("getStaffuc", ucs);
-    ipc.send("getSupsuc", ucs);
+      ipc.send("getStaffuc", ucs);
+      ipc.send("getSupsuc", ucs);
 
-    ipc.on("haveStaffuc", function(evt, staffs) {
-      $("#ddStaff_code")
-        .children("option:not(:first)")
-        .remove();
-      staffListeneruc(staffs);
-    });
-    ipc.on("haveSupsuc", function(evt, _sups) {
-      $("#ddSup_code")
-        .children("option:not(:first)")
-        .remove();
-      supListeneruc(_sups);
-    });
-  })
+      ipc.on("haveStaffuc", function (evt, staffs) {
+        $("#ddStaff_code")
+          .children("option:not(:first)")
+          .remove();
+        staffListeneruc(staffs);
+      });
+      ipc.on("haveSupsuc", function (evt, _sups) {
+        $("#ddSup_code")
+          .children("option:not(:first)")
+          .remove();
+        supListeneruc(_sups);
+      });
+    })
     $('#ddUC').on('change', function () {
       var ucs = $(this).val();
       ucForHH = ucs
-      if($('#ddProgramType').val() == 'otp'){
+      if ($('#ddProgramType').val() == 'otp') {
         ipc.send('getHealthHouse', ucs)
         ipc.on('hh', function (evt, hh) {
           $('#ddHealthHouse').children('option:not(:first)').remove();
@@ -164,7 +165,7 @@ module.exports.stockOutEntry = function () {
       if (data.filter(el => el.item_name == item.item_name).length > 0) {
         alert('Same item is not allowed to enter multiple time, if you want to change quantity release please click to edit the line/same item');
       } else {
-        
+
         if ($("#stockOutEntryForm").valid()) {
           data.push(item);
           // console.log(data);
@@ -217,7 +218,7 @@ module.exports.stockOutEntry = function () {
     })
   }
   $(() => {
-    function rebuildGrid(){
+    function rebuildGrid() {
       var sendValue = function (varName, value) {
         // console.log(varName, value)
         var xx = varName.filter(el => el.item == value)
@@ -226,12 +227,26 @@ module.exports.stockOutEntry = function () {
       }
       ipc.send('getAvailableCommodity', $('#ddProgramType').val() || '');
       ipc.on('availableCommodity', (evt, com) => {
-        var Description  = [{ Name: '', item:''}];
-        var Unit  = [{ Name: '', item:''}];
-        var SubUnit  = [{ Name: '', item:''}];
-        var items = [{ Name: ""}];
-        var availStock = [{ Name: "", item:''}];
-        if(com.commodity.length>0){
+        var Description = [{
+          Name: '',
+          item: ''
+        }];
+        var Unit = [{
+          Name: '',
+          item: ''
+        }];
+        var SubUnit = [{
+          Name: '',
+          item: ''
+        }];
+        var items = [{
+          Name: ""
+        }];
+        var availStock = [{
+          Name: "",
+          item: ''
+        }];
+        if (com.commodity.length > 0) {
           $('.alert-warning').css('display', 'none')
           $('.table-responsive').css('display', '')
 
@@ -254,20 +269,21 @@ module.exports.stockOutEntry = function () {
             })
             availStock.push({
               Name: el.remaining,
-               item: el.item_name,
+              item: el.item_name,
             })
             if (com.commodity.length - 1 == i) {
               stockGrid(Description, Unit, items, SubUnit, availStock);
             }
           })
-        }else{
+        } else {
           $('.alert-warning').css('display', '')
           $('.table-responsive').css('display', 'none')
         }
         ipc.removeAllListeners("availableCommodity");
       })
+
       function stockGrid(Description, Unit, items, SubUnit, availStock) {
-      
+
         $("#stockOutGrid").jsGrid({
           width: "100%",
           height: "400px",
@@ -286,12 +302,12 @@ module.exports.stockOutEntry = function () {
               // console.log('updateitem clicked', item)
               return updItem(item)
             },
-  
+
             deleteItem: function (item) {
               return delItem(item);
             },
           },
-  
+
           fields: [
             // {name:'country_code', title:'Country Code', type:'text'},
             // {name:'base_code', title:'Base Code', type:'text'},
@@ -299,8 +315,14 @@ module.exports.stockOutEntry = function () {
             // {name:'proc_req', title:'Proc: Req: #', type:'text'},
             // {name:'proc_line', title:'Proc: Line', type:'text'},
             {
-              name: 'item_name', title: 'Item', type: 'select', items: items, valueField: "Name",
-              textField: "Name", valueType: 'string', insertTemplate: function () {
+              name: 'item_name',
+              title: 'Item',
+              type: 'select',
+              items: items,
+              valueField: "Name",
+              textField: "Name",
+              valueType: 'string',
+              insertTemplate: function () {
                 var descField = this._grid.fields[1];
                 var unitField = this._grid.fields[2];
                 var subUnitField = this._grid.fields[3];
@@ -316,7 +338,7 @@ module.exports.stockOutEntry = function () {
                   $(".disp_sub_unit-insert").empty().append(subUnitField.insertTemplate());
                   avalable_stockField.items = sendValue(availStock, itemId);
                   $(".avalable_stock-insert").empty().append(avalable_stockField.insertTemplate());
-  
+
                 })
                 return $inertControl;
               },
@@ -326,7 +348,7 @@ module.exports.stockOutEntry = function () {
                 var subUnitField = this._grid.fields[3];
                 var avalable_stockField = this._grid.fields[4];
                 var $editControl = jsGrid.fields.select.prototype.editTemplate.call(this, value);
-  
+
                 var changeItem = function () {
                   var editVal = $editControl.val();
                   // console.log({editVal: editVal})
@@ -345,57 +367,95 @@ module.exports.stockOutEntry = function () {
               }
             },
             {
-              name: 'item_desc', title: 'Description', type: 'select', items: Description
-              , valueField: "Name", valueType: 'string',
-              textField: "Name", insertcss: 'item_desc-insert', updatecss: 'item_desc-update', itemTemplate: function (item_desc) {
+              name: 'item_desc',
+              title: 'Description',
+              type: 'select',
+              items: Description,
+              valueField: "Name",
+              valueType: 'string',
+              textField: "Name",
+              insertcss: 'item_desc-insert',
+              updatecss: 'item_desc-update',
+              itemTemplate: function (item_desc) {
                 return item_desc;
               }
             },
             {
-              name: 'disp_unit', title: 'Unit', type: 'select', items: Unit, valueField: "Name", valueType: 'string',
-              textField: "Name", insertcss: 'disp_unit-insert', updatecss: 'disp_unit-update', itemTemplate: function (disp_unit) {
+              name: 'disp_unit',
+              title: 'Unit',
+              type: 'select',
+              items: Unit,
+              valueField: "Name",
+              valueType: 'string',
+              textField: "Name",
+              insertcss: 'disp_unit-insert',
+              updatecss: 'disp_unit-update',
+              itemTemplate: function (disp_unit) {
                 return disp_unit;
               }
             },
             {
-              name: 'disp_sub_unit', title: 'Sub Unit', type: 'select', items: SubUnit, valueField: "Name", valueType: 'string',
-              textField: "Name", insertcss: 'disp_sub_unit-insert', updatecss: 'disp_sub_unit-update', itemTemplate: function (disp_sub_unit) {
+              name: 'disp_sub_unit',
+              title: 'Sub Unit',
+              type: 'select',
+              items: SubUnit,
+              valueField: "Name",
+              valueType: 'string',
+              textField: "Name",
+              insertcss: 'disp_sub_unit-insert',
+              updatecss: 'disp_sub_unit-update',
+              itemTemplate: function (disp_sub_unit) {
                 return disp_sub_unit;
               }
             },
             {
-              name: 'avalable_stock', title: 'Avalable Stock', type: 'select', items: availStock, valueField: "Name", valueType: 'decimal',
-              textField: "Name", insertcss: 'avalable_stock-insert', updatecss: 'avalable_stock-update', itemTemplate: function (avalable_stock) {
+              name: 'avalable_stock',
+              title: 'Avalable Stock',
+              type: 'select',
+              items: availStock,
+              valueField: "Name",
+              valueType: 'decimal',
+              textField: "Name",
+              insertcss: 'avalable_stock-insert',
+              updatecss: 'avalable_stock-update',
+              itemTemplate: function (avalable_stock) {
                 return avalable_stock;
               }
             },
             // { name: 'avalable_stock', title: 'Avalable Stock', type: 'decimal', default:availabeStock },
             {
-              name: 'quantity_released', title: 'Quantity Released', type: 'decimal', validate: ["required", {
+              name: 'quantity_released',
+              title: 'Quantity Released',
+              type: 'decimal',
+              validate: ["required", {
                 validator: function (value, item) {
                   return value > 0 && value <= item.avalable_stock
-                }, message: function (value, item) {
+                },
+                message: function (value, item) {
                   if (value == 0) {
                     return 'Quantity released must be greater than 0'
                   } else if (value > item.avalable_stock) {
                     return 'Quantity release cannot be more than available stock';
-                  } 
-                }}] },
+                  }
+                }
+              }]
+            },
             {
               type: "control",
-              editButton: false, modeSwitchButton: false
+              editButton: false,
+              modeSwitchButton: false
             }
           ],
-  
+
         });
       }
 
     }
     rebuildGrid();
-    $('#ddProgramType').change(function(){
+    $('#ddProgramType').change(function () {
       rebuildGrid();
     })
-    
+
   });
   $(function () {
     var datePickerId = document.getElementById('stock_release_date');

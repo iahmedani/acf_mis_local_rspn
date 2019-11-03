@@ -1,27 +1,31 @@
 let fs = require('fs')
+var uuid = require('uuid/v4');
 
-module.exports.initScrPlwNew = function (){
-  const { client, mac } = JSON.parse(
+module.exports.initScrPlwNew = function () {
+  const {
+    client,
+    mac
+  } = JSON.parse(
     fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, "utf8")
-);
-  $(()=>{
-    $('input[type="number"]').attr('min',0);
+  );
+  $(() => {
+    $('input[type="number"]').attr('min', 0);
     var p = $('.p')
     var l = $('.l')
     var pt = $('#total_scr_pragnent')
     var lt = $('#total_scr_lactating')
 
-    p.change(()=>{
-      var total=0;
-      p.each(function(){
-        total += isNaN(parseInt($(this).val())) ?  0 : parseInt($(this).val()) 
+    p.change(() => {
+      var total = 0;
+      p.each(function () {
+        total += isNaN(parseInt($(this).val())) ? 0 : parseInt($(this).val())
         pt.val(total);
       })
     })
-    l.change(()=>{
-      var total=0;
-      l.each(function(){
-        total += isNaN(parseInt($(this).val())) ?  0 : parseInt($(this).val()) 
+    l.change(() => {
+      var total = 0;
+      l.each(function () {
+        total += isNaN(parseInt($(this).val())) ? 0 : parseInt($(this).val())
 
 
         lt.val(total);
@@ -30,29 +34,29 @@ module.exports.initScrPlwNew = function (){
 
   })
 
-  function totalCheck (){
+  function totalCheck() {
     var pt = $('#total_scr_pragnent')
     var lt = $('#total_scr_lactating')
     var p1 = $('.p1')
     var l1 = $('.l1')
     var ltotal = parseInt(lt.val());
-    var ptotal =  parseInt(pt.val());
+    var ptotal = parseInt(pt.val());
     var p1Val = 0;
     var l1Val = 0;
-    p1.each(function(){
-      p1Val += ($(this).val())? parseInt($(this).val()) : 0;
+    p1.each(function () {
+      p1Val += ($(this).val()) ? parseInt($(this).val()) : 0;
     })
-    l1.each(function(){
-      l1Val += ($(this).val())? parseInt($(this).val()) : 0;
+    l1.each(function () {
+      l1Val += ($(this).val()) ? parseInt($(this).val()) : 0;
     })
-    if(ltotal != l1Val){
+    if (ltotal != l1Val) {
       l1.addClass('highlightInput')
-    }else{
+    } else {
       l1.removeClass('highlightInput')
     }
-    if(ptotal != p1Val){
+    if (ptotal != p1Val) {
       p1.addClass('highlightInput')
-    }else{
+    } else {
       p1.removeClass('highlightInput')
     }
   }
@@ -60,44 +64,44 @@ module.exports.initScrPlwNew = function (){
     var datePickerId = document.getElementById('txtScrChildDate');
     datePickerId.max = new Date().toISOString().split("T")[0];
   });
-  $(function(){
+  $(function () {
     ipc.send('getProvince');
-    ipc.on('province', function(evt, province){
-      $('#ddProvince').children('option:not(:first)').remove();   
+    ipc.on('province', function (evt, province) {
+      $('#ddProvince').children('option:not(:first)').remove();
       prov(province);
-      })
-      $('#ddProvince').on('change', function(){
-        var prov = $(this).val();
-        ipc.send('getDistrict', prov )
-        ipc.on('district', function(evt, district){
-          $('#ddDistrict').children('option:not(:first)').remove();
+    })
+    $('#ddProvince').on('change', function () {
+      var prov = $(this).val();
+      ipc.send('getDistrict', prov)
+      ipc.on('district', function (evt, district) {
+        $('#ddDistrict').children('option:not(:first)').remove();
 
         dist(district);
-        })
       })
-      $('#ddDistrict').on('change', function(){
-        var dist = $(this).val();
-        ipc.send('getTehsil', dist )
-        ipc.on('tehsil', function(evt, tehsil){
-          $('#ddTehsil').children('option:not(:first)').remove();
-  
+    })
+    $('#ddDistrict').on('change', function () {
+      var dist = $(this).val();
+      ipc.send('getTehsil', dist)
+      ipc.on('tehsil', function (evt, tehsil) {
+        $('#ddTehsil').children('option:not(:first)').remove();
+
         teh(tehsil);
-        })
       })
-      $('#ddTehsil').on('change', function(){
-        var tehs = $(this).val();
-        ipc.send('getUC', tehs )
-        ipc.on('uc', function(evt, uc){
-          $('#ddUC').children('option:not(:first)').remove();
-        
+    })
+    $('#ddTehsil').on('change', function () {
+      var tehs = $(this).val();
+      ipc.send('getUC', tehs)
+      ipc.on('uc', function (evt, uc) {
+        $('#ddUC').children('option:not(:first)').remove();
+
         ucListener(uc);
-        })
       })
-      var ucForHH;
-      $('#ddUC').on('change', function(){
-        var ucs = $(this).val();
-        ucForHH = ucs
-        ipc.send("getStaffuc", ucs);
+    })
+    var ucForHH;
+    $('#ddUC').on('change', function () {
+      var ucs = $(this).val();
+      ucForHH = ucs
+      ipc.send("getStaffuc", ucs);
       ipc.send("getSupsuc", ucs);
 
       ipc.on("haveStaffuc", function (evt, staffs) {
@@ -112,11 +116,11 @@ module.exports.initScrPlwNew = function (){
           .remove();
         supListeneruc(_sups);
       });
-        // ipc.send('getHealthHouse', ucs )
-        // ipc.on('hh', function(evt, hh){
-        //   $('#ddHealthHouse').children('option:not(:first)').remove();
-        // hhListener(hh);
-        // })
+      // ipc.send('getHealthHouse', ucs )
+      // ipc.on('hh', function(evt, hh){
+      //   $('#ddHealthHouse').children('option:not(:first)').remove();
+      // hhListener(hh);
+      // })
     })
     // $("#ddHealthHouse").on("change", function () {
     //   var siteId = $(this).val();
@@ -153,14 +157,15 @@ module.exports.initScrPlwNew = function (){
       var sup_code = $(this).val();
       $("#ddSup_code").val(sup_code);
     });
-    })
-  $('#submitScrPlwNew').on('click', (e)=>{
+  })
+  $('#submitScrPlwNew').on('click', (e) => {
     e.preventDefault();
     // console.log(data);
     $('#scrPlwNewForm').validate();
     totalCheck();
-    if($('#scrPlwNewForm').valid() && $('.highlightInput').length == 0){
+    if ($('#scrPlwNewForm').valid() && $('.highlightInput').length == 0) {
       var scrPlwNewData = $('#scrPlwNewForm').serializeFormJSON();
+      scrPlwNewData.plw_scr_id = uuid();
       // console.log(scrPlwNewData);
       scrPlwNewData.sup_name = $("#ddSup_name option:selected").text();
       scrPlwNewData.staff_name = $("#ddStaff_name option:selected").text();
@@ -170,10 +175,10 @@ module.exports.initScrPlwNew = function (){
       // $('#scrPlwNewForm').get(0).reset();
       $('.clr').val("");
       $('.cld').val("");
-    $('input[type="number"]').attr('min',0);
-    } 
+      $('input[type="number"]').attr('min', 0);
+    }
   })
-  $('#resetScrChildForm').on('click',()=>{
+  $('#resetScrChildForm').on('click', () => {
     $('#scrChildrenForm').get(0).reset();
   })
 }

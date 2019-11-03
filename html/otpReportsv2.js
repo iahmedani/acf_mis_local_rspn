@@ -1875,6 +1875,7 @@ count(case when exit_reason = 'other' then 1 end) as f3,
         ipc.removeAllListeners('getReport');
       });
     } else if ($('#ddProgramType').val() == 'sc') {
+      $(`.cls`).empty();
       var dataNSCReport = await nscSumReport(prepareQry())
       await myPushDataNSC(dataNSCReport);
     }

@@ -162,7 +162,12 @@ module.exports.initOtpFollowUpEdit = function () {
     delete item.tehsil_id
     delete item.uc_id
     delete item.site_id
-    item.next_followup = item.next_followup.split('T')[0];
+    var date_ = new Date(item.next_followup)
+    date_.setDate(date_.getDate() + 1);
+    // date_.toISOString();
+    // date_.toJSON().split('T')[0];
+    date_ = date_.toJSON().split('T')[0]
+    item.next_followup = date_;
     var x = await knex('tblOtpFollowup').update(item).where({
       followup_id: item.followup_id
     })

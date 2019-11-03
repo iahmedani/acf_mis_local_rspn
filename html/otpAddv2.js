@@ -1,3 +1,5 @@
+var uuid = require('uuid/v4');
+
 module.exports.initOtpAdd = function () {
   var knex = require('../mainfunc/db')
   $(":input").inputmask();
@@ -226,6 +228,7 @@ module.exports.initOtpAdd = function () {
     $('#otpAddForm').validate();
     if ($('#otpAddForm').valid()) {
       var otpAddFormData = $('#otpAddForm').serializeFormJSON();
+      otpAddFormData.otp_id = uuid();
       if ($('#ddProgramType').val() == 'otp') {
         var check = await knex('tblOtpAdd').where({
           site_id: otpAddFormData.site_id,

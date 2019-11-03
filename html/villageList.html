@@ -1,31 +1,36 @@
 <template>
   <style>
     .jsgrid-grid-header,
-.jsgrid-grid-body{
-  overflow: auto;
-}
-.jsgrid-grid-header{
-  background-color: cadetblue;
-}
-.jsgrid-cell{
-  padding: .2rem;
-}
-.table td{
-  padding: .2rem;
-  text-align: center;
+    .jsgrid-grid-body {
+      overflow: auto;
+    }
 
-}
-/* .table {
+    .jsgrid-grid-header {
+      background-color: cadetblue;
+    }
+
+    .jsgrid-cell {
+      padding: .2rem;
+    }
+
+    .table td {
+      padding: .2rem;
+      text-align: center;
+
+    }
+
+    /* .table {
   border-radius: 0.4rem;
 } */
-.table th{
-  padding: .4rem;
-  text-align: center;
-}
-.jsgrid-filter-row{
-  height: 10px !important;
-}
-    </style>
+    .table th {
+      padding: .4rem;
+      text-align: center;
+    }
+
+    .jsgrid-filter-row {
+      height: 10px !important;
+    }
+  </style>
   <div class="container-fluid">
     <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">Village
       List</p>
@@ -62,15 +67,16 @@
               <td><select id="ddHealthHouse" name="site" class="form-control form-control-sm" required>
                   <option selected disabled>Select One</option>
                 </select></td>
-              <td colspan="2"><input type="text" name="villageName" id="villageName" class="form-control form-control-sm" required></td>
-              <td colspan="1"><input class="form-check-input" type="checkbox" id="is_deleted" name="is_deleted" ></td>
+              <td colspan="2"><input type="text" name="villageName" id="villageName"
+                  class="form-control form-control-sm" required></td>
+              <td colspan="1"><input class="form-check-input" type="checkbox" id="is_deleted" name="is_deleted"></td>
 
               <td><a href="" class="btn btn-success btn-sm" id="btnSaveVillage"><i class="fas fa-save"></i></a></td>
               <!-- <td><a href="" class="btn btn-warning btn-sm" id="btnUpdateVillage"><i class="fas fa-edit"></i></a></td> -->
               <!-- <td></td> -->
             </tr>
           </table>
-          <input type="number" id="id" name="id" hidden>
+          <input type="text" id="id" name="id" hidden>
         </form>
       </div>
 

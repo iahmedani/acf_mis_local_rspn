@@ -1,15 +1,16 @@
-module.exports.VillageList = function() {
+var uuid = require('uuid/v4');
+module.exports.VillageList = function () {
   ipc.send("getProvince");
-  ipc.on("province", function(evt, province) {
+  ipc.on("province", function (evt, province) {
     $("#ddProvince")
       .children("option:not(:first)")
       .remove();
     prov(province);
   });
-  $("#ddProvince").on("change", function() {
+  $("#ddProvince").on("change", function () {
     var prov = $(this).val();
     ipc.send("getDistrict", prov);
-    ipc.on("district", function(evt, district) {
+    ipc.on("district", function (evt, district) {
       $("#ddDistrict")
         .children("option:not(:first)")
         .remove();
@@ -17,10 +18,10 @@ module.exports.VillageList = function() {
       dist(district);
     });
   });
-  $("#ddDistrict").on("change", function() {
+  $("#ddDistrict").on("change", function () {
     var dist = $(this).val();
     ipc.send("getTehsil", dist);
-    ipc.on("tehsil", function(evt, tehsil) {
+    ipc.on("tehsil", function (evt, tehsil) {
       $("#ddTehsil")
         .children("option:not(:first)")
         .remove();
@@ -28,10 +29,10 @@ module.exports.VillageList = function() {
       teh(tehsil);
     });
   });
-  $("#ddTehsil").on("change", function() {
+  $("#ddTehsil").on("change", function () {
     var tehs = $(this).val();
     ipc.send("getUC", tehs);
-    ipc.on("uc", function(evt, uc) {
+    ipc.on("uc", function (evt, uc) {
       $("#ddUC")
         .children("option:not(:first)")
         .remove();
@@ -40,11 +41,11 @@ module.exports.VillageList = function() {
     });
   });
   var ucForHH;
-  $("#ddUC").on("change", function() {
+  $("#ddUC").on("change", function () {
     var ucs = $(this).val();
     ucForHH = ucs;
     ipc.send("getHealthHouse", ucs);
-    ipc.on("hh", function(evt, hh) {
+    ipc.on("hh", function (evt, hh) {
       $("#ddHealthHouse")
         .children("option:not(:first)")
         .remove();
@@ -82,36 +83,52 @@ module.exports.VillageList = function() {
     });
     // })
   }
+
   function initVillageListGrid() {
-    
+
     _villageList((x, result) => {
       // console.log(result);
       // console.log(result);
       var _supData = {
-        loadData: function(filter) {
-          return $.grep(result._village, function(client) {
+        loadData: function (filter) {
+          return $.grep(result._village, function (client) {
             return (!filter.villageName || client.villageName.indexOf(filter.villageName) > -1) && (!filter.province || client.province == filter.province) && (!filter.district || client.district === filter.district) && (!filter.tehsil || client.tehsil === filter.tehsil) && (!filter.uc || client.uc === filter.uc) && (!filter.site || client.site === filter.site);
             // && (filter.Married === undefined || client.Married === filter.Married);
           });
         },
-  
-        insertItem: function(insertingClient) {
+
+        insertItem: function (insertingClient) {
           // this.clients.push(insertingClient);
         },
-  
-        updateItem: function(updatingClient) {},
-  
-        deleteItem: function(deletingClient) {
+
+        updateItem: function (updatingClient) {},
+
+        deleteItem: function (deletingClient) {
           // var clientIndex = $.inArray(deletingClient, this.clients);
           // this.clients.splice(clientIndex, 1);
         }
       };
       if (!result.province.filter(el => el.id == 0).length > 0) {
-        result.province.unshift({ provinceName: '', id: 0 })
-        result.district.unshift({ districtName: '', id: 0 })
-        result.tehsil.unshift({ tehsilName: '', id: 0 })
-        result.uc.unshift({ ucName: '', id: 0 })
-        result.site.unshift({ siteName: '', id: 0 })
+        result.province.unshift({
+          provinceName: '',
+          id: 0
+        })
+        result.district.unshift({
+          districtName: '',
+          id: 0
+        })
+        result.tehsil.unshift({
+          tehsilName: '',
+          id: 0
+        })
+        result.uc.unshift({
+          ucName: '',
+          id: 0
+        })
+        result.site.unshift({
+          siteName: '',
+          id: 0
+        })
       }
       $("#tblVillageList").jsGrid({
         height: "450px",
@@ -125,8 +142,11 @@ module.exports.VillageList = function() {
         pageSize: 15,
         pageButtonCount: 5,
         controller: _supData,
-        fields: [
-          { name: "id", type: "number", visible: false },
+        fields: [{
+            name: "id",
+            type: "number",
+            visible: false
+          },
           {
             title: "Province",
             name: "province",
@@ -171,7 +191,11 @@ module.exports.VillageList = function() {
             valueField: "id",
             textField: "siteName"
           },
-          { title: "Village Name", name: "villageName", type: "text" },
+          {
+            title: "Village Name",
+            name: "villageName",
+            type: "text"
+          },
           // {
           //   type: "control",
           //   modeSwitchButton: false,
@@ -201,11 +225,11 @@ module.exports.VillageList = function() {
             .remove();
           $("#ddHealthHouse").append(`<option value="${getData.site}" selected>${result.site.filter(el => el.id == getData.site)[0].siteName}</option>`);
           var getData = args.item;
-          
+
           $("#villageName").val(getData.villageName);
-          if(getData.is_deleted){
+          if (getData.is_deleted) {
             $('#is_deleted').prop('checked', true)
-          }else{
+          } else {
             $('#is_deleted').prop('checked', false)
 
           }
@@ -213,9 +237,9 @@ module.exports.VillageList = function() {
           // $("#staff_name").val(item.staff_name);
           $("#id").val(getData.id);
         },
-        rowClass: function(item, itemIndex) {
-          return (item.is_deleted) ? 'bg-red': '';
-      },
+        rowClass: function (item, itemIndex) {
+          return (item.is_deleted) ? 'bg-red' : '';
+        },
       });
     });
   }
@@ -229,10 +253,11 @@ module.exports.VillageList = function() {
     $("#villageForm").validate();
     if ($("#villageForm").valid()) {
       var villData = $("#villageForm").serializeFormJSON();
+      // villData.id = uuid();
       villData.is_deleted = $('#is_deleted').prop('checked');
       // console.log(villData);
       // console.log({
-        // is_deleted: $('#is_deleted').prop('checked')
+      // is_deleted: $('#is_deleted').prop('checked')
       // })
       ipc.send("addVillage", villData);
       ipc.removeAllListeners("addVillage");
