@@ -3,9 +3,11 @@ const {
     app
 } = require('electron');
 
+var regex = /([/./])/g;
+
 module.exports = (knex) => {
     var _version = app.getVersion();
-    _version = parseInt(_version.replace(/./g, ''));
+    _version = parseInt(_version.replace(regex, ''));
     fs.stat(`${process.env.APPDATA}/ACF MIS Local app/.nv`, (err, stat) => {
         if (err) {
             fs.writeFileSync(`${process.env.APPDATA}/ACF MIS Local app/.nv`, _version, 'utf8')
@@ -14,7 +16,8 @@ module.exports = (knex) => {
             var oldV = fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/.nv`, {
                 encoding: 'utf8'
             });
-            oldV = parseInt(oldV.replace(/./g, ''));
+            oldV = parseInt(oldV.replace(regex, ''));
+            console.log(oldV)
 
 
             for (_vold = oldV; _vold <= _version; _vold++) {

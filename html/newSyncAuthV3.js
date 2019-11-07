@@ -320,18 +320,19 @@ module.exports.newSyncAuthV3 = function () {
                         if (_check.length == 0) {
                             await knex(table).insert(datum);
                             elInfo.text(`NMIS updated - ${title}`)
-                        } else if (_check.length == 1 && datum[colName] != _check[0][colName]) {
 
-                            await knex(table).where(id_colmn, datum[id_column]).update(colName, datum[colName]);
-                            elInfo.text(`NMIS updated - ${title}`)
-                            // console.log('getAndUpdateBasicData1')
-                        } else if (datum.isActive != _check[0].isActive) {
-                            await knex(table).where(id_column, datum[id_column]).update('isActive', datum.isActive);
-                            elInfo.text(`NMIS updated - ${title}`)
                         } else if (_check.length == 1 && datum[colName] == _check[0][colName] && datum.isActive == _check[0].isActive) {
                             var _newDatum = datum;
                             delete _newDatum[id_column]
-                            await knex(table).where(id_colmn, datum[id_column]).update(_newDatum);
+                            await knex(table).where(id_column, _check[0][id_column]).update(_newDatum);
+                            elInfo.text(`NMIS updated - ${title}`)
+                        } else if (_check.length == 1 && datum[colName] != _check[0][colName]) {
+
+                            await knex(table).where(id_column, _check[0][id_column]).update(colName, datum[colName]);
+                            elInfo.text(`NMIS updated - ${title}`)
+                            // console.log('getAndUpdateBasicData1')
+                        } else if (datum.isActive != _check[0].isActive) {
+                            await knex(table).where(id_column, _check[0][id_column]).update('isActive', datum.isActive);
                             elInfo.text(`NMIS updated - ${title}`)
                         }
                     } catch (error) {

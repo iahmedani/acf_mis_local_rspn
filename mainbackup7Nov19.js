@@ -1259,14 +1259,19 @@ function creatWindow() {
     width,
     height,
     show: false,
-    // frame: false
+    frame: false
   });
-
+  majorDbUpdate.loadURL(url.format({
+    pathname: path.join(__dirname, '/html/majorDbUpdate.html'),
+    protocol: 'file:',
+    slashes: true,
+  }));
 
   ipcMain.on('major-update-done', () => {
     majorDbUpdate.close();
     mainWindow.maximize();
   })
+
 
   // mainWindow.fullscreen = true;
   fs.stat(`${process.env.APPDATA}/ACF MIS Local app/config.json`, function (err, stat) {
@@ -1274,24 +1279,17 @@ function creatWindow() {
       console.log('File exists');
       mainWindow.once('ready-to-show', () => {
         imran = config = JSON.parse(fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, 'utf8'));
-
-        majorDbUpdate.loadURL(url.format({
-          pathname: path.join(__dirname, '/html/majorDbUpdate.html'),
-          protocol: 'file:',
-          slashes: true,
-        }));
-
         // if (Array.isArray(imran)) {
         //   console.log(imran)
         //   mainWindow.maximize();
         // } else {
-        knex.schema.hasTable('tblUpdateTracker').then(function (exists) {
-          if (!exists) {
-            majorDbUpdate.maximize();
-          } else {
-            mainWindow.maximize();
-          }
-        })
+        //   knex.schema.hasTable('tblUpdateTracker').then(function (exists) {
+        //     if (!exists) {
+        //       majorDbUpdate.maximize();
+        //     } else {
+        mainWindow.maximize();
+        //     }
+        //   })
 
         // }
 
