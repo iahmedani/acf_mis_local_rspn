@@ -304,8 +304,8 @@ module.exports.initGrid = function () {
   }
 
   let samTotalCheck = () => {
-    var samTotalB = parseInt($('#total_sam_boys').val()) + parseInt($('#total_comp_boys').val())
-    var samTotalG = parseInt($('#total_sam_girls').val()) + parseInt($('#total_comp_girls').val())
+    var samTotalB = parseInt($('#total_sam_boys').val()) + parseInt($('#total_comp_boys').val()) + parseInt($('#plus12_oedema_boys').val()) + parseInt($('#plus3_oedema_boys').val())
+    var samTotalG = parseInt($('#total_sam_girls').val()) + parseInt($('#total_comp_girls').val()) + parseInt($('#plus12_oedema_girls').val()) + parseInt($('#plus3_oedema_girls').val())
     var mamTotalB = parseInt($('#total_mam_boys').val())
     var mamTotalG = parseInt($('#total_mam_girls').val())
 
@@ -315,9 +315,13 @@ module.exports.initGrid = function () {
       if ($(".s_sam_g").length - 1 == i) {
         if (s_sam_g != samTotalG) {
           $(".s_sam_g").addClass('highlightInput');
+          $("#plus12_oedema_girls").addClass('highlightInput');
+          $("#plus3_oedema_girls").addClass('highlightInput');
           // alert('Value not allowed')
         } else {
           $(".s_sam_g").removeClass('highlightInput');
+          $("#plus12_oedema_girls").removeClass('highlightInput');
+          $("#plus3_oedema_girls").removeClass('highlightInput');
         }
       }
     })
@@ -328,9 +332,13 @@ module.exports.initGrid = function () {
       if ($(".s_sam_b").length - 1 == i) {
         if (s_sam_b != samTotalB) {
           $(".s_sam_b").addClass('highlightInput');
+          $("#plus12_oedema_boys").addClass('highlightInput');
+          $("#plus3_oedema_boys").addClass('highlightInput');
           // alert('Value not allowed')
         } else {
           $(".s_sam_b").removeClass('highlightInput');
+          $("#plus12_oedema_boys").addClass('highlightInput');
+          $("#plus3_oedema_boys").addClass('highlightInput');
         }
       }
     })
