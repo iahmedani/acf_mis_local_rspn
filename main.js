@@ -1259,7 +1259,7 @@ function creatWindow() {
     width,
     height,
     show: false,
-    // frame: false
+    frame: false
   });
   majorDbUpdate.loadURL(url.format({
     pathname: path.join(__dirname, '/html/majorDbUpdate.html'),
