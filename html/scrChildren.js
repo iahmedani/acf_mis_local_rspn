@@ -334,31 +334,31 @@ module.exports.initGrid = function () {
         }
       }
     })
-    var s_mam_g = 0
-    $('.s_mam_g').each(function (i, el) {
-      s_mam_g = s_mam_g + ($(el).val() ? parseInt($(el).val()) : 0);
-      if ($(".s_mam_g").length - 1 == i) {
-        if (s_mam_g != mamTotalG) {
-          $(".s_mam_g").addClass('highlightInput');
-          // alert('Value not allowed')
-        } else {
-          $(".s_mam_g").removeClass('highlightInput');
-        }
-      }
-    })
+    // var s_mam_g = 0
+    // $('.s_mam_g').each(function (i, el) {
+    //   s_mam_g = s_mam_g + ($(el).val() ? parseInt($(el).val()) : 0);
+    //   if ($(".s_mam_g").length - 1 == i) {
+    //     if (s_mam_g != mamTotalG) {
+    //       $(".s_mam_g").addClass('highlightInput');
+    //       // alert('Value not allowed')
+    //     } else {
+    //       $(".s_mam_g").removeClass('highlightInput');
+    //     }
+    //   }
+    // })
 
-    var s_mam_b = 0
-    $('.s_mam_b').each(function (i, el) {
-      s_mam_b = s_mam_b + ($(el).val() ? parseInt($(el).val()) : 0);
-      if ($(".s_mam_b").length - 1 == i) {
-        if (s_mam_b != mamTotalB) {
-          $(".s_mam_b").addClass('highlightInput');
-          // alert('Value not allowed')
-        } else {
-          $(".s_mam_b").removeClass('highlightInput');
-        }
-      }
-    })
+    // var s_mam_b = 0
+    // $('.s_mam_b').each(function (i, el) {
+    //   s_mam_b = s_mam_b + ($(el).val() ? parseInt($(el).val()) : 0);
+    //   if ($(".s_mam_b").length - 1 == i) {
+    //     if (s_mam_b != mamTotalB) {
+    //       $(".s_mam_b").addClass('highlightInput');
+    //       // alert('Value not allowed')
+    //     } else {
+    //       $(".s_mam_b").removeClass('highlightInput');
+    //     }
+    //   }
+    // })
 
 
 

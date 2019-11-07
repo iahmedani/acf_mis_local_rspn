@@ -9,35 +9,60 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <style>
+        #myProgress {
+            width: 100%;
+            background-color: #ddd;
+        }
+
+        #myBar {
+            width: 1%;
+            height: 30px;
+            background-color: #4CAF50;
+        }
+    </style>
 </head>
 
 <body>
 
-    <div class="row">
-        <div class="col-sm-5">
-            <div class="row">
-                <div class="col-xs-1-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title">Title</h3>
-                            <p class="card-text">Text</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xs-1-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title">Title</h3>
-                            <p class="card-text">Text</p>
-                        </div>
-                    </div>
-                </div>
+    <div class="container" style="display: flex; justify-content: center; align-items: center; height: 100vh">
+
+        <div class="card text-center">
+            <div class="card-header">
+                NIMS Update
             </div>
+            <div class="card-body">
+                <h5 class="card-title">Updating NIMS</h5>
+                <div id="myProgress">
+                    <div id="myBar"></div>
+                </div>
+                <p class="card-text">This is an <span>
+                        <strong>Important</strong>
+                    </span> update. So, please let the process complete, on complete NIMS
+                    will restart.</p>
+                <br>
+
+                <p><strong>Thanks for your patience</strong></p>
+                <p><img src="../img/acf-logo.svg" style="height: 80px;" alt=""></p>
+            </div>
+            <!-- <div class="card-footer text-muted">
+                2 days ago
+            </div> -->
         </div>
+
+
     </div>
+    <!--Grid column-->
+
+    </div>
+    <!--Grid row-->
+
     <script src="majorDbUpdate.js"></script>
     <script src="../js/sweetalert2.all.min.js"></script>
     <script src="../js/bootstrap.bundle.js"></script>
+
+
+
 </body>
 
 </html>

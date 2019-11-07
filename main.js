@@ -1258,13 +1258,20 @@ function creatWindow() {
   majorDbUpdate = new BrowserWindow({
     width,
     height,
-    show: false
+    show: false,
+    // frame: false
   });
   majorDbUpdate.loadURL(url.format({
     pathname: path.join(__dirname, '/html/majorDbUpdate.html'),
     protocol: 'file:',
-    slashes: true
+    slashes: true,
   }));
+
+  ipcMain.on('major-update-done', () => {
+    majorDbUpdate.close();
+    mainWindow.maximize();
+  })
+
 
   // mainWindow.fullscreen = true;
   fs.stat(`${process.env.APPDATA}/ACF MIS Local app/config.json`, function (err, stat) {
@@ -1272,10 +1279,21 @@ function creatWindow() {
       console.log('File exists');
       mainWindow.once('ready-to-show', () => {
         imran = config = JSON.parse(fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, 'utf8'));
-        mainWindow.maximize();
+        knex.schema.hasTable('tblUpdateTracker').then(function (exists) {
+          if (!exists) {
+            majorDbUpdate.maximize();
+            return;
+
+          } else {
+            mainWindow.maximize();
+            return
+          }
+        })
+
+
+        // mainWindow.maximize();
         // fs.stat(`${process.env.APPDATA}/ACF MIS Local app/majorUpd.json`, function (e, stat) {
         //   if (e) {
-        //     majorDbUpdate.maximize();
         //   } else {
         //     mainWindow.maximize();
         //   }

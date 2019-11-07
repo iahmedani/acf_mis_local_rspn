@@ -88,33 +88,31 @@ exports.up = function (knex, Promise) {
         [isActive] BOOLEAN DEFAULT 1);`
     )
     .raw(
-      `CREATE TABLE [main].[tblInterimOtp](
-        [interim_id] char(36), 
-        [interim_id_old] integer, 
-        [otp_id_old] integer, 
-        [otp_id] char(36), 
-        [client_id] varchar(255), 
-        [muac] integer, 
-        [weight] integer, 
-        [height] integer, 
-        [ration1] varchar(255), 
-        [quantity1] integer, 
-        [ration2] varchar(255), 
-        [quantity2] integer, 
-        [ration3] varchar(255), 
-        [quantity3] integer, 
-        [int_prog_type] varchar(255), 
-        [curr_date] date, 
-        [status] varchar(255), 
-        [next_followup] date, 
-        [created_at] datetime, 
-        [updated_at] datetime, 
-        [is_deleted] INT(1) NOT NULL DEFAULT 0, 
-        [other_com_name] VARCHAR(20), 
-        [other_com_qty] DECIMAL DEFAULT 0);`
+      `CREATE TABLE [tblInterimOtp](
+       [interim_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+       [otp_id] integer, 
+       [client_id] varchar(255), 
+       [muac] integer, 
+       [weight] integer, 
+       [height] integer, 
+       [ration1] varchar(255), 
+       [quantity1] integer, 
+       [ration2] varchar(255), 
+       [quantity2] integer, 
+       [ration3] varchar(255), 
+       [quantity3] integer, 
+       [int_prog_type] varchar(255), 
+       [curr_date] date, 
+       [status] varchar(255), 
+       [next_followup] date, 
+       [created_at] datetime, 
+       [updated_at] datetime, 
+       [is_deleted] INT(1) NOT NULL DEFAULT 0, 
+       [other_com_name] VARCHAR(20), 
+       [other_com_qty] DECIMAL DEFAULT 0);`
     )
     .raw(
-      `CREATE TABLE [main].[tblLhw](
+      `CREATE TABLE [tblLhw](
         [site] INT, 
         [uc] INT NOT NULL, 
         [tehsil] INT NOT NULL, 
@@ -122,8 +120,7 @@ exports.up = function (knex, Promise) {
         [staff_name] VARCHAR(50) NOT NULL, 
         [staff_code] VARCHAR(10) NOT NULL UNIQUE, 
         [province] INT NOT NULL, 
-        [id_old] INTEGER, 
-        [id] char(36), 
+        [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
         [client_id] VARCHAR NOT NULL, 
         [upload_status] INT NOT NULL DEFAULT 0, 
         [created_at] DATE, 
@@ -132,9 +129,8 @@ exports.up = function (knex, Promise) {
       `
     )
     .raw(
-      `CREATE TABLE [main].[tblOtpAdd](
-        [otp_id] char(36), 
-        [otp_id_old] integer, 
+      `CREATE TABLE [tblOtpAdd](
+        [otp_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
         [client_id] varchar(255), 
         [site_id] integer, 
         [site_village] varchar(255), 
@@ -185,15 +181,14 @@ exports.up = function (knex, Promise) {
         [tehsil_id] INTEGER, 
         [nsc_otp_id] VARCHAR, 
         [upload_date] DATE, 
-        [hh_id] VARCHAR(20));                 
+        [hh_id] VARCHAR(20), 
+        UNIQUE([reg_id]));                 
       `
     )
     .raw(
-      `CREATE TABLE [main].[tblOtpExit](
-        [exit_id_old] integer, 
-        [exit_id] char(36), 
-        [otp_id_old] integer, 
-        [otp_id] char(36), 
+      `CREATE TABLE [tblOtpExit](
+        [exit_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+        [otp_id] integer REFERENCES [tblOtpAdd]([otp_id]) ON DELETE RESTRICT ON UPDATE NO ACTION, 
         [client_id] varchar(255), 
         [exit_muac] FLOAT, 
         [exit_weight] FLOAT, 
@@ -216,14 +211,13 @@ exports.up = function (knex, Promise) {
         [exit_other_com_name] VARCHAR(20), 
         [exit_other_com_qty] FLOAT DEFAULT 0, 
         [upload_date] DATE);
+      
       `
     )
     .raw(
-      `CREATE TABLE [main].[tblOtpFollowup](
-        [followup_id] char(36), 
-        [followup_id_old] integer, 
-        [otp_id_old] integer, 
-        [otp_id] char(36), 
+      `CREATE TABLE [tblOtpFollowup](
+        [followup_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
+        [otp_id] integer, 
         [client_id] varchar(255), 
         [weight] DECIMAL, 
         [height] DECIMAL, 
@@ -247,9 +241,8 @@ exports.up = function (knex, Promise) {
         [upload_date] DATE);`
     )
     .raw(
-      `CREATE TABLE [main].[tblScrChildren](
-        [ch_scr_id_old] INTEGER, 
-        [ch_scr_id] char(36), 
+      `CREATE TABLE [tblScrChildren](
+        [ch_scr_id] INTEGER PRIMARY KEY AUTOINCREMENT, 
         [site_id] INTEGER, 
         [screening_date] DATE, 
         [created_at] DATE, 
@@ -338,9 +331,8 @@ exports.up = function (knex, Promise) {
       `
     )
     .raw(
-      `CREATE TABLE [main].[tblScrPlw](
-        [plw_scr_id_old] INTEGER, 
-        [plw_scr_id] char(36), 
+      `CREATE TABLE [tblScrPlw](
+        [plw_scr_id] INTEGER PRIMARY KEY AUTOINCREMENT, 
         [site_id] INTEGER, 
         [screening_date] DATE, 
         [created_at] DATE, 
@@ -377,7 +369,7 @@ exports.up = function (knex, Promise) {
         [catchment_population] INTEGER, 
         [total_hh], 
         [total_followup] INTEGER DEFAULT 0, 
-        [total_exits] INTEGER DEFAULT 0);     
+        [total_exits] INTEGER DEFAULT 0);      
       `
     )
     .raw(
@@ -413,9 +405,8 @@ exports.up = function (knex, Promise) {
        [upload_status] INT NOT NULL DEFAULT 0);`
     )
     .raw(
-      `CREATE TABLE [main].[tblSessions](
-        [session_id] char(36), 
-        [session_id_old] integer , 
+      `CREATE TABLE [tblSessions](
+        [session_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
         [site_id] integer, 
         [client_id] varchar(255), 
         [session_date] date, 
@@ -446,9 +437,8 @@ exports.up = function (knex, Promise) {
       `
     )
     .raw(
-      `CREATE TABLE [main].[tblSiteStock](
-        [stock_out_id_old] integer , 
-        [stock_out_id] char(36), 
+      `CREATE TABLE [tblSiteStock](
+        [stock_out_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
         [program_type] varchar(10), 
         [item_id] integer, 
         [item_name] VARCHAR(50), 
@@ -470,9 +460,8 @@ exports.up = function (knex, Promise) {
       `
     )
     .raw(
-      `CREATE TABLE [main].[tblStock](
-        [id] char(36), 
-        [id_old] integer, 
+      `CREATE TABLE [tblStock](
+        [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
         [dn_number] VARCHAR, 
         [dn_date] DATE, 
         [item_name] VARCHAR, 
@@ -485,7 +474,7 @@ exports.up = function (knex, Promise) {
         [lost_and_damage] DECIMAL NOT NULL DEFAULT 0, 
         [expiry_date] DATE, 
         [client_id] VARCHAR, 
-        [upload_status] INTEGER DEFAULT 0, 
+        [upload_status] INTEGER DEFAULT 0,
         [upload_date] DATE);`
     )
     .raw(
@@ -501,9 +490,8 @@ exports.up = function (knex, Promise) {
               [upload_status] INT DEFAULT 0);`
     )
     .raw(
-      `CREATE TABLE [main].[tblStokDistv2](
-        [dist_id_old] integer, 
-        [dist_id] char(36), 
+      `CREATE TABLE [tblStokDistv2](
+        [dist_id] integer PRIMARY KEY AUTOINCREMENT NOT NULL, 
         [program_type] varchar(10), 
         [item_name] varchar(50) NOT NULL, 
         [item_id] integer NOT NULL, 
@@ -525,13 +513,13 @@ exports.up = function (knex, Promise) {
         [dist_month] VARCHAR, 
         [province_id] INTEGER, 
         [uc_id] INTEGER, 
-        [client_id] VARCHAR, 
+        [client_id] VARCHAR,
         [upload_date] DATE);
 
       `
     )
     .raw(
-      `CREATE TABLE [main].[tblSupervisors](
+      `CREATE TABLE [tblSupervisors](
         [site] INT, 
         [uc] INT NOT NULL, 
         [tehsil] INT NOT NULL, 
@@ -539,8 +527,7 @@ exports.up = function (knex, Promise) {
         [sup_name] varchar(50) NOT NULL, 
         [sup_code] VARCHAR(10) NOT NULL UNIQUE, 
         [province] INT NOT NULL, 
-        [id_old] INTEGER, 
-        [id] char(36), 
+        [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
         [client_id] VARCHAR NOT NULL, 
         [upload_status] VARCHAR NOT NULL DEFAULT 0, 
         [created_at] DATE NOT NULL, 
@@ -558,15 +545,14 @@ exports.up = function (knex, Promise) {
        [updated_at] datetime);`
     )
     .raw(
-      `CREATE TABLE [main].[tblVillages](
+      `CREATE TABLE [tblVillages](
         [site] INT NOT NULL, 
         [uc] INT NOT NULL, 
         [tehsil] INT NOT NULL, 
         [district] INT NOT NULL, 
         [villageName] VARCHAR(50) NOT NULL, 
         [province] INT NOT NULL, 
-        [id_old] INTEGER, 
-        [id] char(36), 
+        [id] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
         [client_id] VARCHAR NOT NULL, 
         [upload_status] INT NOT NULL DEFAULT 0, 
         [created_at] DATE, 
@@ -1972,16 +1958,11 @@ FROM   [main].[v_geo]
                                INNER JOIN [main].[v_geo_tehsil] ON [main].[tblOtpAdd].[tehsil_id] = [main].[v_geo_tehsil].[tehsil_id]
                         WHERE  [tblOtpExit].[is_deleted] = 0
                                  AND [tblOtpAdd].[prog_type] = 'sc';
-                        `).raw(`CREATE TABLE tblUpdateTracker(
-                          tableName varchar(100), 
-                          old_id varchar(100), 
-                          new_id varchar(100), 
-                          backup_name varchar(100));`)
+                        `)
 };
 
 exports.down = function (knex, Promise) {
   return knex.schema
-    .dropTable("tblUpdateTracker")
     .raw(`drop view v_otpExitFullForUpdateNSC`)
     .raw(`drop view v_otpAddmision2`)
     .raw(`drop view v_nsc_remaining_geo`)
