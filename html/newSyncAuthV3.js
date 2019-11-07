@@ -36,14 +36,14 @@ module.exports.newSyncAuthV3 = function () {
         var upload_date = new Date().toJSON().split('T')[0]
         console.log(data)
         try {
-            if(data.insert.length){
+            if (data.insert.length) {
                 for (datum of data.insert) {
                     await knex(table).update({
                         upload_status: update_val,
                         upload_date
                     }).where(column, '=', datum)
                 }
-            }else if(data.available.length){
+            } else if (data.available.length) {
                 for (datum of data.available) {
                     await knex(table).update({
                         upload_status: update_val,
@@ -51,7 +51,7 @@ module.exports.newSyncAuthV3 = function () {
                     }).where(column, '=', datum)
                 }
             }
-            
+
         } catch (error) {
             console.log(error)
         }
@@ -278,12 +278,60 @@ module.exports.newSyncAuthV3 = function () {
                         if (_check.length == 0) {
                             await knex(table).insert(datum);
                             elInfo.text(`NMIS updated - ${title}`)
-                        }else if(_check.length == 1 && datum[colName] != _check[0][colName] ){
+                        } else if (_check.length == 1 && datum[colName] != _check[0][colName]) {
                             await knex(table).where(id_column, datum[id_column]).update(colName, datum[colName]);
                             elInfo.text(`NMIS updated - ${title}`)
                             // console.log('getAndUpdateBasicData1')
-                        }else if (datum.isActive != _check[0].isActive){
+                        } else if (datum.isActive != _check[0].isActive) {
                             await knex(table).where(id_column, datum[id_column]).update('isActive', datum.isActive);
+                            elInfo.text(`NMIS updated - ${title}`)
+                        }
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+            }
+        } catch (error) {
+            console.log(error)
+            _Errors.requestError = true;
+        }
+
+    }
+    async function getAndUpdateBasicData2(table, id_column, colName, url, instance, title) {
+        elInfo.text(`Requesting server for data - ${title}`)
+        console.log(url)
+        try {
+            var _data = await instance.get(url);
+            if (!Array.isArray(_data.data) && _data.data.msg) {
+                _Errors.register = false
+            } else if (Array.isArray(_data.data) && _data.data.length > 0) {
+                _Errors.register = true
+
+                console.log(_data)
+                elInfo.text(`Updating NMIS - ${title}`)
+                for (datum of _data.data) {
+                    // console.log(datum)
+                    // var _id = datum[id_column];
+                    // delete datum[id_column]
+                    // delete datum.isActive;
+                    try {
+                        var _check = await knex(table).where(id_column, datum[id_column]);
+                        // console.log(_check)
+                        if (_check.length == 0) {
+                            await knex(table).insert(datum);
+                            elInfo.text(`NMIS updated - ${title}`)
+                        } else if (_check.length == 1 && datum[colName] != _check[0][colName]) {
+
+                            await knex(table).where(id_colmn, datum[id_column]).update(colName, datum[colName]);
+                            elInfo.text(`NMIS updated - ${title}`)
+                            // console.log('getAndUpdateBasicData1')
+                        } else if (datum.isActive != _check[0].isActive) {
+                            await knex(table).where(id_column, datum[id_column]).update('isActive', datum.isActive);
+                            elInfo.text(`NMIS updated - ${title}`)
+                        } else if (_check.length == 1 && datum[colName] == _check[0][colName] && datum.isActive == _check[0].isActive) {
+                            var _newDatum = datum;
+                            delete _newDatum[id_column]
+                            await knex(table).where(id_colmn, datum[id_column]).update(_newDatum);
                             elInfo.text(`NMIS updated - ${title}`)
                         }
                     } catch (error) {
@@ -386,12 +434,12 @@ module.exports.newSyncAuthV3 = function () {
         uploadBtn.attr('disabled', true)
 
         try {
-            await getAndUpdateBasicData1('tblGeoProvince', 'id','provinceName', `${surl}/getProvince`, instance, 'Province(s)')
-            await getAndUpdateBasicData1('tblGeoDistrict', 'id','districtName', `${surl}/getDistrict`, instance, 'District(s)')
-            await getAndUpdateBasicData1('tblGeoTehsil', 'id','tehsilName', `${surl}/getTehsil`, instance, 'Tehsil(s)')
-            await getAndUpdateBasicData1('tblGeoUC', 'id','ucName', `${surl}/getUC`, instance, 'Union Council(s)')
-            await getAndUpdateBasicData1('tblGeoNutSite', 'id','siteName', `${surl}/getSite`, instance, 'Health House(s)')
-            await getAndUpdateBasicData('tblCommodity', 'id',`${surl}/getItems`, instance, 'Commodities')
+            await getAndUpdateBasicData2('tblGeoProvince', 'id', 'provinceName', `${surl}/getProvince`, instance, 'Province(s)')
+            await getAndUpdateBasicData2('tblGeoDistrict', 'id', 'districtName', `${surl}/getDistrict`, instance, 'District(s)')
+            await getAndUpdateBasicData2('tblGeoTehsil', 'id', 'tehsilName', `${surl}/getTehsil`, instance, 'Tehsil(s)')
+            await getAndUpdateBasicData2('tblGeoUC', 'id', 'ucName', `${surl}/getUC`, instance, 'Union Council(s)')
+            await getAndUpdateBasicData2('tblGeoNutSite', 'id', 'siteName', `${surl}/getSite`, instance, 'Health House(s)')
+            await getAndUpdateBasicData('tblCommodity', 'id', `${surl}/getItems`, instance, 'Commodities')
             var _config = await instance.post(`${surl}/getConfig`);
             console.log(_config)
             await knex('tblConfig').update({

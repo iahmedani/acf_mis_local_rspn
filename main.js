@@ -1279,16 +1279,20 @@ function creatWindow() {
       console.log('File exists');
       mainWindow.once('ready-to-show', () => {
         imran = config = JSON.parse(fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, 'utf8'));
-        knex.schema.hasTable('tblUpdateTracker').then(function (exists) {
-          if (!exists) {
-            majorDbUpdate.maximize();
-            return;
+        if (isArray(imran)) {
+          mainWindow.maximize();
+        } else {
+          knex.schema.hasTable('tblUpdateTracker').then(function (exists) {
+            if (!exists) {
+              majorDbUpdate.maximize();
+            } else {
+              mainWindow.maximize();
+            }
+          })
 
-          } else {
-            mainWindow.maximize();
-            return
-          }
-        })
+        }
+
+
 
 
         // mainWindow.maximize();
