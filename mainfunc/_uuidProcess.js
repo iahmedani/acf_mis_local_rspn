@@ -247,6 +247,7 @@ async function updateUpdateTracker(tN, _old, _new) {
             new_id: _new,
             backup_name: backup_name
         })
+        // await knex.raw(``)
         console.log('Backup Done')
     } catch (error) {
         console.log(error)

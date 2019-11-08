@@ -1264,8 +1264,11 @@ function creatWindow() {
 
 
   ipcMain.on('major-update-done', () => {
-    majorDbUpdate.close();
-    mainWindow.maximize();
+    console.log('This was called - Major-update-done')
+    app.exit();
+    app.relaunch();
+    // majorDbUpdate.close();
+    // mainWindow.maximize();
   })
 
   // mainWindow.fullscreen = true;
@@ -1290,6 +1293,7 @@ function creatWindow() {
             majorDbUpdate.maximize();
           } else {
             mainWindow.maximize();
+
           }
         })
 

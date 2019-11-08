@@ -11,8 +11,7 @@ module.exports = (knex) => {
     fs.stat(`${process.env.APPDATA}/ACF MIS Local app/.nv`, (err, stat) => {
         if (err) {
             fs.writeFileSync(`${process.env.APPDATA}/ACF MIS Local app/.nv`, _version, 'utf8')
-        }
-        if (stat) {
+        } else if (stat) {
             var oldV = fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/.nv`, {
                 encoding: 'utf8'
             });
@@ -21,6 +20,7 @@ module.exports = (knex) => {
 
 
             for (_vold = oldV; _vold <= _version; _vold++) {
+                console.log(_vold)
                 if (_vold == 1514) {
                     knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
                         .then(r => {
@@ -784,348 +784,353 @@ module.exports = (knex) => {
                         .catch(e => {
                             console.log(e)
                         })
-                } else if (_vold > 1538 && _vold <= 1542) {
-                    knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                        .then(r => {
-                            return knex.raw(`DROP VIEW IF EXISTS [main].[v_geo_lhw];`)
-                        }).then(r => {
-                            return knex.raw(`CREATE VIEW [v_geo_lhw]
+                } else if (_vold > 1538 && _vold <= 1541) {
+                    knex.schema.hasTable('tblUpdateTracker').then(function (exists) {
+                        if (exists) {
+                            knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                                .then(r => {
+                                    return knex.raw(`DROP VIEW IF EXISTS [main].[v_geo_lhw];`)
+                                }).then(r => {
+                                    return knex.raw(`CREATE VIEW [v_geo_lhw]
+                                        AS
+                                        SELECT 
+                                               [v_geo_uc].*, 
+                                               [main].[tblLhw].[staff_name], 
+                                               [main].[tblLhw].[staff_code]
+                                        FROM   [main].[v_geo_uc]
+                                               INNER JOIN [main].[tblLhw] ON [main].[tblLhw].[uc] = [main].[v_geo_uc].[uc_id];`)
+                                }).then(r => {
+                                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`DROP VIEW IF EXISTS [main].[vSessionsFullForUpdate];`)
+                                }).then(r => {
+                                    return knex.raw(`CREATE VIEW [main].[vSessionsFullForUpdate]
                                     AS
                                     SELECT 
-                                           [v_geo_uc].*, 
-                                           [main].[tblLhw].[staff_name], 
-                                           [main].[tblLhw].[staff_code]
-                                    FROM   [main].[v_geo_uc]
-                                           INNER JOIN [main].[tblLhw] ON [main].[tblLhw].[uc] = [main].[v_geo_uc].[uc_id];`)
-                        }).then(r => {
-                            return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`DROP VIEW IF EXISTS [main].[vSessionsFullForUpdate];`)
-                        }).then(r => {
-                            return knex.raw(`CREATE VIEW [main].[vSessionsFullForUpdate]
-                                AS
-                                SELECT 
-                                       [main].[v_geo].[province], 
-                                       [main].[v_geo].[province_id], 
-                                       [main].[v_geo].[district_id], 
-                                       [main].[v_geo].[district_name], 
-                                       [main].[v_geo].[tehsil_id], 
-                                       [main].[v_geo].[tehsil_name], 
-                                       [main].[v_geo].[uc_name], 
-                                       [main].[v_geo].[site_name] as site_name, 
-                                       [tblSessions].*
-                                FROM   [main].[tblSessions]
-                                       INNER JOIN [main].[v_geo] ON ([main].[v_geo].[site_id] = [main].[tblSessions].[site_id])
-                                WHERE  [tblsessions].[is_deleted] = 0
-                                UNION ALL
-                                SELECT 
-                                       [main].[v_geo_lhw].[province], 
-                                       [main].[v_geo_lhw].[province_id], 
-                                       [main].[v_geo_lhw].[district_id], 
-                                       [main].[v_geo_lhw].[district_name], 
-                                       [main].[v_geo_lhw].[tehsil_id], 
-                                       [main].[v_geo_lhw].[tehsil_name], 
-                                       [main].[v_geo_lhw].[uc_name],
-                                       '' as site_name, 
-                                       [tblSessions].*
-                                FROM   [main].[tblSessions]
-                                       INNER JOIN [main].[v_geo_lhw] ON ([main].[v_geo_lhw].[uc_id] = [main].[tblSessions].[uc_id]
-                                            AND [main].[tblSessions].[CHW_id] = [main].[v_geo_lhw].[staff_code])
-                                WHERE  [tblsessions].[is_deleted] = 0;
-                                `)
-                        }).then(r => {
-                            return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            console.log('created new view for sessions to correct report and entry')
-                            return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`DROP VIEW IF EXISTS [main].[v_exitNSCReport];`)
-                        }).then(r => {
-                            return knex.raw(`CREATE VIEW [v_exitNSCReport]
-                                AS
-                                SELECT 
-                                       [main].[tblOtpExit].[exit_id], 
-                                       [main].[tblOtpAdd].[otp_id], 
-                                       [main].[tblOtpAdd].[tehsil_id], 
-                                       [main].[tblOtpAdd].[age], 
-                                       [main].[tblOtpAdd].[gender], 
-                                       [main].[tblOtpAdd].[prog_type], 
-                                       [main].[tblOtpExit].[exit_reason], 
-                                       [main].[tblOtpExit].[exit_date]
-                                FROM   [main].[tblOtpAdd]
-                                       INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
-                                WHERE  [main].[tblOtpAdd].[prog_type] = 'sc'
-                                         AND [main].[tblOtpAdd].[is_deleted] = 0
-                                         AND [main].[tblOtpExit].[is_deleted] = 0;`)
-                        }).then(r => {
-                            return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`DROP VIEW IF EXISTS [main].[v_geo_tehsil];`)
-                        }).then(r => {
-                            return knex.raw(`CREATE VIEW [v_geo_tehsil]
-                                AS
-                                SELECT 
-                                       [main].[tblGeoProvince].[provinceName] AS [province_name], 
-                                       [main].[tblGeoDistrict].[province_id], 
-                                       [main].[tblGeoDistrict].[districtName] AS [district_name], 
-                                       [main].[tblGeoTehsil].[district_id], 
-                                       [main].[tblGeoTehsil].[tehsilName] AS [tehsil_name], 
-                                       [main].[tblGeoTehsil].[id] AS [tehsil_id]
-                                FROM   [main].[tblGeoProvince]
-                                       INNER JOIN [main].[tblGeoDistrict] ON [main].[tblGeoProvince].[id] = [main].[tblGeoDistrict].[province_id]
-                                       INNER JOIN [main].[tblGeoTehsil] ON [main].[tblGeoDistrict].[id] = [main].[tblGeoTehsil].[district_id]
-                                WHERE  [main].[tblGeoProvince].[isActive] = 1
-                                         AND [main].[tblGeoDistrict].[isActive] = 1
-                                         AND [main].[tblGeoTehsil].[isActive] = 1;`)
-                        }).then(r => {
-                            return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`DROP VIEW IF EXISTS [main].[v_exitNSCReportInterval];`)
-                        }).then(r => {
-                            return knex.raw(`CREATE VIEW [v_exitNSCReportInterval]
-                                AS
-                                SELECT 
-                                       [vnc].*, 
-                                       [vg].[province_id], 
-                                       [vg].[district_id]
-                                FROM   [v_exitNSCReport] [vnc]
-                                       INNER JOIN [v_geo_tehsil] [vg] ON [vnc].[tehsil_id] = [vg].[tehsil_id];`)
-                        }).then(r => {
-                            return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`DROP VIEW IF EXISTS [main].[v_NSCAdd_yearmonth];`)
-                        }).then(r => {
-                            return knex.raw(`CREATE VIEW [v_NSCAdd_yearmonth]
-                                AS
-                                SELECT 
-                                       [tehsil_id], 
-                                       STRFTIME ('%Y-%m', [reg_date]) AS [Year_month], 
-                                       (CASE WHEN [age] < 7 THEN '06' WHEN [age] > 6
-                                         AND [age] < 24 THEN '623' WHEN [age] > 23 THEN '2459' END) AS [age_group], 
-                                       [gender], 
-                                       COUNT ([otp_id]) AS [tAdd]
-                                FROM   [tblOtpAdd]
-                                WHERE  [is_deleted] = 0 AND [prog_type] = 'sc'
-                                GROUP  BY
-                                          [tehsil_id], 
-                                          [Year_month], 
-                                          [age_group], 
-                                          [gender];`)
-                        }).then(r => {
-                            return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`DROP VIEW IF EXISTS [main].[v_nscExit_full];`)
-                        }).then(r => {
-                            return knex.raw(`CREATE VIEW [v_nscExit_full]
-                                AS
-                                SELECT 
-                                       [main].[v_geo_tehsil].[province_id], 
-                                       [main].[v_geo_tehsil].[province_name] AS [province], 
-                                       [main].[v_geo_tehsil].[district_id], 
-                                       [main].[v_geo_tehsil].[district_name], 
-                                       [main].[v_geo_tehsil].[tehsil_id], 
-                                       [main].[v_geo_tehsil].[tehsil_name], 
-                                       [main].[tblOtpAdd].[address], 
-                                       [main].[tblOtpExit].[exit_date], 
-                                       [main].[tblOtpExit].[exit_reason], 
-                                       [main].[tblOtpAdd].[p_name], 
-                                       [main].[tblOtpAdd].[f_or_h_name], 
-                                       [main].[tblOtpAdd].[gender], 
-                                       [main].[tblOtpAdd].[reg_id], 
-                                       [main].[tblOtpAdd].[reg_date]
-                                FROM   [main].[v_geo_tehsil]
-                                       INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo_tehsil].[tehsil_id] = [main].[tblOtpAdd].[tehsil_id]
-                                       INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
-                                WHERE  [main].[tblOtpExit].[is_deleted] = 0
-                                         AND [main].[tblOtpAdd].[is_deleted] = 0  AND [main].[tblOtpAdd].[prog_type] = 'sc';`)
-                        }).then(r => {
-                            return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`DROP VIEW IF EXISTS [main].[v_NSCExit_yearmonth];`)
-                        }).then(r => {
-                            return knex.raw(`CREATE VIEW [v_NSCExit_yearmonth]
-                                AS
-                                SELECT 
-                                       [main].[tblOtpAdd].[tehsil_id], 
-                                       STRFTIME ('%Y-%m', [main].[tblOtpExit].[exit_date]) AS [Year_month], 
-                                       (CASE WHEN [age] < 7 THEN '06' WHEN [age] > 6
-                                         AND [age] < 24 THEN '623' WHEN [age] > 23 THEN '2459' END) AS [age_group], 
-                                       [main].[tblOtpAdd].[gender], 
-                                       COUNT ([main].[tblOtpExit].[exit_id]) AS [tExit]
-                                FROM   [main].[tblOtpExit]
-                                       INNER JOIN [main].[tblOtpAdd] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
-                                WHERE  [main].[tblOtpAdd].[is_deleted] = 0
-                                         AND [main].[tblOtpExit].[is_deleted] = 0
-                                         AND [main].[tblOtpAdd].[prog_type] = 'sc'
-                                GROUP  BY
-                                          [main].[tblOtpAdd].[tehsil_id], 
-                                          [Year_month], 
-                                          [age_group], 
-                                          [main].[tblOtpAdd].[gender];
-                                `)
-                        }).then(r => {
-                            return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`DROP VIEW IF EXISTS [main].[v_nsc_remaining];`)
-                        }).then(r => {
-                            return knex.raw(`CREATE VIEW [v_nsc_remaining]
-                                AS
-                                SELECT 
-                                       [main].[v_NSCAdd_yearmonth].[tehsil_id], 
-                                       [main].[v_NSCAdd_yearmonth].[Year_month], 
-                                       [main].[v_NSCAdd_yearmonth].[age_group], 
-                                       [main].[v_NSCAdd_yearmonth].[gender], 
-                                       SUM ([main].[v_NSCAdd_yearmonth].[tAdd]) AS [tAdd], 
-                                       SUM ([main].[v_NSCExit_yearmonth].[tExit]) AS [tExit], 
-                                       (SUM ([main].[v_NSCAdd_yearmonth].[tAdd]) - CASE WHEN SUM ([main].[v_NSCExit_yearmonth].[tExit]) IS NULL THEN 0 ELSE SUM ([main].[v_NSCExit_yearmonth].[tExit]) END) AS [rem]
-                                FROM   [main].[v_NSCAdd_yearmonth]
-                                       LEFT JOIN [main].[v_NSCExit_yearmonth] ON [main].[v_NSCAdd_yearmonth].[tehsil_id] = [main].[v_NSCExit_yearmonth].[tehsil_id]
-                                            AND [main].[v_NSCAdd_yearmonth].[Year_month] = [main].[v_NSCExit_yearmonth].[Year_month]
-                                            AND [main].[v_NSCAdd_yearmonth].[age_group] = [main].[v_NSCExit_yearmonth].[age_group]
-                                            AND [main].[v_NSCAdd_yearmonth].[gender] = [main].[v_NSCExit_yearmonth].[gender]
-                                GROUP  BY
-                                          [main].[v_NSCAdd_yearmonth].[tehsil_id], 
-                                          [main].[v_NSCAdd_yearmonth].[Year_month], 
-                                          [main].[v_NSCAdd_yearmonth].[age_group], 
-                                          [main].[v_NSCAdd_yearmonth].[gender];
-                                
-                                `)
-                        }).then(r => {
-                            return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`DROP VIEW IF EXISTS [main].[v_nsc_remaining_geo];`)
-                        }).then(r => {
-                            return knex.raw(`CREATE VIEW [v_nsc_remaining_geo]
-                                AS
-                                SELECT 
-                                       [main].[v_geo_tehsil].[province_id], 
-                                       [main].[v_geo_tehsil].[district_id], 
-                                       [main].[v_geo_tehsil].[tehsil_id], 
-                                       [main].[v_nsc_remaining].[Year_month], 
-                                       [main].[v_nsc_remaining].[age_group] AS [age_group], 
-                                       [main].[v_nsc_remaining].[gender], 
-                                       [main].[v_nsc_remaining].[tAdd], 
-                                       [main].[v_nsc_remaining].[tExit], 
-                                       [main].[v_nsc_remaining].[rem]
-                                FROM   [main].[v_geo_tehsil]
-                                       INNER JOIN [main].[v_nsc_remaining] ON [main].[v_geo_tehsil].[tehsil_id] = [main].[v_nsc_remaining].[tehsil_id];
-                                `)
-                        }).then(r => {
-                            return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`DROP VIEW IF EXISTS [main].[v_otpAddmision2];`)
-                        }).then(r => {
-                            return knex.raw(`CREATE VIEW 'v_otpAddmision2'
-                                AS
-                                SELECT 
-                                       [main].[v_geo].[province_id], 
-                                       [main].[v_geo].[province], 
-                                       [main].[v_geo].[district_id], 
-                                       [main].[v_geo].[district_name], 
-                                       [main].[v_geo].[tehsil_id], 
-                                       [main].[v_geo].[tehsil_name], 
-                                       [main].[v_geo].[uc_id], 
-                                       [main].[v_geo].[uc_name], 
-                                       [main].[v_geo].[site_name], 
-                                       [tblOtpAdd].*
-                                FROM   [main].[v_geo]
-                                       INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo].[site_id] = [main].[tblOtpAdd].[site_id]
-                                WHERE  [main].[tblOtpAdd].[is_deleted] = 0
-                                UNION ALL
-                                SELECT 
-                                       [v_geo_tehsil].[province_id], 
-                                       [v_geo_tehsil].[province_name] AS [province], 
-                                       [v_geo_tehsil].[district_id], 
-                                       [v_geo_tehsil].[district_name], 
-                                       [v_geo_tehsil].[tehsil_id], 
-                                       [v_geo_tehsil].[tehsil_name], 
-                                       '' AS [uc_id], 
-                                       '' AS [uc_name], 
-                                       '' AS [site_name], 
-                                       [tblOtpAdd].*
-                                FROM   [main].[v_geo_tehsil]
-                                       INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo_tehsil].[tehsil_id] = [main].[tblOtpAdd].[tehsil_id]
-                                WHERE  [main].[tblOtpAdd].[is_deleted] = 0
-                                         AND [main].[tblOtpAdd].[prog_type] = 'sc';
-                                `)
-                        }).then(r => {
-                            return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            return knex.raw(`DROP VIEW IF EXISTS [main].[v_otpExitFullForUpdateNSC];`)
-                        }).then(r => {
-                            return knex.raw(`CREATE VIEW 'v_otpExitFullForUpdateNSC'
-                                AS
-                                SELECT 
-                                       [main].[tblOtpAdd].[site_id], 
-                                       [main].[tblOtpAdd].[p_name], 
-                                       [main].[tblOtpAdd].[reg_id], 
-                                       [main].[tblOtpAdd].[site_village], 
-                                       [main].[tblOtpAdd].[prog_type], 
-                                       [main].[v_geo].[province_id], 
-                                       [main].[v_geo].[province], 
-                                       [main].[v_geo].[district_id], 
-                                       [main].[v_geo].[district_name], 
-                                       [main].[v_geo].[tehsil_id], 
-                                       [main].[v_geo].[tehsil_name], 
-                                       [main].[v_geo].[uc_id], 
-                                       [main].[v_geo].[uc_name], 
-                                       [main].[v_geo].[site_name], 
-                                       [tblOtpExit].*
-                                FROM   [main].[tblOtpAdd]
-                                       INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
-                                       INNER JOIN [main].[v_geo] ON [main].[tblOtpAdd].[site_id] = [main].[v_geo].[site_id]
-                                WHERE  [tblOtpExit].[is_deleted] = 0
-                                UNION ALL
-                                SELECT 
-                                       [main].[tblOtpAdd].[site_id], 
-                                       [main].[tblOtpAdd].[p_name], 
-                                       [main].[tblOtpAdd].[reg_id], 
-                                       [main].[tblOtpAdd].[site_village], 
-                                       [main].[tblOtpAdd].[prog_type], 
-                                       [main].[v_geo_tehsil].[province_id], 
-                                       [main].[v_geo_tehsil].[province_name] AS [province], 
-                                       [main].[v_geo_tehsil].[district_id], 
-                                       [main].[v_geo_tehsil].[district_name], 
-                                       [main].[v_geo_tehsil].[tehsil_id], 
-                                       [main].[v_geo_tehsil].[tehsil_name], 
-                                       '' AS [uc_id], 
-                                       '' AS [uc_name], 
-                                       '' AS [site_name], 
-                                       [tblOtpExit].*
-                                FROM   [main].[tblOtpAdd]
-                                       INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
-                                       INNER JOIN [main].[v_geo_tehsil] ON [main].[tblOtpAdd].[tehsil_id] = [main].[v_geo_tehsil].[tehsil_id]
-                                WHERE  [tblOtpExit].[is_deleted] = 0
-                                         AND [tblOtpAdd].[prog_type] = 'sc';                        
-                                `)
-                        }).then(r => {
-                            return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
-                        }).then(r => {
-                            console.log(`database updated till version ${_vold} for NSC reporting`)
-                        })
-                        .catch(e => {
-                            console.log(e)
-                        })
+                                           [main].[v_geo].[province], 
+                                           [main].[v_geo].[province_id], 
+                                           [main].[v_geo].[district_id], 
+                                           [main].[v_geo].[district_name], 
+                                           [main].[v_geo].[tehsil_id], 
+                                           [main].[v_geo].[tehsil_name], 
+                                           [main].[v_geo].[uc_name], 
+                                           [main].[v_geo].[site_name] as site_name, 
+                                           [tblSessions].*
+                                    FROM   [main].[tblSessions]
+                                           INNER JOIN [main].[v_geo] ON ([main].[v_geo].[site_id] = [main].[tblSessions].[site_id])
+                                    WHERE  [tblsessions].[is_deleted] = 0
+                                    UNION ALL
+                                    SELECT 
+                                           [main].[v_geo_lhw].[province], 
+                                           [main].[v_geo_lhw].[province_id], 
+                                           [main].[v_geo_lhw].[district_id], 
+                                           [main].[v_geo_lhw].[district_name], 
+                                           [main].[v_geo_lhw].[tehsil_id], 
+                                           [main].[v_geo_lhw].[tehsil_name], 
+                                           [main].[v_geo_lhw].[uc_name],
+                                           '' as site_name, 
+                                           [tblSessions].*
+                                    FROM   [main].[tblSessions]
+                                           INNER JOIN [main].[v_geo_lhw] ON ([main].[v_geo_lhw].[uc_id] = [main].[tblSessions].[uc_id]
+                                                AND [main].[tblSessions].[CHW_id] = [main].[v_geo_lhw].[staff_code])
+                                    WHERE  [tblsessions].[is_deleted] = 0;
+                                    `)
+                                }).then(r => {
+                                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    console.log('created new view for sessions to correct report and entry')
+                                    return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`DROP VIEW IF EXISTS [main].[v_exitNSCReport];`)
+                                }).then(r => {
+                                    return knex.raw(`CREATE VIEW [v_exitNSCReport]
+                                    AS
+                                    SELECT 
+                                           [main].[tblOtpExit].[exit_id], 
+                                           [main].[tblOtpAdd].[otp_id], 
+                                           [main].[tblOtpAdd].[tehsil_id], 
+                                           [main].[tblOtpAdd].[age], 
+                                           [main].[tblOtpAdd].[gender], 
+                                           [main].[tblOtpAdd].[prog_type], 
+                                           [main].[tblOtpExit].[exit_reason], 
+                                           [main].[tblOtpExit].[exit_date]
+                                    FROM   [main].[tblOtpAdd]
+                                           INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+                                    WHERE  [main].[tblOtpAdd].[prog_type] = 'sc'
+                                             AND [main].[tblOtpAdd].[is_deleted] = 0
+                                             AND [main].[tblOtpExit].[is_deleted] = 0;`)
+                                }).then(r => {
+                                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`DROP VIEW IF EXISTS [main].[v_geo_tehsil];`)
+                                }).then(r => {
+                                    return knex.raw(`CREATE VIEW [v_geo_tehsil]
+                                    AS
+                                    SELECT 
+                                           [main].[tblGeoProvince].[provinceName] AS [province_name], 
+                                           [main].[tblGeoDistrict].[province_id], 
+                                           [main].[tblGeoDistrict].[districtName] AS [district_name], 
+                                           [main].[tblGeoTehsil].[district_id], 
+                                           [main].[tblGeoTehsil].[tehsilName] AS [tehsil_name], 
+                                           [main].[tblGeoTehsil].[id] AS [tehsil_id]
+                                    FROM   [main].[tblGeoProvince]
+                                           INNER JOIN [main].[tblGeoDistrict] ON [main].[tblGeoProvince].[id] = [main].[tblGeoDistrict].[province_id]
+                                           INNER JOIN [main].[tblGeoTehsil] ON [main].[tblGeoDistrict].[id] = [main].[tblGeoTehsil].[district_id]
+                                    WHERE  [main].[tblGeoProvince].[isActive] = 1
+                                             AND [main].[tblGeoDistrict].[isActive] = 1
+                                             AND [main].[tblGeoTehsil].[isActive] = 1;`)
+                                }).then(r => {
+                                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`DROP VIEW IF EXISTS [main].[v_exitNSCReportInterval];`)
+                                }).then(r => {
+                                    return knex.raw(`CREATE VIEW [v_exitNSCReportInterval]
+                                    AS
+                                    SELECT 
+                                           [vnc].*, 
+                                           [vg].[province_id], 
+                                           [vg].[district_id]
+                                    FROM   [v_exitNSCReport] [vnc]
+                                           INNER JOIN [v_geo_tehsil] [vg] ON [vnc].[tehsil_id] = [vg].[tehsil_id];`)
+                                }).then(r => {
+                                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`DROP VIEW IF EXISTS [main].[v_NSCAdd_yearmonth];`)
+                                }).then(r => {
+                                    return knex.raw(`CREATE VIEW [v_NSCAdd_yearmonth]
+                                    AS
+                                    SELECT 
+                                           [tehsil_id], 
+                                           STRFTIME ('%Y-%m', [reg_date]) AS [Year_month], 
+                                           (CASE WHEN [age] < 7 THEN '06' WHEN [age] > 6
+                                             AND [age] < 24 THEN '623' WHEN [age] > 23 THEN '2459' END) AS [age_group], 
+                                           [gender], 
+                                           COUNT ([otp_id]) AS [tAdd]
+                                    FROM   [tblOtpAdd]
+                                    WHERE  [is_deleted] = 0 AND [prog_type] = 'sc'
+                                    GROUP  BY
+                                              [tehsil_id], 
+                                              [Year_month], 
+                                              [age_group], 
+                                              [gender];`)
+                                }).then(r => {
+                                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`DROP VIEW IF EXISTS [main].[v_nscExit_full];`)
+                                }).then(r => {
+                                    return knex.raw(`CREATE VIEW [v_nscExit_full]
+                                    AS
+                                    SELECT 
+                                           [main].[v_geo_tehsil].[province_id], 
+                                           [main].[v_geo_tehsil].[province_name] AS [province], 
+                                           [main].[v_geo_tehsil].[district_id], 
+                                           [main].[v_geo_tehsil].[district_name], 
+                                           [main].[v_geo_tehsil].[tehsil_id], 
+                                           [main].[v_geo_tehsil].[tehsil_name], 
+                                           [main].[tblOtpAdd].[address], 
+                                           [main].[tblOtpExit].[exit_date], 
+                                           [main].[tblOtpExit].[exit_reason], 
+                                           [main].[tblOtpAdd].[p_name], 
+                                           [main].[tblOtpAdd].[f_or_h_name], 
+                                           [main].[tblOtpAdd].[gender], 
+                                           [main].[tblOtpAdd].[reg_id], 
+                                           [main].[tblOtpAdd].[reg_date]
+                                    FROM   [main].[v_geo_tehsil]
+                                           INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo_tehsil].[tehsil_id] = [main].[tblOtpAdd].[tehsil_id]
+                                           INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+                                    WHERE  [main].[tblOtpExit].[is_deleted] = 0
+                                             AND [main].[tblOtpAdd].[is_deleted] = 0  AND [main].[tblOtpAdd].[prog_type] = 'sc';`)
+                                }).then(r => {
+                                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`DROP VIEW IF EXISTS [main].[v_NSCExit_yearmonth];`)
+                                }).then(r => {
+                                    return knex.raw(`CREATE VIEW [v_NSCExit_yearmonth]
+                                    AS
+                                    SELECT 
+                                           [main].[tblOtpAdd].[tehsil_id], 
+                                           STRFTIME ('%Y-%m', [main].[tblOtpExit].[exit_date]) AS [Year_month], 
+                                           (CASE WHEN [age] < 7 THEN '06' WHEN [age] > 6
+                                             AND [age] < 24 THEN '623' WHEN [age] > 23 THEN '2459' END) AS [age_group], 
+                                           [main].[tblOtpAdd].[gender], 
+                                           COUNT ([main].[tblOtpExit].[exit_id]) AS [tExit]
+                                    FROM   [main].[tblOtpExit]
+                                           INNER JOIN [main].[tblOtpAdd] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+                                    WHERE  [main].[tblOtpAdd].[is_deleted] = 0
+                                             AND [main].[tblOtpExit].[is_deleted] = 0
+                                             AND [main].[tblOtpAdd].[prog_type] = 'sc'
+                                    GROUP  BY
+                                              [main].[tblOtpAdd].[tehsil_id], 
+                                              [Year_month], 
+                                              [age_group], 
+                                              [main].[tblOtpAdd].[gender];
+                                    `)
+                                }).then(r => {
+                                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`DROP VIEW IF EXISTS [main].[v_nsc_remaining];`)
+                                }).then(r => {
+                                    return knex.raw(`CREATE VIEW [v_nsc_remaining]
+                                    AS
+                                    SELECT 
+                                           [main].[v_NSCAdd_yearmonth].[tehsil_id], 
+                                           [main].[v_NSCAdd_yearmonth].[Year_month], 
+                                           [main].[v_NSCAdd_yearmonth].[age_group], 
+                                           [main].[v_NSCAdd_yearmonth].[gender], 
+                                           SUM ([main].[v_NSCAdd_yearmonth].[tAdd]) AS [tAdd], 
+                                           SUM ([main].[v_NSCExit_yearmonth].[tExit]) AS [tExit], 
+                                           (SUM ([main].[v_NSCAdd_yearmonth].[tAdd]) - CASE WHEN SUM ([main].[v_NSCExit_yearmonth].[tExit]) IS NULL THEN 0 ELSE SUM ([main].[v_NSCExit_yearmonth].[tExit]) END) AS [rem]
+                                    FROM   [main].[v_NSCAdd_yearmonth]
+                                           LEFT JOIN [main].[v_NSCExit_yearmonth] ON [main].[v_NSCAdd_yearmonth].[tehsil_id] = [main].[v_NSCExit_yearmonth].[tehsil_id]
+                                                AND [main].[v_NSCAdd_yearmonth].[Year_month] = [main].[v_NSCExit_yearmonth].[Year_month]
+                                                AND [main].[v_NSCAdd_yearmonth].[age_group] = [main].[v_NSCExit_yearmonth].[age_group]
+                                                AND [main].[v_NSCAdd_yearmonth].[gender] = [main].[v_NSCExit_yearmonth].[gender]
+                                    GROUP  BY
+                                              [main].[v_NSCAdd_yearmonth].[tehsil_id], 
+                                              [main].[v_NSCAdd_yearmonth].[Year_month], 
+                                              [main].[v_NSCAdd_yearmonth].[age_group], 
+                                              [main].[v_NSCAdd_yearmonth].[gender];
+                                    
+                                    `)
+                                }).then(r => {
+                                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`DROP VIEW IF EXISTS [main].[v_nsc_remaining_geo];`)
+                                }).then(r => {
+                                    return knex.raw(`CREATE VIEW [v_nsc_remaining_geo]
+                                    AS
+                                    SELECT 
+                                           [main].[v_geo_tehsil].[province_id], 
+                                           [main].[v_geo_tehsil].[district_id], 
+                                           [main].[v_geo_tehsil].[tehsil_id], 
+                                           [main].[v_nsc_remaining].[Year_month], 
+                                           [main].[v_nsc_remaining].[age_group] AS [age_group], 
+                                           [main].[v_nsc_remaining].[gender], 
+                                           [main].[v_nsc_remaining].[tAdd], 
+                                           [main].[v_nsc_remaining].[tExit], 
+                                           [main].[v_nsc_remaining].[rem]
+                                    FROM   [main].[v_geo_tehsil]
+                                           INNER JOIN [main].[v_nsc_remaining] ON [main].[v_geo_tehsil].[tehsil_id] = [main].[v_nsc_remaining].[tehsil_id];
+                                    `)
+                                }).then(r => {
+                                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`DROP VIEW IF EXISTS [main].[v_otpAddmision2];`)
+                                }).then(r => {
+                                    return knex.raw(`CREATE VIEW 'v_otpAddmision2'
+                                    AS
+                                    SELECT 
+                                           [main].[v_geo].[province_id], 
+                                           [main].[v_geo].[province], 
+                                           [main].[v_geo].[district_id], 
+                                           [main].[v_geo].[district_name], 
+                                           [main].[v_geo].[tehsil_id], 
+                                           [main].[v_geo].[tehsil_name], 
+                                           [main].[v_geo].[uc_id], 
+                                           [main].[v_geo].[uc_name], 
+                                           [main].[v_geo].[site_name], 
+                                           [tblOtpAdd].*
+                                    FROM   [main].[v_geo]
+                                           INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo].[site_id] = [main].[tblOtpAdd].[site_id]
+                                    WHERE  [main].[tblOtpAdd].[is_deleted] = 0
+                                    UNION ALL
+                                    SELECT 
+                                           [v_geo_tehsil].[province_id], 
+                                           [v_geo_tehsil].[province_name] AS [province], 
+                                           [v_geo_tehsil].[district_id], 
+                                           [v_geo_tehsil].[district_name], 
+                                           [v_geo_tehsil].[tehsil_id], 
+                                           [v_geo_tehsil].[tehsil_name], 
+                                           '' AS [uc_id], 
+                                           '' AS [uc_name], 
+                                           '' AS [site_name], 
+                                           [tblOtpAdd].*
+                                    FROM   [main].[v_geo_tehsil]
+                                           INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo_tehsil].[tehsil_id] = [main].[tblOtpAdd].[tehsil_id]
+                                    WHERE  [main].[tblOtpAdd].[is_deleted] = 0
+                                             AND [main].[tblOtpAdd].[prog_type] = 'sc';
+                                    `)
+                                }).then(r => {
+                                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    return knex.raw(`DROP VIEW IF EXISTS [main].[v_otpExitFullForUpdateNSC];`)
+                                }).then(r => {
+                                    return knex.raw(`CREATE VIEW 'v_otpExitFullForUpdateNSC'
+                                    AS
+                                    SELECT 
+                                           [main].[tblOtpAdd].[site_id], 
+                                           [main].[tblOtpAdd].[p_name], 
+                                           [main].[tblOtpAdd].[reg_id], 
+                                           [main].[tblOtpAdd].[site_village], 
+                                           [main].[tblOtpAdd].[prog_type], 
+                                           [main].[v_geo].[province_id], 
+                                           [main].[v_geo].[province], 
+                                           [main].[v_geo].[district_id], 
+                                           [main].[v_geo].[district_name], 
+                                           [main].[v_geo].[tehsil_id], 
+                                           [main].[v_geo].[tehsil_name], 
+                                           [main].[v_geo].[uc_id], 
+                                           [main].[v_geo].[uc_name], 
+                                           [main].[v_geo].[site_name], 
+                                           [tblOtpExit].*
+                                    FROM   [main].[tblOtpAdd]
+                                           INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+                                           INNER JOIN [main].[v_geo] ON [main].[tblOtpAdd].[site_id] = [main].[v_geo].[site_id]
+                                    WHERE  [tblOtpExit].[is_deleted] = 0
+                                    UNION ALL
+                                    SELECT 
+                                           [main].[tblOtpAdd].[site_id], 
+                                           [main].[tblOtpAdd].[p_name], 
+                                           [main].[tblOtpAdd].[reg_id], 
+                                           [main].[tblOtpAdd].[site_village], 
+                                           [main].[tblOtpAdd].[prog_type], 
+                                           [main].[v_geo_tehsil].[province_id], 
+                                           [main].[v_geo_tehsil].[province_name] AS [province], 
+                                           [main].[v_geo_tehsil].[district_id], 
+                                           [main].[v_geo_tehsil].[district_name], 
+                                           [main].[v_geo_tehsil].[tehsil_id], 
+                                           [main].[v_geo_tehsil].[tehsil_name], 
+                                           '' AS [uc_id], 
+                                           '' AS [uc_name], 
+                                           '' AS [site_name], 
+                                           [tblOtpExit].*
+                                    FROM   [main].[tblOtpAdd]
+                                           INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+                                           INNER JOIN [main].[v_geo_tehsil] ON [main].[tblOtpAdd].[tehsil_id] = [main].[v_geo_tehsil].[tehsil_id]
+                                    WHERE  [tblOtpExit].[is_deleted] = 0
+                                             AND [tblOtpAdd].[prog_type] = 'sc';                        
+                                    `)
+                                }).then(r => {
+                                    return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+                                }).then(r => {
+                                    console.log(`database updated till version ${_vold} for NSC reporting`)
+                                })
+                                .catch(e => {
+                                    console.log(e)
+                                })
+                        }
+                    })
+
                 } else {
                     console.log('database allready updated')
                 }
