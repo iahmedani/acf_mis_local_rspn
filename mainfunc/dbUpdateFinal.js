@@ -19,7 +19,7 @@ module.exports = (knex) => {
             console.log(oldV)
 
 
-            for (_vold = oldV; _vold < _version; _vold++) {
+            for (_vold = oldV; _vold <= _version; _vold++) {
                 console.log(_vold)
                 if (_vold == 1514) {
                     knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)

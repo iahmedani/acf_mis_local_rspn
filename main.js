@@ -1256,10 +1256,10 @@ function creatWindow() {
   });
 
   majorDbUpdate = new BrowserWindow({
-    width,
-    height,
+    width: 600,
+    height: 400,
     show: false,
-    // frame: false
+    frame: false
   });
 
 
@@ -1290,7 +1290,7 @@ function creatWindow() {
         // } else {
         knex.schema.hasTable('tblUpdateTracker').then(function (exists) {
           if (!exists) {
-            majorDbUpdate.maximize();
+            majorDbUpdate.show();
           } else {
             mainWindow.maximize();
 

@@ -304,8 +304,8 @@ module.exports.initGrid = function () {
   }
 
   let samTotalCheck = () => {
-    var samTotalB = parseInt($('#total_sam_boys').val()) + parseInt($('#total_comp_boys').val()) + parseInt($('#plus12_oedema_boys').val()) + parseInt($('#plus3_oedema_boys').val())
-    var samTotalG = parseInt($('#total_sam_girls').val()) + parseInt($('#total_comp_girls').val()) + parseInt($('#plus12_oedema_girls').val()) + parseInt($('#plus3_oedema_girls').val())
+    var samTotalB = parseInt($('#total_sam_boys').val()) + parseInt($('#plus12_oedema_boys').val()) + parseInt($('#plus3_oedema_boys').val()) + parseInt($('#total_comp_boys').val())
+    var samTotalG = parseInt($('#total_sam_girls').val()) + parseInt($('#plus12_oedema_girls').val()) + parseInt($('#plus3_oedema_girls').val()) + parseInt($('#total_comp_girls').val())
     var mamTotalB = parseInt($('#total_mam_boys').val())
     var mamTotalG = parseInt($('#total_mam_girls').val())
 
