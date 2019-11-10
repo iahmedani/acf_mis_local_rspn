@@ -725,7 +725,7 @@ module.exports = (knex) => {
                         .catch(e => {
                             console.log(e)
                         })
-                } else if ((_vold > 1537 && _vold <= 1543)) {
+                } else if ((_vold > 1537 && _vold < _version)) {
                     knex.schema.hasTable('tblUpdateTracker').then(function (exists) {
                         if (exists) {
                             knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
