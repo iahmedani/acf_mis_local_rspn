@@ -725,7 +725,7 @@ module.exports = (knex) => {
                         .catch(e => {
                             console.log(e)
                         })
-                } else if ((_vold > 1537 && _vold < _version)) {
+                } else if ((_vold > 1537 && _vold == _version)) {
                     knex.schema.hasTable('tblUpdateTracker').then(function (exists) {
                         if (exists) {
                             knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
@@ -782,7 +782,6 @@ module.exports = (knex) => {
                                     return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
                                 }).then(r => {
                                     console.log('created new view for sessions to correct report and entry')
-                                }).then(r => {
                                     return knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
                                 }).then(r => {
                                     return knex.raw(`DROP VIEW IF EXISTS [main].[v_exitNSCReport];`)
