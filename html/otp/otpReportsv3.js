@@ -1,5 +1,5 @@
 // var async = require('async');
-const knex = require('../mainfunc/db');
+const knex = require('../../mainfunc/db');
 
 module.exports.initOtpReportsV2 = async function () {
   var ddReportType = $('#reportType');
@@ -1340,13 +1340,13 @@ count(case when exit_reason <> 'cured' and exit_reason <> 'death' and exit_reaso
               },
               {
                 title: 'Total Moved In (C=C2+C2+C3)',
-                data: 'c'
+                data: 'c3'
               },
               {
                 title: 'Total In (D=A+B+C+CC)',
                 data: null,
                 render: function (data, type, row) {
-                  return (data. a + data.cc + data.c + data.b)
+                  return (data.a + data.d)
                 }
               },
               {
@@ -1394,7 +1394,7 @@ count(case when exit_reason <> 'cured' and exit_reason <> 'death' and exit_reaso
                 data: null,
                 render: function (data, type, row) {
                   // console.log(data);
-                  return ((data. a + data.cc + data.c + data.b) - data.g)
+                  return ((data.a + data.d) - data.g)
                 }
               },
             ]

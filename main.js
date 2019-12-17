@@ -404,7 +404,13 @@ function exitUpdDataSave(event, data, client) {
   data.upload_status = 2;
   const otpExitAddData = data;
   console.log(otpExitAddData);
-
+  const updAddmision  = {
+    exit_date : otpExitAddData.exit_date,
+    exit_reason: otpExitAddData.exit_reason,
+    total_days: otpExitAddData.days_in_program,
+    // upload_status : 2
+    // otp_id : otpExitAddData.otp_id
+  }
   const followup = {
     client_id: data.client_id,
     weight: data.exit_weight,
@@ -439,17 +445,34 @@ function exitUpdDataSave(event, data, client) {
         data: result
       })
     }).then(result => {
-      return knex('tblOtpFollowup').select('followup_id').where('otp_id', data.otp_id).whereNotNull('status').orderBy('rowid', 'desc').limit(1);
+      return knex('tblOtpFollowup').select('followup_id').where('otp_id', data.otp_id).whereNotNull('status').where({is_deleted:0}).orderBy('rowid', 'desc').limit(1);
     }).then(result => {
       if (result.length) {
         return knex('tblOtpFollowup').update(followup).where('followup_id', result[0]['followup_id']);
       } else {
         return [];
       }
-    }).then(result => {
-      console.log({
-        msg: 'interm table updated',
-        data: result
+    }).then(r=>{
+      return knex('tblOtpFollowup').count({total_followups:'followup_id'}).where({otp_id: data.otp_id, is_deleted:0})
+     
+    }).then(async (result)=>{
+      console.log('total followups', JSON.stringify(result));
+      if(result.length){
+        updAddmision.total_followups = result[0].total_followups;
+        var upStatus = await knex.select('upload_status').from('tblOtpAdd').where('otp_id', data.otp_id).where('is_deleted', 0);
+        if(upStatus[0].upload_status == '1'){
+          updAddmision.upload_status = 2;
+          return knex('tblOtpAdd').update(updAddmision).where('otp_id', data.otp_id)
+        }else{
+          return knex('tblOtpAdd').update(updAddmision).where('otp_id', data.otp_id)
+        }
+      } else {
+        return [];
+      }
+    }).then(r=>{
+       console.log({
+        msg: 'all tables are updated',
+        data: r
       })
     })
     .catch(e => {
@@ -457,6 +480,83 @@ function exitUpdDataSave(event, data, client) {
       errMsg(event, "", "Record not updated, plz try again or contact admin");
     })
 }
+// function exitUpdDataSave(event, data, client) {
+//   data.client_id = client;
+//   data.upload_status = 2;
+//   const otpExitAddData = data;
+//   console.log(otpExitAddData);
+
+//   const followup = {
+//     client_id: data.client_id,
+//     weight: data.exit_weight,
+//     ration1: (data.exit_ration1) ? data.exit_ration1 : '',
+//     quantity1: (data.exit_quantity1) ? data.exit_quantity1 : '',
+//     ration2: (data.exit_ration2) ? data.exit_ration2 : '',
+//     quantity2: (data.exit_quantity2) ? data.exit_quantity2 : '',
+//     ration3: (data.exit_ration3) ? data.exit_ration3 : '',
+//     quantity3: (data.exit_quantity3) ? data.exit_quantity3 : '',
+//     other_com_name: (data.exit_other_com_name) ? data.exit_other_com_name : '',
+//     other_com_qty: (data.exit_other_com_qty) ? data.exit_other_com_qty : '',
+//     muac: data.exit_muac,
+//     status: data.exit_reason,
+//     curr_date: data.exit_date
+//   }
+
+//   knex('tblOtpExit')
+//     .where('otp_id', otpExitAddData.otp_id)
+//     .update(otpExitAddData)
+//     .then(result => {
+//       console.log(result);
+//       sucMsg(event, "", "Record updated Successfully");
+//       return knex('tblInterimOtp')
+//         .where('otp_id', otpExitAddData.otp_id)
+//         .update({
+//           status: otpExitAddData.exit_reason
+//         })
+//     })
+//     .then(result => {
+//       console.log({
+//         msg: 'interm table updated',
+//         data: result
+//       })
+//     }).then(result => {
+//       return knex('tblOtpFollowup').select('followup_id').where('otp_id', data.otp_id).whereNotNull('status').orderBy('rowid', 'desc').limit(1);
+//     }).then(result => {
+//       if (result.length) {
+//         return knex('tblOtpFollowup').update(followup).where('followup_id', result[0]['followup_id']);
+//       } else {
+//         return [];
+//       }
+//     }).then(r=>{
+//       return knex('tblOtpFollowup').count({total_followups:'followup_id'}).where({otp_id: data.otp_id, is_deleted:0})
+     
+//     }).then(async (result)=>{
+//       console.log('total followups', JSON.stringify(result));
+//       if(result.length){
+//         updAddmision.total_followups = result[0].total_followups;
+//         var upStatus = await knex.select('upload_status').from('tblOtpAdd').where('otp_id', data.otp_id).where('is_deleted', 0);
+//         if(upStatus[0].upload_status == '1'){
+//           updAddmision.upload_status = 2;
+//           return knex('tblOtpAdd').update(updAddmision).where('otp_id', data.otp_id)
+//         }else{
+//           return knex('tblOtpAdd').update(updAddmision).where('otp_id', data.otp_id)
+//         }
+//       } else {
+//         return [];
+//       }
+//     }).then(result => {
+//       console.log({
+//         msg: 'all tables are updated',
+//         data: result
+//       })
+//     })
+//     .catch(e => {
+//       console.log(e);
+//       errMsg(event, "", "Record not updated, plz try again or contact admin");
+//     })
+// }
+
+
 //Exit Update: Edit (update) one record
 ipcMain.on('otpExitUpdate', (e, data) => {
   exitUpdDataSave(e, data, imran.client);
@@ -556,6 +656,63 @@ function otpAddDataForExit(event, filter) {
   //   })
 }
 // add OTP Exit 
+// function otpExitAddDataSave(event, data, client) {
+//   data.client_id = client;
+//   data.upload_status = 0;
+//   const otpExitAddData = data;
+//   console.log({
+//     location: 'OTP ADD EXIT',
+//     data
+//   });
+//   const followup = {
+//     otp_id: data.otp_id,
+//     followup_id: _uuid(),
+//     client_id: data.client_id,
+//     weight: data.exit_weight,
+//     ration1: (data.exit_ration1) ? data.exit_ration1 : '',
+//     quantity1: (data.exit_quantity1) ? data.exit_quantity1 : '',
+//     ration2: (data.exit_ration2) ? data.exit_ration2 : '',
+//     quantity2: (data.exit_quantity2) ? data.exit_quantity2 : '',
+//     ration3: (data.exit_ration3) ? data.exit_ration3 : '',
+//     quantity3: (data.exit_quantity3) ? data.exit_quantity3 : '',
+//     other_com_name: (data.exit_other_com_name) ? data.exit_other_com_name : '',
+//     other_com_qty: (data.exit_other_com_qty) ? data.exit_other_com_qty : '',
+//     muac: data.exit_muac,
+//     status: data.exit_reason,
+//     curr_date: data.exit_date
+//   }
+//   knex('tblOtpExit')
+//     .insert(data)
+//     .then(result => {
+//       console.log(result);
+//       sucMsg(event, '', 'Patient exit record is saved')
+//       return knex('tblInterimOtp')
+//         .where('otp_id', otpExitAddData.otp_id)
+//         .update({
+//           status: otpExitAddData.exit_reason
+//         })
+//     })
+//     .then(result => {
+//       console.log({
+//         msg: 'interm table updated',
+//         data: result
+//       })
+//       console.log(followup)
+//       return knex('tblOtpFollowup')
+//         .insert(followup)
+//     })
+//     .then(result => {
+//       console.log({
+//         msg: 'followup table updated',
+//         data: result
+//       })
+//     })
+//     .catch(e => {
+//       console.log(e);
+//       errMsg(event, '', 'Patient exit record not saved, plz try again or contact admin')
+//     })
+// }
+
 function otpExitAddDataSave(event, data, client) {
   data.client_id = client;
   data.upload_status = 0;
@@ -564,6 +721,12 @@ function otpExitAddDataSave(event, data, client) {
     location: 'OTP ADD EXIT',
     data
   });
+  const updAddmision  = {
+    exit_date : otpExitAddData.exit_date,
+    exit_reason: otpExitAddData.exit_reason,
+    total_days: otpExitAddData.days_in_program,
+    // upload_status:2
+  }
   const followup = {
     otp_id: data.otp_id,
     followup_id: _uuid(),
@@ -600,6 +763,25 @@ function otpExitAddDataSave(event, data, client) {
       console.log(followup)
       return knex('tblOtpFollowup')
         .insert(followup)
+    }).then(r=>{
+      return knex('tblOtpFollowup').count({total_followups: 'followup_id'}).where({is_deleted:0, otp_id: data.otp_id})
+    }).then( async(result) =>{
+      console.log('total followups', JSON.stringify(result));
+      // if(result.length){
+      //   updAddmision.total_followups = result[0].total_followups;
+      //   // return knex('tblOtpAdd').update(updAddmision).where('otp_id', data.otp_id)
+        if(result.length){
+          updAddmision.total_followups = result[0].total_followups;
+          var upStatus = await knex.select('upload_status').from('tblOtpAdd').where('otp_id', data.otp_id).where('is_deleted', 0);
+          if(upStatus[0].upload_status == '1'){
+            updAddmision.upload_status = 2;
+            return knex('tblOtpAdd').update(updAddmision).where('otp_id', data.otp_id)
+          }else{
+            return knex('tblOtpAdd').update(updAddmision).where('otp_id', data.otp_id)
+          }
+      } else {
+        return [];
+      }
     })
     .then(result => {
       console.log({
@@ -612,7 +794,6 @@ function otpExitAddDataSave(event, data, client) {
       errMsg(event, '', 'Patient exit record not saved, plz try again or contact admin')
     })
 }
-
 // // sending all session of site 
 // function allSessionsData(event, data) {
 //   console.log(data);
@@ -2238,3 +2419,4 @@ require("./mainfunc/stockInUpdate")(ipcMain, knex, fs, clientMessages, async);
 require('./mainfunc/updateDb');
 
 require('./mainfunc/dbUpdateFinal')(knex);
+require('./mainfunc/exitAdditionalColumns')();

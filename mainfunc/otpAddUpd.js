@@ -1,11 +1,27 @@
 module.exports = (ipcMain, knex, fs, sndMsg, async) => {
   // All OTP Addmision records which are not deleted (is_deleted = 0)
   ipcMain.on('allOtpTest', (event, filter) => {
-    // console.log(filter);
+    console.log(filter);
     var _limit = (filter.pageSize) ? filter.pageSize : 10;
     var _offset = (filter.pageIndex == 1) ? 0 : (filter.pageIndex - 1) * _limit;
     // console.log({ _limit, _offset })
     // console.log(`%${filter.site_village}%`);
+    console.log(knex("v_otpAddmision2")
+    .where("p_name", "like", `%${filter.p_name}%`)
+    .where("reg_id", "like", `%${filter.reg_id}%`)
+    .where("province", "like", `%${filter.province}%`)
+    .where("district_name", "like", `%${filter.district_name}%`)
+    .where("uc_name", "like", `%${filter.uc_name}%`)
+    .where("tehsil_name", "like", `%${filter.tehsil_name}%`)
+    .where("prog_type", "like", `%${filter.prog_type}%`)
+    .where({
+      is_deleted: 0
+    })
+    .whereRaw(`otp_id NOT IN (select otp_id from tblOtpExit where is_deleted = 0)`)
+    .limit(_limit)
+    .offset(_offset).toSQL().toNative())
+
+    // console.log(my_x)
     async.series({
       data: cb => {
         knex("v_otpAddmision2")
@@ -47,10 +63,12 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
       }
     }, (e, result) => {
       if (e) {
+        console.log(e)
         event.sender.send("allOtpTest", {
           err: e
         });
       } else {
+        console.log(result)
         event.sender.send('allOtpTest', {
           result
         })

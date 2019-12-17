@@ -261,7 +261,7 @@ module.exports.initOtpAddUpdV2 = function () {
         loadData: function (filter) {
           // console.log(filter);
           // console.log("loaddata", site_id);
-          ipc.send("allOtpTest", filter);
+          // ipc.send("allOtpTest", filter);
           return getOtp(filter);
         },
         deleteItem: function (item) {

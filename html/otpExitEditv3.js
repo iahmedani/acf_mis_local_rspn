@@ -440,7 +440,7 @@ module.exports.initOtpExitEditV2 = function () {
         $("#weight_gain").val(data.weight_gain);
         $("#days_in_program").val(data.days_in_program);
         $("#add_weight").val(data.weight);
-        $("#add_date").val(data.reg_date);
+        $("#add_date").val(data.add_date);
         $("#ddProvince").val(data.province_id);
 
 
