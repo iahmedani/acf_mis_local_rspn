@@ -30,13 +30,24 @@ module.exports.initOtpAdd = function () {
         teh(tehsil);
       })
     })
-    $('#ddTehsil').on('change', function () {
+    $('#ddTehsil').on('change', async function () {
       var tehs = $(this).val();
       ipc.send('getUC', tehs)
       ipc.on('uc', function (evt, uc) {
         $('#ddUC').children('option:not(:first)').remove();
         ucListener(uc);
       })
+      if ($('#ddProgramType').val() == 'sc') {
+        try {
+          var _listNsc = await knex('v_geo_active').where({
+            tehsil_id: tehs,
+            SC: 1
+          })
+          nscList(_listNsc, 'ddHealthHouse');
+        } catch (error) {
+          console.log(error)
+        }
+      }
     })
     var ucForHH;
     $('#ddUC').on('change', function () {
@@ -372,11 +383,11 @@ module.exports.initOtpAdd = function () {
   });
   $("#ddProgramType").on("change", function () {
     if ($(this).val() == "sc") {
-      $("#ddHealthHouse").attr("disabled", true);
+      // $("#ddHealthHouse").attr("disabled", true);
       $("#ddUC").attr("disabled", true);
       $("#ddVillageName").attr('disabled', true);
     } else {
-      $("#ddHealthHouse").attr("disabled", false);
+      // $("#ddHealthHouse").attr("disabled"s, false);
       $("#ddUC").attr("disabled", false);
       $("#ddVillageName").attr("disabled", false);
 

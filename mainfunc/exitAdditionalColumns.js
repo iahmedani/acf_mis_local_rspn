@@ -20,11 +20,13 @@ async function toUpdateOtpAdd(otp_id) {
             total_followups: totalFollowups[0].total_followups
         }
         var upStatus = await knex.select('upload_status').from('tblOtpAdd').where('otp_id', otp_id).where('is_deleted', 0);
-        if (upStatus[0].upload_status == '1') {
-            updAddmision.upload_status = 2;
-            return knex('tblOtpAdd').update(updAddmision).where('otp_id', otp_id)
-        } else {
-            return knex('tblOtpAdd').update(updAddmision).where('otp_id', otp_id)
+        if (upStatus) {
+            if (upStatus[0].upload_status == '1') {
+                updAddmision.upload_status = 2;
+                await knex('tblOtpAdd').update(updAddmision).where('otp_id', otp_id)
+            } else {
+                await knex('tblOtpAdd').update(updAddmision).where('otp_id', otp_id)
+            }
         }
 
     } catch (error) {
@@ -61,14 +63,17 @@ module.exports = async () => {
             if (!versionCheck.length) {
                 try {
                     await finalToUpdateOtpAdd();
-                    await knex('tblUpdates').insert({version: 1544, description:'OTP Additional Columns updated successfully'})
+                    await knex('tblUpdates').insert({
+                        version: 1544,
+                        description: 'OTP Additional Columns updated successfully'
+                    })
                     console.log('OTP ADDITIONAL COLUMN UPDATED SUCCESSFULLY')
 
                 } catch (error) {
                     console.log(error)
                 }
-            }else{
-                console.log('OTP ADDITIONAL COLUMN ALLREADY UPDATED')
+            } else {
+                console.log('OTP ADDITIONAL COLUMN ALREADY UPDATED')
             }
         }
     });

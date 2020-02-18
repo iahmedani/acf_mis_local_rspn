@@ -263,6 +263,11 @@
       })
       ipc.removeAllListeners('hh');
     }
+    const nscList = async (nscsList, elId) => {
+      await asyncForEach(nscsList, async (el) => {
+        $('#' + elId).append(`<option value="${el.site_id}">${el.site_name}</option>`);
+      })
+    }
     const hhListener_siteOne = async (hh) => {
       await asyncForEach(hh.hh, async (el) => {
         $('#site_one').append(`<option value="${el.siteName}">${el.siteName}</option>`);
