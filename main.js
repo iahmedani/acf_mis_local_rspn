@@ -404,8 +404,8 @@ function exitUpdDataSave(event, data, client) {
   data.upload_status = 2;
   const otpExitAddData = data;
   console.log(otpExitAddData);
-  const updAddmision  = {
-    exit_date : otpExitAddData.exit_date,
+  const updAddmision = {
+    exit_date: otpExitAddData.exit_date,
     exit_reason: otpExitAddData.exit_reason,
     total_days: otpExitAddData.days_in_program,
     // upload_status : 2
@@ -445,32 +445,39 @@ function exitUpdDataSave(event, data, client) {
         data: result
       })
     }).then(result => {
-      return knex('tblOtpFollowup').select('followup_id').where('otp_id', data.otp_id).whereNotNull('status').where({is_deleted:0}).orderBy('rowid', 'desc').limit(1);
+      return knex('tblOtpFollowup').select('followup_id').where('otp_id', data.otp_id).whereNotNull('status').where({
+        is_deleted: 0
+      }).orderBy('rowid', 'desc').limit(1);
     }).then(result => {
       if (result.length) {
         return knex('tblOtpFollowup').update(followup).where('followup_id', result[0]['followup_id']);
       } else {
         return [];
       }
-    }).then(r=>{
-      return knex('tblOtpFollowup').count({total_followups:'followup_id'}).where({otp_id: data.otp_id, is_deleted:0})
-     
-    }).then(async (result)=>{
+    }).then(r => {
+      return knex('tblOtpFollowup').count({
+        total_followups: 'followup_id'
+      }).where({
+        otp_id: data.otp_id,
+        is_deleted: 0
+      })
+
+    }).then(async (result) => {
       console.log('total followups', JSON.stringify(result));
-      if(result.length){
+      if (result.length) {
         updAddmision.total_followups = result[0].total_followups;
         var upStatus = await knex.select('upload_status').from('tblOtpAdd').where('otp_id', data.otp_id).where('is_deleted', 0);
-        if(upStatus[0].upload_status == '1'){
+        if (upStatus[0].upload_status == '1') {
           updAddmision.upload_status = 2;
           return knex('tblOtpAdd').update(updAddmision).where('otp_id', data.otp_id)
-        }else{
+        } else {
           return knex('tblOtpAdd').update(updAddmision).where('otp_id', data.otp_id)
         }
       } else {
         return [];
       }
-    }).then(r=>{
-       console.log({
+    }).then(r => {
+      console.log({
         msg: 'all tables are updated',
         data: r
       })
@@ -529,7 +536,7 @@ function exitUpdDataSave(event, data, client) {
 //       }
 //     }).then(r=>{
 //       return knex('tblOtpFollowup').count({total_followups:'followup_id'}).where({otp_id: data.otp_id, is_deleted:0})
-     
+
 //     }).then(async (result)=>{
 //       console.log('total followups', JSON.stringify(result));
 //       if(result.length){
@@ -721,8 +728,8 @@ function otpExitAddDataSave(event, data, client) {
     location: 'OTP ADD EXIT',
     data
   });
-  const updAddmision  = {
-    exit_date : otpExitAddData.exit_date,
+  const updAddmision = {
+    exit_date: otpExitAddData.exit_date,
     exit_reason: otpExitAddData.exit_reason,
     total_days: otpExitAddData.days_in_program,
     // upload_status:2
@@ -763,22 +770,27 @@ function otpExitAddDataSave(event, data, client) {
       console.log(followup)
       return knex('tblOtpFollowup')
         .insert(followup)
-    }).then(r=>{
-      return knex('tblOtpFollowup').count({total_followups: 'followup_id'}).where({is_deleted:0, otp_id: data.otp_id})
-    }).then( async(result) =>{
+    }).then(r => {
+      return knex('tblOtpFollowup').count({
+        total_followups: 'followup_id'
+      }).where({
+        is_deleted: 0,
+        otp_id: data.otp_id
+      })
+    }).then(async (result) => {
       console.log('total followups', JSON.stringify(result));
       // if(result.length){
       //   updAddmision.total_followups = result[0].total_followups;
       //   // return knex('tblOtpAdd').update(updAddmision).where('otp_id', data.otp_id)
-        if(result.length){
-          updAddmision.total_followups = result[0].total_followups;
-          var upStatus = await knex.select('upload_status').from('tblOtpAdd').where('otp_id', data.otp_id).where('is_deleted', 0);
-          if(upStatus[0].upload_status == '1'){
-            updAddmision.upload_status = 2;
-            return knex('tblOtpAdd').update(updAddmision).where('otp_id', data.otp_id)
-          }else{
-            return knex('tblOtpAdd').update(updAddmision).where('otp_id', data.otp_id)
-          }
+      if (result.length) {
+        updAddmision.total_followups = result[0].total_followups;
+        var upStatus = await knex.select('upload_status').from('tblOtpAdd').where('otp_id', data.otp_id).where('is_deleted', 0);
+        if (upStatus[0].upload_status == '1') {
+          updAddmision.upload_status = 2;
+          return knex('tblOtpAdd').update(updAddmision).where('otp_id', data.otp_id)
+        } else {
+          return knex('tblOtpAdd').update(updAddmision).where('otp_id', data.otp_id)
+        }
       } else {
         return [];
       }
@@ -1433,7 +1445,8 @@ function creatWindow() {
   mainWindow = new BrowserWindow({
     width,
     height,
-    show: false
+    show: false,
+    // frame: false
   });
 
   majorDbUpdate = new BrowserWindow({
@@ -2416,7 +2429,7 @@ require("./mainfunc/stockInUpdate")(ipcMain, knex, fs, clientMessages, async);
 
 // Future db updates
 
-require('./mainfunc/updateDb');
+// require('./mainfunc/updateDb');
 
-require('./mainfunc/dbUpdateFinal')(knex);
-require('./mainfunc/exitAdditionalColumns')();
+// require('./mainfunc/dbUpdateFinal')(knex);
+// require('./mainfunc/exitAdditionalColumns')();
