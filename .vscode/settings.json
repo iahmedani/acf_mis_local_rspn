@@ -10,5 +10,6 @@
             "server": "165.227.147.183",
             "username": "sa"
         }
-    ]
+    ],
+    "liveServer.settings.port": 5501
 }

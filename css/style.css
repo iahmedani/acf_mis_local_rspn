@@ -14,7 +14,33 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: linear-gradient(left, #fff, #e4e4e4);
+  border: 1px solid #aaa;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #fff;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(left, #22add4, #1e98ba);
+}
+
+/* ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -23,7 +49,7 @@ input[type=number]::-webkit-inner-spin-button {
 
 ::-webkit-scrollbar-thumb {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-}
+} */
 
 /* .jsgrid-cell, .jsgrid-cell>select{
   font-size: 6px !important;
@@ -354,3 +380,7 @@ label {
 }
 
 */
+body {
+  overflow: hidden;
+  /* Hide scrollbars */
+}

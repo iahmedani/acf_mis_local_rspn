@@ -3,164 +3,201 @@ var Highcharts = require('../js/charts/highcharts');
 // require('highcharts/highcharts-more')(Highcharts)
 // require('../js/charts/exporting')(Highcharts);
 // require('../js/charts/export-data')(Highcharts);
-    
+
 module.exports.initDashboard = function () {
-  async function plwData (){
+
+  async function plwData() {
     var _plwData = await knex('tblScrPlw')
-                              .sum({muac_gt_21_pragnent:'muac_gt_21_pragnent'})
-                              .sum({muac_gt_21_lactating:'muac_gt_21_lactating'})
-                              .sum({muac_le_21_pragnent:'muac_le_21_pragnent'})
-                              .sum({muac_le_21_lactating:'muac_le_21_lactating'})
-                              .where({is_deleted: 0})
+      .sum({
+        muac_gt_21_pragnent: 'muac_gt_21_pragnent'
+      })
+      .sum({
+        muac_gt_21_lactating: 'muac_gt_21_lactating'
+      })
+      .sum({
+        muac_le_21_pragnent: 'muac_le_21_pragnent'
+      })
+      .sum({
+        muac_le_21_lactating: 'muac_le_21_lactating'
+      })
+      .where({
+        is_deleted: 0
+      })
     return _plwData;
   }
-  async function _exitData(){
+  async function _exitData() {
     var data = await knex('tblOtpExit')
-                        .select('exit_reason')
-                        .count({total: 'exit_reason'})
-                        .where({is_deleted:0})
-                        .groupBy('exit_reason')
+      .select('exit_reason')
+      .count({
+        total: 'exit_reason'
+      })
+      .where({
+        is_deleted: 0
+      })
+      .groupBy('exit_reason')
     // console.log(data)
     return data;
-  } 
-async function _exitChart (){
-  var _g = await _exitData();
-  var cured = (_g.filter(el=> el.exit_reason=='cured').length > 0) ? _g.filter(el=> el.exit_reason=='cured')[0].total : 0;
-  var defaulter = (_g.filter(el=> el.exit_reason=='defaulter').length > 0) ? _g.filter(el=> el.exit_reason=='defaulter')[0].total : 0;
-  var death = (_g.filter(el=> el.exit_reason=='death').length > 0) ? _g.filter(el=> el.exit_reason=='death')[0].total : 0;
-  var non_respondent = (_g.filter(el=> el.exit_reason=='non_respondent').length > 0) ? _g.filter(el=> el.exit_reason=='non_respondent')[0].total : 0;
+  }
+  async function _exitChart() {
+    var _g = await _exitData();
+    var cured = (_g.filter(el => el.exit_reason == 'cured').length > 0) ? _g.filter(el => el.exit_reason == 'cured')[0].total : 0;
+    var defaulter = (_g.filter(el => el.exit_reason == 'defaulter').length > 0) ? _g.filter(el => el.exit_reason == 'defaulter')[0].total : 0;
+    var death = (_g.filter(el => el.exit_reason == 'death').length > 0) ? _g.filter(el => el.exit_reason == 'death')[0].total : 0;
+    var non_respondent = (_g.filter(el => el.exit_reason == 'non_respondent').length > 0) ? _g.filter(el => el.exit_reason == 'non_respondent')[0].total : 0;
 
-  var indicatorsChart = new Highcharts.chart("indicators-Chart", {
-    chart: {
-      plotBackgroundColor: null,
-      plotBorderWidth: null,
-      plotShadow: false,
-      type: "pie"
-    },
-    title: { text: 'Performance Indicators' },
-    // exporting: true,
-    credits: false,
-    tooltip: {
-      pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
-    },
-    plotOptions: {
-      pie: {
-        allowPointSelect: true,
-        cursor: "pointer",
-        dataLabels: {
-          enabled: true,
-          format: "<b>{point.name}</b>: {point.percentage:.1f} %",
-          style: {
-            color:
-              (Highcharts.theme && Highcharts.theme.contrastTextColor) ||
-              "black"
-          },
-          connectorColor: "silver"
-        }
-      }
-    },
-    series: [
-      {
-        name: "Share",
-        data: [
-          { name: "Cured", y:  cured},
-          { name: "Death", y: death },
-          { name: "Defaulter", y: defaulter},
-          { name: "Non Respondent", y: non_respondent },
-        ]
-      }
-    ]
-  });
-
-} 
-_exitChart();
-
-async function _session (){
-  var data = await knex('tblSessions')
-                      .select('session_type')
-                      .sum({male_participants: 'male_participants'})
-                      .sum({female_participants: 'female_participants'})
-                      .sum({pragnent: 'pragnent'})
-                      .sum({lactating: 'lactating'})
-                      .where({is_deleted:0})
-                      .groupBy('session_type');
- 
-
-  var _thisChartData = await _sessionData(data)
-  // var sessions = data.map(el=> el.session_type);
-  // var _subCat = ['Male Participants','Female Participants', 'Pragnent', 'Lactating']
-  // var _subCat = ['Male Participants','Female Participants', 'Pragnent', 'Lactating']
-  // // console.log(data);
-  // var _mySessionData = (data.length > 0 ) ? [{
-  //   name:'Male Participants',
-  //   data:[data.filter(el=> el.session_type == "cooking")[0].male_participants,   data.filter(el=> el.session_type == "iycf")[0].male_participants,  data.filter(el=> el.session_type == "nut_health_hygene")[0].male_participants,]
-  // },{
-  //   name:'Female Participants',
-  //   data:[data.filter(el=> el.session_type == "cooking")[0].female_participants,   data.filter(el=> el.session_type == "iycf")[0].female_participants,  data.filter(el=> el.session_type == "nut_health_hygene")[0].female_participants,]
-  // },
-  //   {
-  //     name:'Pragnent',
-
-  //     data:[data.filter(el=> el.session_type == "cooking")[0].pragnent,   data.filter(el=> el.session_type == "iycf")[0].pragnent,  data.filter(el=> el.session_type == "nut_health_hygene")[0].pragnent,]
-  //   },
-  //   {
-  //     name:'Lactating',
-  //   data:[data.filter(el=> el.session_type == "cooking")[0].lactating,   data.filter(el=> el.session_type == "iycf")[0].lactating,  data.filter(el=> el.session_type == "nut_health_hygene")[0].lactating,]
-
-  // }   
-  // ]: [];
-  // var seriesData = []
-  // for (session of sessions){
-  //   var x = {};
-  //   x.name= session;
-  //   var y = data.filter(el => el.session_type === session)[0];
-  //   x.data = [y.male_participants, y.female_participants, y.pragnent, y.lactating]
-  //   // console.log(x)
-  //   seriesData.push(x);
-
-  // }
-  var stockChart = new Highcharts.chart('stock-Chart', {
-    chart: {
-      type: 'column'
-    },
-    
-
-    title: { text: 'Sessions Participants Summary' },
-    // exporting: true,
-    credits: false,
-    // subtitle: false,
-    xAxis: {
-      categories: _thisChartData.cat,
-      // crosshair: true
-    },
-    yAxis: {
-      min: 0,
-      title: false,
-    },
-    tooltip: {
-      headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-      pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-        '<td style="padding:0"><b>{point.y:.0f}</b></td></tr>',
-      footerFormat: '</table>',
-      shared: true,
-      useHTML: true
-    },
-    plotOptions: {
-      column: {
-        pointPadding: 0.2,
-        borderWidth: 0,
-        dataLabels: {
-          enabled: true,
-          crop: false,
-          overflow: 'none'
+    var indicatorsChart = new Highcharts.chart("indicators-Chart", {
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: "pie"
       },
-      }
-    },
-    series: _thisChartData.serries
-  });
-  
-}
-_session();
+      title: {
+        text: 'Performance Indicators'
+      },
+      // exporting: true,
+      credits: false,
+      tooltip: {
+        pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: "pointer",
+          dataLabels: {
+            enabled: true,
+            format: "<b>{point.name}</b>: {point.percentage:.1f} %",
+            style: {
+              color: (Highcharts.theme && Highcharts.theme.contrastTextColor) ||
+                "black"
+            },
+            connectorColor: "silver"
+          }
+        }
+      },
+      series: [{
+        name: "Share",
+        data: [{
+            name: "Cured",
+            y: cured
+          },
+          {
+            name: "Death",
+            y: death
+          },
+          {
+            name: "Defaulter",
+            y: defaulter
+          },
+          {
+            name: "Non Respondent",
+            y: non_respondent
+          },
+        ]
+      }]
+    });
+
+  }
+  _exitChart();
+
+  async function _session() {
+    var data = await knex('tblSessions')
+      .select('session_type')
+      .sum({
+        male_participants: 'male_participants'
+      })
+      .sum({
+        female_participants: 'female_participants'
+      })
+      .sum({
+        pragnent: 'pragnent'
+      })
+      .sum({
+        lactating: 'lactating'
+      })
+      .where({
+        is_deleted: 0
+      })
+      .groupBy('session_type');
+
+
+    var _thisChartData = await _sessionData(data)
+    // var sessions = data.map(el=> el.session_type);
+    // var _subCat = ['Male Participants','Female Participants', 'Pragnent', 'Lactating']
+    // var _subCat = ['Male Participants','Female Participants', 'Pragnent', 'Lactating']
+    // // console.log(data);
+    // var _mySessionData = (data.length > 0 ) ? [{
+    //   name:'Male Participants',
+    //   data:[data.filter(el=> el.session_type == "cooking")[0].male_participants,   data.filter(el=> el.session_type == "iycf")[0].male_participants,  data.filter(el=> el.session_type == "nut_health_hygene")[0].male_participants,]
+    // },{
+    //   name:'Female Participants',
+    //   data:[data.filter(el=> el.session_type == "cooking")[0].female_participants,   data.filter(el=> el.session_type == "iycf")[0].female_participants,  data.filter(el=> el.session_type == "nut_health_hygene")[0].female_participants,]
+    // },
+    //   {
+    //     name:'Pragnent',
+
+    //     data:[data.filter(el=> el.session_type == "cooking")[0].pragnent,   data.filter(el=> el.session_type == "iycf")[0].pragnent,  data.filter(el=> el.session_type == "nut_health_hygene")[0].pragnent,]
+    //   },
+    //   {
+    //     name:'Lactating',
+    //   data:[data.filter(el=> el.session_type == "cooking")[0].lactating,   data.filter(el=> el.session_type == "iycf")[0].lactating,  data.filter(el=> el.session_type == "nut_health_hygene")[0].lactating,]
+
+    // }   
+    // ]: [];
+    // var seriesData = []
+    // for (session of sessions){
+    //   var x = {};
+    //   x.name= session;
+    //   var y = data.filter(el => el.session_type === session)[0];
+    //   x.data = [y.male_participants, y.female_participants, y.pragnent, y.lactating]
+    //   // console.log(x)
+    //   seriesData.push(x);
+
+    // }
+    var stockChart = new Highcharts.chart('stock-Chart', {
+      chart: {
+        type: 'column'
+      },
+
+
+      title: {
+        text: 'Sessions Participants Summary'
+      },
+      // exporting: true,
+      credits: false,
+      // subtitle: false,
+      xAxis: {
+        categories: _thisChartData.cat,
+        // crosshair: true
+      },
+      yAxis: {
+        min: 0,
+        title: false,
+      },
+      tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+          '<td style="padding:0"><b>{point.y:.0f}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+      },
+      plotOptions: {
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 0,
+          dataLabels: {
+            enabled: true,
+            crop: false,
+            overflow: 'none'
+          },
+        }
+      },
+      series: _thisChartData.serries
+    });
+
+  }
+  _session();
 
   $(() => {
     // var exporting = {
@@ -170,7 +207,7 @@ _session();
     //     }
     //   }
     // };
-    
+
     ipc.send("newDashboard", '')
     ipc.on("newDashboard", (event, data) => {
       // console.log(data)
@@ -179,7 +216,9 @@ _session();
         chart: {
           type: "column"
         },
-        title: { text: "Screening Children" },
+        title: {
+          text: "Screening Children"
+        },
         // exporting: true,
         credits: false,
         xAxis: {
@@ -200,8 +239,7 @@ _session();
             enabled: false,
             style: {
               fontWeight: "bold",
-              color:
-                (Highcharts.theme && Highcharts.theme.textColor) || "gray"
+              color: (Highcharts.theme && Highcharts.theme.textColor) || "gray"
             }
           }
         },
@@ -215,33 +253,29 @@ _session();
             color: '#000000',
             fontSize: '8px',
             width: 150
-            
-        },
+
+          },
           floating: false,
-          backgroundColor:
-            (Highcharts.theme && Highcharts.theme.background2) || "white",
+          backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || "white",
           // borderColor: "#CCC",
           // borderWidth: 1,
           shadow: false
         },
         tooltip: {
           headerFormat: "<b>Session Type: {point.x}</b><br/>",
-          pointFormat:
-            "{series.name}: {point.y}<br/>Total: {point.stackTotal}"
+          pointFormat: "{series.name}: {point.y}<br/>Total: {point.stackTotal}"
         },
         plotOptions: {
           column: {
             stacking: "normal",
             dataLabels: {
               enabled: true,
-              color:
-                (Highcharts.theme && Highcharts.theme.dataLabelsColor) ||
+              color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) ||
                 "white"
             }
           }
         },
-        series: [
-          {
+        series: [{
             name: "Normal MUAC>12.5cm",
             data: [
               scrChild.normal_boys_623,
@@ -351,8 +385,8 @@ _session();
       //     }
       //   ]
       // });
-    
-      
+
+
       // ipc.removeAllListeners("newDashboard");
     });
     // ipc.send('test')
@@ -360,28 +394,28 @@ _session();
     //   console.log(data)
     // })
 
-    
+
   })
 
 
-  async function _plwScrChart (){
+  async function _plwScrChart() {
     var _plwData = await plwData();
     // console.log(_plwData)
     _plwData = _plwData[0]
     var PlwChart = new Highcharts.chart("regByProg-Chart", {
       chart: {
         type: 'column'
-    },
-    title: {
+      },
+      title: {
         text: 'PLW Screening'
-    },
+      },
       // title: { text: "PLW Children" },
       // exporting: true,
       credits: false,
       // yAxis:false,
       yAxis: {
-        title:false,
-        min:0,
+        title: false,
+        min: 0,
       },
       xAxis: {
         categories: [
@@ -389,57 +423,59 @@ _session();
           "Lactating MUAC >21 cm",
           "Pragnent MUAC <21 cm",
           "Lactating MUAC <21 cm",
-        ]},
+        ]
+      },
       series: [{
         name: 'Total Screened',
         data: [
-            ["Pragnent MUAC >21 cm", _plwData.muac_gt_21_pragnent],
-            ['Lactating MUAC >21 cm', _plwData.muac_gt_21_lactating],
-            ['Pragnent MUAC <21 cm', _plwData.muac_le_21_pragnent],
-            ['Lactating MUAC <21 cm', _plwData.muac_le_21_lactating],
-            
+          ["Pragnent MUAC >21 cm", _plwData.muac_gt_21_pragnent],
+          ['Lactating MUAC >21 cm', _plwData.muac_gt_21_lactating],
+          ['Pragnent MUAC <21 cm', _plwData.muac_le_21_pragnent],
+          ['Lactating MUAC <21 cm', _plwData.muac_le_21_lactating],
+
         ],
         dataLabels: {
-            enabled: true,
-            // rotation: -90,
-            color: '#FFFFFF',
-            align: 'center',
-            // format: '{point.y:.1f}', // one decimal
-            y: 10, // 10 pixels down from the top
-            style: {
-                fontSize: '13px',
-                fontFamily: 'Verdana, sans-serif'
-            }
+          enabled: true,
+          // rotation: -90,
+          color: '#FFFFFF',
+          align: 'center',
+          // format: '{point.y:.1f}', // one decimal
+          y: 10, // 10 pixels down from the top
+          style: {
+            fontSize: '13px',
+            fontFamily: 'Verdana, sans-serif'
+          }
         }
-    }]
-      
+      }]
+
     });
   }
 
   _plwScrChart();
-  
+
+
 }
 
 
-let _sessionData = async function(sessions){
-  var _data ={
-    cat:[],
-    serries:[]
-   }
-  
-  for (session of sessions){
+let _sessionData = async function (sessions) {
+  var _data = {
+    cat: [],
+    serries: []
+  }
+
+  for (session of sessions) {
     _data.cat.push(session.session_type.toUpperCase().replace(/_/g, ' '))
     var keys = Object.keys(session);
-    keys = await keys.filter(el=> el != 'session_type' )
-    for (key of keys){
+    keys = await keys.filter(el => el != 'session_type')
+    for (key of keys) {
       var x = {};
       x.name = key.toUpperCase().replace(/_/g, ' ');
-      var xData = []; 
-      for ( n of sessions){
-          xData.push(n[key])
+      var xData = [];
+      for (n of sessions) {
+        xData.push(n[key])
       }
       x.data = xData;
-      if(_data.cat.length == sessions.length){
+      if (_data.cat.length == sessions.length) {
 
         _data.serries.push(x)
       }
@@ -447,4 +483,3 @@ let _sessionData = async function(sessions){
   }
   return _data;
 }
-

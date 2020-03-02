@@ -408,6 +408,8 @@ function exitUpdDataSave(event, data, client) {
     exit_date: otpExitAddData.exit_date,
     exit_reason: otpExitAddData.exit_reason,
     total_days: otpExitAddData.days_in_program,
+    exit_muac: otpExitAddData.exit_muac,
+    exit_weight: otpExitAddData.exit_weight,
     // upload_status : 2
     // otp_id : otpExitAddData.otp_id
   }
@@ -732,6 +734,8 @@ function otpExitAddDataSave(event, data, client) {
     exit_date: otpExitAddData.exit_date,
     exit_reason: otpExitAddData.exit_reason,
     total_days: otpExitAddData.days_in_program,
+    exit_muac: otpExitAddData.exit_muac,
+    exit_weight: otpExitAddData.exit_weight,
     // upload_status:2
   }
   const followup = {
@@ -778,7 +782,7 @@ function otpExitAddDataSave(event, data, client) {
         otp_id: data.otp_id
       })
     }).then(async (result) => {
-      console.log('total followups', JSON.stringify(result));
+      // console.log('total followups', JSON.stringify(result));
       // if(result.length){
       //   updAddmision.total_followups = result[0].total_followups;
       //   // return knex('tblOtpAdd').update(updAddmision).where('otp_id', data.otp_id)
@@ -2433,3 +2437,5 @@ require("./mainfunc/stockInUpdate")(ipcMain, knex, fs, clientMessages, async);
 
 // require('./mainfunc/dbUpdateFinal')(knex);
 // require('./mainfunc/exitAdditionalColumns')();
+
+// require('./mainfunc/dbUpdates/v3DbUpdates').v3Database();

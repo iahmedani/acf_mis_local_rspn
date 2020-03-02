@@ -2,11 +2,18 @@
   <div class="container-container">
     <form id="scrPlwNewForm">
       <div class="form-group row">
-        <div class="col-sm-2">
-          <label for="report_month" class=" col-form-label">Report Month</label>
-          <input type="month" name="report_month" class="form-control form-control-sm " required tabindex="1">
+        <div class="col-sm-1">
+          <label for="ent_type" class=" col-form-label">Entry Type</label>
+          <select name="ent_type" id="ent_type" class="form-control form-control-sm " required tabindex="1">
+            <option value="new" selected>New</option>
+            <option value="rescreen">ReScreen</option>
+          </select>
         </div>
         <div class="col-sm-2">
+          <label for="report_month" class=" col-form-label"> Month</label>
+          <input type="month" name="report_month" class="form-control form-control-sm " tabindex="1" required>
+        </div>
+        <div class="col-sm-1">
           <label for="ddProvince" class="col-form-label">Province:</label>
           <select id="ddProvince" name="province_id" class="form-control form-control-sm" tabindex="2">
             <option value="">Select One</option>
@@ -76,8 +83,8 @@
 
         <div class="col-sm-2">
           <label for="screening_date" class=" col-form-label">Entry Date:</label>
-          <input type="date" name="screening_date" id="txtScrChildDate" class="form-control form-control-sm cld"
-            required tabindex="11">
+          <input type="date" name="screening_date" min="2018-01-01" id="txtScrChildDate"
+            class="form-control form-control-sm cld" required tabindex="11">
         </div>
 
       </div>
@@ -101,12 +108,12 @@
                 id="total_scr_pragnent" tabindex="-1" readonly>
             </td>
             <td class="align-middle">
-              <input required min="0" type="number" class="form-control form-control-sm clr p"
+              <input required min="0" type="number" class="form-control form-control-sm clr p rescreen"
                 name="reScreened_scr_pragnent" id="reScreened_scr_pragnent" tabindex="12">
             </td>
             <td class="align-middle">
-              <input required min="0" type="number" class="form-control form-control-sm clr p" name="new_scr_pragnent"
-                id="new_scr_pragnent" tabindex="14">
+              <input required min="0" type="number" class="form-control form-control-sm clr p newscreen"
+                name="new_scr_pragnent" id="new_scr_pragnent" tabindex="14">
             </td>
             <td class="align-middle">
               <input required min="0" type="number" class="form-control form-control-sm clr"
@@ -120,11 +127,11 @@
               <input required min="0" type="number" class="form-control form-control-sm clr p1"
                 name="muac_gt_21_pragnent" id="muac_gt_21_pragnent" tabindex="20">
             </td>
-            <td class="align-middle bg-warning" rowspan="2">
+            <td class="align-middle bg-warning" rowspan="3">
               <input required min="0" type="number" class="form-control form-control-sm clr" name="total_followup"
                 id="total_followup" tabindex="22">
             </td>
-            <td class="align-middle bg-warning" rowspan="2">
+            <td class="align-middle bg-warning" rowspan="3">
               <input required min="0" type="number" class="form-control form-control-sm clr" name="total_exits"
                 id="total_exits" tabindex="23">
             </td>
@@ -136,12 +143,12 @@
                 id="total_scr_lactating" tabindex="-1" readonly>
             </td>
             <td class="align-middle">
-              <input required min="0" type="number" class="form-control form-control-sm clr l"
+              <input required min="0" type="number" class="form-control form-control-sm clr l rescreen"
                 name="reScreened_scr_lactating" id="reScreened_scr_lactating" tabindex="13">
             </td>
             <td class="align-middle">
-              <input required min="0" type="number" class="form-control form-control-sm clr l" name="new_scr_lactating"
-                id="new_scr_lactating" tabindex="15">
+              <input required min="0" type="number" class="form-control form-control-sm clr l newscreen"
+                name="new_scr_lactating" id="new_scr_lactating" tabindex="15">
             </td>
 
             <td class="align-middle">
@@ -164,6 +171,40 @@
           </td> -->
           </tr>
           <tr>
+            <th class="align-middle">PLW</th>
+            <td class="align-middle">
+              <input required min="0" type="number" class="form-control form-control-sm clr" name="total_scr_plw"
+                id="total_scr_plw" tabindex="-1" readonly>
+            </td>
+            <td class="align-middle">
+              <input required min="0" type="number" class="form-control form-control-sm clr plw rescreen"
+                name="reScreened_scr_plw" id="reScreened_scr_plw" tabindex="13">
+            </td>
+            <td class="align-middle">
+              <input required min="0" type="number" class="form-control form-control-sm clr plw newscreen"
+                name="new_scr_plw" id="new_scr_plw" tabindex="15">
+            </td>
+
+            <td class="align-middle">
+              <input required min="0" type="number" class="form-control form-control-sm clr" name="ifa_first_time_plw"
+                id="ifa_first_time_plw" tabindex="17">
+            </td>
+            <td class="align-middle">
+              <input required min="0" type="number" class="form-control form-control-sm clr plw1" name="muac_le_21_plw"
+                id="muac_le_21_plw" tabindex="19">
+            </td>
+            <td class="align-middle">
+              <input required min="0" type="number" class="form-control form-control-sm clr plw1" name="muac_gt_21_plw"
+                id="muac_gt_21_plw" tabindex="21">
+            </td>
+            <!-- <td class="align-middle">
+            <input required min="0" type="number" class="form-control form-control-sm clr" name="followup_lactating" id="followup_lactating">
+          </td> -->
+            <!-- <td class="align-middle">
+            <input required min="0" type="number" class="form-control form-control-sm clr" name="exit_lactating" id="exit_lactating">
+          </td> -->
+          </tr>
+          <tr>
             <td colspan="7" class="not-req"></td>
             <td>
               <input type="submit" id="submitScrPlwNew" value="Save"
@@ -171,7 +212,7 @@
             </td>
             <td>
               <button id="resetScrPlwNew"
-                class="btn btn-warning btn-sm shadow-sm  form-cntrol form-control-sm btn-block"
+                class="btn btn-warning btn-sm shadow-sm  form-control form-control-sm btn-block"
                 tabindex="25">Reset</button>
             </td>
             <!-- <td colspan="3"></td> -->

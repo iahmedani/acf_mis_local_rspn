@@ -1,96 +1,97 @@
 <template>
-    <div class="container-fluid">
-      <div class="row">
+  <div class="container-fluid">
+    <div class="row">
 
-        <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">Session</p>
-  <form id="sessionForm" class="col col-lg-12 col-md-12">
-  <div class="form-group row">
-      <div class="form-group col-sm-2">
-        <label for="prog_type" class="col-form-label">Program Type:</label>
-        <select name="prog_type" id="ddProgramType" class="form-control form-control-sm myFilter" required>
-          <option value="">Select One</option>
-            <!-- <option value="sfp">TSFP</option>
+      <form id="sessionForm" class="col col-lg-12 col-md-12">
+        <div class="form-group row">
+          <div class="form-group col-sm-2">
+            <label for="prog_type" class="col-form-label">Program Type:</label>
+            <select name="prog_type" id="ddProgramType" class="form-control form-control-sm myFilter" required>
+              <option value="">Select One</option>
+              <!-- <option value="sfp">TSFP</option>
             <option value="sfp_Plw">TSFP-PLW</option> -->
-            <option value="otp">OTP</option>
-            <!-- <option value="sc">NSC</option> -->
-            <option value="outreach">Out Reach</option>
-        </select>
-      </div>
-      <div class="form-group col-sm-2 ">
-        <label for="province" class="col-form-label ">Province</label>
-        <select id="ddProvince" class="form-control form-control-sm myFilter prgChange" required>
-          <option selected value="">Choose</option>
+              <option value="otp">OTP</option>
+              <!-- <option value="sc">NSC</option> -->
+              <option value="outreach">Out Reach</option>
+            </select>
+          </div>
+          <div class="form-group col-sm-2 ">
+            <label for="province" class="col-form-label ">Province</label>
+            <select id="ddProvince" class="form-control form-control-sm myFilter prgChange" required>
+              <option selected value="">Choose</option>
 
-        </select>
-      </div>
-      <div class="form-group col-sm-2 ">
+            </select>
+          </div>
+          <div class="form-group col-sm-2 ">
 
-        <label for="district" class="col-form-label myFilter">District</label>
-        <select name="district" id="ddDistrict" class="form-control form-control-sm prgChange" required>
-          <option selected value="">Choose</option>
-        </select>
-      </div>
-      <div class="form-group col-sm-2 ">
+            <label for="district" class="col-form-label myFilter">District</label>
+            <select name="district" id="ddDistrict" class="form-control form-control-sm prgChange" required>
+              <option selected value="">Choose</option>
+            </select>
+          </div>
+          <div class="form-group col-sm-2 ">
 
-        <label for="Tehsil" class="col-form-label myFilter">Tehsil</label>
-        <select name="Tehsil" id="ddTehsil" class="form-control form-control-sm prgChange" required>
-          <option selected value="">Choose</option>
+            <label for="Tehsil" class="col-form-label myFilter">Tehsil</label>
+            <select name="Tehsil" id="ddTehsil" class="form-control form-control-sm prgChange" required>
+              <option selected value="">Choose</option>
 
-        </select>
-      </div>
-      <div class="form-group col-sm-2  nsc">
-        <label for="uc" class="col-form-label">UC</label>
-        <select id="ddUC" name="uc_id" class="form-control form-control-sm myFilter prgChange" required>
-          <option selected value="">Choose</option>
-        </select>
-      </div>
-      <div class="form-group col-sm-2 nsc noOutreach">
-        <label for="site_id" class="col-form-label">Reporting Site Name:</label>
-        <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm myFilter prgChange" required>
-          <option selected value="">Select One</option>
-        </select>
-      </div>
-      <!-- </div> -->
-      <!-- <div class="form-group row"> -->
-      <div class="form-group col-sm-2 outreach">
-        <label for="staff_code" class="col-form-label">Staff Code:</label>
-        <select id="ddStaff_code" name="staff_code" class="form-control form-control-sm cld myFilter prgChange" required>
-          <option value="">Select One</option>
-        </select>
-      </div>
-      <div class="form-group col-sm-2 outreach">
-        <label for="staff_name" class="col-form-label">Staff Name:</label>
-        <select id="ddStaff_name" name="staff_name" class="form-control form-control-sm cld prgChange" required>
-          <option value="">Select One</option>
-        </select>
-      </div>
-      <div class="form-group col-sm-2 outreach">
-        <label for="sup_code" class=" col-form-label">Supervisor Code:</label>
-        <select id="ddSup_code" name="sup_code" class="form-control form-control-sm cld myFilter prgChange" required>
-          <option value="">Select One</option>
-        </select>
-      </div>
-      <div class="form-group col-sm-2 outreach">
-        <label for="sup_name" class=" col-form-label">Supervisor Name:</label>
-        <select id="ddSup_name" name="sup_name" class="form-control form-control-sm cld prgChange" required>
-          <option value="">Select One</option>
-        </select>
-      </div>
-      <!-- </div> -->
-      <!-- <div class="form-group row"> -->
-      <!-- <label for="dn_number" class="col-sm-2 col-form-label">Delivery Note #:</label>
+            </select>
+          </div>
+          <div class="form-group col-sm-2  nsc">
+            <label for="uc" class="col-form-label">UC</label>
+            <select id="ddUC" name="uc_id" class="form-control form-control-sm myFilter prgChange" required>
+              <option selected value="">Choose</option>
+            </select>
+          </div>
+          <div class="form-group col-sm-2 nsc noOutreach">
+            <label for="site_id" class="col-form-label">Reporting Site Name:</label>
+            <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm myFilter prgChange" required>
+              <option selected value="">Select One</option>
+            </select>
+          </div>
+          <!-- </div> -->
+          <!-- <div class="form-group row"> -->
+          <div class="form-group col-sm-2 outreach">
+            <label for="staff_code" class="col-form-label">Staff Code:</label>
+            <select id="ddStaff_code" name="staff_code" class="form-control form-control-sm cld myFilter prgChange"
+              required>
+              <option value="">Select One</option>
+            </select>
+          </div>
+          <div class="form-group col-sm-2 outreach">
+            <label for="staff_name" class="col-form-label">Staff Name:</label>
+            <select id="ddStaff_name" name="staff_name" class="form-control form-control-sm cld prgChange" required>
+              <option value="">Select One</option>
+            </select>
+          </div>
+          <div class="form-group col-sm-2 outreach">
+            <label for="sup_code" class=" col-form-label">Supervisor Code:</label>
+            <select id="ddSup_code" name="sup_code" class="form-control form-control-sm cld myFilter prgChange"
+              required>
+              <option value="">Select One</option>
+            </select>
+          </div>
+          <div class="form-group col-sm-2 outreach">
+            <label for="sup_name" class=" col-form-label">Supervisor Name:</label>
+            <select id="ddSup_name" name="sup_name" class="form-control form-control-sm cld prgChange" required>
+              <option value="">Select One</option>
+            </select>
+          </div>
+          <!-- </div> -->
+          <!-- <div class="form-group row"> -->
+          <!-- <label for="dn_number" class="col-sm-2 col-form-label">Delivery Note #:</label>
             <div class="col-sm-4">
               <input type="text" name="dn_number" id="dn_number" class="form-control form-control-sm" required>
-            </div> -->     
-    </div>
-    <div class="row">
-      <div id="jsGrid" class="table-responsive"></div>
-    </div>
-  
-  </form>
-      </div>
+            </div> -->
+        </div>
+        <div class="row">
+          <div id="jsGrid" class="table-responsive"></div>
+        </div>
 
-        <!-- <div class="row">
+      </form>
+    </div>
+
+    <!-- <div class="row">
 
           <div class="form-group col-sm-2 ">
             <label for="province">Province</label>
@@ -131,7 +132,7 @@
           </div>
           
         </div> -->
-        <!-- <form action="">
+    <!-- <form action="">
     
           <div class="row">
             <div class="form-group col-sm-2">
@@ -163,9 +164,9 @@
       
           </div>
         </form> -->
-        
-    
-        <!-- </div> -->
-        <!-- </div> -->
-      </div>
+
+
+    <!-- </div> -->
+    <!-- </div> -->
+  </div>
 </template>

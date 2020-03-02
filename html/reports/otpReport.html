@@ -1,9 +1,9 @@
 <template>
-    <div class="row">
+    <div class="container-fluid">
         <div id="filter" class="rounded">
             <form id="otpReportFilerForm">
                 <div class="form-group row">
-                    <div class="col-sm-2">
+                    <div class="col-sm-2 col-md-2 col-lg-2">
 
                         <label for="ddProgramType" class="col-form-label">Program Type:</label>
 
@@ -16,52 +16,52 @@
                         </select>
 
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-2 col-md-2 col-lg-2">
                         <label for="ddProvince" class="col-form-label">Province:</label>
                         <select id="ddProvince" name="province_id" class="form-control form-control-sm">
                             <option value="">All</option>
                         </select>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-2 col-md-2 col-lg-2">
                         <label for="ddDistrict" class="col-form-label">District:</label>
                         <select id="ddDistrict" name="district_id" class="form-control form-control-sm">
                             <option value="">All</option>
                         </select>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-2 col-md-2 col-lg-2">
                         <label for="ddTehsil" class="col-form-label">Tehsil:</label>
                         <select id="ddTehsil" name="tehsil_id" class="form-control form-control-sm">
                             <option value="">All</option>
                         </select>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-2 col-md-2 col-lg-2">
                         <label for="ddUC" class="col-form-label">UC:</label>
                         <select id="ddUC" name="uc_id" class="form-control form-control-sm">
                             <option value="">All</option>
                         </select>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-2 col-md-2 col-lg-2">
                         <label for="site_id" class="col-form-label">Site Name:</label>
                         <select id="ddHealthHouse" name="site_id" class="form-control form-control-sm">
                             <option selected value="">All</option>
                         </select>
                     </div>
-                    <div class="col-sm-2" id="strDateDiv">
+                    <div class="col-sm-2 col-md-2 col-lg-2" id="strDateDiv">
                         <label for="startDate" class="col-form-label">Start Date</label>
                         <input type="date" name="startDate" id="startDate" class="form-control form-control-sm"
                             min="2019-01-01" max="2024-12-31" required>
                     </div>
-                    <div class="col-sm-2" id="endDateDiv">
+                    <div class="col-sm-2 col-md-2 col-lg-2" id="endDateDiv">
                         <label for="endDate" class="col-form-label">End Date</label>
                         <input type="date" name="endDate" id="endDate" class="form-control form-control-sm"
                             min="2019-01-01" max="2024-12-31">
                     </div>
-                    <div class="col-sm-2 align-self-end" id="btnShowDiv">
+                    <div class="col-sm-2 col-md-2 col-lg-2 align-self-end" id="btnShowDiv">
                         <button class="btn btn-info btn-sm btn-block form-control form-control-sm shadow-sm"
                             id="showData">
                             <i class="fas fa-filter"></i> Show Data</button>
                     </div>
-                    <div class="col-sm-3 align-self-end" id="btnIntervalDiv">
+                    <div class="col-sm-2 align-self-end" id="btnIntervalDiv">
                         <button class="btn btn-success btn-sm btn-block form-control form-control-sm shadow-sm "
                             id="exportData">
                             <i class="far fa-file-excel"></i> Generate Report</button>

@@ -1,7 +1,6 @@
 <template>
   <div id="stockEntry">
     <div class="row">
-      <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">Stock Entry: </p>
       <div class="alert alert-danger col-sm-12 col-lg-12 col-md-12" role="alert">
         <span class="b"> Note! </span> All Quantities must be added in Sub Unit.
       </div>
@@ -16,22 +15,22 @@
             <input type="date" name="dn_date" id="dn_date" class="form-control form-control-sm" required>
           </div>
         </div>
-        
-        
-          
+
+
+
       </form>
     </div>
-      <div class="row">
-        <div class="table-responsive">
-            <div id="jsGridStockInEntry"></div>
-          </div>
-
+    <div class="row">
+      <div class="table-responsive">
+        <div id="jsGridStockInEntry"></div>
       </div>
 
-        <div class=" row">
-            <div class="offset-sm-10 col-sm-2">
-              <button type="submit" class="btn btn-info btn-block" id="stockEntrySubmit">Save</button>
-            </div>
-          </div>
     </div>
+
+    <div class=" row">
+      <div class="offset-sm-10 col-sm-2">
+        <button type="submit" class="btn btn-info btn-block" id="stockEntrySubmit">Save</button>
+      </div>
+    </div>
+  </div>
 </template>

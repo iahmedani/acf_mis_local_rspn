@@ -1,28 +1,27 @@
 <template>
-<style>
-  .item_id-insert, .item_id-update{
-    display: none !important;
-  }  
-</style>
-  <div id="stockDidt">
+  <style>
+    .item_id-insert,
+    .item_id-update {
+      display: none !important;
+    }
+  </style>
+  <div id="stockDidt" class="container-fluid">
     <div class="row">
-      <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">Stock Distribution  </p>
       <form action="#" id="stockDist" class="col-sm-12">
         <div class="form-group row">
-            <div class="col-sm-2">
-                <label for="distMonth" class="col-form-label">Reporting Month</label>
-                <input type="month" name="distMonth" id="distMonth" class="form-control form-control-sm"
-                  required>
-              </div>
+          <div class="col-sm-2">
+            <label for="distMonth" class="col-form-label">Reporting Month</label>
+            <input type="month" name="distMonth" id="distMonth" class="form-control form-control-sm" required>
+          </div>
           <div class="form-group col-sm-2">
             <label for="prog_type" class="form-label">Program Type:</label>
             <select name="prog_type" id="ddProgramType" class="form-control form-control-sm" required>
               <option selected value="">Select One</option>
-                <option disabled value="sfp">TSFP</option>
-                <option disabled value="sfp_Plw">TSFP-PLW</option>
-                <option value="otp">OTP</option>
-                <option value="sc">NSC</option>
-                <option value="outreach">Out Reach</option>
+              <option disabled value="sfp">TSFP</option>
+              <option disabled value="sfp_Plw">TSFP-PLW</option>
+              <option value="otp">OTP</option>
+              <option value="sc">NSC</option>
+              <option value="outreach">Out Reach</option>
             </select>
           </div>
           <div class="form-group col-sm-2 ">
@@ -91,15 +90,15 @@
                 <div class="col-sm-4">
                   <input type="text" name="dn_number" id="dn_number" class="form-control form-control-sm" required>
                 </div> -->
-          
-         
+
+
         </div>
         <div class="row">
 
-            <div class="alert alert-danger col-sm-12 col-lg-12 col-md-12" role="alert">
-                <span class="b"> Note! </span> All Quantities must be added in Sub Unit.
-              </div>
+          <div class="alert alert-danger col-sm-12 col-lg-12 col-md-12" role="alert">
+            <span class="b"> Note! </span> All Quantities must be added in Sub Unit.
           </div>
+        </div>
         <div class="row">
           <div class="table-responsive">
             <div id="stockDistGrid"></div>
@@ -108,10 +107,10 @@
         </div>
         <div class="form-group row">
           <div class="ml-auto col-sm-2">
-            <button type="submit" class="btn btn-info btn-sm" id="stockDistSubmit" >Save</button>
-          <!-- </div>    -->
-          <!-- <div class="float-right col-sm-2"> -->
-            <button type="rest" class="btn btn-warning btn-sm" id="stockDistReset" >Reset</button>
+            <button type="submit" class="btn btn-info btn-sm" id="stockDistSubmit">Save</button>
+            <!-- </div>    -->
+            <!-- <div class="float-right col-sm-2"> -->
+            <button type="rest" class="btn btn-warning btn-sm" id="stockDistReset">Reset</button>
             <!-- <button type="reset" class="btn btn-info btn-block" id="stockOutEntrySubmit">Save</button> -->
           </div>
         </div>

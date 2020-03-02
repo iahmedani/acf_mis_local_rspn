@@ -33,7 +33,6 @@
 
   <script>
     const electron = require('electron');
-    const FS = require('fs');
     const ipc = electron.ipcRenderer;
     const remote = electron.remote;
     var hjk = {
@@ -41,13 +40,6 @@
       Password: 'test123'
     }
     window.sessionStorage.setItem('user', hjk)
-
-    var appConfig = JSON.parse(FS.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, 'utf8'))
-    window.sessionStorage.setItem('config', JSON.stringify(appConfig))
-    var _dx = JSON.parse(window.sessionStorage.getItem('config'))
-
-    console.log(_dx)
-
     // console.log(window.sessionStorage.getItem('user'))
   </script>
   <link rel="import" href="dashboard.html">
@@ -70,7 +62,7 @@
   <!-- <link rel="import" href="scrChildren.html"> -->
   <link rel="import" href="data_entry/scrChildren.html">
   <!-- <link rel="import" href="scrChildrenUpdv1.html"> -->
-  <link rel="import" href="data_edit/scrChildrenUpdv1.html">
+  <link rel="import" href="data_entry/scrChildrenUpdv1.html">
   <link rel="import" href="scrChildReportNew.html">
   <link rel="import" href="scrPlwReportNew.html">
   <link rel="import" href="stockEntry.html">
@@ -80,8 +72,7 @@
   <link rel="import" href="stockDist.html">
   <link rel="import" href="stockDistReport.html">
   <link rel="import" href="stockDistUpd.html">
-  <!-- <link rel="import" href="supList.html"> -->
-  <link rel="import" href="data_entry/supList.html">
+  <link rel="import" href="supList.html">
   <link rel="import" href="staffList.html">
   <link rel="import" href="villageList.html">
   <link rel="import" href="sessionsReport.html">
@@ -899,8 +890,7 @@
   // var InitOtpReportsV2 = require('./otpReportsv2').initOtpReportsV2;
   var OTPReport = require('./reports/otpReport').OTPReport;
   var InitDefaulterv2 = require('./def2').initDefaulterv2;
-  // var InitScrChildrenUpd = require('./scrChildrenUpdv1').initScrChildrenUpd;
-  var InitScrChildrenUpd = require('./data_edit/scrChildrenUpdv1').initScrChildrenUpd;
+  var InitScrChildrenUpd = require('./scrChildrenUpdv1').initScrChildrenUpd;
   var InitScrPlwNewUpd = require('./scrPlwNewUpdv1').initScrPlwNewUpd;
   var InitScrChildrenReport = require('./scrChildrenReport').initScrChildrenReport;
   var InitScrPlwNewReport = require('./scrPlwNewReport').initScrPlwNewReport;
@@ -908,8 +898,7 @@
   var InitStockEntryUpdate = require('./stockEntryUpdate').stockEntryUpdate;
   var InitAutoStock = require('./autoStock').autoStock;
   var InitStockDist = require('./scrStock').stockDist;
-  // var InitSupList = require('./supList').SupList;
-  var InitSupList = require('./data_entry/supList').SupList;
+  var InitSupList = require('./supList').SupList;
   var InitStaffList = require('./staffList').StaffList;
   var InitVillageList = require('./villageList').VillageList;
   var InitSessionsReport = require('./sessionsReport').sessionsReport;
@@ -1028,8 +1017,7 @@
   }
 
   function supListTemplate() {
-    // var content = document.querySelector('link[href="supList.html"]');
-    var content = document.querySelector('link[href="data_entry/supList.html"]');
+    var content = document.querySelector('link[href="supList.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -1174,8 +1162,7 @@
   }
 
   function scrChUpdTemplate1() {
-    // var content = document.querySelector('link[href="scrChildrenUpdv1.html"]');
-    var content = document.querySelector('link[href="data_edit/scrChildrenUpdv1.html"]');
+    var content = document.querySelector('link[href="scrChildrenUpdv1.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
