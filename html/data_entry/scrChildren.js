@@ -199,6 +199,8 @@ module.exports.initGrid = function () {
     if ($('#scrChildrenForm').valid() && $('.highlightInput').length == 0) {
       var scrChildrenData = $('#scrChildrenForm').serializeFormJSON();
       scrChildrenData.ch_scr_id = uuid();
+      var appConfig = JSON.parse(window.sessionStorage.getItem('config'));
+      scrChildrenData.org_name = appConfig.org_name;
       // console.log(scrChildrenData);
       scrChildrenData.reffer_otp_boys = parseInt(scrChildrenData.reffer_otp_boys_s1) + ((parseInt(scrChildrenData.reffer_otp_boys_s2)) ? parseInt(scrChildrenData.reffer_otp_boys_s2) : 0);
       scrChildrenData.reffer_otp_girls = parseInt(scrChildrenData.reffer_otp_girls_s1) + ((parseInt(scrChildrenData.reffer_otp_girls_s2)) ? parseInt(scrChildrenData.reffer_otp_girls_s2) : 0);

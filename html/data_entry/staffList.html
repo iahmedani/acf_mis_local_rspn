@@ -32,10 +32,12 @@
     }
   </style>
   <div class="container-fluid">
-    <div id="tblSupList" class="rounded"></div>
+    <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">L/CHW List
+    </p>
+    <div id="tblStaffList" class="rounded"></div>
     <div class="row">
       <div class="col-sm-12 rounded">
-        <form action="#" id="supForm">
+        <form action="#" id="staffForm">
           <table class="table table-bordered table-sm ">
             <tr class="bg-info rounded">
               <th class="rounded">Province</th>
@@ -43,8 +45,8 @@
               <th class="rounded">Tehsil</th>
               <th class="rounded">UC</th>
               <!-- <th class="rounded">Reporting Site</th> -->
-              <th class="rounded">Sup Code</th>
-              <th class="rounded">Sup Name</th>
+              <th class="rounded">Staff Code</th>
+              <th class="rounded">Staff Name</th>
               <th class="rounded">De-activate</th>
               <th class="rounded">Save</th>
               <!-- <th class="rounded">Update</th> -->
@@ -63,13 +65,15 @@
                   <option value="">Select One</option>
                 </select></td>
               <!-- <td><select id="ddHealthHouse" name="site" class="form-control form-control-sm" required>
-                <option value="">Select One</option>
-              </select></td> -->
-              <td><input type="text" name="sup_code" id="sup_code" class="form-control form-control-sm" required></td>
-              <td><input type="text" name="sup_name" id="sup_name" class="form-control form-control-sm" required></td>
+                  <option selected disabled>Select One</option>
+                </select></td> -->
+              <td><input type="text" name="staff_code" id="staff_code" class="form-control form-control-sm" required>
+              </td>
+              <td><input type="text" name="staff_name" id="staff_name" class="form-control form-control-sm" required>
+              </td>
               <td colspan="1"><input class="form-check-input" type="checkbox" id="is_deleted" name="is_deleted"></td>
-              <td><button class="btn btn-success btn-sm" id="btnSaveSup"><i class="fas fa-save"></i></button></td>
-              <!-- <td><button class="btn btn-warning btn-sm" id="btnUpdateSup" disabled><i class="fas fa-edit"></i></button></td> -->
+              <td><button class="btn btn-success btn-sm" id="btnSaveStaff"><i class="fas fa-save"></i></button></td>
+              <!-- <td><a href="" class="btn btn-warning btn-sm" id="btnUpdateStaff"><i class="fas fa-edit"></i></a></td> -->
               <!-- <td></td> -->
             </tr>
           </table>
@@ -78,7 +82,7 @@
       </div>
 
     </div>
-    <button class="btn btn-sm btn-success" id="_supListExport">Export List</button>
+    <button class="btn btn-sm btn-success" id="_staffListExport">Export List</button>
   </div>
 
 </template>

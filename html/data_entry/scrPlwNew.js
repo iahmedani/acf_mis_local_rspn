@@ -189,6 +189,8 @@ module.exports.initScrPlwNew = function () {
     if ($('#scrPlwNewForm').valid() && $('.highlightInput').length == 0) {
       var scrPlwNewData = $('#scrPlwNewForm').serializeFormJSON();
       scrPlwNewData.plw_scr_id = uuid();
+      var appConfig = JSON.parse(window.sessionStorage.getItem('config'));
+      scrPlwNewData.org_name = appConfig.org_name;
       // console.log(scrPlwNewData);
       scrPlwNewData.sup_name = $("#ddSup_name option:selected").text();
       scrPlwNewData.staff_name = $("#ddStaff_name option:selected").text();

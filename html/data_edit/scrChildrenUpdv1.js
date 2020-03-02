@@ -648,6 +648,8 @@ module.exports.initScrChildrenUpd = function () {
     $('#scrChildrenUpdForm').validate();
     if ($('#scrChildrenUpdForm').valid() && $('.highlightInput').length == 0) {
       var scrChildrenUpdData = $('#scrChildrenUpdForm').serializeFormJSON();
+      var appConfig = JSON.parse(window.sessionStorage.getItem('config'));
+      scrChildrenUpdData.org_name = appConfig.org_name;
       scrChildrenUpdData.reffer_otp_boys = parseInt(scrChildrenUpdData.reffer_otp_boys_s1) + ((parseInt(scrChildrenUpdData.reffer_otp_boys_s2)) ? parseInt(scrChildrenUpdData.reffer_otp_boys_s2) : 0);
       scrChildrenUpdData.reffer_otp_girls = parseInt(scrChildrenUpdData.reffer_otp_girls_s1) + ((parseInt(scrChildrenUpdData.reffer_otp_girls_s2)) ? parseInt(scrChildrenUpdData.reffer_otp_girls_s2) : 0);
       scrChildrenUpdData.reffer_tsfp_boys = parseInt(scrChildrenUpdData.reffer_tsfp_boys_s1) + ((parseInt(scrChildrenUpdData.reffer_tsfp_boys_s2)) ? parseInt(scrChildrenUpdData.reffer_tsfp_boys_s2) : 0);

@@ -1,4 +1,5 @@
-var uuid = require('uuid/v4')
+var uuid = require('uuid/v4');
+var knex = require('../../mainfunc/db');
 module.exports.StaffList = function () {
   ipc.send('getProvince');
   ipc.on('province', function (evt, province) {
@@ -246,7 +247,6 @@ module.exports.StaffList = function () {
       var appConfig = JSON.parse(window.sessionStorage.getItem('config'));
       staffData.org_name = appConfig.org_name;
       staffData.project_name = appConfig.project_name;
-
       staffData.is_deleted = $('#is_deleted').prop('checked');
 
       // console.log(staffData);
@@ -265,6 +265,23 @@ module.exports.StaffList = function () {
     }
     e.preventDefault();
   });
+  $(document).ready(function () {
+    $('#_staffListExport').click(async function () {
+      try {
+        var data = await knex.raw(`select b.province Province, b.district_name District,b.tehsil_name Tehsil,b.uc_name UC, a.staff_code Code, a.staff_name Name,a.org_name Organization,a.project_name Project, (case when a.is_deleted = 0 then 'No' else 'Yes' end)  Deleted,a.created_at Created, (case when a.upload_status = 0 then 'Not Uploaded' when a.upload_status = 1 then 'Uploaded' else 'Edited' end) Status from tblLhw a inner join v_geo_uc b on b.uc_id = a.uc`)
+        // var data = $('#txt').val();
+        if (data == '')
+          return;
+        JSONToCSVConvertor(data, "CHW List", true, );
 
+      } catch (error) {
+        console.log(error)
+        alert('Data Fetch error')
+      }
+
+
+      // JSONToCSVConvertor(data, "Vehicle Report", true);
+    });
+  });
 
 }

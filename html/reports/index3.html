@@ -57,8 +57,7 @@
   <link rel="import" href="otpFollowUpv2.html">
   <link rel="import" href="otpFollowUpv2Edit.html">
   <link rel="import" href="otpExitv2.html">
-  <!-- <link rel="import" href="sessionsv2.html"> -->
-  <link rel="import" href="data_entry/sessionsv2.html">
+  <link rel="import" href="sessionsv2.html">
   <link rel="import" href="scrReportsv2.html">
   <!-- <link rel="import" href="otpReportsv2.html"> -->
   <link rel="import" href="reports/otpReport.html">
@@ -75,8 +74,7 @@
   <link rel="import" href="data_edit/scrChildrenUpdv1.html">
   <!-- <link rel="import" href="scrChildReportNew.html"> -->
   <link rel="import" href="reports/scrChildReportNew.html">
-  <!-- <link rel="import" href="scrPlwReportNew.html"> -->
-  <link rel="import" href="reports/scrPlwReportNew.html">
+  <link rel="import" href="scrPlwReportNew.html">
   <link rel="import" href="stockEntry.html">
   <link rel="import" href="stockEntryUpdate.html">
   <link rel="import" href="autoStock.html">
@@ -884,53 +882,6 @@
   });
 
   jsGrid.fields.date = MyDateField;
-
-  var MyDateMonthField = function (config) {
-    jsGrid.Field.call(this, config);
-  };
-
-  MyDateMonthField.prototype = new jsGrid.Field({
-
-    css: "date-field", // redefine general property 'css'
-    align: "center", // redefine general property 'align'
-
-    sorter: function (date1, date2) {
-      return new Date(date1) - new Date(date2);
-    },
-
-    itemTemplate: function (value) {
-      return new Date(value).toJSON().split('T')[0];
-    },
-
-    insertTemplate: function (value) {
-      return this._insertPicker = $("<input >").datepicker({
-        defaultDate: new Date(),
-        changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-        dateFormat: 'MM yy',
-        onClose: function (dateText, inst) {
-          $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-        }
-      });
-    },
-
-    editTemplate: function (value) {
-      return this._editPicker = $("<input >").datepicker({
-        format: 'MM yy'
-      }).datepicker("setDate", new Date(value));
-    },
-
-    insertValue: function () {
-      return this._insertPicker.datepicker("getDate").toJSON().split('T')[0];
-    },
-
-    editValue: function () {
-      return this._editPicker.datepicker("getDate").toJSON().split('T')[0];
-    }
-  });
-
-  jsGrid.fields.date_month = MyDateMonthField;
 </script>
 <script>
   // var InitGrid = require('./scrChildv2').initGrid;
@@ -948,8 +899,7 @@
   var InitOtpAddUpdV2 = require('./data_edit/otpAddUpdv4').initOtpAddUpdV2;
   var InitOtpExit = require('./otpExitv2').initOtpExit;
   var InitOtpExitEditV2 = require('./otpExitEditv3').initOtpExitEditV2;
-  var InitSessionsV2 = require('./data_entry/sessionsv2').initSessionsV2;
-  // var InitSessionsV2 = require('./sessionsv2').initSessionsV2;
+  var InitSessionsV2 = require('./sessionsv2').initSessionsV2;
   // var InitOtpReportsV2 = require('./otpReportsv2').initOtpReportsV2;
   var OTPReport = require('./reports/otpReport').OTPReport;
   var InitDefaulterv2 = require('./def2').initDefaulterv2;
@@ -1154,8 +1104,7 @@
   }
 
   function sessionsTemplate() {
-    // var content = document.querySelector('link[href="sessionsv2.html"]');
-    var content = document.querySelector('link[href="data_entry/sessionsv2.html"]');
+    var content = document.querySelector('link[href="sessionsv2.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -1265,8 +1214,7 @@
   }
 
   function scrReportTemplatePlwNew() {
-    // var content = document.querySelector('link[href="scrPlwReportNew.html"]');
-    var content = document.querySelector('link[href="reports/scrPlwReportNew.html"]');
+    var content = document.querySelector('link[href="scrPlwReportNew.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();

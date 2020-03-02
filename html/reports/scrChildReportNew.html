@@ -1,0 +1,217 @@
+<template>
+
+  <div class="container-fluid">
+    <form action="#!" id="filterDate">
+      <div class="form-group row">
+        <div class="col-sm-2">
+          <label for="ddProvince" class="col-form-label">Province:</label>
+          <select id="ddProvince" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="ddDistrict" class="col-form-label">District:</label>
+          <select id="ddDistrict" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="ddTehsil" class="col-form-label">Tehsil:</label>
+          <select id="ddTehsil" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="ddUC" class="col-form-label">UC:</label>
+          <select id="ddUC" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="ddSup_code" class=" col-form-label">Supervisor Code:</label>
+          <select id="ddSup_code" class="form-control form-control-sm cld">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="ddSup_name" class=" col-form-label">Supervisor Name:</label>
+          <select id="ddSup_name" class="form-control form-control-sm cld">
+            <option value="">Select One</option>
+          </select>
+        </div>
+
+        <div class="col-sm-2">
+          <label for="ddStaff_code" class="col-form-label">Staff Code:</label>
+          <select id="ddStaff_code" class="form-control form-control-sm cld">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <label for="ddStaff_name" class="col-form-label">Staff Name:</label>
+          <select id="ddStaff_name" class="form-control form-control-sm cld">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-1">
+          <label for="interval" class="col-form-label">Inverval</label>
+          <select name="internval" id="ddInterval" class="form-control form-control-sm">
+            <option value="0" selected>No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
+        <!-- <div class="form-group col-sm-6"> -->
+        <!-- <div class="form-group row"> -->
+        <div class="form-group col-sm-2">
+          <label for="start_date" class="col-form-label">Start Month:</label>
+          <input type="month" name="start_date" id="start_date" class="form-control form-control-sm" disabled required>
+        </div>
+        <div class="form-group col-sm-2">
+          <label for="end_date" class="col-form-label">End Month:</label>
+          <input type="month" name="end_date" id="end_date" disabled class="form-control form-control-sm" required>
+        </div>
+        <div class="form-group col-sm-2 align-self-end">
+          <button type="submit" class="btn btn-info btn-sm btn-block form-control form-control-sm shadow-sm"
+            id="showDataScrReport">
+            <i class="fas fa-filter"></i> Show Data</button>
+        </div>
+        <div class="form-group col-sm-1 align-self-end">
+          <button class="btn btn-success btn-sm btn-block form-control form-control-sm shadow-sm" type="button"
+            id="exportScrChReport">
+            <i class="fas fa-file-excel"></i> Export</button>
+        </div>
+      </div>
+        </form>
+     <!-- </div> -->
+    <!-- </div> -->
+
+    <!-- </div> -->
+    <!-- </div> -->
+    <div class="table-responsive">
+      <table class="table-bordered text-center" style="font-size: 10px;" id="scrChildNewSum">
+        <tr>
+          <th rowspan="2" class="text-center text-capitalize ">Category</th>
+          <th rowspan="2" class="text-center text-capitalize ">Total Screened</th>
+          <th rowspan="2" class="text-center text-capitalize ">New / First Time Screened Children</th>
+          <th rowspan="2" class="text-center text-capitalize ">Re-Screened Children</th>
+          <th colspan="4" class="text-center text-capitalize ">6-23 Months Children</th>
+          <th colspan="4" class="text-center text-capitalize ">23-59 Months Children</th>
+          <th colspan="2" class="text-center text-capitalize ">Oedema</th>
+          <th colspan="2" class="text-center text-capitalize ">Children Refered to</th>
+          <th rowspan="2" colspan="1" class="text-center text-capitalize ">Total Number of children received 30 sachet
+            of MNP</th>
+          <th rowspan="2" class="text-center text-capitalize ">Deworming</th>
+          <th rowspan="2" class="text-center text-capitalize ">Followed Up</th>
+          <th rowspan="2" class="text-center text-capitalize ">Exit From Criteria</th>
+        </tr>
+        <tr>
+          <th class="text-center text-capitalize ">Normal Children </th>
+          <th class="text-center text-capitalize ">MAM children </th>
+          <th class="text-center text-capitalize ">SAM without complication </th>
+          <th class="text-center text-capitalize ">SAM with Complication </th>
+          <th class="text-center text-capitalize ">Normal Children </th>
+          <th class="text-center text-capitalize ">MAM children </th>
+          <th class="text-center text-capitalize ">SAM without complication </th>
+          <th class="text-center text-capitalize ">SAM with Complication </th>
+          <!-- <th class="text-center text-capitalize ">No</th> -->
+          <th class="text-center text-capitalize ">(&plus;,&plus;&plus;)</th>
+          <th class="text-center text-capitalize ">(&plus;&plus;&plus;)</th>
+          <th class="text-center text-capitalize ">TSFP</th>
+          <th class="text-center text-capitalize ">OTP</th>
+          <!-- <th class="text-center text-capitalize">1st</th>
+          <th class="text-center text-capitalize">2nd</th>
+          <th class="text-center text-capitalize">3rd</th>
+          <th class="text-center text-capitalize">4th</th>
+          <th class="text-center text-capitalize">5th</th>
+          <th class="text-center text-capitalize">6th</th> -->
+        </tr>
+        <tr>
+          <th class="text-center">Total</th>
+          <td class="text-center" id="total_scr"></td>
+          <td class="text-center" id="total_new"></td>
+          <td class="text-center" id="total_reScreened"></td>
+          <td class="text-center" id="total_normal_623"></td>
+          <td class="text-center" id="total_mam_623"></td>
+          <td class="text-center" id="total_sam_without_comp_623"></td>
+          <td class="text-center" id="total_sam_with_comp_623"></td>
+          <td class="text-center" id="total_normal_2459"></td>
+          <td class="text-center" id="total_mam_2459"></td>
+          <td class="text-center" id="total_sam_without_comp_2459"></td>
+          <td class="text-center" id="total_sam_with_comp_2459"></td>
+          <!-- <td class="text-center" id="total_no_oedema"></td> -->
+          <td class="text-center" id="total_plus12_oedema"></td>
+          <td class="text-center" id="total_plus3_oedema"></td>
+          <td class="text-center" id="total_tsfp"></td>
+          <td class="text-center" id="total_otp"></td>
+          <td class="text-center" id="total_mnp"></td>
+          <!-- <td class="text-center" id="total_mnp_sch_second"></td>
+          <td class="text-center" id="total_mnp_sch_third"></td>
+          <td class="text-center" id="total_mnp_sch_fourth"></td>
+          <td class="text-center" id="total_mnp_sch_fifth"></td>
+          <td class="text-center" id="total_mnp_sch_sixth"></td> -->
+          <td class="text-center" id="total_deworming"></td>
+          <td class="text-center" rowspan="3" id="total_followup"></td>
+          <td class="text-center" rowspan="3" id="total_exits"></td>
+        </tr>
+        <tr>
+          <th class="text-center">Boys</th>
+          <td class="text-center" id="total_scr_boys"></td>
+          <td class="text-center" id="new_boys"></td>
+          <td class="text-center" id="reScreened_boys"></td>
+          <td class="text-center" id="normal_boys_623"></td>
+          <td class="text-center" id="mam_boys_623"></td>
+          <td class="text-center" id="sam_without_comp_boys_623"></td>
+          <td class="text-center" id="sam_with_comp_boys_623"></td>
+          <td class="text-center" id="normal_boys_2459"></td>
+          <td class="text-center" id="mam_boys_2459"></td>
+          <td class="text-center" id="sam_without_comp_boys_2459"></td>
+          <td class="text-center" id="sam_with_comp_boys_2459"></td>
+          <!-- <td class="text-center" id="no_oedema_boys"></td> -->
+          <td class="text-center" id="plus12_oedema_boys"></td>
+          <td class="text-center" id="plus3_oedema_boys"></td>
+          <td class="text-center" id="reffer_tsfp_boys"></td>
+          <td class="text-center" id="reffer_otp_boys"></td>
+          <td class="text-center" id="mnp_boys"></td>
+          <!-- <td class="text-center" id="second_mnp_30_boys"></td>
+          <td class="text-center" id="third_mnp_30_boys"></td>
+          <td class="text-center" id="fourth_mnp_30_boys"></td>
+          <td class="text-center" id="fifth_mnp_30_boys"></td>
+          <td class="text-center" id="sixth_mnp_30_boys"></td> -->
+          <td class="text-center" id="deworming_boys"></td>
+          <!-- <td class="text-center" rowspan="3" id="total_followup"></td> -->
+          <!-- <td class="text-center" rowspan="3" id="total_exits"></td> -->
+        </tr>
+        <tr>
+          <th class="text-center">Girls</th>
+          <td class="text-center" id="total_scr_girls"></td>
+          <td class="text-center" id="new_girls"></td>
+          <td class="text-center" id="reScreened_girls"></td>
+          <td class="text-center" id="normal_girls_623"></td>
+          <td class="text-center" id="mam_girls_623"></td>
+          <td class="text-center" id="sam_without_comp_girls_623"></td>
+          <td class="text-center" id="sam_with_comp_girls_623"></td>
+          <td class="text-center" id="normal_girls_2459"></td>
+          <td class="text-center" id="mam_girls_2459"></td>
+          <td class="text-center" id="sam_without_comp_girls_2459"></td>
+          <td class="text-center" id="sam_with_comp_girls_2459"></td>
+          <!-- <td class="text-center" id="no_oedema_girls"></td> -->
+          <td class="text-center" id="plus12_oedema_girls"></td>
+          <td class="text-center" id="plus3_oedema_girls"></td>
+          <td class="text-center" id="reffer_tsfp_girls"></td>
+          <td class="text-center" id="reffer_otp_girls"></td>
+          <td class="text-center" id="mnp_girls"></td>
+          <!-- <td class="text-center" id="second_mnp_30_girls"></td>
+          <td class="text-center" id="third_mnp_30_girls"></td>
+          <td class="text-center" id="fourth_mnp_30_girls"></td>
+          <td class="text-center" id="fifth_mnp_30_girls"></td>
+          <td class="text-center" id="sixth_mnp_30_girls"></td> -->
+          <td class="text-center" id="deworming_girls"></td>
+          <!-- <td class="text-center" id="followedup_girls"></td> -->
+          <!-- <td class="text-center" id="exits_girls"></td> -->
+        </tr>
+      </table>
+    </div>
+  </div>
+  <table class="table-bordered text-center" style="font-size: 10px;" id="scrChildNewSingle" hidden>
+
+  </table>
+</template>

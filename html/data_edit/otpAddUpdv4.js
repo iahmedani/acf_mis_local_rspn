@@ -735,7 +735,7 @@ module.exports.initOtpAddUpdV2 = function () {
   var age = $('#age');
   var eReason = $('#ent_reason');
   var rType = $('#ref_type');
-  var oedema = $('oedema');
+  var oedema = $('#oedema');
   var muac = $('#muac');
 
   // list of element affecting
