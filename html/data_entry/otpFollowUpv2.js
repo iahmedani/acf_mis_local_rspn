@@ -1,4 +1,4 @@
-const knex = require('../mainfunc/db');
+const knex = require('../../mainfunc/db');
 var uuid = require('uuid/v4')
 
 module.exports.initOtpFollowUp = function () {

@@ -1,0 +1,38 @@
+<template>
+  <div id="stockEntry" class="container-fluid">
+    <div class="row">
+      <div class="table-responsive">
+        <div id="stockInList"></div>
+      </div>
+    </div>
+    <div class="row">
+      <form action="#" id="stockEntryForm" class="col-sm-12">
+        <div class="form-group row">
+          <label for="dn_number" class="col-sm-2 col-form-label">Delivery Note #:</label>
+          <div class="col-sm-4">
+            <input type="text" name="dn_number" id="dn_number" class="form-control form-control-sm" readonly>
+          </div>
+          <label for="dn_date" class="col-sm-2 col-form-label">Delivery Date:</label>
+          <div class="col-sm-4">
+            <input type="date" name="dn_date" id="dn_date" class="form-control form-control-sm" readonly>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="row">
+      <div class="alert alert-danger col-sm-12 col-lg-12 col-md-12" role="alert">
+        <span class="b"> Note! </span> All Quantities must be added in Sub Unit.
+      </div>
+      <div class="table-responsive">
+        <div id="stockInUpdate"></div>
+      </div>
+
+    </div>
+    <!-- <div class="form-group row">
+          <div class="offset-sm-10 col-sm-2">
+            <button type="submit" class="btn btn-info btn-block" id="stockEntrySubmit">Save</button>
+          </div>
+        </div> -->
+  </div>
+  </div>
+</template>

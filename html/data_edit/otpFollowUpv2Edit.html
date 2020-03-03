@@ -1,0 +1,77 @@
+<template>
+
+  <div class="container-fluid">
+    <form id="editFollowupForm">
+      <div class="row">
+        <div class="form-group col-sm-2 ">
+          <label for="province">Province</label>
+          <select id="ddProvince" class="form-control form-control-sm" required>
+            <option value="">Choose</option>
+
+          </select>
+        </div>
+        <div class="form-group col-sm-2 ">
+
+          <label for="district">District</label>
+          <select id="ddDistrict" class="form-control form-control-sm" required>
+            <option value="">Choose</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-2 ">
+
+          <label for="Tehsil">Tehsil</label>
+          <select id="ddTehsil" class="form-control form-control-sm" required>
+            <option value="">Choose</option>
+
+          </select>
+        </div>
+        <div class="form-group col-sm-2 ">
+          <label for="uc">UC</label>
+          <select id="ddUC" class="form-control form-control-sm" required>
+            <option value="">Choose</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-2">
+
+          <label for="site_id" class="form-label">Site Name:</label>
+
+          <select name="site_id" id="ddHealthHouse" class="form-control form-control-sm" required>
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-2">
+          <label for="site_village" class="form-label">Village:</label>
+          <select name="site_village" id="ddVillageName" class="form-control form-control-sm">
+            <option value="">Select One</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-2">
+
+          <label for="reg_id" class="form-label">Registration ID</label>
+
+          <input type="text" name="reg_id" id="reg_id" class="form-control form-control-sm" required>
+
+        </div>
+        <div class="form-group col-sm-2">
+
+          <label class="form-label text-white">Registration ID</label>
+
+          <button type="submit" id="btnShowFollowupUp" class="btn btn-success form-control form-control-sm btn-sm">Show
+            Data</button>
+
+        </div>
+      </div>
+    </form>
+    <!-- <div class="card">
+        <div class="card-header">
+          Patient List:
+        </div>
+        <div class="card-body"> -->
+    <div class="table-responsive">
+
+      <div id="jsGrid"></div>
+    </div>
+    <!-- </div> -->
+    <!-- </div> -->
+  </div>
+</template>

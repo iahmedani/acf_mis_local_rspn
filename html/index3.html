@@ -46,29 +46,36 @@
     window.sessionStorage.setItem('config', JSON.stringify(appConfig))
     var _dx = JSON.parse(window.sessionStorage.getItem('config'))
 
-    console.log(_dx)
+    // console.log(_dx)
 
     // console.log(window.sessionStorage.getItem('user'))
   </script>
-  <link rel="import" href="dashboard.html">
+  <!-- <link rel="import" href="dashboard.html"> -->
+  <link rel="import" href="reports/dashboard.html">
   <!-- <link rel="import" href="scrPlwNew.html"> -->
   <link rel="import" href="data_entry/scrPlwNew.html">
   <link rel="import" href="data_entry/otpAddv2.html">
-  <link rel="import" href="otpFollowUpv2.html">
-  <link rel="import" href="otpFollowUpv2Edit.html">
-  <link rel="import" href="otpExitv2.html">
+  <!-- <link rel="import" href="otpFollowUpv2.html"> -->
+  <link rel="import" href="data_entry/otpFollowUpv2.html">
+  <!-- <link rel="import" href="otpFollowUpv2Edit.html"> -->
+  <link rel="import" href="data_edit/otpFollowUpv2Edit.html">
+  <!-- <link rel="import" href="otpExitv2.html"> -->
+  <link rel="import" href="data_entry/otpExitv2.html">
+  <!-- <link rel="import" href="otpExitEditv3.html"> -->
+  <link rel="import" href="data_edit/otpExitEditv3.html">
   <!-- <link rel="import" href="sessionsv2.html"> -->
   <link rel="import" href="data_entry/sessionsv2.html">
-  <link rel="import" href="scrReportsv2.html">
+  <!-- <link rel="import" href="scrReportsv2.html"> -->
   <!-- <link rel="import" href="otpReportsv2.html"> -->
   <link rel="import" href="reports/otpReport.html">
-  <link rel="import" href="defaulterv2.html">
+  <!-- <link rel="import" href="defaulterv2.html"> -->
+  <!-- <link rel="import" href="defaulterv2.html"> -->
+  <link rel="import" href="reports/defaulterv2.html">
   <!-- <link rel="import" href="scrChUpdv2.html"> -->
   <!-- <link rel="import" href="scrPlwNewUpdv1.html"> -->
   <link rel="import" href="data_edit/scrPlwNewUpdv1.html">
   <!-- <link rel="import" href="scrPlUpdv2.html"> -->
   <link rel="import" href="data_edit/otpAddUpdv4.html">
-  <link rel="import" href="otpExitEditv3.html">
   <!-- <link rel="import" href="scrChildren.html"> -->
   <link rel="import" href="data_entry/scrChildren.html">
   <!-- <link rel="import" href="scrChildrenUpdv1.html"> -->
@@ -77,27 +84,38 @@
   <link rel="import" href="reports/scrChildReportNew.html">
   <!-- <link rel="import" href="scrPlwReportNew.html"> -->
   <link rel="import" href="reports/scrPlwReportNew.html">
-  <link rel="import" href="stockEntry.html">
-  <link rel="import" href="stockEntryUpdate.html">
-  <link rel="import" href="autoStock.html">
+  <link rel="import" href="data_entry/stockEntry.html">
+  <!-- <link rel="import" href="stockEntry.html"> -->
+  <!-- <link rel="import" href="stockEntryUpdate.html"> -->
+  <link rel="import" href="data_edit/stockEntryUpdate.html">
+  <link rel="import" href="reports/autoStock.html">
   <!-- <link rel="import" href="scrStock.html"> -->
-  <link rel="import" href="stockDist.html">
+  <!-- <link rel="import" href="stockDist.html">
   <link rel="import" href="stockDistReport.html">
-  <link rel="import" href="stockDistUpd.html">
+  <link rel="import" href="stockDistUpd.html"> -->
+  <link rel="import" href="data_entry/stockDist.html">
+  <link rel="import" href="reports/stockDistReport.html">
+  <link rel="import" href="data_edit/stockDistUpd.html">
   <!-- <link rel="import" href="supList.html"> -->
   <link rel="import" href="data_entry/supList.html">
   <!-- <link rel="import" href="staffList.html"> -->
   <link rel="import" href="data_entry/staffList.html">
   <!-- <link rel="import" href="villageList.html"> -->
   <link rel="import" href="data_entry/villageList.html">
-  <link rel="import" href="sessionsReport.html">
-  <link rel="import" href="stockOutEntry.html">
-  <link rel="import" href="stockOutUpdate.html">
-  <link rel="import" href="stockOutReport.html">
+  <!-- <link rel="import" href="sessionsReport.html"> -->
+  <link rel="import" href="reports/sessionsReport.html">
+  <!-- <link rel="import" href="stockOutEntry.html"> -->
+  <link rel="import" href="data_entry/stockOutEntry.html">
+  <!-- <link rel="import" href="stockOutUpdate.html"> -->
+  <link rel="import" href="data_edit/stockOutUpdate.html">
+  <!-- <link rel="import" href="stockOutReport.html"> -->
+  <link rel="import" href="reports/stockOutReport.html">
   <!-- <link rel="import" href="newSyncAuth.html"> -->
   <!-- origional is v2 -->
-  <link rel="import" href="newSyncAuthV3.html">
-  <link rel="import" href="otp_add_followup_report.html">
+  <!-- <link rel="import" href="newSyncAuthV3.html"> -->
+  <link rel="import" href="api/newSyncAuthV3.html">
+  <!-- <link rel="import" href="otp_add_followup_report.html"> -->
+  <link rel="import" href="reports/otp_add_followup_report.html">
 
 </head>
 
@@ -517,10 +535,10 @@
   <script src="plugins/jquery-mapael/jquery.mapael.min.js"></script>
   <script src="plugins/jquery-mapael/maps/usa_states.min.js"></script>
   <!-- ChartJS -->
-  <script src="plugins/chart.js/Chart.min.js"></script>
+  <!-- <script src="plugins/chart.js/Chart.min.js"></script> -->
 
   <!-- PAGE SCRIPTS -->
-  <script src="dist/js/pages/dashboard2.js"></script>
+  <!-- <script src="dist/js/pages/dashboard2.js"></script> -->
 </body>
 <script>
   window.$ = window.jQuery = require('jquery');
@@ -752,7 +770,7 @@
 <script src="../js/buttons.bootstrap4.min.js"></script>
 <script src="../js/jquery.inputmask.bundle.min.js"></script>
 <script src="../js/dataTables.bootstrap4.min.js"></script>
-<script src="../js/handsontable.full.min.js"></script>
+<!-- <script src="../js/handsontable.full.min.js"></script> -->
 <script src="../js/jquery.floatThead.min.js"></script>
 <!-- <script src="../js/select2.min.js"></script> -->
 <!-- <script src="../js/charts/highcharts.js"></script> -->
@@ -939,20 +957,25 @@
   // var InitScrPlw = require('./scrPlwv2').initScrPlw;
   // var InitScrPlwNew = require('./scrPlwNew').initScrPlwNew;
   var InitScrPlwNew = require('./data_entry/scrPlwNew').initScrPlwNew;
-  var InitScrReportsV2 = require('./scrReportsv2').initScrReportsV2;
+  // var InitScrReportsV2 = require('./scrReportsv2').initScrReportsV2;
   // var InitScrChUpdv2 = require('./scrChUpdv2').initScrChUpdv2;
   // var InitScrPlUpdv2 = require('./scrPlUpdv2').initScrPlUpdv2;
   var InitOtpAdd = require('./data_entry/otpAddv2').initOtpAdd;
-  var InitOtpFollowUp = require('./otpFollowUpv2').initOtpFollowUp;
-  var InitOtpFollowUpEdit = require('./otpFollowUpv2Edit').initOtpFollowUpEdit;
+  // var InitOtpFollowUp = require('./otpFollowUpv2').initOtpFollowUp;
+  var InitOtpFollowUp = require('./data_entry/otpFollowUpv2').initOtpFollowUp;
+  // var InitOtpFollowUpEdit = require('./otpFollowUpv2Edit').initOtpFollowUpEdit;
+  var InitOtpFollowUpEdit = require('./data_edit/otpFollowUpv2Edit').initOtpFollowUpEdit;
   var InitOtpAddUpdV2 = require('./data_edit/otpAddUpdv4').initOtpAddUpdV2;
-  var InitOtpExit = require('./otpExitv2').initOtpExit;
-  var InitOtpExitEditV2 = require('./otpExitEditv3').initOtpExitEditV2;
+  // var InitOtpExit = require('./otpExitv2').initOtpExit;
+  var InitOtpExit = require('./data_entry/otpExitv2').initOtpExit;
+  // var InitOtpExitEditV2 = require('./otpExitEditv3').initOtpExitEditV2;
+  var InitOtpExitEditV2 = require('./data_edit/otpExitEditv3').initOtpExitEditV2;
   var InitSessionsV2 = require('./data_entry/sessionsv2').initSessionsV2;
   // var InitSessionsV2 = require('./sessionsv2').initSessionsV2;
   // var InitOtpReportsV2 = require('./otpReportsv2').initOtpReportsV2;
   var OTPReport = require('./reports/otpReport').OTPReport;
-  var InitDefaulterv2 = require('./def2').initDefaulterv2;
+  // var InitDefaulterv2 = require('./def2').initDefaulterv2;
+  var InitDefaulterv2 = require('./reports/def2').initDefaulterv2;
   // var InitScrChildrenUpd = require('./scrChildrenUpdv1').initScrChildrenUpd;
   var InitScrChildrenUpd = require('./data_edit/scrChildrenUpdv1').initScrChildrenUpd;
   // var InitScrPlwNewUpd = require('./scrPlwNewUpdv1').initScrPlwNewUpd;
@@ -961,32 +984,46 @@
   var InitScrChildrenReport = require('./reports/scrChildrenReport').initScrChildrenReport;
   // var InitScrPlwNewReport = require('./scrPlwNewReport').initScrPlwNewReport;
   var InitScrPlwNewReport = require('./reports/scrPlwNewReport').initScrPlwNewReport;
-  var InitStockEntry = require('./stockEntry').stockEntry;
-  var InitStockEntryUpdate = require('./stockEntryUpdate').stockEntryUpdate;
-  var InitAutoStock = require('./autoStock').autoStock;
-  var InitStockDist = require('./scrStock').stockDist;
+  // var InitStockEntry = require('./stockEntry').stockEntry;
+  var InitStockEntry = require('./data_entry/stockEntry').stockEntry;
+  // var InitStockEntryUpdate = require('./stockEntryUpdate').stockEntryUpdate;
+  var InitStockEntryUpdate = require('./data_edit/stockEntryUpdate').stockEntryUpdate;
+  // var InitAutoStock = require('./autoStock').autoStock;
+  var InitAutoStock = require('./reports/autoStock').autoStock;
+  // var InitStockDist = require('./scrStock').stockDist;
   // var InitSupList = require('./supList').SupList;
   var InitSupList = require('./data_entry/supList').SupList;
   // var InitStaffList = require('./staffList').StaffList;
   var InitStaffList = require('./data_entry/staffList').StaffList;
   // var InitVillageList = require('./villageList').VillageList;
   var InitVillageList = require('./data_entry/villageList').VillageList;
-  var InitSessionsReport = require('./sessionsReport').sessionsReport;
-  var InitstockOutEntry = require('./stockOutEntry').stockOutEntry;
-  var InitstockOutReport = require('./stockOutReport').stockOutReport;
-  var InitstockOutUpdate = require('./stockOutUpdate').stockOutUpdate;
-  var InitStockDist = require('./stockDist').stockDist;
-  var InitStockDistReport = require('./stockDistReport').stockDistReport;
-  var InitStockDistUpd = require('./stockDistUpd').stockDistUpd;
-  var InitDashboard = require('./dashboard').initDashboard;
-  var InitNewSyncAuth = require('./newSyncAuth').newSyncAuth;
+  // var InitSessionsReport = require('./sessionsReport').sessionsReport;
+  var InitSessionsReport = require('./reports/sessionsReport').sessionsReport;
+  // var InitstockOutEntry = require('./stockOutEntry').stockOutEntry;
+  // var InitstockOutReport = require('./stockOutReport').stockOutReport;
+  // var InitstockOutUpdate = require('./stockOutUpdate').stockOutUpdate;
+  var InitstockOutEntry = require('./data_entry/stockOutEntry').stockOutEntry;
+  var InitstockOutReport = require('./reports/stockOutReport').stockOutReport;
+  var InitstockOutUpdate = require('./data_edit/stockOutUpdate').stockOutUpdate;
+  // var InitStockDist = require('./stockDist').stockDist;
+  // var InitStockDistReport = require('./stockDistReport').stockDistReport;
+  // var InitStockDistUpd = require('./stockDistUpd').stockDistUpd;
+  var InitStockDist = require('./data_entry/stockDist').stockDist;
+  var InitStockDistReport = require('./reports/stockDistReport').stockDistReport;
+  var InitStockDistUpd = require('./data_edit/stockDistUpd').stockDistUpd;
+  // var InitDashboard = require('./dashboard').initDashboard;
+  var InitDashboard = require('./reports/dashboard').initDashboard;
+  // var InitNewSyncAuth = require('./newSyncAuth').newSyncAuth;
   // origional is v2
-  var InitNewSyncAuthV3 = require('./newSyncAuthV3').newSyncAuthV3;
-  var IniOtpAddFollowupReportV1 = require('./otp_add_followup_report').iniOtpAddFollowupReportV1;
+  // var InitNewSyncAuthV3 = require('./newSyncAuthV3').newSyncAuthV3;
+  var InitNewSyncAuthV3 = require('./api/newSyncAuthV3').newSyncAuthV3;
+  // var IniOtpAddFollowupReportV1 = require('./otp_add_followup_report').iniOtpAddFollowupReportV1;
+  var IniOtpAddFollowupReportV1 = require('./reports/otp_add_followup_report').iniOtpAddFollowupReportV1;
   // var InitDefaulterv2 = require('./defaulterv2').initDefaulterv2;
 
   function otp_add_followup_report_Template() {
-    var content = document.querySelector('link[href="otp_add_followup_report.html"]');
+    // var content = document.querySelector('link[href="otp_add_followup_report.html"]');
+    var content = document.querySelector('link[href="reports/otp_add_followup_report.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -995,7 +1032,8 @@
   }
 
   function stockOutUpdateTemplate() {
-    var content = document.querySelector('link[href="stockOutUpdate.html"]');
+    // var content = document.querySelector('link[href="stockOutUpdate.html"]');
+    var content = document.querySelector('link[href="data_edit/stockOutUpdate.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -1014,7 +1052,8 @@
 
   function newSyncAuthV2Template() {
     //  origional v2
-    var content = document.querySelector('link[href="newSyncAuthV3.html"]');
+    // var content = document.querySelector('link[href="newSyncAuthV3.html"]');
+    var content = document.querySelector('link[href="api/newSyncAuthV3.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -1024,7 +1063,8 @@
   }
 
   function dashboardTemplate() {
-    var content = document.querySelector('link[href="dashboard.html"]');
+    // var content = document.querySelector('link[href="dashboard.html"]');
+    var content = document.querySelector('link[href="reports/dashboard.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -1033,7 +1073,8 @@
   }
 
   function stockDistUpdTemplate() {
-    var content = document.querySelector('link[href="stockDistUpd.html"]');
+    // var content = document.querySelector('link[href="stockDistUpd.html"]');
+    var content = document.querySelector('link[href="data_edit/stockDistUpd.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -1042,7 +1083,8 @@
   }
 
   function stockDistReportTemplate() {
-    var content = document.querySelector('link[href="stockDistReport.html"]');
+    // var content = document.querySelector('link[href="stockDistReport.html"]');
+    var content = document.querySelector('link[href="reports/stockDistReport.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -1051,7 +1093,8 @@
   }
 
   function stockDistTemplate() {
-    var content = document.querySelector('link[href="stockDist.html"]');
+    // var content = document.querySelector('link[href="stockDist.html"]');
+    var content = document.querySelector('link[href="data_entry/stockDist.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -1060,7 +1103,8 @@
   }
 
   function sessionReportTemplate() {
-    var content = document.querySelector('link[href="sessionsReport.html"]');
+    // var content = document.querySelector('link[href="sessionsReport.html"]');
+    var content = document.querySelector('link[href="reports/sessionsReport.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -1069,7 +1113,8 @@
   }
 
   function stockOutEntryTemplate() {
-    var content = document.querySelector('link[href="stockOutEntry.html"]');
+    // var content = document.querySelector('link[href="stockOutEntry.html"]');
+    var content = document.querySelector('link[href="data_entry/stockOutEntry.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -1078,7 +1123,8 @@
   }
 
   function stockOutReportTemplate() {
-    var content = document.querySelector('link[href="stockOutReport.html"]');
+    // var content = document.querySelector('link[href="stockOutReport.html"]');
+    var content = document.querySelector('link[href="reports/stockOutReport.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -1116,17 +1162,17 @@
     InitVillageList();
   }
 
-  function scrStockTemplate() {
-    var content = document.querySelector('link[href="scrStock.html"]');
-    var template = content.import.querySelector('template');
-    var clone = document.importNode(template.content, true);
-    $('#jsContent').empty();
-    document.querySelector('#jsContent').appendChild(clone)
-    InitStockDist();
-  }
+  // function scrStockTemplate() {
+  //   var content = document.querySelector('link[href="scrStock.html"]');
+  //   var template = content.import.querySelector('template');
+  //   var clone = document.importNode(template.content, true);
+  //   $('#jsContent').empty();
+  //   document.querySelector('#jsContent').appendChild(clone)
+  //   InitStockDist();
+  // }
 
   function autoStockTemplate() {
-    var content = document.querySelector('link[href="autoStock.html"]');
+    var content = document.querySelector('link[href="reports/autoStock.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -1135,7 +1181,8 @@
   }
 
   function defReportTemplate() {
-    var content = document.querySelector('link[href="defaulterv2.html"]');
+    // var content = document.querySelector('link[href="defaulterv2.html"]');
+    var content = document.querySelector('link[href="reports/defaulterv2.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -1164,7 +1211,8 @@
   }
 
   function otpExitEditTemplate() {
-    var content = document.querySelector('link[href="otpExitEditv3.html"]');
+    // var content = document.querySelector('link[href="otpExitEditv3.html"]');
+    var content = document.querySelector('link[href="data_edit/otpExitEditv3.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -1173,7 +1221,8 @@
   }
 
   function otpExitTemplate() {
-    var content = document.querySelector('link[href="otpExitv2.html"]');
+    // var content = document.querySelector('link[href="otpExitv2.html"]');
+    var content = document.querySelector('link[href="data_entry/otpExitv2.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -1191,7 +1240,8 @@
   }
 
   function addFollowupOtpTemplate() {
-    var content = document.querySelector('link[href="otpFollowUpv2.html"]');
+    // var content = document.querySelector('link[href="otpFollowUpv2.html"]');
+    var content = document.querySelector('link[href="data_entry/otpFollowUpv2.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -1200,7 +1250,8 @@
   }
 
   function editFollowupOtpTemplate() {
-    var content = document.querySelector('link[href="otpFollowUpv2Edit.html"]');
+    // var content = document.querySelector('link[href="otpFollowUpv2Edit.html"]');
+    var content = document.querySelector('link[href="data_edit/otpFollowUpv2Edit.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -1245,14 +1296,14 @@
     InitScrChildrenUpd();
   }
 
-  function scrReportTemplate() {
-    var content = document.querySelector('link[href="scrReportsv2.html"]');
-    var template = content.import.querySelector('template');
-    var clone = document.importNode(template.content, true);
-    $('#jsContent').empty();
-    document.querySelector('#jsContent').appendChild(clone)
-    InitScrReportsV2();
-  }
+  // function scrReportTemplate() {
+  //   var content = document.querySelector('link[href="scrReportsv2.html"]');
+  //   var template = content.import.querySelector('template');
+  //   var clone = document.importNode(template.content, true);
+  //   $('#jsContent').empty();
+  //   document.querySelector('#jsContent').appendChild(clone)
+  //   InitScrReportsV2();
+  // }
 
   function scrReportTemplateNew() {
     // var content = document.querySelector('link[href="scrChildReportNew.html"]');
@@ -1302,7 +1353,8 @@
   }
 
   function stockEntryTemplate() {
-    var content = document.querySelector('link[href="stockEntry.html"]');
+    // var content = document.querySelector('link[href="stockEntry.html"]');
+    var content = document.querySelector('link[href="data_entry/stockEntry.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -1311,7 +1363,8 @@
   }
 
   function stockEntryUpdateTemplate() {
-    var content = document.querySelector('link[href="stockEntryUpdate.html"]');
+    // var content = document.querySelector('link[href="stockEntryUpdate.html"]');
+    var content = document.querySelector('link[href="data_edit/stockEntryUpdate.html"]');
     var template = content.import.querySelector('template');
     var clone = document.importNode(template.content, true);
     $('#jsContent').empty();
@@ -1424,10 +1477,10 @@
     addScrPlwTemplate();
     // ipc.send('nav', 'plw');
   })
-  $('#scrReport').on('click', function () {
-    scrReportTemplate();
-    // ipc.send('nav', 'report');
-  })
+  // $('#scrReport').on('click', function () {
+  //   scrReportTemplate();
+  //   // ipc.send('nav', 'report');
+  // })
   $('#scrChUpd').on('click', function () {
     scrChUpdTemplate1();
     // ipc.send('nav', 'scrChUpd');

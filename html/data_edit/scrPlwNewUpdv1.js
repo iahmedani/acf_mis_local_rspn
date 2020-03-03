@@ -318,7 +318,7 @@ module.exports.initScrPlwNewUpd = function () {
           title: "Catchment Population",
           type: "text",
           editing: false,
-          width: 50
+          width: 80
         },
         {
           name: "staff_name",
