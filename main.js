@@ -44,27 +44,6 @@ const {
 var async = require('async');
 const knex = require('./mainfunc/db');
 
-let _urlBugRemove = async () => {
-  try {
-
-    var x = await knex('tblConfig')
-    if (x.length) {
-
-      console.log(x)
-      if (x[0].value == 'https://training.paka.cf') {
-        await knex('tblConfig').update({
-          value: 'http://training.paka.cf'
-        }).where({
-          value: 'https://training.paka.cf'
-        })
-      }
-    }
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-_urlBugRemove();
 // let _testVar 
 async function _serverUrl() {
   var x = await knex('tblConfig');
@@ -2429,7 +2408,7 @@ require("./mainfunc/otpAddExitReport")(ipcMain, knex, fs, clientMessages, async)
 // Managing Sync with Auth
 require("./mainfunc/syncwithauth")(ipcMain, knex, fs, clientMessages, async, request, rp);
 // Managing Update of StockIn
-require("./mainfunc/stockInUpdate")(ipcMain, knex, fs, clientMessages, async);
+// require("./mainfunc/stockInUpdate")(ipcMain, knex, fs, clientMessages, async);
 
 // Future db updates
 

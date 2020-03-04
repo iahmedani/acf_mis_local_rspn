@@ -5,7 +5,7 @@ var Highcharts = require('../../js/charts/highcharts');
 // require('../js/charts/export-data')(Highcharts);
 
 module.exports.initDashboard = function () {
-
+  $('#addrNavId').empty().text('Dashboard')
   async function plwData() {
     var _plwData = await knex('tblScrPlw')
       .sum({
