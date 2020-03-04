@@ -2,11 +2,9 @@
   <div class="container-fluid">
 
     <div class="row">
-      <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">Session
-      </p>
       <form action="#!" id="filterDateSession">
-        <div class="form-group row">
-          <div class="form-group col-sm-2">
+        <div class="form-group row pd-0 md-0">
+          <div class="form-group col-sm-2 pd-0 md-0">
             <label for="prog_type">Program Type:</label>
             <select name="prog_type" id="ddProgramType" class="form-control form-control-sm sReportFilter" required>
               <option value="">Select One</option>
@@ -17,21 +15,21 @@
               <option value="outreach">Out Reach</option>
             </select>
           </div>
-          <div class="form-group col-sm-2 ">
+          <div class="form-group col-sm-2 pd-0 md-0">
             <label for="province">Province</label>
             <select id="ddProvince" class="form-control form-control-sm sReportFilter prgChange">
               <option selected value="">Choose</option>
 
             </select>
           </div>
-          <div class="form-group col-sm-2 ">
+          <div class="form-group col-sm-2 pd-0 md-0">
 
             <label for="district">District</label>
             <select id="ddDistrict" class="form-control form-control-sm sReportFilter prgChange">
               <option selected value="">Choose</option>
             </select>
           </div>
-          <div class="form-group col-sm-2">
+          <div class="form-group col-sm-2 pd-0 md-0">
 
             <label for="Tehsil">Tehsil</label>
             <select id="ddTehsil" class="form-control form-control-sm sReportFilter prgChange">
@@ -39,13 +37,13 @@
 
             </select>
           </div>
-          <div class="form-group col-sm-2 otp">
+          <div class="form-group col-sm-2 otp pd-0 md-0">
             <label for="uc">UC</label>
             <select id="ddUC" class="form-control form-control-sm sReportFilter prgChange">
               <option selected value="">Choose</option>
             </select>
           </div>
-          <div class="form-group col-sm-2 otp noOutreach sReportFilter">
+          <div class="form-group col-sm-2 otp noOutreach sReportFilter pd-0 md-0">
 
             <label for="site_id" class="form-label">Site Name:</label>
             <small id="site_must" style="color:red" hidden>Please select one Site</small>
@@ -56,27 +54,27 @@
             </select>
           </div>
 
-          <div class="form-group col-sm-2 outreach sReportFilter">
+          <div class="form-group col-sm-2 outreach sReportFilter pd-0 md-0">
             <label for="staff_code" class="col-form-label">Staff Code:</label>
             <select id="ddStaff_code" name="staff_code" class="form-control form-control-sm cld myFilter prgChange"
               required>
               <option value="">Select One</option>
             </select>
           </div>
-          <div class="form-group col-sm-2 outreach">
+          <div class="form-group col-sm-2 outreach pd-0 md-0">
             <label for="staff_name" class="col-form-label">Staff Name:</label>
             <select id="ddStaff_name" name="staff_name" class="form-control form-control-sm cld prgChange" required>
               <option value="">Select One</option>
             </select>
           </div>
-          <div class="form-group col-sm-2 outreach sReportFilter">
+          <div class="form-group col-sm-2 outreach sReportFilter pd-0 md-0">
             <label for="sup_code" class=" col-form-label">Supervisor Code:</label>
             <select id="ddSup_code" name="sup_code" class="form-control form-control-sm cld myFilter prgChange"
               required>
               <option value="">Select One</option>
             </select>
           </div>
-          <div class="form-group col-sm-2 outreach">
+          <div class="form-group col-sm-2 outreach pd-0 md-0">
             <label for="sup_name" class=" col-form-label">Supervisor Name:</label>
             <select id="ddSup_name" name="sup_name" class="form-control form-control-sm cld prgChange" required>
               <option value="">Select One</option>
@@ -85,22 +83,22 @@
 
           <!-- </div> -->
           <!-- <div class="row"> -->
-          <div class="col-sm-2">
-            <label for="interval" class="col-form-label">Inverval</label>
+          <div class="col-sm-2 pd-0 md-0">
+            <label for="interval" class="col-form-label ">Inverval</label>
             <select name="internval" id="ddInterval" class="form-control form-control-sm">
               <option value="0" selected>No</option>
               <option value="1">Yes</option>
             </select>
           </div>
-          <div class="col-sm-2" id="picYear">
+          <div class="col-sm-2 pd-0 md-0" id="picYear">
             <label for="start_date" class="col-form-label">Start Date:</label>
             <input type="date" name="start_date" id="start_date" class="form-control form-control-sm" disabled required>
           </div>
-          <div class="col-sm-2" id="picQuarter">
+          <div class="col-sm-2 pd-0 md-0" id="picQuarter">
             <label for="end_date" class="col-form-label">End Date:</label>
             <input type="date" name="end_date" id="end_date" disabled class="form-control form-control-sm" required>
           </div>
-          <div class="col-sm-2 align-self-end">
+          <div class="col-sm-2 align-self-end pd-0 md-0">
             <button type="submit" class="btn btn-info btn-sm btn-block form-control form-control-sm shadow-sm"
               id="showSessionReport" disabled>
               <i class="fas fa-filter"></i> Show Data</button>
@@ -112,7 +110,7 @@
     <br>
     <hr>
 
-    <div class="table-responsive">
+    <div class="table-responsive p-0 m-0">
       <div class="spinner-border text-primary" role="status">
         <span class="sr-only">Loading...</span>
       </div>
@@ -121,7 +119,7 @@
     </div>
     <br>
     <hr>
-    <div class="table-responsive">
+    <div class="table-responsive p-0 m-0" style="height: 25vh">
       <div class="spinner-border text-primary" role="status">
         <span class="sr-only">Loading...</span>
       </div>

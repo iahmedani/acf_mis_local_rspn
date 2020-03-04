@@ -715,7 +715,7 @@ function otpExitAddDataSave(event, data, client) {
     total_days: otpExitAddData.days_in_program,
     exit_muac: otpExitAddData.exit_muac,
     exit_weight: otpExitAddData.exit_weight,
-    // upload_status:2
+    // upload_status: 2
   }
   const followup = {
     otp_id: data.otp_id,
@@ -768,7 +768,7 @@ function otpExitAddDataSave(event, data, client) {
       if (result.length) {
         updAddmision.total_followups = result[0].total_followups;
         var upStatus = await knex.select('upload_status').from('tblOtpAdd').where('otp_id', data.otp_id).where('is_deleted', 0);
-        if (upStatus[0].upload_status == '1') {
+        if (upStatus[0].upload_status) {
           updAddmision.upload_status = 2;
           return knex('tblOtpAdd').update(updAddmision).where('otp_id', data.otp_id)
         } else {

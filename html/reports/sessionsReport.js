@@ -186,6 +186,8 @@ module.exports.sessionsReport = () => {
           })
           .DataTable({
             data: data.result.data,
+            responsive: true,
+            pageLength: 5,
             dom: "Bfrtip",
             // "dom": '<"dttopcustom"lfr>t<"dtbottomcustom"ip>',
             buttons: ["copy", {
