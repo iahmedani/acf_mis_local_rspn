@@ -349,6 +349,7 @@ module.exports.newSyncAuthV3 = function () {
     uploadBtn.on('click', async () => {
         var surl = await knex("tblConfig");
         surl = surl[0].value + '/api3';
+        console.log(surl)
         elProgress.show();
         updateBtn.attr('disabled', true)
         uploadBtn.attr('disabled', true)
