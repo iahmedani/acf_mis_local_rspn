@@ -2409,7 +2409,7 @@ require("./mainfunc/otpAddExitReport")(ipcMain, knex, fs, clientMessages, async)
 // Managing Sync with Auth
 require("./mainfunc/syncwithauth")(ipcMain, knex, fs, clientMessages, async, request, rp);
 // Managing Update of StockIn
-// require("./mainfunc/stockInUpdate")(ipcMain, knex, fs, clientMessages, async);
+require("./mainfunc/stockInUpdate")(ipcMain, knex, fs, clientMessages, async);
 
 // Future db updates
 

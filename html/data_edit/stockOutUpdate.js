@@ -716,7 +716,7 @@ module.exports.stockOutUpdate = function () {
         })
       }
       let updateController = {
-        loadData: (resportId) => {
+        loadData: (reportId) => {
           return loadStockReport(reportId)
         },
         insertItem: (item) => {
