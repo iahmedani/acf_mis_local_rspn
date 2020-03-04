@@ -64,7 +64,7 @@ async function finalToUpdateOtpAdd() {
 }
 
 // find additional data for scr table and create run update 
-async function toUpdateScrTables(tbaleName, screening_id, id_col) {
+async function toUpdateScrTables(tbaleName, screening_id, id_col, org_name) {
     try {
         var geoDetails = await knex('v_geo_uc').select('province_id', 'district_id', 'tehsil_id').whereRaw(`uc_id in (select uc_id from ${tbaleName} where is_deleted = 0 and ${id_col} = ${screening_id})`)
 
@@ -72,6 +72,7 @@ async function toUpdateScrTables(tbaleName, screening_id, id_col) {
             province_id: geoDetails[0].province_id,
             tehsil_id: geoDetails[0].tehsil_id,
             district_id: geoDetails[0].district_id,
+            org_name: org_name
         }
         var upStatus = await knex.select('upload_status').from(tbaleName).where(id_col, screening_id).where('is_deleted', 0);
         if (upStatus) {
@@ -89,14 +90,14 @@ async function toUpdateScrTables(tbaleName, screening_id, id_col) {
     }
 }
 // loop function execution to update new columns in scr table having tableName as param
-async function updateScrTableLoop(tbaleName, id_col) {
+async function updateScrTableLoop(tbaleName, id_col, org_name) {
     try {
         var scr_id_array = await knex(tbaleName).select(id_col).where({
             is_deleted: 0
         });
 
         for (scr_id of scr_id_array) {
-            await toUpdateScrTables(tableName, scr_id[id_col], id_col);
+            await toUpdateScrTables(tableName, scr_id[id_col], id_col, org_name);
         }
 
     } catch (error) {

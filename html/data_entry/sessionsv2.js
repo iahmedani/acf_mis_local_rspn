@@ -271,7 +271,7 @@ module.exports.initSessionsV2 = function () {
           delete item.tehsil_name;
           delete item.tehsil_id;
           delete item.uc_name;
-          // delete item.uc_id;
+          delete item.uc_id;
           delete item.site_name;
           // delete item.district_id;
           item.total_session = parseInt(item.ind_session) + parseInt(item.grp_sessions)
@@ -287,6 +287,9 @@ module.exports.initSessionsV2 = function () {
           // date_.toJSON().split('T')[0];
           date_ = date_.toJSON().split('T')[0]
           item.site_id = ($("#ddHealthHouse").val()) ? $("#ddHealthHouse").val() : '';
+          item.province_id = ($("#ddProvince").val()) ? $("#ddProvince").val() : '';
+          item.district_id = ($("#ddDistrict").val()) ? $("#ddDistrict").val() : '';
+          item.tehsil_id = ($("#ddTehsil").val()) ? $("#ddTehsil").val() : '';
           item.uc_id = ($("#ddUC").val()) ? $("#ddUC").val() : '';
           item.CHW_id = $("#ddStaff_code").val() ? $("#ddStaff_code").val() : "";
           item.CHS_id = $("#ddSup_code").val() ? $("#ddSup_code").val() : "";
@@ -661,6 +664,10 @@ module.exports.initSessionsV2 = function () {
 
   let updateData = (item) => {
     delete item["uc_id:1"]
+    delete item["district_id:1"]
+    delete item["tehsil_id:1"]
+    delete item["province_id:1"]
+    console.log(item)
     return new Promise((resolve, reject) => {
       ipc.send('updateSessionsSingle', item);
       ipc.on('updateSessionsSingle', (e, result) => {
