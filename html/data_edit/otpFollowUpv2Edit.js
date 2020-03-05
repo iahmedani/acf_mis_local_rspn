@@ -352,7 +352,14 @@ module.exports.initOtpFollowUpEdit = function () {
           type: "date",
           title: "Next Follow Up",
           // editing: false,
-          align: "right"
+          align: "right",
+          validate: {
+            validator: "range",
+            message: function (value, item) {
+              return "Please check next next followup date"
+            },
+            param: ['2019-01-01', ['2021-12-31']]
+          },
         },
         {
           name: 'upload_status',
