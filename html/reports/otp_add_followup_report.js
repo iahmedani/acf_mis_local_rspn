@@ -134,8 +134,10 @@ module.exports.iniOtpAddFollowupReportV1 = async function () {
       //   $('.spinner-border').css('display', processing ? 'block' : 'none');
       // })
       .DataTable({
-        // "processing": true,
+        "processing": true,
+        responsive: true,
         data: data,
+        pageLength: 8,
         dom: "Bfrtip",
         buttons: ["copy", {
           extend: "csv",
