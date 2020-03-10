@@ -203,8 +203,8 @@ module.exports.sessionsReport = () => {
                 title: "Date",
                 data: "session_date",
                 render: function (data, type, row) {
-                  var x = new Date(data)
-                  return x.toDateString();
+                  var x = new Date(data).getFullYear() + '-' + new Date(data).getMonth();
+                  return x
 
                 }
               },

@@ -142,18 +142,18 @@
                 <div class="form-group col-sm-1">
                   <label for="is_mother_alive" class="form-label">Mother Alive</label>
                   <select type="text" name="is_mother_alive" id="is_mother_alive"
-                    class="form-control form-control-sm clr" required>
+                    class="form-control form-control-sm cld" required>
                     <option value="yes" selected>Yes</option>
                     <option value="no">No</option>
                   </select>
                 </div>
                 <div class="form-group col-sm-1">
                   <label for="age" class="form-label">Age</label>
-                  <input type="number" step="any" name="age" id="age" class="form-control form-control-sm" required>
+                  <input type="number" step="any" name="age" id="age" class="form-control form-control-sm clr" required>
                 </div>
                 <div class="form-group col-sm-1">
                   <label for="gender" class="form-label">Gender</label>
-                  <select name="gender" id="gender" class="form-control form-control-sm" required>
+                  <select name="gender" id="gender" class="form-control form-control-sm cld" required>
                     <option value="">Choose</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
@@ -195,19 +195,19 @@
                 <div class="form-group col-sm-2" id="nsc_old_otp_id_div">
                   <label for="nsc_old_otp_id">OLD Reg: ID
                   </label>
-                  <input type="text" name="nsc_old_otp_id" id="nsc_old_otp_id" class="form-control form-control-sm"
+                  <input type="text" name="nsc_old_otp_id" id="nsc_old_otp_id" class="form-control form-control-sm clr"
                     value="0">
                 </div>
                 <div class="form-group col-sm-2" id="old_otp_or_nsc_div">
                   <label for="old_otp_or_nsc_detail">Old OTP/NSC details
                   </label>
                   <input type="text" name="old_otp_or_nsc_detail" id="old_otp_or_nsc_detail"
-                    class="form-control form-control-sm">
+                    class="form-control form-control-sm clr">
                 </div>
 
                 <div class="form-group col-sm-2">
                   <label for="ref_type">Referral Type</label>
-                  <select name="ref_type" id="ref_type" class="form-control form-control-sm" required>
+                  <select name="ref_type" id="ref_type" class="form-control form-control-sm cld" required>
                     <option selected value="">Choose</option>
                     <option value="self">Self</option>
                     <option value="peer">Peer to Peer</option>
@@ -244,14 +244,15 @@
                   <label for="weight" class="form-label">Weight
                     <small>(KG)</small>
                   </label>
-                  <input type="number" step="any" name="weight" id="weight" class="form-control form-control-sm" min="0"
-                    required>
+                  <input type="number" step="any" name="weight" id="weight" class="form-control form-control-sm clr"
+                    min="0" required>
                 </div>
                 <div class="form-group col-sm-2">
                   <label for="muac">MUAC
                     <small>(CM)</small>
                   </label>
-                  <input type="number" step="any" name="muac" id="muac" class="form-control form-control-sm" required>
+                  <input type="number" step="any" name="muac" id="muac" class="form-control form-control-sm clr"
+                    required>
                 </div>
                 <div class="form-group col-sm-2">
                   <label for="height" class="form-label">Height/Length
@@ -285,7 +286,7 @@
               <div class="row">
                 <div class="form-group col-sm-2">
                   <label for="diarrhoea">Diarrhoea</label>
-                  <select name="diarrhoea" id="diarrhoea" class="form-control form-control-sm notNsc" required>
+                  <select name="diarrhoea" id="diarrhoea" class="form-control form-control-sm notNsc cld" required>
                     <option value="">Choose</option>
                     <option value="1">Yes</option>
                     <option value="0">No</option>
@@ -294,7 +295,7 @@
                 <div class="form-group col-sm-1">
 
                   <label for="vomiting">Vomiting</label>
-                  <select name="vomiting" id="vomiting" class="form-control form-control-sm notNsc" required>
+                  <select name="vomiting" id="vomiting" class="form-control form-control-sm notNsc cld" required>
                     <option value="">Choose</option>
                     <option value="1">Yes</option>
                     <option value="0">No</option>
@@ -303,7 +304,7 @@
                 <div class="form-group col-sm-1">
 
                   <label for="cough">Cough</label>
-                  <select name="cough" id="cough" class="form-control form-control-sm notNsc" required>
+                  <select name="cough" id="cough" class="form-control form-control-sm notNsc cld" required>
                     <option value="">Choose</option>
                     <option value="1">Yes</option>
                     <option value="0">No</option>
@@ -312,7 +313,7 @@
                 <div class="form-group col-sm-2">
 
                   <label for="appetite">Appetite</label>
-                  <select name="appetite" id="appetite" class="form-control form-control-sm notNsc" required>
+                  <select name="appetite" id="appetite" class="form-control form-control-sm notNsc cld" required>
                     <option value="">Choose</option>
                     <option value="good">Good</option>
                     <option value="poor">Poor</option>
@@ -322,7 +323,7 @@
                 <div class="form-group col-sm-2">
 
                   <label for="daily_stool">Stools&#047;Day</label>
-                  <select name="daily_stool" id="daily_stool" class="form-control form-control-sm notNsc" required>
+                  <select name="daily_stool" id="daily_stool" class="form-control form-control-sm notNsc cld" required>
                     <option value="">Choose</option>
                     <option value="bet1_3">1 to 3</option>
                     <option value="bet4_5">4 to 5</option>
@@ -332,7 +333,7 @@
                 <div class="form-group col-sm-2">
 
                   <label for="pass_urine">Passing Urine</label>
-                  <select name="pass_urine" id="pass_urine" class="form-control form-control-sm notNsc" required>
+                  <select name="pass_urine" id="pass_urine" class="form-control form-control-sm notNsc cld" required>
                     <option value="">Choose</option>
                     <option value="1">Yes</option>
                     <option value="0">No</option>
@@ -341,7 +342,7 @@
                 <div class="form-group col-sm-2">
 
                   <label for="b_feeding">Breast Feeding</label>
-                  <select name="b_feeding" id="b_feeding" class="form-control form-control-sm notNsc" required>
+                  <select name="b_feeding" id="b_feeding" class="form-control form-control-sm notNsc cld" required>
                     <option value="">Choose</option>
                     <option value="1">Yes</option>
                     <option value="0">No</option>
@@ -354,7 +355,7 @@
               <div class="row">
                 <div class="form-group col-sm-2">
                   <label for="ration1">Commodity 1:</label>
-                  <select name="ration1" class="form-control form-control-sm" id="ration1" required>
+                  <select name="ration1" class="form-control form-control-sm cld" id="ration1" required>
                     <option value="">Choose</option>
                     <!-- <option value="RUTF Sachets">RUTF Sachets</option>
                       <option value="RUSF_Children">RUSF Children</option>
@@ -375,8 +376,8 @@
                 </div>
                 <div class="form-group col-sm-1">
                   <label for="quantity1">Quantity:</label>
-                  <input type="number" step="any" name="quantity1" id="quantity1" class="form-control form-control-sm"
-                    min="0" required>
+                  <input type="number" step="any" name="quantity1" id="quantity1"
+                    class="form-control form-control-sm clr" min="0" required>
                 </div>
                 <div class="form-group col-sm-2">
                   <label for="ration2">Commodity 2:</label>
