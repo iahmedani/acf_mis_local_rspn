@@ -2420,3 +2420,5 @@ require("./mainfunc/stockInUpdate")(ipcMain, knex, fs, clientMessages, async);
 // require('./mainfunc/exitAdditionalColumns')();
 
 // require('./mainfunc/dbUpdates/v3DbUpdates').v3Database();
+
+require('./mainfunc/v3_updates/v3_0_3');
