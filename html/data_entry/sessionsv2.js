@@ -1,4 +1,5 @@
 var uuid = require('uuid/v4');
+var knex = require('../../mainfunc/db');
 module.exports.initSessionsV2 = function () {
   $('#ddProgramType').change(() => {
     $('.prgChange').val("")
@@ -32,7 +33,7 @@ module.exports.initSessionsV2 = function () {
         teh(tehsil);
       });
     });
-    $("#ddTehsil").on("change", function () {
+    $("#ddTehsil").on("change", async function () {
       var tehs = $(this).val();
       ipc.send("getUC", tehs);
       ipc.on("uc", function (evt, uc) {
@@ -41,6 +42,18 @@ module.exports.initSessionsV2 = function () {
           .remove();
         ucListener(uc);
       });
+      if ($('#ddProgramType').val() == 'sc') {
+        try {
+          var _listNsc = await knex('v_geo_active').where({
+            tehsil_id: tehs,
+            SC: 1
+          })
+          // $('#nsc_old_otp_id').attr('data-inputmask', "'mask':'NSC-999999'")
+          nscList(_listNsc, 'ddHealthHouse');
+        } catch (error) {
+          console.log(error)
+        }
+      }
     });
     var ucForHH;
     $('#ddUC').on('change', function () {
@@ -144,13 +157,21 @@ module.exports.initSessionsV2 = function () {
         $('.outreach input').attr('required', true);
         $('.nsc').show();
         $('.nsc input').attr('required', true);
+        $('#ddUC').attr('disabled', false)
+
         $('.noOutreach').hide();
-      } else {
+      } else if (val == 'otp') {
         $('.outreach').hide();
         $('.nsc').show();
         $('.nsc input').attr('required', true);
         $('.outreach input').attr('required', false);
+        $('#ddUC').attr('disabled', false)
 
+
+      } else if (val == 'sc') {
+        $('#ddUC').attr('disabled', true)
+        $('.outreach').hide();
+        $('.outreach input').attr('required', false);
       }
     })
   })
@@ -635,14 +656,15 @@ module.exports.initSessionsV2 = function () {
   }
 
   let insertData = (item) => {
+    console.log(item)
     return new Promise((resolve, reject) => {
       $("#sessionForm").validate();
       if ($("#sessionForm").valid()) {
         item.session_id = uuid();
-
         ipc.send("insertSessionsSingle", item);
         ipc.on("insertSessionsSingle", (e, result) => {
           if (result.err) {
+            alert(result.err)
             reject(result.err);
             ipc.removeAllListeners("insertSessionsSingle");
           } else {

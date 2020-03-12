@@ -839,6 +839,7 @@ function sessionsDataSave(event, item, config, client) {
       }))
     })
     .catch(e => {
+      console.log(e)
       event.sender.send('insertSessionsSingle', ({
         err: e
       }))

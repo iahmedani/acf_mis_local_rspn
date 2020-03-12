@@ -339,10 +339,11 @@ module.exports.stockEntry = function () {
     // console.log(stockEntryArr)
     await ipc.send('stockEntry', (stockEntryArr))
     await ipc.removeAllListeners('stockEntry')
-    // data = [];
+    data = [];
+    $("#jsGridStockInEntry").jsGrid("option", "data", []);
     // $('#jsGrid').jsGrid("loadData");
     // $('#scrPlwForm').get(0).reset();
-    setTimeout(stockEntryTemplate, 3000);
+    // setTimeout(stockEntryTemplate, 3000);
 
     // } else {
     //   $('#scrPlwForm').validate();

@@ -495,6 +495,13 @@ const singleTables = (addTableEl, exitTableEl, add, exit) => {
             {
                 title: 'Breast Fed',
                 data: 'b_Feeding'
+            },
+            {
+                title: 'Exit Reason',
+                data: null,
+                render: function (data, type, row) {
+                    return data.exit_reason ? data.exit_reason : 'ongoing';
+                }
             }
         ]
     })
@@ -801,7 +808,8 @@ module.exports.OTPReport = async function () {
                     myPushData(_data);
                 } else if ($('#ddProgramType').val() == 'sc') {
                     $(`.cls`).empty();
-                    var dataNSCReport = await nscSumReport(filter)
+                    var dataNSCReport = await nscSumReport(_qry)
+                    // console.log(dataNSCReport)
                     await myPushDataNSC(dataNSCReport);
                 }
                 Swal.close();
@@ -1359,22 +1367,22 @@ async function pushLineDataCatLoop(data) {
     if (data.length) {
         for (dataum of data) {
             if (dataum.age_group == '06' && dataum.gender == 'male') {
-                console.log(dataum)
+                // console.log(dataum)
                 await pushLineData('06_m_', dataum)
             } else if (dataum.age_group == '06' && dataum.gender == 'female') {
-                console.log(dataum)
+                // console.log(dataum)
                 await pushLineData('06_f_', dataum)
             } else if (dataum.age_group == '623' && dataum.gender == 'male') {
-                console.log(dataum)
+                // console.log(dataum)
                 await pushLineData('623_m_', dataum)
             } else if (dataum.age_group == '623' && dataum.gender == 'female') {
-                console.log(dataum)
+                // console.log(dataum)
                 await pushLineData('623_f_', dataum)
             } else if (dataum.age_group == '2459' && dataum.gender == 'male') {
-                console.log(dataum)
+                // console.log(dataum)
                 await pushLineData('2459_m_', dataum)
             } else if (dataum.age_group == '2459' && dataum.gender == 'female') {
-                console.log(dataum)
+                // console.log(dataum)
                 await pushLineData('2459_f_', dataum)
             }
 
@@ -1389,7 +1397,72 @@ async function pushLineDataCatLoop(data) {
     }
 
 }
+async function ageGenderGroup() {
 
+    $('#06_m_d').text(
+        function () {
+            return parseInt($('#06_m_a').text()) + parseInt($('#06_m_b').text()) + parseInt($('#06_m_c').text()) ? parseInt($('#06_m_a').text()) + parseInt($('#06_m_b').text()) + parseInt($('#06_m_c').text()) : 0
+        })
+    $('#06_f_d').text(
+        function () {
+            return parseInt($('#06_f_a').text()) + parseInt($('#06_f_b').text()) + parseInt($('#06_f_c').text()) ? parseInt($('#06_f_a').text()) + parseInt($('#06_f_b').text()) + parseInt($('#06_f_c').text()) : 0
+        })
+    $('#623_m_d').text(
+        function () {
+            return parseInt($('#623_m_a').text()) + parseInt($('#623_m_b').text()) + parseInt($('#623_m_c').text()) ? parseInt($('#623_m_a').text()) + parseInt($('#623_m_b').text()) + parseInt($('#623_m_c').text()) : 0
+        })
+    $('#623_f_d').text(
+        function () {
+            return parseInt($('#623_f_a').text()) + parseInt($('#623_f_b').text()) + parseInt($('#623_f_c').text()) ? parseInt($('#623_f_a').text()) + parseInt($('#623_f_b').text()) + parseInt($('#623_f_c').text()) : 0
+        })
+    $('#2459_m_d').text(
+        function () {
+            return parseInt($('#2459_m_a').text()) + parseInt($('#2459_m_b').text()) + parseInt($('#2459_m_c').text()) ? parseInt($('#2459_m_a').text()) + parseInt($('#2459_m_b').text()) + parseInt($('#2459_m_c').text()) : 0
+        })
+    $('#2459_f_d').text(
+        function () {
+            return parseInt($('#2459_f_b').text()) + parseInt($('#2459_f_b').text()) + parseInt($('#2459_f_c').text()) ? parseInt($('#2459_f_b').text()) + parseInt($('#2459_f_b').text()) + parseInt($('#2459_f_c').text()) : 0
+        })
+
+    $('#06_m_h').text(
+        function () {
+            return parseInt($('#06_m_d').text()) - parseInt($('#06_m_g').text()) ? parseInt($('#06_m_d').text()) - parseInt($('#06_m_g').text()) : 0
+        })
+    $('#06_f_h').text(
+        function () {
+            return parseInt($('#06_f_d').text()) - parseInt($('#06_f_g').text()) ? parseInt($('#06_f_d').text()) - parseInt($('#06_f_g').text()) : 0
+        })
+    $('#623_m_h').text(
+        function () {
+            return parseInt($('#623_m_d').text()) - parseInt($('#623_m_g').text()) ? parseInt($('#623_m_d').text()) - parseInt($('#623_m_g').text()) : 0
+        })
+    $('#623_f_h').text(
+        function () {
+            return parseInt($('#623_f_d').text()) - parseInt($('#623_f_g').text()) ? parseInt($('#623_f_d').text()) - parseInt($('#623_f_g').text()) : 0
+        })
+    $('#2459_m_h').text(
+        function () {
+            return parseInt($('#2459_m_d').text()) + parseInt($('#2459_m_g').text()) ? parseInt($('#2459_m_d').text()) - parseInt($('#2459_m_g').text()) : 0
+        })
+    $('#2459_f_h').text(
+        function () {
+            return parseInt($('#2459_f_d').text()) - parseInt($('#2459_f_g').text()) ? parseInt($('#2459_f_d').text()) - parseInt($('#2459_f_g').text()) : 0
+        })
+
+    var types = ['06_m_', '06_f_', '623_m_', '623_f_', '2459_m_', '2459_f_'];
+    var cels = ['a', 'b1', 'b2', 'b', 'c1', 'c2', 'c3', 'c4', 'c5', 'c', 'd', 'e1', 'e2', 'e3', 'e4', 'e', 'f1', 'f2', 'f3', 'f', 'g', 'h'];
+
+    for (cel of cels) {
+        var x = 0;
+        for (type of types) {
+            // console.log(type[cel])
+            x += parseInt($(`#${type+cel}`).text());
+        }
+        $(`#t_${cel}`).empty()
+        $(`#t_${cel}`).text(x);
+    }
+
+}
 async function myPushDataNSC(x) {
     // console.log(x)
     try {

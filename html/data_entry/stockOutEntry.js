@@ -1,4 +1,6 @@
 var uuid = require('uuid/v4')
+var knex = require('../../mainfunc/db')
+
 module.exports.stockOutEntry = function () {
   $('#ddProgramType').change(() => {
     $('.prgChange').val("")
@@ -27,14 +29,26 @@ module.exports.stockOutEntry = function () {
         teh(tehsil);
       })
     })
-    $('#ddTehsil').on('change', function () {
+    $('#ddTehsil').on('change', async function () {
       var tehs = $(this).val();
       ipc.send('getUC', tehs)
       ipc.on('uc', function (evt, uc) {
         $('#ddUC').children('option:not(:first)').remove();
 
         ucListener(uc);
-      })
+      });
+      if ($('#ddProgramType').val() == 'sc') {
+        try {
+          var _listNsc = await knex('v_geo_active').where({
+            tehsil_id: tehs,
+            SC: 1
+          })
+          // $('#nsc_old_otp_id').attr('data-inputmask', "'mask':'NSC-999999'")
+          nscList(_listNsc, 'ddHealthHouse');
+        } catch (error) {
+          console.log(error)
+        }
+      }
     })
     var ucForHH;
     $('#ddUC').on('change', function () {
@@ -131,11 +145,11 @@ module.exports.stockOutEntry = function () {
         $('.outreach input').attr('required', true);
         $('.nsc').show();
         $('.noOutreach').hide();
-
+        $('#ddUC').attr('disabled', false)
         $('.nsc input').attr('required', true);
       } else if (val == 'sc') {
-        $('.nsc').hide();
-        $('.nsc input').attr('required', false);
+
+        $('#ddUC').attr('disabled', true)
         $('.outreach').hide();
         $('.outreach input').attr('required', false);
       } else {
@@ -143,6 +157,7 @@ module.exports.stockOutEntry = function () {
         $('.nsc').show();
         $('.nsc input').attr('required', true);
         $('.outreach input').attr('required', false);
+        $('#ddUC').attr('disabled', false)
 
       }
     })
@@ -477,10 +492,11 @@ module.exports.stockOutEntry = function () {
     // console.log(stockEntryArr);
     ipc.send("stockOutEntry", stockEntryArr);
     ipc.removeAllListeners("stockOutEntry");
-    // data = [];
+    data = [];
+    $("#stockOutGrid").jsGrid("option", "data", []);
     // $('#jsGrid').jsGrid("loadData");
     // $('#scrPlwForm').get(0).reset();
-    setTimeout(stockOutEntryTemplate, 3000);
+    // setTimeout(stockOutEntryTemplate, 3000);
 
     // } else {
     //   $('#scrPlwForm').validate();

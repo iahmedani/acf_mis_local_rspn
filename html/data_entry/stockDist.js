@@ -1,3 +1,4 @@
+var knex = require('../../mainfunc/db')
 module.exports.stockDist = function () {
   // $(function () {
   //   var datePickerId = document.getElementById('txtScrChildDate');
@@ -29,13 +30,25 @@ module.exports.stockDist = function () {
         teh(tehsil);
       })
     })
-    $('#ddTehsil').on('change', function () {
+    $('#ddTehsil').on('change', async function () {
       var tehs = $(this).val();
       ipc.send('getUC', tehs)
       ipc.on('uc', function (evt, uc) {
         $('#ddUC').children('option:not(:first)').remove();
         ucListener(uc);
       })
+      if ($('#ddProgramType').val() == 'sc') {
+        try {
+          var _listNsc = await knex('v_geo_active').where({
+            tehsil_id: tehs,
+            SC: 1
+          })
+          // $('#nsc_old_otp_id').attr('data-inputmask', "'mask':'NSC-999999'")
+          nscList(_listNsc, 'ddHealthHouse');
+        } catch (error) {
+          console.log(error)
+        }
+      }
     })
     var ucForHH;
     $('#ddUC').on('change', function () {
@@ -163,9 +176,10 @@ module.exports.stockDist = function () {
         $('.nsc').show();
         $('.noOutreach').hide();
         $('.nsc input').attr('required', true);
+        $('#ddUC').attr('disabled', false)
+
       } else if (val == 'sc') {
-        $('.nsc').hide();
-        $('.nsc input').attr('required', false);
+        $('#ddUC').attr('disabled', true)
         $('.outreach').hide();
         $('.outreach input').attr('required', false);
       } else {
@@ -173,11 +187,13 @@ module.exports.stockDist = function () {
         $('.nsc').show();
         $('.nsc input').attr('required', true);
         $('.outreach input').attr('required', false);
+        $('#ddUC').attr('disabled', false)
+
 
       }
     })
   })
-  var data = [];
+  let data = [];
   let myInsert = (item) => {
     console.log(item);
     return new Promise((resolve, reject) => {
@@ -602,7 +618,7 @@ module.exports.stockDist = function () {
   //   datePickerId.max = new Date().toISOString().split("T")[0];
   // });
   $("#stockDistSubmit").on("click", e => {
-    console.log(data);
+    // console.log(data);
     // if(data.length>0){
 
     var stockDistArr = [];
@@ -614,9 +630,11 @@ module.exports.stockDist = function () {
     ipc.send("stockDistEntry", stockDistArr);
     ipc.removeAllListeners("stockDistEntry");
     // data = [];
+    data = [];
+    $("#stockDistGrid").jsGrid("option", "data", []);
     // $('#jsGrid').jsGrid("loadData");
     // $('#scrPlwForm').get(0).reset();
-    setTimeout(stockDistTemplate, 3000);
+    // setTimeout(stockDistTemplate, 3000);
 
     // } else {
     //   $('#scrPlwForm').validate();
@@ -626,10 +644,7 @@ module.exports.stockDist = function () {
   $("#stockDistReset").on("click", e => {
     data = [];
     // $('#jsGrid').jsGrid("loadData");
-    $("#stockDist")
-      .get(0)
-      .reset();
-    $("#stockDistGrid").jsGrid("destroy");
+    $("#stockDistGrid").jsGrid("option", "data", []);
     e.preventDefault();
   });
 

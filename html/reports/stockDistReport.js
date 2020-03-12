@@ -1,10 +1,11 @@
+var knex = require('../../mainfunc/db')
 module.exports.stockDistReport = function () {
   // $(function () {
   //   var datePickerId = document.getElementById('txtScrChildDate');
   //   datePickerId.max = new Date().toISOString().split("T")[0];
   // });
 
-  $('#ddProgramType').change(()=>{
+  $('#ddProgramType').change(() => {
     $('.prgChange').val("")
   })
   $(function () {
@@ -30,55 +31,67 @@ module.exports.stockDistReport = function () {
         teh(tehsil);
       })
     })
-    $('#ddTehsil').on('change', function () {
+    $('#ddTehsil').on('change', async function () {
       var tehs = $(this).val();
       ipc.send('getUC', tehs)
       ipc.on('uc', function (evt, uc) {
         $('#ddUC').children('option:not(:first)').remove();
         ucListener(uc);
       })
+      if ($('#ddProgramType').val() == 'sc') {
+        try {
+          var _listNsc = await knex('v_geo_active').where({
+            tehsil_id: tehs,
+            SC: 1
+          })
+          // $('#nsc_old_otp_id').attr('data-inputmask', "'mask':'NSC-999999'")
+          nscList(_listNsc, 'ddHealthHouse');
+        } catch (error) {
+          console.log(error)
+        }
+      }
     })
     var ucForHH;
-    $('#ddUC').on('change', function(){
+    $('#ddUC').on('change', function () {
       var ucs = $(this).val();
       ucForHH = ucs
-      ipc.send('getHealthHouse', ucs )
-      ipc.on('hh', async function(evt, hh){
+      ipc.send('getHealthHouse', ucs)
+      ipc.on('hh', async function (evt, hh) {
         // console.log(hh)
         $('#site_one').children('option:not(:first)').remove();
-        if(hh.hh.length > 1){
-          $('.secondSite').css('display', '')  
+        if (hh.hh.length > 1) {
+          $('.secondSite').css('display', '')
           $('#site_two').children('option:not(:first)').remove();
-          await asyncForEach(hh.hh, async(el)=>{
-            $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);              
-          })            
-        }else{
-          $('.secondSite').css('display', 'none')  
+          await asyncForEach(hh.hh, async (el) => {
+            $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);
+          })
+        } else {
+          $('.secondSite').css('display', 'none')
 
         }
         hhListener_siteOne(hh);
 
       });
-    ipc.send("getStaffuc", ucs);
-    ipc.send("getSupsuc", ucs);
+      ipc.send("getStaffuc", ucs);
+      ipc.send("getSupsuc", ucs);
 
-    ipc.on("haveStaffuc", function(evt, staffs) {
-      $("#ddStaff_code")
-        .children("option:not(:first)")
-        .remove();
-      staffListeneruc(staffs);
-    });
-    ipc.on("haveSupsuc", function(evt, _sups) {
-      $("#ddSup_code")
-        .children("option:not(:first)")
-        .remove();
-      supListeneruc(_sups);
-    });
-  })
+      ipc.on("haveStaffuc", function (evt, staffs) {
+        $("#ddStaff_code")
+          .children("option:not(:first)")
+          .remove();
+        staffListeneruc(staffs);
+      });
+      ipc.on("haveSupsuc", function (evt, _sups) {
+        $("#ddSup_code")
+          .children("option:not(:first)")
+          .remove();
+        supListeneruc(_sups);
+      });
+    })
     $('#ddUC').on('change', function () {
       var ucs = $(this).val();
       ucForHH = ucs
-      if($('#ddProgramType').val() == 'otp'){
+      if ($('#ddProgramType').val() == 'otp') {
         ipc.send('getHealthHouse', ucs)
         ipc.on('hh', function (evt, hh) {
           $('#ddHealthHouse').children('option:not(:first)').remove();
@@ -155,30 +168,30 @@ module.exports.stockDistReport = function () {
     $('#ddProgramType').on('change', function () {
       var val = $(this).val();
       // if (data.length > 0) {
-        //   data = [];
-        // }
-        console.log(val)
-        if (val == 'outreach') {
-          $('.outreach').show();
-          $('.outreach input').attr('required', true);
-          $('.nsc').show();
-          $('.nsc input').attr('required', true);
-          $('.noOutreach').hide();
-        } else if (val == 'sc') {
-          $('.nsc').hide();
-          $('.nsc input').attr('required', false);
-          $('.outreach').hide();
-          $('.outreach input').attr('required', false);
-        } else {
-          $('.outreach').hide();
-          $('.nsc').show();
-          $('.nsc input').attr('required', true);
-          $('.outreach input').attr('required', false);
-          
-        }
-      })
+      //   data = [];
+      // }
+      console.log(val)
+      if (val == 'outreach') {
+        $('.outreach').show();
+        $('.outreach input').attr('required', true);
+        $('.nsc').show();
+        $('.nsc input').attr('required', true);
+        $('.noOutreach').hide();
+      } else if (val == 'sc') {
+        $('.nsc').hide();
+        $('.nsc input').attr('required', false);
+        $('.outreach').hide();
+        $('.outreach input').attr('required', false);
+      } else {
+        $('.outreach').hide();
+        $('.nsc').show();
+        $('.nsc input').attr('required', true);
+        $('.outreach input').attr('required', false);
+
+      }
     })
-    var data = [];
+  })
+  var data = [];
   let myInsert = (item) => {
     // console.log(item);
     return new Promise((resolve, reject) => {
@@ -269,11 +282,25 @@ module.exports.stockDistReport = function () {
       var progType = $(this).val();
       ipc.send('getCommodity', progType);
       ipc.on('commodity', (evt, com) => {
-        var Description = [{ Name: '', item: '' }];
-        var Unit = [{ Name: '', item: '' }];
-        var SubUnit = [{ Name: '', item: '' }];
-        var items = [{ Name: "" }];
-        var item_id = [{ Name: '', item: '' }];
+        var Description = [{
+          Name: '',
+          item: ''
+        }];
+        var Unit = [{
+          Name: '',
+          item: ''
+        }];
+        var SubUnit = [{
+          Name: '',
+          item: ''
+        }];
+        var items = [{
+          Name: ""
+        }];
+        var item_id = [{
+          Name: '',
+          item: ''
+        }];
         // console.log(com)
         // var availStock = [{ Name: "", item: '' }];
         com.commodity.forEach((el, i) => {
@@ -322,12 +349,12 @@ module.exports.stockDistReport = function () {
             insertItem: item => {
               return myInsert(item);
             },
-            updateItem: function(item) {
+            updateItem: function (item) {
               // console.log('updateitem clicked', item)
               return updItem(item);
             },
 
-            deleteItem: function(item) {
+            deleteItem: function (item) {
               return delItem(item);
             }
           },
@@ -346,7 +373,7 @@ module.exports.stockDistReport = function () {
               valueField: "Name",
               textField: "Name",
               valueType: "string",
-              insertTemplate: function() {
+              insertTemplate: function () {
                 var descField = this._grid.fields[1];
                 var unitField = this._grid.fields[2];
                 var subUnitField = this._grid.fields[3];
@@ -358,7 +385,7 @@ module.exports.stockDistReport = function () {
                 var $inertControl = jsGrid.fields.select.prototype.insertTemplate.call(
                   this
                 );
-                $inertControl.on("change", function() {
+                $inertControl.on("change", function () {
                   var itemId = $(this).val();
                   descField.items = sendValue(Description, itemId);
                   $(".item_desc-insert")
@@ -383,7 +410,7 @@ module.exports.stockDistReport = function () {
                 });
                 return $inertControl;
               },
-              editTemplate: function(value) {
+              editTemplate: function (value) {
                 var descField = this._grid.fields[1];
                 var unitField = this._grid.fields[2];
                 var subUnitField = this._grid.fields[3];
@@ -398,7 +425,7 @@ module.exports.stockDistReport = function () {
                   value
                 );
 
-                var changeItem = function() {
+                var changeItem = function () {
                   var editVal = $editControl.val();
                   // console.log({editVal: editVal})
                   descField.items = sendValue(Description, editVal);
@@ -437,7 +464,7 @@ module.exports.stockDistReport = function () {
               textField: "Name",
               insertcss: "item_desc-insert",
               updatecss: "item_desc-update",
-              itemTemplate: function(item_desc) {
+              itemTemplate: function (item_desc) {
                 return item_desc;
               },
               readOnly: true
@@ -452,7 +479,7 @@ module.exports.stockDistReport = function () {
               textField: "Name",
               insertcss: "disp_unit-insert",
               updatecss: "disp_unit-update",
-              itemTemplate: function(disp_unit) {
+              itemTemplate: function (disp_unit) {
                 return disp_unit;
               },
               readOnly: true
@@ -467,7 +494,7 @@ module.exports.stockDistReport = function () {
               textField: "Name",
               insertcss: "disp_sub_unit-insert",
               updatecss: "disp_sub_unit-update",
-              itemTemplate: function(disp_sub_unit) {
+              itemTemplate: function (disp_sub_unit) {
                 return disp_sub_unit;
               },
               readOnly: true
@@ -476,13 +503,19 @@ module.exports.stockDistReport = function () {
               name: "opening",
               title: "Opening",
               type: "decimal",
-              validate: ["required", { validator: "min", param: 0 }]
+              validate: ["required", {
+                validator: "min",
+                param: 0
+              }]
             },
             {
               name: "received",
               title: "Received",
               type: "decimal",
-              validate: ["required", { validator: "min", param: 0 }]
+              validate: ["required", {
+                validator: "min",
+                param: 0
+              }]
             },
             {
               name: "distributed",
@@ -491,10 +524,10 @@ module.exports.stockDistReport = function () {
               validate: [
                 "required",
                 {
-                  validator: function(value, item) {
+                  validator: function (value, item) {
                     return value <= item.opening + item.received;
                   },
-                  message: function(value, item) {
+                  message: function (value, item) {
                     return `${
                       item.item_name
                     } coult not be distribued more than available stock (opening + received) ${item.opening +
@@ -510,13 +543,13 @@ module.exports.stockDistReport = function () {
               validate: [
                 "required",
                 {
-                  validator: function(value, item) {
+                  validator: function (value, item) {
                     return (
                       value <=
                       item.opening + item.received - item.distributed
                     );
                   },
-                  message: function(value, item) {
+                  message: function (value, item) {
                     return `${
                       item.item_name
                     } coult not be damaged more than available stock (opening + received - distributed) ${item.opening +
@@ -531,7 +564,7 @@ module.exports.stockDistReport = function () {
               title: "Balance",
               width: 80,
               align: "center",
-              itemTemplate: function(value, item) {
+              itemTemplate: function (value, item) {
                 // var test = this._grid.fields[5];
                 // var $inertControl = jsGrid.fields.DecimalField.prototype.insertTemplate.call(test);
 
@@ -555,7 +588,7 @@ module.exports.stockDistReport = function () {
               textField: "Name",
               insertcss: "item_id-insert",
               updatecss: "item_id-update",
-              itemTemplate: function(item_id) {
+              itemTemplate: function (item_id) {
                 // console.log(item_id);
                 return item_id;
               }
@@ -567,9 +600,9 @@ module.exports.stockDistReport = function () {
             }
           ]
         });
-      }   
+      }
     });
-   
+
 
   });
   // $(function () {
@@ -615,9 +648,9 @@ module.exports.stockDistReport = function () {
     x.district = $("#ddDistrict  option:selected").text() != 'Choose' ? $("#ddDistrict  option:selected").text() : "";
     x.tehsil = $("#ddTehsil  option:selected").text() != 'Choose' ? $("#ddTehsil  option:selected").text() : "";
     x.uc = $("#ddUC  option:selected").text() != 'Choose' ? $("#ddUC  option:selected").text() : "";
-    x.site = $("#ddHealthHouse  option:selected").text() !='Select One' ? $("#ddHealthHouse  option:selected").text() : "";
-    x.chw = $("#ddStaff_name option:selected").text() != 'Select One' ? $("#ddStaff_name option:selected").text():'' ;
-    x.chs = $("#ddSup_name option:selected").text()!= 'Select One' ? $("#ddSup_name option:selected").text():'' ;
+    x.site = $("#ddHealthHouse  option:selected").text() != 'Select One' ? $("#ddHealthHouse  option:selected").text() : "";
+    x.chw = $("#ddStaff_name option:selected").text() != 'Select One' ? $("#ddStaff_name option:selected").text() : '';
+    x.chs = $("#ddSup_name option:selected").text() != 'Select One' ? $("#ddSup_name option:selected").text() : '';
     x.dist_month = $("#distMonth").val() ? $("#distMonth").val() : '';
     return x;
   }
@@ -640,32 +673,82 @@ module.exports.stockDistReport = function () {
       $("#tblStockDistReport").DataTable({
         data: data.result,
         dom: "Bfrtip",
-        buttons: ["copy", { extend: "csv", filename: 'Monthly Stock Distribution Report' }, { extend: "excel", filename: 'Monthly Stock Distribution Report' }],
+        buttons: ["copy", {
+          extend: "csv",
+          filename: 'Monthly Stock Distribution Report'
+        }, {
+          extend: "excel",
+          filename: 'Monthly Stock Distribution Report'
+        }],
         retrieve: true,
         paging: true,
-        columns: [
-          { title: "Report ID", data: "Report ID" },
+        columns: [{
+            title: "Report ID",
+            data: "Report ID"
+          },
           {
-            title: "Program", data: "Program", render: function (data, type, row) {
+            title: "Program",
+            data: "Program",
+            render: function (data, type, row) {
               if (data == 'sc') {
-              return 'NSC'
+                return 'NSC'
               } else {
                 return data.toUpperCase();
+              }
             }
-          } },
-          { title: "Report Month", data: "Month" },
-          { title: "District", data: "District" },
-          { title: "Tehsil", data: "Tehsil" },
-          { title: "UC", data: "UC" },
-          { title: "Health House", data: "Health House" },
-          { title: "CHW", data: "CHW" },
-          { title: "CHS", data: "CHS" },
-          { title: "Item", data: "Item" },
-          { title: "Opening", data: "opening" },
-          { title: "Received", data: "received" },
-          { title: "Distributed", data: "distributed" },
-          { title: "Damaged", data: "damaged" },
-          { title: "Balance", data: "remaining" },
+          },
+          {
+            title: "Report Month",
+            data: "Month"
+          },
+          {
+            title: "District",
+            data: "District"
+          },
+          {
+            title: "Tehsil",
+            data: "Tehsil"
+          },
+          {
+            title: "UC",
+            data: "UC"
+          },
+          {
+            title: "Health House",
+            data: "Health House"
+          },
+          {
+            title: "CHW",
+            data: "CHW"
+          },
+          {
+            title: "CHS",
+            data: "CHS"
+          },
+          {
+            title: "Item",
+            data: "Item"
+          },
+          {
+            title: "Opening",
+            data: "opening"
+          },
+          {
+            title: "Received",
+            data: "received"
+          },
+          {
+            title: "Distributed",
+            data: "distributed"
+          },
+          {
+            title: "Damaged",
+            data: "damaged"
+          },
+          {
+            title: "Balance",
+            data: "remaining"
+          },
           // {
           //   title: "Created At", data: "Created",
           //   render: function (data, type, row) {
@@ -674,16 +757,19 @@ module.exports.stockDistReport = function () {
           //   }
           // },
           {
-            title: "Upload Status", data: "upload_status", render: function (data, type, row) {
-            // console.log(data)
-            if (data == 0) {
-              return 'Not Uploaded'
-            } else if (data == 2) {
-              return 'Edited'
-            } else {
-              return 'Uploaded'
+            title: "Upload Status",
+            data: "upload_status",
+            render: function (data, type, row) {
+              // console.log(data)
+              if (data == 0) {
+                return 'Not Uploaded'
+              } else if (data == 2) {
+                return 'Edited'
+              } else {
+                return 'Uploaded'
+              }
             }
-          } },
+          },
         ]
       });
       ipc.removeAllListeners("getAllDistReports");

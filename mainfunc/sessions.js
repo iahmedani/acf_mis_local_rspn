@@ -1,21 +1,22 @@
 module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
- 
+
   // sending all session of site and not deleted (is_deleted)
   ipcMain.on("getSessionsAll", (event, filter) => {
     var _limit = (filter.pageSize) ? filter.pageSize : 10;
     var _offset = (filter.pageIndex == 1) ? 0 : (filter.pageIndex - 1) * _limit;
-    (filter.session_type) ? filter.session_type = filter.session_type : filter.session_type = '';
-    (filter.session_location) ? filter.session_location = filter.session_location : filter.session_location = '';
-    (filter.CHW_id) ? filter.CHW_id = filter.CHW_id : filter.CHW_id = '';
-    (filter.CHS_id) ? filter.CHS_id = filter.CHS_id : filter.CHS_id = '';
-    (filter.prog_type) ? filter.prog_type = filter.prog_type : filter.prog_type = '';
-    (filter.prog_type == 'otp') ? filter.uc_id = '' : filter.uc_id = filter.uc_id;
+    (filter.session_type) ? filter.session_type = filter.session_type: filter.session_type = '';
+    (filter.session_location) ? filter.session_location = filter.session_location: filter.session_location = '';
+    (filter.CHW_id) ? filter.CHW_id = filter.CHW_id: filter.CHW_id = '';
+    (filter.CHS_id) ? filter.CHS_id = filter.CHS_id: filter.CHS_id = '';
+    (filter.prog_type) ? filter.prog_type = filter.prog_type: filter.prog_type = '';
+    (filter.prog_type == 'otp' || filter.prog_type == 'sc') ? filter.uc_id = '': filter.uc_id = filter.uc_id;
     console.log(filter);
-    async.series(
-      {
+    async.series({
         data: cb => {
           knex("vSessionsFullForUpdate")
-            .where({ is_deleted: 0 })
+            .where({
+              is_deleted: 0
+            })
             .where('province_id', 'like', `%${filter.province_id}%`)
             .where('district_id', 'like', `%${filter.district_id}%`)
             .where('tehsil_id', 'like', `%${filter.tehsil_id}%`)
@@ -41,7 +42,9 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
         itemsCount: cb => {
           // knex("tblSessions")
           knex("vSessionsFullForUpdate")
-            .where({ is_deleted: 0 })
+            .where({
+              is_deleted: 0
+            })
             .where('province_id', 'like', `%${filter.province_id}%`)
             .where('district_id', 'like', `%${filter.district_id}%`)
             .where('tehsil_id', 'like', `%${filter.tehsil_id}%`)
@@ -59,10 +62,14 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
       },
       (e, result) => {
         if (e) {
-          event.sender.send("getSessionsAll", { err: e });
+          event.sender.send("getSessionsAll", {
+            err: e
+          });
           // console.log(e)
         } else {
-          event.sender.send("getSessionsAll", { result });
+          event.sender.send("getSessionsAll", {
+            result
+          });
           // console.log(result);
         }
       }
@@ -84,28 +91,38 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
   //       sndMsg.errMsg(event, "", `Session with id:${item.session_id} could not be deleted, please contact admin`);    
   //       event.sender.send("deleteSessionsSingle", { err });
   //       console.log(err);
-        
+
   //     });
   // });
 
   // //  Deleting Children Screening (is_deleted = 1 ) in tables tblScrChildren
   ipcMain.on("deleteSessionsSingle", (event, session_id) => {
     console.log(session_id);
-    async.series({ delScrCh: cb => {
+    async.series({
+      delScrCh: cb => {
         knex("tblSessions")
-          .where({ session_id})
-          .update({ is_deleted: 1 })
+          .where({
+            session_id
+          })
+          .update({
+            is_deleted: 1
+          })
           .then(result => cb(null, result))
           .catch(e => cb(e));
-      } }, (err, result) => {
+      }
+    }, (err, result) => {
       if (err) {
         sndMsg.errMsg(event, "", `Session with id:${session_id} could not be deleted, please contact admin`);
-        event.sender.send("deleteSessionsSingle", { err });
+        event.sender.send("deleteSessionsSingle", {
+          err
+        });
         console.log(err);
       } else {
         console.log(result);
         sndMsg.sucMsg(event, "", `Session with id:${session_id} is deleted`);
-        event.sender.send("deleteSessionsSingle", { result });
+        event.sender.send("deleteSessionsSingle", {
+          result
+        });
       }
     });
   });
