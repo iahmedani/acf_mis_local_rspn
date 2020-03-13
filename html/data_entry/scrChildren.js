@@ -427,4 +427,8 @@ module.exports.initGrid = function () {
     }
   });
 
+  $('#site_two').select2({
+    minimumInputLength: 3 // only start searching when the user has input 3 or more characters
+  });
+
 }
