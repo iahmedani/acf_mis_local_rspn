@@ -294,6 +294,11 @@ module.exports.initSessionsV2 = function () {
           delete item.uc_name;
           delete item.uc_id;
           delete item.site_name;
+          var date_ = new Date(item.session_date)
+          date_.setDate(date_.getDate() + 1);
+          // date_.toISOString();
+          // date_.toJSON().split('T')[0];
+          date_ = date_.toJSON().split('T')[0]
           // delete item.district_id;
           item.total_session = parseInt(item.ind_session) + parseInt(item.grp_sessions)
 
@@ -307,6 +312,7 @@ module.exports.initSessionsV2 = function () {
           // date_.toISOString();
           // date_.toJSON().split('T')[0];
           date_ = date_.toJSON().split('T')[0]
+          console.log(date_)
           item.site_id = ($("#ddHealthHouse").val()) ? $("#ddHealthHouse").val() : '';
           item.province_id = ($("#ddProvince").val()) ? $("#ddProvince").val() : '';
           item.district_id = ($("#ddDistrict").val()) ? $("#ddDistrict").val() : '';
@@ -335,7 +341,7 @@ module.exports.initSessionsV2 = function () {
           name: 'session_date',
           title: 'Date',
           filtering: false,
-          type: 'date_month',
+          type: 'date',
           validate: {
             validator: "range",
             message: function (value, item) {

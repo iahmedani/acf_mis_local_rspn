@@ -883,11 +883,14 @@
 
     insertTemplate: function (value) {
       return this._insertPicker = $("<input>").datepicker({
-        defaultDate: new Date()
+        defaultDate: new Date(),
+        format: 'MM/DD/YYYY'
       });
     },
 
     editTemplate: function (value) {
+      var __date = new Date(value);
+      __date.toJSON().split('T')[0]
       return this._editPicker = $("<input>").datepicker({
         format: 'MM/DD/YYYY'
       }).datepicker("setDate", new Date(value));
