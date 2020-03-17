@@ -406,7 +406,7 @@ module.exports.initScrPlwNewUpd = function () {
         var timeDiff = Math.abs(date2.getTime() - date1.getTime());
         var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
         diffDays = (args.item.upload_status == 1) ? diffDays : 0;
-        if (diffDays < 99) {
+        if (diffDays < 699) {
 
           this.editItem(args.item);
           var data = args.item;
