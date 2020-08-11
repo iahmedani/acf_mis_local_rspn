@@ -216,10 +216,13 @@ module.exports.sessionsReport = () => {
                 title: "Date",
                 data: "session_date",
                 render: function (data, type, row) {
-                  var x = new Date(data).getFullYear() + '-' + new Date(data).getMonth();
+                  var x = new Date(data).getFullYear() + '-' + (parseInt(new Date(data).getMonth()) + parseInt(1));
                   return x
 
                 }
+              },{
+                title: "Session Date",
+                data: "session_date"
               },
               {
                 title: "Program",
