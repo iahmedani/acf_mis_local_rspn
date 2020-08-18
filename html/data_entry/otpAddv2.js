@@ -348,6 +348,14 @@ module.exports.initOtpAdd = function () {
     var _weight = $(this).val();
     rusfOnWeigth(_weight);
   });
+  $('#ent_reason').on('change', function(e){
+    var _val = $(this).val();
+    if( $('#ddProgramType').val()== 'otp' && _val == 'no_prv_pro'){
+      $('#ration2').val('Amoxicilin Syrup')
+    }else{
+      $('#ration2').val('');
+    }
+  })
 
   // form submission
   $('#otpAddForm').on('submit', async (e) => {
@@ -373,7 +381,11 @@ module.exports.initOtpAdd = function () {
           ipc.removeAllListeners('submitOtpAdd');
 
           $('.clr').val("");
-          $(".cld").val("")
+          $(".cld").val("");
+          $('cldyes').val(1);
+          $('cldno').val(0);
+          $('cldgood').val('good');
+          $('cldbet1_3').val('bet1_3');
         }
       } else {
         $('#regIdInfo').css('display', 'none')

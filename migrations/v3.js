@@ -2102,12 +2102,9 @@ FROM   [main].[v_geo]
              [tblOtpExit].[exit_date]
       FROM   [tblOtpAdd]
              LEFT JOIN [tblOtpExit] ON [tblOtpAdd].[otp_id] = [tblOtpExit].[otp_id]
-      WHERE  [tblOtpAdd].[is_deleted] = 0
-               AND ([tblOtpExit].[is_deleted] = 0
-               OR [tblOtpExit].[is_deleted] IS NULL);
-      
+      WHERE  [tblOtpAdd].[is_deleted] = 0;      
       `)
-              .raw(`CREATE VIEW [oneTableGeo]
+       .raw(`CREATE VIEW [oneTableGeo]
       AS
       SELECT *
       FROM   [oneTable]
@@ -2117,6 +2114,9 @@ FROM   [main].[v_geo]
 
 exports.down = function (knex, Promise) {
        return knex.schema
+              .raw(`drop view oneTableGeo`)
+              .raw(`drop view oneTable`)
+              .raw(`drop view v_OtpAddmision3`)
               .dropTable("tblUpdates")
               .dropTable("tblUpdateTracker")
               .raw(`drop view v_otpExitFullForUpdateNSC`)

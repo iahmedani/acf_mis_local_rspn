@@ -22,8 +22,9 @@ module.exports.autoStock = function () {
 
   ipc.send('stocks')
   ipc.on('stocks', (e, stocks) => {
-    // console.table(stocks)
+    console.table(stocks)
     // var ration = $.uniqueSort(stocks.map(el => el.ration));
+    // console.log(stocks)
     var test = [];
     var rem = {};
     var previous = {};
