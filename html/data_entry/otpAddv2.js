@@ -351,9 +351,12 @@ module.exports.initOtpAdd = function () {
   $('#ent_reason').on('change', function(e){
     var _val = $(this).val();
     if( $('#ddProgramType').val()== 'otp' && _val == 'no_prv_pro'){
-      $('#ration2').val('Amoxicilin Syrup')
+      $('#ration2').val('Amoxicilin Syrup');
+      $('#quantity2').val(1);
     }else{
       $('#ration2').val('');
+      $('#quantity2').val('');
+
     }
   })
 
