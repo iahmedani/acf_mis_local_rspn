@@ -367,10 +367,29 @@ module.exports.initSessionsV2 = function () {
               Name: 'IYCF',
               value: 'iycf'
             },
-            // { Name: 'Breast Feeding Counseling', value: 'breastFeeding' },
             {
               Name: 'Cooking Demonstration',
               value: 'cooking'
+            },
+            {
+              Name: '(SBCC) Identification, prevention and treatment of malnutrition',
+              value: '(SBCC) Identification, prevention and treatment of malnutrition'
+            },
+            {
+              Name: '(SBCC) Diet and healthcare of mothers during pregnancy and lactation',
+              value: '(SBCC) Diet and healthcare of mothers during pregnancy and lactation'
+            },
+            {
+              Name: '(SBCC) Mother and child care after delivery',
+              value: '(SBCC) Mother and child care after delivery'
+            },
+            {
+              Name: `(SBCC) Children’s diet`,
+              value: `(SBCC) Children’s diet`
+            },
+            {
+              Name: `(SBCC) Personal and environmental hygiene`,
+              value: `(SBCC) Personal and environmental hygiene`
             },
             {
               Name: 'Other',

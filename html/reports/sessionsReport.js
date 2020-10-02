@@ -282,8 +282,13 @@ module.exports.sessionsReport = () => {
                     iycf: 'IYCF',
                     breastFeeding: 'Breast Feeding Counseling',
                     cooking: 'Cooking Demonstration',
-                    other: 'Other'
-                  }
+                    other: 'Other',
+                    '(SBCC) Identification, prevention and treatment of malnutrition': '(SBCC) Identification, prevention and treatment of malnutrition',
+                     '(SBCC) Diet and healthcare of mothers during pregnancy and lactation': '(SBCC) Diet and healthcare of mothers during pregnancy and lactation',
+                    '(SBCC) Mother and child care after delivery': '(SBCC) Mother and child care after delivery',
+                   '(SBCC) Children’s diet': `(SBCC) Children’s diet`,
+                   '(SBCC) Personal and environmental hygiene': `(SBCC) Personal and environmental hygiene`
+                    }
                   return x[data];
                 }
               },
@@ -361,8 +366,13 @@ module.exports.sessionsReport = () => {
                     iycf: 'IYCF',
                     breastFeeding: 'Breast Feeding Counseling',
                     cooking: 'Cooking Demonstration',
-                    other: 'Other'
-                  }
+                    other: 'Other',
+                    '(SBCC) Identification, prevention and treatment of malnutrition': '(SBCC) Identification, prevention and treatment of malnutrition',
+                     '(SBCC) Diet and healthcare of mothers during pregnancy and lactation': '(SBCC) Diet and healthcare of mothers during pregnancy and lactation',
+                    '(SBCC) Mother and child care after delivery': '(SBCC) Mother and child care after delivery',
+                   '(SBCC) Children’s diet': `(SBCC) Children’s diet`,
+                   '(SBCC) Personal and environmental hygiene': `(SBCC) Personal and environmental hygiene`
+                    }
                   return x[data];
                 }
               },

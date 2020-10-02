@@ -22,37 +22,59 @@ module.exports.autoStock = function () {
 
   ipc.send('stocks')
   ipc.on('stocks', (e, stocks) => {
-    console.table(stocks)
+    // console.table(stocks)
     // var ration = $.uniqueSort(stocks.map(el => el.ration));
-    // console.log(stocks)
     var test = [];
     var rem = {};
     var previous = {};
     var dist = {}
+    var ret = {}
+    var damaged = {}
     var rec = {}
     stocks.forEach((el, i) => {
       if (i == 0) {        
-        rem[el.item] = el.recQty - el.dist_qty;
+        rem[el.item] = el.recQty - (el.dist_qty + el.ret_qty);
         previous[el.item] = (el.dist_qty + rem[el.item]) - el.recQty;
       } else if (Object.keys(rem)[Object.keys(rem).indexOf(el.item)] == el.item) {
-        rem[el.item] = (el.recQty + rem[el.item]) - el.dist_qty;
-        previous[el.item] = (el.dist_qty + rem[el.item]) - el.recQty;
+        rem[el.item] = (el.recQty + rem[el.item]) - (el.dist_qty + el.ret_qty);
+        previous[el.item] = ((el.dist_qty + el.ret_qty) + rem[el.item]) - el.recQty;
       } else {
-        rem[el.item] = el.recQty - el.dist_qty;
-        previous[el.item] = (el.dist_qty + rem[el.item]) - el.recQty;
+        rem[el.item] = el.recQty - (el.dist_qty + el.ret_qty);
+        previous[el.item] = ((el.dist_qty + el.ret_qty) + rem[el.item]) - el.recQty;
       }
       dist[el.item] = (isNaN(dist[el.item]) ? 0 : dist[el.item]) + el.dist_qty;
       rec[el.item] = (isNaN(rec[el.item]) ? 0 : rec[el.item]) + el.recQty;
+      ret[el.item] = (isNaN(ret[el.item]) ? 0 : ret[el.item]) + el.ret_qty;
       el.totalDist = dist[el.item];
       el.totalRec = rec[el.item];
       el.remaining = rem[el.item];
+      el.return = ret[el.item];
       el.prev = previous[el.item];
       test.push(el);
+
+      
       if (test.length == stocks.length) {
         // console.table(test);
         // console.log(dist)
         // console.log(rec)
+        var listItems = stocks.map(el=>el.item);
+        listItems = [...new Set(listItems)];
+        console.log({listItems})
+        var myOwnAnalysis = [];
+        listItems.forEach((el, i, allItems)=>{
+
+          var itemData = stocks.filter(xl=>xl.item == el);
+          var _varAnalysis = {};
+          _varAnalysis.item = el;
+          var _recieved = 0;
+          var _dist =0;
+          _varAnalysis.recieved = itemData.reduce((totalRec, rec )=> (totalRec + rec.recQty), _recieved);
+          _varAnalysis.dist = itemData.reduce((totalDist, dist )=> (totalDist + dist.dist_qty), _dist);
+          _varAnalysis.distAvg = Math.floor(_varAnalysis.dist / itemData.length).toFixed(2)
+          myOwnAnalysis.push(_varAnalysis)
+        })
         
+        console.log({myOwnAnalysis})
         var avgItems = $.uniqueSort(test.map(el => el.item));
         var avg = [];
         avgItems.forEach((avgRow, w) => {
@@ -62,10 +84,12 @@ module.exports.autoStock = function () {
           }
           var dists = 0;
           var recs = 0;
+          var rets = 0;
           var id = 0;
           test.forEach((avgRowChild, q) => {
             if (avgRowChild.item == avgRow) {
               dists += avgRowChild.dist_qty;
+              rets += avgRowChild.ret_qty;
               recs += avgRowChild.recQty;
               rr._id = id;
             }
@@ -73,8 +97,9 @@ module.exports.autoStock = function () {
             if (test.length - 1 == q) {
               rr.dist = dists;
               rr.rec = recs;
+              rr.ret = rets;
               rr._avg = parseFloat((dists / rr.months).toFixed(2))
-              rr.precent = parseFloat((((recs - dists) / recs) * 100).toFixed(2))
+              rr.precent = parseFloat((((recs - (dists + rets)) / recs) * 100).toFixed(2))
               rr.nextReq = (rr.precent <= 25) ? parseFloat((rr._avg * 3) + (rr._avg * 0.15).toFixed(2)) : 0;
               avg.push(rr);
             }
@@ -89,8 +114,8 @@ module.exports.autoStock = function () {
               $('#btnStockRequest').attr("hidden",true)
             }
             $(() => {
-              if ($.fn.DataTable.isDataTable("#example")) {
-                $("#example")
+              if ($.fn.DataTable.isDataTable("#new_Stocks")) {
+                $("#new_Stocks")
                   .DataTable()
                   .clear()
                   .destroy();
@@ -109,7 +134,7 @@ module.exports.autoStock = function () {
               }
 
 
-              $('#example').DataTable({
+              $('#new_Stocks').DataTable({
                 data: test,
                 dom: 'Bfrtip',
                 buttons: [
@@ -122,16 +147,34 @@ module.exports.autoStock = function () {
                   { title: "Opening", data: 'prev' },
                   { title: "Recieved", data: 'recQty' },
                   { title: "Distributed", data: 'dist_qty' },
+                  { title: "Return or Damaged", data: 'ret_qty' },
                   { title: "Remaining", data: 'remaining' }
                 ]
               });
               $('#avgs').DataTable({
-                data: avg,
+                data: myOwnAnalysis,
                 columns: [
                   { title: "Item", data: 'item' },
-                  { title: "Average Monthly Consumption (AMC)", data: '_avg' },
-                  { title: "Stock Available %", data: 'precent' },
-                  { title: 'Next Request', data: 'nextReq'}
+                  { title: "Average Monthly Consumption (AMC)", data: 'distAvg' },
+                  { title: "Stock Available % (Monthly)", data: null,render:(data, type, row)=>{
+                    var remaining =  data.recieved - data.dist;
+                    // console.log(data)
+                    var __percent =  Math.floor(remaining / data.distAvg * 100).toFixed();
+                    return __percent  + '%';
+                  },createdCell: function(td, cellData, rowData, row, col){
+                    var remaining =  cellData.recieved - cellData.dist;
+                    // console.log(data)
+                    var __percent =  Math.floor(remaining / cellData.distAvg * 100).toFixed();
+                    if(__percent < 5){
+                      $(td).css('color', 'red')
+                    }else if ( __percent > 5 && __percent <25 ){
+                      $(td).css('color', 'yellow')
+                    }
+                  } },
+                  { title: 'Next Request (for Quarter)', data: null, render:(data, type, row)=>{
+                    return Math.floor((data.distAvg * 3) + (data.distAvg * 0.25)).toFixed();
+                  }},
+        
                 ]
                 // })
               })
@@ -262,6 +305,7 @@ module.exports.autoStock = function () {
         })
        
       }
+
     })
     ipc.removeAllListeners('stocks')
   })
