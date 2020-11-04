@@ -407,16 +407,16 @@ module.exports.initGrid = function () {
   // })
 
   // $('.secondSite').css('display', 'none')
-  // $('#ent_type').on('change', function () {
-  //   if ($(this).val() == 'new') {
-  //     $('.newscreen').attr('disabled', false)
-  //     $('.rescreen').attr('disabled', true)
-  //   } else {
-  //     $('.newscreen').attr('disabled', true)
-  //     $('.rescreen').attr('disabled', false)
-  //   }
-  // })
-  // $('.rescreen').attr('disabled', true)
+  $('#ent_type').on('change', function () {
+    if ($(this).val() == 'new') {
+      $('.newscreen').attr('disabled', false)
+      $('.rescreen').attr('disabled', true)
+    } else {
+      $('.newscreen').attr('disabled', true)
+      $('.rescreen').attr('disabled', false)
+    }
+  })
+  $('.rescreen').attr('disabled', true)
 
   var $table = $('#tablePreview');
   $table.floatThead({

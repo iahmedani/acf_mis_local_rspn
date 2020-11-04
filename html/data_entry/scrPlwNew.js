@@ -207,14 +207,14 @@ module.exports.initScrPlwNew = function () {
     $('#scrChildrenForm').get(0).reset();
   })
 
-  // $('#ent_type').on('change', function () {
-  //   if ($(this).val() == 'new') {
-  //     $('.newscreen').attr('disabled', false)
-  //     $('.rescreen').attr('disabled', true)
-  //   } else {
-  //     $('.newscreen').attr('disabled', true)
-  //     $('.rescreen').attr('disabled', false)
-  //   }
-  // })
-  // $('.rescreen').attr('disabled', true)
+  $('#ent_type').on('change', function () {
+    if ($(this).val() == 'new') {
+      $('.newscreen').attr('disabled', false)
+      $('.rescreen').attr('disabled', true)
+    } else {
+      $('.newscreen').attr('disabled', true)
+      $('.rescreen').attr('disabled', false)
+    }
+  })
+  $('.rescreen').attr('disabled', true)
 }
