@@ -842,16 +842,16 @@ module.exports.initScrChildrenUpd = function () {
       }
     })
   })
-  $('#ent_type').on('change', function () {
-    if ($(this).val() == 'new') {
-      $('.newscreen').attr('disabled', false)
-      $('.rescreen').attr('disabled', true)
-    } else {
-      $('.newscreen').attr('disabled', true)
-      $('.rescreen').attr('disabled', false)
-    }
-  })
-  $('.rescreen').attr('disabled', true)
+  // $('#ent_type').on('change', function () {
+  //   if ($(this).val() == 'new') {
+  //     $('.newscreen').attr('disabled', false)
+  //     $('.rescreen').attr('disabled', true)
+  //   } else {
+  //     $('.newscreen').attr('disabled', true)
+  //     $('.rescreen').attr('disabled', false)
+  //   }
+  // })
+  // $('.rescreen').attr('disabled', true)
 
   var $table = $('#tablePreview');
   $table.floatThead({
@@ -865,4 +865,125 @@ module.exports.initScrChildrenUpd = function () {
   $('#site_two').select2({
     minimumInputLength: 3 // only start searching when the user has input 3 or more characters
   });
+
+  let _sumVals = function(el1, el2, tel1, tel2) {
+    var _el1 = $('.'+el1);
+    var _el2 = $('.'+el2);
+    var _tel1 = $('#'+tel1);
+    var _tel2 = $('#'+tel2);
+
+    var t1 = 0;
+    var t2 = 0;
+    _el1.each(function(i, el){     
+      t1 = t1 + parseInt($(this).val());
+      if(_el1.length == i+1){
+        _tel1.val(t1);
+      }
+    })
+    _el2.each(function(i, el){    
+      t2 = t2 + parseInt($(this).val());
+
+      if(_el2.length == i+1){
+        _tel2.val(t2);
+      }
+    })
+    
+    
+
+  }
+  
+  var tscr = $('.tscr');
+  var ent_type = $('#ent_type');
+  var odema12 = $('.odema12');
+  var odema3 = $('.odema3');
+  var otp1 = $('.otp1');
+  var otp2 = $('.otp2');
+  var tsfp1 = $('.tsfp1');
+  var tsfp2 = $('.tsfp2');
+  var mnpnew = $('.mnpnew');
+  var mnp = $('.mnp');
+  var mnpexit = $('.mnpexit');
+  var deworm = $('.deworm');
+  var other = $('.other');
+  
+  // Total screening auto calculation
+  tscr.on('change', function(){
+    _entType = ent_type.val();
+    _sumVals('_tb', '_tg', 'total_scr_boys', 'total_scr_girls');
+    if(_entType == 'rescreen'){
+      $('#reScreened_boys').val($('#total_scr_boys').val());
+      $('#reScreened_girls').val($('#total_scr_girls').val());
+      $('#new_boys').val(0);
+      $('#new_girls').val(0);
+    }else if(_entType == 'new'){
+      $('#reScreened_boys').val(0);
+      $('#reScreened_girls').val(0);
+      $('#new_boys').val($('#total_scr_boys').val());
+      $('#new_girls').val($('#total_scr_girls').val());
+    }
+  })
+  // Entry values corrention
+  ent_type.on('change', function(){
+    _entType = $(this).val();
+    if(_entType == 'rescreen'){
+      $('#reScreened_boys').val($('#total_scr_boys').val());
+      $('#reScreened_girls').val($('#total_scr_girls').val());
+      $('#new_boys').val(0);
+      $('#new_girls').val(0);
+    }else if(_entType == 'new'){
+      $('#reScreened_boys').val(0);
+      $('#reScreened_girls').val(0);
+      $('#new_boys').val($('#total_scr_boys').val());
+      $('#new_girls').val($('#total_scr_girls').val());
+    }
+  })
+// Odema plus12
+  odema12.on('change', function(){
+    _sumVals('_odb12', '_odg12', 'plus12_oedema_boys', 'plus12_oedema_girls')
+  })
+  // Odema plus3
+  odema3.on('change', function(){
+    _sumVals('_odb3', '_odg3', 'plus3_oedema_boys', 'plus3_oedema_girls')
+  })
+
+  // otp1 ref
+  otp1.on('change', function(){
+    _sumVals('otp1b', 'otp1g', 'reffer_otp_boys_s1', 'reffer_otp_girls_s1')
+  })
+  // otp1 ref
+  otp2.on('change', function(){
+    _sumVals('otp2b', 'otp2g', 'reffer_otp_boys_s2', 'reffer_otp_girls_s2')
+  })
+  // tsfp1 ref
+  tsfp1.on('change', function(){
+    _sumVals('tsfp1b', 'tsfp1g', 'reffer_tsfp_boys_s1', 'reffer_tsfp_girls_s1')
+  })
+  // tsfp2 ref
+  tsfp2.on('change', function(){
+    _sumVals('tsfp2b', 'tsfp2g', 'reffer_tsfp_boys_s2', 'reffer_tsfp_girls_s2')
+  })
+  // mnp new
+  mnpnew.on('change', function(){
+    _sumVals('mnpnewb', 'mnpnewg', 'mnp_boys', 'mnp_girls')
+  })
+  // mnp followup
+  mnp.on('change', function(){
+    _sumVals('mnpb', 'mnpg', 'followup_boys', 'followup_girls')
+    $('#total_followup').val( ($('#followup_boys').val() + $('#followup_girls').val()))
+  })
+  // mnp exits
+  mnpexit.on('change', function(){
+    _sumVals('mnpexitb', 'mnpexitg', 'exits_boys', 'exits_girls')
+    $('#total_exits').val( ($('#exits_boys').val() + $('#exits_girls').val()))
+  })
+  // Deworming
+  deworm.on('change', function(){
+    _sumVals('dewormb', 'dewormg', 'deworming_boys', 'deworming_girls')
+  })
+  // Deworming
+  other.on('change', function(){
+    _sumVals('otherb', 'otherg', 'other_boys', 'other_girls')
+  })
+  
+
 }
