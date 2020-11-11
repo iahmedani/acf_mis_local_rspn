@@ -2424,3 +2424,4 @@ require("./mainfunc/stockInUpdate")(ipcMain, knex, fs, clientMessages, async);
 // require('./mainfunc/v3_updates/v3_0_3');
 // require('./mainfunc/v3_updates/v3_0_8');
 // require('./mainfunc/v3_updates/v3_0_9');
+require('./mainfunc/v3_updates/v3_1_0');
