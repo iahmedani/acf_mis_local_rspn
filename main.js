@@ -1839,6 +1839,16 @@ function creatWindow() {
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
   // Insert menu
   Menu.setApplicationMenu(mainMenu);
+
+  // Emitted when the window is closed.
+  mainWindow.on('closed', function (e) {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    // console.log(e)
+    mainWindow = null
+    app.quit();
+  })
 }
 //Creating main window
 app.on('ready', creatWindow);
