@@ -432,10 +432,33 @@ module.exports.initSessionsV2 = function () {
           editing: false,
           readOnly: true,
           itemTemplate: function (value, item) {
-            var x = ((item.ind_session) ? parseInt(item.ind_session) : 0) + ((item.grp_sessions) ? parseInt(item.grp_sessions) : 0)
+            var x = ((item.ind_session) ? parseInt(item.ind_session) : 0) + ((item.grp_sessions) ? parseInt(item.grp_sessions) : 0) + ((item.mtmg) ? parseInt(item.mtmg) : 0) + ((item.ftfg) ? parseInt(item.ftfg) : 0)
             return x;
           }
         },
+        {
+          name: "mtmg",
+          width: 50,
+          title: "Session Given to MTM",
+          type: "number",
+          filtering: false,
+          validate: {
+            validator: 'min',
+            param: 0
+          }
+        },
+        {
+          name: "ftfg",
+          width: 50,
+          title: "Session Given to FTF",
+          type: "number",
+          filtering: false,
+          validate: {
+            validator: 'min',
+            param: 0
+          }
+        },
+
         {
           name: "grp_sessions",
           width: 50,

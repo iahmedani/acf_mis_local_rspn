@@ -2,7 +2,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
 
   // sending all session of site and not deleted (is_deleted)
   ipcMain.on("getSessionsAllReport", (event, filter) => {
-    console.log(filter);
+    // console.log(filter);
     if (filter.startDate && filter.endDate) {
       async.series({
           data: cb => {
@@ -39,7 +39,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
             event.sender.send("getSessionsAllReport", {
               result
             });
-            console.log(result);
+            // console.log(result);
           }
         }
       );
@@ -78,7 +78,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
             event.sender.send("getSessionsAllReport", {
               result
             });
-            console.log(result);
+            // console.log(result);
           }
         }
       );
@@ -86,7 +86,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
   });
 
   ipcMain.on("getSessionsSummary", (event, filter) => {
-    console.log(filter);
+    // console.log(filter);
     if (filter.startDate && filter.endDate) {
       async.series({
           data: cb => {
@@ -94,6 +94,12 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
               .select('prog_type', 'session_type')
               .sum({
                 total_session: 'total_session'
+              })
+              .sum({
+                mtmg: 'mtmg'
+              })
+              .sum({
+                ftfg: 'ftfg'
               })
               .sum({
                 grp_sessions: 'grp_sessions'
@@ -152,7 +158,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
             event.sender.send("getSessionsSummary", {
               result
             });
-            console.log(result);
+            // console.log(result);
           }
         }
       );
@@ -163,6 +169,12 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
               .select('prog_type', 'session_type')
               .sum({
                 total_session: 'total_session'
+              })
+              .sum({
+                mtmg: 'mtmg'
+              })
+              .sum({
+                ftfg: 'ftfg'
               })
               .sum({
                 grp_sessions: 'grp_sessions'
@@ -220,7 +232,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async, client, localDate, ) => {
             event.sender.send("getSessionsSummary", {
               result
             });
-            console.log(result);
+            // console.log(result);
           }
         }
       );

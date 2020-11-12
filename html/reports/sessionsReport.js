@@ -188,11 +188,17 @@ module.exports.sessionsReport = () => {
           .DataTable()
           .destroy();
       }
-
+      swal.fire({
+        imageUrl:'../img/4V0b.gif',
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        showConfirmButton: false,
+    })
 
       ipc.send("getSessionsAllReport", filter);
       ipc.on("getSessionsAllReport", (event, data) => {
-        console.log(data.result.data);
+        // console.log(data.result.data);
+      
         $("#tblSessionReport")
           .on('processing.dt', function (e, settings, processing) {
             $('.spinner-border').css('display', processing ? 'block' : 'none');
@@ -266,6 +272,18 @@ module.exports.sessionsReport = () => {
                 }
               },
               {
+                title: 'Total Sessions',
+                data: 'total_session'
+              },
+              {
+                title: 'Session Given to MTM',
+                data: 'mtmg'
+              },
+              {
+                title: 'Session Given to FTF',
+                data: 'ftfg'
+              },
+              {
                 title: 'Group Sessions',
                 data: 'grp_sessions'
               },
@@ -299,21 +317,14 @@ module.exports.sessionsReport = () => {
                   return data.replace('_', ' ').toUpperCase();
                 }
               },
-              {
-                title: "Females",
-                data: "female_participants"
-              },
+              
               {
                 title: "Males",
                 data: "male_participants"
               },
               {
-                title: "New Participants",
-                data: "new_participants"
-              },
-              {
-                title: "Old Participants",
-                data: "old_participants"
+                title: "Females",
+                data: "female_participants"
               },
               {
                 title: "Pragnent",
@@ -323,6 +334,15 @@ module.exports.sessionsReport = () => {
                 title: "Lactating",
                 data: "lactating"
               },
+              {
+                title: "New Participants",
+                data: "new_participants"
+              },
+              {
+                title: "Old Participants",
+                data: "old_participants"
+              },
+              
               {
                 title: "Remarks",
                 data: "remarks"
@@ -334,7 +354,7 @@ module.exports.sessionsReport = () => {
 
       ipc.send("getSessionsSummary", filter);
       ipc.on("getSessionsSummary", (event, data) => {
-        console.log(data.result.data);
+        // console.log(data.result.data);
         $("#tblSessionSummary")
           .on('processing.dt', function (e, settings, processing) {
             $('.spinner-border').css('display', processing ? 'block' : 'none');
@@ -381,6 +401,14 @@ module.exports.sessionsReport = () => {
                 data: 'total_session'
               },
               {
+                title: 'Session Given to MTM',
+                data: 'mtmg'
+              },
+              {
+                title: 'Session Given to FTF',
+                data: 'ftfg'
+              },
+              {
                 title: 'Group',
                 data: 'grp_sessions'
               },
@@ -416,6 +444,7 @@ module.exports.sessionsReport = () => {
             ]
           });
       });
+      Swal.close()
     }
     getSessionData(currentFilter());
     $("#ddInterval").on("change", function () {

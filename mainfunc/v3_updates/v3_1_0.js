@@ -161,6 +161,58 @@ module.exports = async function (app) {
             await knex('tblUpdates').insert({version:310, description:'Updated scrChilren to support v2 IM tools'})
             console.log('updated v310')
         }
+        var _check = await knex('tblUpdates').where({version:313});
+        if(!_check.length){
+            await knex.raw(`PRAGMA [main].legacy_alter_table = 'on';`)
+            await knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
+            await knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
+            await knex.raw(`ALTER TABLE [main].[tblSessions] RENAME TO [_sqliteexpert_temp_table_1];`)
+            await knex.raw(`CREATE TABLE [main].[tblSessions](
+                [session_id] char(36), 
+                [session_id_old] integer, 
+                [site_id] integer, 
+                [client_id] varchar(255), 
+                [session_date] date, 
+                [session_type] varchar(255), 
+                [male_participants] INTEGER, 
+                [female_participants] INTEGER, 
+                [session_location] varchar(255), 
+                [upload_status] integer, 
+                [created_at] datetime, 
+                [updated_at] datetime, 
+                [old_participants] INTEGER, 
+                [new_participants] INTEGER, 
+                [username] VARCHAR(50), 
+                [org_name] VARCHAR(50), 
+                [project_name] VARCHAR(50), 
+                [pragnent] INT, 
+                [lactating] INT, 
+                [is_deleted] INTEGER(1) NOT NULL DEFAULT 0, 
+                [remarks] VARCHAR NOT NULL DEFAULT "N/A", 
+                [CHS_id] VARCHAR, 
+                [CHW_id] VARCHAR, 
+                [upload_date] DATE, 
+                [prog_type] varchar(10), 
+                [total_session] INTEGER DEFAULT 0, 
+                [ind_session] INTEGER DEFAULT 0, 
+                [grp_sessions] INTEGER DEFAULT 0, 
+                [uc_id] INTEGER, 
+                [province_id] INTEGER, 
+                [district_id] INTEGER, 
+                [tehsil_id] INTEGER, 
+                [mtmg] INTEGER, 
+                [ftfg] INTEGER);`)
+            await knex.raw(`
+            INSERT INTO [main].[tblSessions]([rowid], [session_id], [session_id_old], [site_id], [client_id], [session_date], [session_type], [male_participants], [female_participants], [session_location], [upload_status], [created_at], [updated_at], [old_participants], [new_participants], [username], [org_name], [project_name], [pragnent], [lactating], [is_deleted], [remarks], [CHS_id], [CHW_id], [upload_date], [prog_type], [total_session], [ind_session], [grp_sessions], [uc_id], [province_id], [district_id], [tehsil_id])
+            SELECT [rowid], [session_id], [session_id_old], [site_id], [client_id], [session_date], [session_type], [male_participants], [female_participants], [session_location], [upload_status], [created_at], [updated_at], [old_participants], [new_participants], [username], [org_name], [project_name], [pragnent], [lactating], [is_deleted], [remarks], [CHS_id], [CHW_id], [upload_date], [prog_type], [total_session], [ind_session], [grp_sessions], [uc_id], [province_id], [district_id], [tehsil_id]
+            FROM [main].[_sqliteexpert_temp_table_1];`)
+            await knex.raw(`DROP TABLE IF EXISTS [main].[_sqliteexpert_temp_table_1];`)
+            await knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
+            await knex.raw(`PRAGMA [main].foreign_keys = 'on';`)
+            await knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
+            await knex('tblUpdates').insert({version:313, description:'Updated tblSessions to support v2 IM tools'})
+            console.log('updated v313')
+        }
     } catch (error) {
 
         console.log(error)
