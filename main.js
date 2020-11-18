@@ -1430,7 +1430,7 @@ function creatWindow() {
   mainWindow = new BrowserWindow({
     width,
     height,
-    show: false,
+    show: false
     // frame: false
   });
 

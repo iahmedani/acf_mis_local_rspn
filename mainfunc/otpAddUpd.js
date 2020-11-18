@@ -68,7 +68,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
           err: e
         });
       } else {
-        console.log(result)
+        // console.log(result)
         event.sender.send('allOtpTest', {
           result
         })
