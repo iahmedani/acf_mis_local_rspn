@@ -35,7 +35,7 @@ module.exports.initOtpAddUpdV2 = function () {
   //     return o;
   //   };
   // })(jQuery);
-  $(function () {
+  $(async function () {
     // ipc.send('getCommodity');
     // ipc.on('commodity', function (evt, com) {
     //   $('#ration1').children('option:not(:first)').remove();
@@ -131,6 +131,45 @@ module.exports.initOtpAddUpdV2 = function () {
 
       });
     });
+
+    // filter
+    await setFormDefualts('filterProgramType','filterProvince','filterDistrict','filterTehsil')
+    // await appendItems('filterProvince','provinceList',false,'id','provinceName');
+    // chooseDefault('filterProgramType', 'defProg');
+    // chooseDefault('filterProvince', 'defProv');
+    // $('#filterProgramType').trigger('change')
+    // $('#filterProvince').trigger('change')
+    // var DefProvince = JSON.parse(window.localStorage.getItem('defaults'))['defProv']['value'];
+    // await appendItems('filterDistrict','districtList',false,'id','districtName',DefProvince,'province_id');
+    // chooseDefault('filterDistrict', 'defDist');
+    // var DefDistrict = JSON.parse(window.localStorage.getItem('defaults'))['defDist']['value'];
+    // await appendItems('filterTehsil','tehsilList',false,'id','tehsilName',DefDistrict,'district_id');
+
+    // $('#filterProvince').on('change', async function(){
+    //   var _id = $(this).val();
+    //   console.log(_id)
+    //   await appendItems('filterDistrict','districtList',false,'id','districtName',_id,'province_id');
+    //   chooseDefault('filterProvince', 'defProv');
+    // })
+
+
+    await updatGeoElonChange('filterProvince','filterDistrict','filterTehsil', 'filterUC' )
+    $('.filter').on('change', async function(){
+      // programe type change in uc selections
+      if($('#filterProgramType').val() == 'sc'){
+        $("#filterUC").attr("disabled", true);
+      }else{
+        $("#filterUC").attr("disabled", false);
+      }
+      var filter = {};
+     createExternalFilter(filter);
+     
+      // $('#AddUpdate-jsGrid').jsGrid("loadData");
+      $("#AddUpdate-jsGrid").jsGrid("loadData", filter).done(function() {
+        console.log("data loaded");
+      });
+
+    })
 
   });
   $(function () {
@@ -254,7 +293,7 @@ module.exports.initOtpAddUpdV2 = function () {
         value: 'sc'
       }
     ];
-    $("#jsGrid").jsGrid({
+    $("#AddUpdate-jsGrid").jsGrid({
       width: "100%",
       height: "300px",
       filtering: true,
@@ -273,44 +312,48 @@ module.exports.initOtpAddUpdV2 = function () {
           // console.log(filter);
           // console.log("loaddata", site_id);
           // ipc.send("allOtpTest", filter);
+          createExternalFilter(filter);
           return getOtp(filter);
         },
         deleteItem: function (item) {
           return delOtp(item);
         }
       },
-      fields: [{
-          name: "prog_type",
-          title: 'Program Type',
-          type: 'select',
-          items: prog_type,
-          textField: 'name',
-          valueField: 'value',
-          width: 50
-        },
+      fields: [
+        // {
+        //   name: "prog_type",
+        //   title: 'Program Type',
+        //   type: 'select',
+        //   items: prog_type,
+        //   textField: 'name',
+        //   valueField: 'value',
+        //   width: 50
+        // },
+        // {
+        //   name: "province",
+        //   title: "Province",
+        //   type: "text",
+        //   width: 50
+        // },
+        // {
+        //   name: "district_name",
+        //   title: "District",
+        //   type: "text",
+        //   width: 50
+        // },
+        // {
+        //   name: "tehsil_name",
+        //   title: "Tehsil",
+        //   type: "text",
+        //   width: 50
+        // },
         {
-          name: "province",
-          title: "Province",
+          name: "site_name",
+          title: "Site Name",
           type: "text",
-          width: 50
-        },
-        {
-          name: "district_name",
-          title: "District",
-          type: "text",
-          width: 50
-        },
-        {
-          name: "tehsil_name",
-          title: "Tehsil",
-          type: "text",
-          width: 50
-        },
-        {
-          name: "uc_name",
-          title: "Uion Council",
-          type: "text",
-          width: 50
+          width: 50,
+          filtering:false,
+          editing:false
         },
         {
           name: "site_village",

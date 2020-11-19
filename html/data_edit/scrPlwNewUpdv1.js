@@ -78,40 +78,10 @@ module.exports.initScrPlwNewUpd = function () {
     var datePickerId = document.getElementById('txtScrChildDate');
     datePickerId.max = new Date().toISOString().split("T")[0];
   });
-  $(function () {
-    ipc.send('getProvince');
-    ipc.on('province', function (evt, province) {
-      $('#ddProvince').children('option:not(:first)').remove();
-      prov(province);
-    })
-    $('#ddProvince').on('change', function () {
-      var prov = $(this).val();
-      ipc.send('getDistrict', prov)
-      ipc.on('district', function (evt, district) {
-        $('#ddDistrict').children('option:not(:first)').remove();
-
-        dist(district);
-      })
-    })
-    $('#ddDistrict').on('change', function () {
-      var dist = $(this).val();
-      ipc.send('getTehsil', dist)
-      ipc.on('tehsil', function (evt, tehsil) {
-        $('#ddTehsil').children('option:not(:first)').remove();
-
-        teh(tehsil);
-      })
-    })
-    $('#ddTehsil').on('change', function () {
-      var tehs = $(this).val();
-      ipc.send('getUC', tehs)
-      ipc.on('uc', function (evt, uc) {
-        $('#ddUC').children('option:not(:first)').remove();
-
-        ucListener(uc);
-      })
-    })
-    var ucForHH;
+  $(async function () {
+    await setFormDefualts(false,'ddProvince','ddDistrict','ddTehsil')
+    await appendItems('ddProvince','provinceList',false,'id','provinceName');
+    await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse' )
     $('#ddUC').on('change', function () {
       var ucs = $(this).val();
       ucForHH = ucs

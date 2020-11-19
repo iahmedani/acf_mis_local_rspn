@@ -572,71 +572,37 @@ const singleTables = (addTableEl, exitTableEl, add, exit) => {
                 data: 'address'
             },
             {
+                title: 'Exit MUAC',
+                data: 'exit_muac:1'
+            },
+            {
+                title: 'Exit Weight',
+                data: 'exit_weight:1'
+            },
+            {
                 title: 'Exit Reason',
                 data: 'exit_reason:1'
+            },
+            {
+                title: 'Total Followups',
+                data: 'total_followups'
+            },
+            {
+                title: 'Total Days',
+                data: 'days_in_program'
             }
         ]
     })
 }
 
 module.exports.OTPReport = async function () {
+
+    var defProg = JSON.parse(window.localStorage.getItem('defaults'))['defProg']
+    await setFormDefualts('ddProgramType','ddProvince','ddDistrict','ddTehsil')
+    await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse',defProg ) 
     // drop down selections
-    $(function () {
-        ipc.send('getProvince');
-        ipc.on('province', function (evt, province) {
-            $('#ddProvince').children('option:not(:first)').remove();
-            prov(province);
-        })
-        $('#ddProvince').on('change', function () {
-            var prov = $(this).val();
-            ipc.send('getDistrict', prov)
-            ipc.on('district', function (evt, district) {
-                $('#ddDistrict').children('option:not(:first)').remove();
-                dist(district);
-            })
-            var province = $('#ddProvince option:selected').text();
-            $('#adrProvince').val(province);
-        })
-        $('#ddDistrict').on('change', function () {
-            var dist = $(this).val();
-            ipc.send('getTehsil', dist)
-            ipc.on('tehsil', function (evt, tehsil) {
-                $('#ddTehsil').children('option:not(:first)').remove();
-                teh(tehsil);
-            })
-            var district = $('#ddDistrict option:selected').text();
-            $('#adrDistrict').val(district);
-        })
-        $('#ddTehsil').on('change', async function () {
-            var tehs = $(this).val();
-            ipc.send('getUC', tehs)
-            ipc.on('uc', function (evt, uc) {
-                $('#ddUC').children('option:not(:first)').remove();
-                ucListener(uc);
-            })
-            if ($('#ddProgramType').val() == 'sc') {
-                try {
-                    var _listNsc = await knex('v_geo_active').where({
-                        tehsil_id: tehs,
-                        SC: 1
-                    })
-                    $('#nsc_old_otp_id').attr('data-inputmask', "'mask':'NSC-999999'")
-                    nscList(_listNsc, 'ddHealthHouse');
-                } catch (error) {
-                    console.log(error)
-                }
-            }
-        })
-        var ucForHH;
-        $('#ddUC').on('change', function () {
-            var ucs = $(this).val();
-            ucForHH = ucs
-            ipc.send('getHealthHouse', ucs)
-            ipc.on('hh', function (evt, hh) {
-                $('#ddHealthHouse').children('option:not(:first)').remove();
-                hhListener(hh);
-            })
-        })
+    $(async function () {
+        await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse',defProg ) 
         $('#ddHealthHouse').on('change', function () {
 
             var h_id = $(this).val();
@@ -665,13 +631,24 @@ module.exports.OTPReport = async function () {
     })
     var ddReportType = $('#ddProgramType');
 
-    ddReportType.on('change', function (e) {
-        console.log($(this).val())
-        if ($(this).val() == 'sc') {
+    if (defProg == 'sc') {
+        $('#nsc_report').css('display', 'block')
+        $('#otp_report').css('display', 'none')
+
+    } else if (defProg == 'otp') {
+        $('#nsc_report').css('display', 'none')
+        $('#otp_report').css('display', 'block')
+    }
+
+    ddReportType.on('change', async function (e) {
+        var val = $(this).val()
+        await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse',val ) 
+        // console.log($(this).val())
+        if (val == 'sc') {
             $('#nsc_report').css('display', 'block')
             $('#otp_report').css('display', 'none')
 
-        } else if ($(this).val() == 'otp') {
+        } else if (val == 'otp') {
             $('#nsc_report').css('display', 'none')
             $('#otp_report').css('display', 'block')
         }

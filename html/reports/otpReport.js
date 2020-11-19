@@ -680,8 +680,24 @@ const singleTables = (addTableEl, exitTableEl, add, exit) => {
                 data: 'address'
             },
             {
+                title: 'Exit MUAC',
+                data: 'exit_muac:1'
+            },
+            {
+                title: 'Exit Weight',
+                data: 'exit_weight:1'
+            },
+            {
                 title: 'Exit Reason',
                 data: 'exit_reason:1'
+            },
+            {
+                title: 'Total Followups',
+                data: 'total_followups'
+            },
+            {
+                title: 'Total Days',
+                data: 'days_in_program'
             }
         ]
     })

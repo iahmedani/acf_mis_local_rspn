@@ -168,6 +168,7 @@ function followupIntermData(event, filter) {
     .where('tblOtpAdd.reg_id', 'like', `%${filter.reg_id ? filter.reg_id :''}%`)
     .where('tblOtpAdd.p_name', 'like', `%${filter.p_name ? filter.p_name :''}%`)
     .where('tblOtpAdd.f_or_h_name', 'like', `%${filter.f_or_h_name ? filter.f_or_h_name :''}%`)
+    .where('tblOtpAdd.prog_type', 'like', `%${filter.prog_type}%`)
 
 
     // .where('tblOtpAdd.site_village', 'like', `%${filter.site_village ? filter.site_village :''}%`)
@@ -201,9 +202,10 @@ function followupIntermData(event, filter) {
         .where('tblOtpAdd.reg_id', 'like', `%${filter.reg_id ? filter.reg_id :''}%`)
         .where('tblOtpAdd.p_name', 'like', `%${filter.p_name ? filter.p_name :''}%`)
         .where('tblOtpAdd.f_or_h_name', 'like', `%${filter.f_or_h_name ? filter.f_or_h_name :''}%`)
+        .where('tblOtpAdd.prog_type', filter.prog_type)
 
         .where('tblOtpAdd.gender', 'like', `%${filter.gender ? filter.gender :''}%`)
-        // .where('tblOtpAdd.prog_type', 'like', `%${filter.prog_type}%`)
+        .where('tblOtpAdd.prog_type', 'like', `%${filter.prog_type}%`)
         .count({
           total: 'tblOtpAdd.reg_id'
         })
@@ -217,7 +219,7 @@ function followupIntermData(event, filter) {
         })
 
     }).then(result => {
-      console.log(result)
+      // console.log(result)
       event.sender.send('getInterim', ({
         result: result.result,
         totalCount: result.totalCount
@@ -226,7 +228,7 @@ function followupIntermData(event, filter) {
     })
     .catch(e => {
       // e.location = 'Follow up interim call'
-      console.log(e);
+      // console.log(e);
       event.sender.send('getInterim', ({
         err: e
       }))

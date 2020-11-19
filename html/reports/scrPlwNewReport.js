@@ -1,6 +1,7 @@
 module.exports.initScrPlwNewReport = function () {
-
-  $(function () {
+  var defProg = JSON.parse(window.localStorage.getItem('defaults'))['defProg']
+  $(async function () {
+    
     // var datePickerId_end = document.getElementById('end_date');
     // datePickerId_end.max = new Date().toISOString().split("T")[0];
     var datePickerId_start = document.getElementById('start_date');
@@ -18,39 +19,11 @@ module.exports.initScrPlwNewReport = function () {
       }
     })
 
-    ipc.send('getProvince');
-    ipc.on('province', function (evt, province) {
-      $('#ddProvince').children('option:not(:first)').remove();
-      prov(province);
-    })
-    $('#ddProvince').on('change', function () {
-      var prov = $(this).val();
-      ipc.send('getDistrict', prov)
-      ipc.on('district', function (evt, district) {
-        $('#ddDistrict').children('option:not(:first)').remove();
 
-        dist(district);
-      })
-    })
-    $('#ddDistrict').on('change', function () {
-      var dist = $(this).val();
-      ipc.send('getTehsil', dist)
-      ipc.on('tehsil', function (evt, tehsil) {
-        $('#ddTehsil').children('option:not(:first)').remove();
-
-        teh(tehsil);
-      })
-    })
-    $('#ddTehsil').on('change', function () {
-      var tehs = $(this).val();
-      ipc.send('getUC', tehs)
-      ipc.on('uc', function (evt, uc) {
-        $('#ddUC').children('option:not(:first)').remove();
-
-        ucListener(uc);
-      })
-    })
-    var ucForHH;
+      
+      await setFormDefualts(false,'ddProvince','ddDistrict','ddTehsil')
+      await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse',defProg )
+      
     $('#ddUC').on('change', function () {
       var ucs = $(this).val();
       ucForHH = ucs

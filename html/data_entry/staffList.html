@@ -32,8 +32,60 @@
     }
   </style>
   <div class="container-fluid">
+    <div class="row">
+      <!-- <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 10px; margin-bottom: 10px">
+        Admission</p> -->
+      <!-- <div class="form-group col-sm-2">
+
+        <label for="filterProgramType" class="form-label">Program Type:</label>
+
+        <select  id="filterProgramType" class="form-control form-control-sm ptype filter" required>
+          <option  value="">Select One</option>
+          <option disabled value="sfp">TSFP</option>
+          <option disabled value="sfp_Plw">TSFP-PLW</option>
+          <option value="otp" >OTP</option>
+          <option value="sc">NSC</option>
+        </select>
+
+      </div> -->
+      <div class="form-group col-sm-2 ">
+        <label for="filterProvince">Province</label>
+        <select id="filterProvince" class="form-control form-control-sm filter" required>
+          <option selected value="">Choose</option>
+
+        </select>
+      </div>
+      <div class="form-group col-sm-2 ">
+
+        <label for="filterDistrict">District</label>
+        <select id="filterDistrict" class="form-control form-control-sm filter" required>
+          <option selected value="">Choose</option>
+        </select>
+      </div>
+      <div class="form-group col-sm-2 ">
+
+        <label for="filterTehsil">Tehsil</label>
+        <select  id="filterTehsil" class="form-control form-control-sm filter" required>
+          <option selected value="">Choose</option>
+
+        </select>
+      </div>
+      <div class="form-group col-sm-2 ">
+        <label for="filterUC">UC</label>
+        <select id="filterUC" class="form-control form-control-sm filter" required>
+          <option selected value="">Choose</option>
+        </select>
+      </div>
+      <div class="form-group col-sm-2">
+
+        <label  class="form-label"></label>
+        <!-- <button type="submit"></button> -->
+        <button href="#" class="btn btn-success btn-sm form-control form-control-sm mt-1">Filter</button>
+      </div>
+    </div>
     <p class="list-group-item bg-info btn-block text-white" style="padding-bottom: 15px; margin-bottom: 15px">L/CHW List
     </p>
+    
     <div id="tblStaffList" class="rounded"></div>
     <div class="row">
       <div class="col-sm-12 rounded">

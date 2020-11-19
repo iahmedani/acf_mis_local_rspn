@@ -5,88 +5,10 @@ module.exports.stockOutEntry = function () {
   $('#ddProgramType').change(() => {
     $('.prgChange').val("")
   })
-  $(function () {
-    ipc.send('getProvince');
-    ipc.on('province', function (evt, province) {
-      $('#ddProvince').children('option:not(:first)').remove();
-      prov(province);
-    })
-    $('#ddProvince').on('change', function () {
-      var prov = $(this).val();
-      ipc.send('getDistrict', prov)
-      ipc.on('district', function (evt, district) {
-        $('#ddDistrict').children('option:not(:first)').remove();
-
-        dist(district);
-      })
-    })
-    $('#ddDistrict').on('change', function () {
-      var dist = $(this).val();
-      ipc.send('getTehsil', dist)
-      ipc.on('tehsil', function (evt, tehsil) {
-        $('#ddTehsil').children('option:not(:first)').remove();
-
-        teh(tehsil);
-      })
-    })
-    $('#ddTehsil').on('change', async function () {
-      var tehs = $(this).val();
-      ipc.send('getUC', tehs)
-      ipc.on('uc', function (evt, uc) {
-        $('#ddUC').children('option:not(:first)').remove();
-
-        ucListener(uc);
-      });
-      if ($('#ddProgramType').val() == 'sc') {
-        try {
-          var _listNsc = await knex('v_geo_active').where({
-            tehsil_id: tehs,
-            SC: 1
-          })
-          // $('#nsc_old_otp_id').attr('data-inputmask', "'mask':'NSC-999999'")
-          nscList(_listNsc, 'ddHealthHouse');
-        } catch (error) {
-          console.log(error)
-        }
-      }
-    })
-    var ucForHH;
-    $('#ddUC').on('change', function () {
-      var ucs = $(this).val();
-      ucForHH = ucs
-      ipc.send('getHealthHouse', ucs)
-      ipc.on('hh', async function (evt, hh) {
-        // console.log(hh)
-        $('#site_one').children('option:not(:first)').remove();
-        if (hh.hh.length > 1) {
-          $('.secondSite').css('display', '')
-          $('#site_two').children('option:not(:first)').remove();
-          await asyncForEach(hh.hh, async (el) => {
-            $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);
-          })
-        } else {
-          $('.secondSite').css('display', 'none')
-
-        }
-        hhListener_siteOne(hh);
-
-      });
-      ipc.send("getStaffuc", ucs);
-      ipc.send("getSupsuc", ucs);
-
-      ipc.on("haveStaffuc", function (evt, staffs) {
-        $("#ddStaff_code")
-          .children("option:not(:first)")
-          .remove();
-        staffListeneruc(staffs);
-      });
-      ipc.on("haveSupsuc", function (evt, _sups) {
-        $("#ddSup_code")
-          .children("option:not(:first)")
-          .remove();
-        supListeneruc(_sups);
-      });
-    })
+  $(async function () {
+    await setFormDefualts('ddProgramType','ddProvince','ddDistrict','ddTehsil')
+    await appendItems('ddProvince','provinceList',false,'id','provinceName');
+    await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse' )
     $('#ddUC').on('change', function () {
       var ucs = $(this).val();
       ucForHH = ucs
@@ -137,9 +59,34 @@ module.exports.stockOutEntry = function () {
   })
   $(() => {
     // $('.outreach').hide();
-    $('#ddProgramType').on('change', function () {
+    // $('.outreach').hide();
+    var defProg = JSON.parse(window.localStorage.getItem('defaults'))['defProg']
+    // console.log({defProg})
+    // $('#ddProgramType').val(defProg);
+    if (defProg == 'outreach') {
+      $('.outreach').show();
+      $('.outreach input').attr('required', true);
+      $('.nsc').show();
+      $('.noOutreach').hide();
+      $('#ddUC').attr('disabled', false)
+      $('.nsc input').attr('required', true);
+    } else if (defProg == 'sc') {
+
+      $('#ddUC').attr('disabled', true)
+      $('.outreach').hide();
+      $('.outreach input').attr('required', false);
+    } else {
+      $('.outreach').hide();
+      $('.nsc').show();
+      $('.nsc input').attr('required', true);
+      $('.outreach input').attr('required', false);
+      $('#ddUC').attr('disabled', false)
+
+    }
+    $('#ddProgramType').on('change', async function () {
       var val = $(this).val();
       console.log(val)
+      await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse',val)
       if (val == 'outreach') {
         $('.outreach').show();
         $('.outreach input').attr('required', true);

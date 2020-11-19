@@ -456,6 +456,13 @@
 
                     <p>Sync Data</p>
                   </a></li>
+                <li class="nav-item">
+                  <!-- Button trigger modal -->
+                  <a class="nav-link" data-toggle="modal" data-target="#defaults">
+                    <img src="dist/icons/icons8_settings.svg" width="25" alt="" srcset="">
+                    <p>Set Defaults</p>
+                  </a>
+                  </li>
               </ul>
             </li>
             <!-- <li class="nav-item">
@@ -505,6 +512,58 @@
     </footer> -->
   </div>
   <!-- ./wrapper -->
+
+  <!-- Set Default options -->
+
+<!-- Modal -->
+<div class="modal fade" id="defaults" tabindex="-1" aria-labelledby="defaultsLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="defaultsLabel">Set Default Options</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+
+          <div class="form-group col-sm-4">
+  
+            <label for="defPType" class="form-label">Program Type:</label>
+  
+            <select  id="defPType" class="form-control form-control-sm ptype _def" required>
+              <option selected value="">Select One</option>
+              <option disabled value="sfp">TSFP</option>
+              <option disabled value="sfp_Plw">TSFP-PLW</option>
+              <option value="otp">OTP</option>
+              <option value="sc">NSC</option>
+            </select>
+  
+          </div>
+          <div class="form-group col-sm-4 ">
+            <label for="defProvince">Province</label>
+            <select id="defProvince"  class="form-control form-control-sm _def" required>
+              <option selected value="">Choose</option>
+  
+            </select>
+          </div>
+          <div class="form-group col-sm-4 ">
+  
+            <label for="defDistrict">District</label>
+            <select id="defDistrict" class="form-control form-control-sm _def" required>
+              <option selected value="">Choose</option>
+            </select>
+          </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" id="setDefaultOptionsBtn" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 
   <!-- REQUIRED SCRIPTS -->
   <!-- jQuery -->
@@ -592,6 +651,12 @@
   const prov = async (province) => {
     await asyncForEach(province.province, async (el) => {
       $('#ddProvince').append(`<option value="${el.id}">${el.provinceName}</option>`);
+    })
+    ipc.removeAllListeners('province')
+  }
+  const provElId = async (elID,province) => {
+    await asyncForEach(province.province, async (el) => {
+      $('#'+elID).append(`<option value="${el.id}">${el.provinceName}</option>`);
     })
     ipc.removeAllListeners('province')
   }
@@ -755,6 +820,14 @@
     })
     ipc.removeAllListeners('haveSups');
   }
+  require('./geoUtils');
+
+  const {chooseDefault, appendItems,setFormDefualts, updatGeoElonChange, createExternalFilter,createExternalFilterValue} = require('./geoUtils')
+  // $('#defaults').modal('toggle')
+  // console.log(window.sessionStorage.getItem('geoList'));
+ 
+
+
 </script>
 
 <!-- <script src="../js/bootstrap.bundle.js"></script> -->

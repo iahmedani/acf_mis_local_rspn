@@ -8,82 +8,13 @@ module.exports.initOtpAdd = function () {
 
 
   // drop down selections
-  $(function () {
+  $( async function () {
     var datePickerId = document.getElementById('reg_date');
     datePickerId.max = new Date().toISOString().split("T")[0];
     datePickerId.min = new Date('2018-01-01').toISOString().split("T")[0];
-    ipc.send('getProvince');
-    ipc.on('province', function (evt, province) {
-      $('#ddProvince').children('option:not(:first)').remove();
-      prov(province);
-    })
-    $('#ddProvince').on('change', function () {
-      var prov = $(this).val();
-      ipc.send('getDistrict', prov)
-      ipc.on('district', function (evt, district) {
-        $('#ddDistrict').children('option:not(:first)').remove();
-        dist(district);
-      })
-      var province = $('#ddProvince option:selected').text();
-      $('#adrProvince').val(province);
-    })
-    $('#ddDistrict').on('change', function () {
-      var dist = $(this).val();
-      ipc.send('getTehsil', dist)
-      ipc.on('tehsil', function (evt, tehsil) {
-        $('#ddTehsil').children('option:not(:first)').remove();
-        teh(tehsil);
-      })
-      var district = $('#ddDistrict option:selected').text();
-      $('#adrDistrict').val(district);
-    })
-    $('#ddTehsil').on('change', async function () {
-      var tehs = $(this).val();
-      ipc.send('getUC', tehs)
-      ipc.on('uc', function (evt, uc) {
-        $('#ddUC').children('option:not(:first)').remove();
-        ucListener(uc);
-      })
-      if ($('#ddProgramType').val() == 'sc') {
-        try {
-          var _listNsc = await knex('v_geo_active').where({
-            tehsil_id: tehs,
-            SC: 1
-          })
-          $('#nsc_old_otp_id').attr('data-inputmask', "'mask':'NSC-999999'")
-          nscList(_listNsc, 'ddHealthHouse');
-        } catch (error) {
-          console.log(error)
-        }
-      }
-    })
-    var ucForHH;
-    $('#ddUC').on('change', function () {
-      var ucs = $(this).val();
-      ucForHH = ucs
-      ipc.send('getHealthHouse', ucs)
-      ipc.on('hh', function (evt, hh) {
-        $('#ddHealthHouse').children('option:not(:first)').remove();
-        hhListener(hh);
-      })
-    })
-    $('#ddHealthHouse').on('change', function () {
-
-      var h_id = $(this).val();
-      ipc.send("getVillage", h_id);
-      ipc.on("haveVillage", (evt, _villages) => {
-        $("#ddVillageName")
-          .children("option:not(:first)")
-          .remove();
-        villListener(_villages);
-
-      });
-      ipc.send('getHealthHouseType', h_id)
-      ipc.on('hhType', function (evt, hh) {
-        hhTypeListener(h_id, hh);
-
-      })
-    })
+    await setFormDefualts('ddProgramType','ddProvince','ddDistrict','ddTehsil')
+    await appendItems('ddProvince','provinceList',false,'id','provinceName');
+    await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse' )
   });
 
   // Conditionals 
@@ -140,8 +71,10 @@ module.exports.initOtpAdd = function () {
   /**
    * Change element actions
    */
-  pType.on('change', function () {
+  pType.on('change', async function () {
     var prog = $(this).val();
+    await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse',prog)
+
     var msk = {
       sc: 'NSC',
       otp: 'OTP'

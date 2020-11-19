@@ -3,7 +3,7 @@ var uuid = require('uuid/v4');
 
 module.exports.initOtpExit = function () {
 
-  $(function () {
+  $( async function () {
     var inDays = function (d1, d2) {
       var date1 = new Date(d1);
       var date2 = new Date(d2);
@@ -48,66 +48,9 @@ module.exports.initOtpExit = function () {
     //   commodity(com, 'exit_ration2');
     //   commodity(com, 'exit_ration3');
     // })
-    ipc.send('getProvince');
-    ipc.on('province', function (evt, province) {
-      $('#ddProvince').children('option:not(:first)').remove();
-
-      // province.province.forEach(el=>{
-      // $('#ddProvince').append(`<option value="${el.id}">${el.provinceName}</option>`);
-
-      // })
-      prov(province);
-    })
-    $('#ddProvince').on('change', function () {
-      var prov = $(this).val();
-      ipc.send('getDistrict', prov)
-      ipc.on('district', function (evt, district) {
-        $('#ddDistrict').children('option:not(:first)').remove();
-
-        //   district.district.forEach(el=>{
-        // $('#ddDistrict').append(`<option value="${el.id}">${el.districtName}</option>`);              
-        //   })
-        dist(district);
-      })
-    })
-    $('#ddDistrict').on('change', function () {
-      var dist = $(this).val();
-      ipc.send('getTehsil', dist)
-      ipc.on('tehsil', function (evt, tehsil) {
-        $('#ddTehsil').children('option:not(:first)').remove();
-
-        //   tehsil.tehsil.forEach(el=>{
-        // $('#ddTehsil').append(`<option value="${el.id}">${el.tehsilName}</option>`);              
-        //   })
-        teh(tehsil);
-      })
-    })
-    $('#ddTehsil').on('change', function () {
-      var tehs = $(this).val();
-      ipc.send('getUC', tehs)
-      ipc.on('uc', function (evt, uc) {
-        $('#ddUC').children('option:not(:first)').remove();
-
-        //   uc.uc.forEach(el=>{
-        // $('#ddUC').append(`<option value="${el.id}">${el.ucName}</option>`);              
-        //   })
-        ucListener(uc);
-      })
-    })
-    var ucForHH;
-    $('#ddUC').on('change', function () {
-      var ucs = $(this).val();
-      ucForHH = ucs
-      ipc.send('getHealthHouse', ucs)
-      ipc.on('hh', function (evt, hh) {
-        $('#ddHealthHouse').children('option:not(:first)').remove();
-        //   hh.hh.forEach(el=>{
-        // $('#ddHealthHouse').append(`<option value="${el.id}">${el.siteName}</option>`);              
-        //   })
-        hhListener(hh);
-      })
-    })
-
+    await setFormDefualts('ddProgramType','ddProvince','ddDistrict','ddTehsil')
+    await appendItems('ddProvince','provinceList',false,'id','provinceName');
+    await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse' )
   });
   // $('#ddHealthHouse').on('change', function (e) {
   //   // $('#').jsGrid.
@@ -311,7 +254,9 @@ module.exports.initOtpExit = function () {
     });
   };
 
-  $('#ddProgramType').on('change', function () {
+  $('#ddProgramType').on('change', async function () {
+    var prog = $(this).val();
+    await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse',prog)
     $('#exit_reason').children('option:not(:first)').remove();
     if ($(this).val() == 'sc') {
       $('#exit_reason').append(`

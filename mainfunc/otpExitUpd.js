@@ -2,13 +2,26 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
   //  Calling all data in table  
   ipcMain.on("allOtpExit", (event, filter) => {
     console.log(filter);
+    var _tableName;
     var _limit = filter.pageSize ? filter.pageSize : 10;
     var _offset = filter.pageIndex == 1 ? 0 : (filter.pageIndex - 1) * _limit;
+    filter.p_name = filter.p_name ? filter.p_name : ''
+    filter.reg_id = filter.reg_id ? filter.reg_id : ''
+    filter.site_village = filter.site_village ? filter.site_village : ''
     // console.log({ _limit, _offset });
     // console.log(`%${filter.site_village}%`);
+
+    if(filter.prog_type == 'sc'){
+      _tableName = 'allNSCExits'
+    }else if (filter.prog_type == 'otp'){
+      _tableName = 'allOtpExits'
+    }else{
+      _tableName = '';
+    }
+
     async.series({
         data: cb => {
-          knex("v_otpExitFullForUpdateNSC")
+          knex(_tableName)
             .where("p_name", "like", `%${filter.p_name}%`)
             // .where("site_village", "like", `%${filter.site_village}%`)
             .where("reg_id", "like", `%${filter.reg_id}%`)
@@ -16,7 +29,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
             .where("district_name", "like", `%${filter.district_name}%`)
             .where("uc_name", "like", `%${filter.uc_name}%`)
             .where("tehsil_name", "like", `%${filter.tehsil_name}%`)
-            .where("prog_type", "like", `%${filter.prog_type}%`)
+            // .where("prog_type", "like", `%${filter.prog_type}%`)
             // .where('report_month', 'like', `%${filter.report_month}%`)
 
             .where({
@@ -28,7 +41,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
             .catch(e => cb(e));
         },
         itemsCount: cb => {
-          knex("v_otpExitFullForUpdateNSC")
+          knex(_tableName)
             .where("p_name", "like", `%${filter.p_name}%`)
             // .where("site_village", "like", `%${filter.site_village}%`)
             .where("reg_id", "like", `%${filter.reg_id}%`)
@@ -36,7 +49,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
             .where("district_name", "like", `%${filter.district_name}%`)
             .where("uc_name", "like", `%${filter.uc_name}%`)
             .where("tehsil_name", "like", `%${filter.tehsil_name}%`)
-            .where("prog_type", "like", `%${filter.prog_type}%`)
+            // .where("prog_type", "like", `%${filter.prog_type}%`)
             .where({
               is_deleted: 0
             })
@@ -47,6 +60,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
       },
       (e, result) => {
         if (e) {
+          console.log(e)
           event.sender.send("allOtpExit", {
             err: e
           });
@@ -55,6 +69,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
           event.sender.send("allOtpExit", {
             result
           });
+          console.log(result)
           // console.log(result);
         }
       }

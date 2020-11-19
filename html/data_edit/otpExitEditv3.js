@@ -26,11 +26,14 @@ module.exports.initOtpExitEditV2 = function () {
     e.preventDefault();
   })
 
-  $(function () {
+  $(async function () {
     var datePickerId = document.getElementById('exit_date');
     datePickerId.max = new Date().toISOString().split("T")[0];
+
+
+    
   });
-  $(function () {
+  $(async function () {
     var inDays = function (d1, d2) {
       var date1 = new Date(d1);
       var date2 = new Date(d2);
@@ -49,6 +52,9 @@ module.exports.initOtpExitEditV2 = function () {
       $('#weight_gain').empty();
       $('#weight_gain').val(gKgDay);
     })
+
+    
+   
     // ipc.send('getCommodity');
     // ipc.on('commodity', function (evt, com) {
     //   $('#exit_ration1').children('option:not(:first)').remove();
@@ -145,8 +151,30 @@ module.exports.initOtpExitEditV2 = function () {
 
       })
     })
+
+    
   });
-  $(function () {
+  $(async function () {
+
+    $('.filter').on('change', function(){
+      // programe type change in uc selections
+      if($('#filterProgramType').val() == 'sc'){
+        $("#filterUC").attr("disabled", true);
+      }else{
+        $("#filterUC").attr("disabled", false);
+      }
+      var filter = {};
+     createExternalFilter(filter);
+     
+      // $('#AddUpdate-jsGrid').jsGrid("loadData");
+      $("#jsGrid").jsGrid("loadData", filter).done(function() {
+        console.log("data loaded");
+      });
+
+    })
+
+    await setFormDefualts('filterProgramType','filterProvince','filterDistrict','filterTehsil')
+    await updatGeoElonChange('filterProvince','filterDistrict','filterTehsil', 'filterUC' )
     let xx = (site_id) => {
       return new Promise((resolve, reject) => {
         ipc.send('get', site_id);
@@ -245,44 +273,54 @@ module.exports.initOtpExitEditV2 = function () {
     deleteConfirm: "Do you really want to delete Exit record?",
     controller: {
       loadData: function (filter) {
+        createExternalFilter(filter);
         return getOtpExit(filter);
       },
       deleteItem: function (item) {
         return delOtpExit(item);
       }
     },
-    fields: [{
-        name: "prog_type",
-        title: 'Program Type',
-        type: 'select',
-        items: prog_type,
-        textField: 'name',
-        valueField: 'value',
-        width: 50
-      },
+    fields: [
+      // {
+      //   name: "prog_type",
+      //   title: 'Program Type',
+      //   type: 'select',
+      //   items: prog_type,
+      //   textField: 'name',
+      //   valueField: 'value',
+      //   width: 50
+      // },
+      // {
+      //   name: "province",
+      //   title: "Province",
+      //   type: "text",
+      //   width: 50
+      // },
+      // {
+      //   name: "district_name",
+      //   title: "District",
+      //   type: "text",
+      //   width: 50
+      // },
+      // {
+      //   name: "tehsil_name",
+      //   title: "Tehsil",
+      //   type: "text",
+      //   width: 50
+      // },
+      // {
+      //   name: "uc_name",
+      //   title: "Uion Council",
+      //   type: "text",
+      //   width: 50
+      // },
       {
-        name: "province",
-        title: "Province",
+        name: "site_name",
+        title: "Site Name",
         type: "text",
-        width: 50
-      },
-      {
-        name: "district_name",
-        title: "District",
-        type: "text",
-        width: 50
-      },
-      {
-        name: "tehsil_name",
-        title: "Tehsil",
-        type: "text",
-        width: 50
-      },
-      {
-        name: "uc_name",
-        title: "Uion Council",
-        type: "text",
-        width: 50
+        width: 50,
+        filtering:false,
+        editing:false
       },
       {
         name: "site_village",

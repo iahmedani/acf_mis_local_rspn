@@ -1,50 +1,28 @@
 var uuid = require('uuid/v4');
 var knex = require('../../mainfunc/db');
-module.exports.StaffList = function () {
-  ipc.send('getProvince');
-  ipc.on('province', function (evt, province) {
-    $('#ddProvince').children('option:not(:first)').remove();
-    prov(province);
+module.exports.StaffList = async function () {
+  await setFormDefualts(false,'filterProvince','filterDistrict','filterTehsil')
+  $('.filter').on('change', async function(){
+    // programe type change in uc selections
+    if($('#filterProgramType').val() == 'sc'){
+      $("#filterUC").attr("disabled", true);
+    }else{
+      $("#filterUC").attr("disabled", false);
+    }
+    var filter = {};
+    createExternalFilterValue(filter);
+   filter.district = filter.district_name
+          filter.tehsil = filter.tehsil_name
+          filter.uc = filter.uc_name
+   
+    // $('#AddUpdate-jsGrid').jsGrid("loadData");
+    $("#tblStaffList").jsGrid("loadData", filter).done(function() {
+      console.log("data loaded");
+    });
   })
-  $('#ddProvince').on('change', function () {
-    var prov = $(this).val();
-    ipc.send('getDistrict', prov)
-    ipc.on('district', function (evt, district) {
-      $('#ddDistrict').children('option:not(:first)').remove();
-
-      dist(district);
-    })
-  })
-  $('#ddDistrict').on('change', function () {
-    var dist = $(this).val();
-    ipc.send('getTehsil', dist)
-    ipc.on('tehsil', function (evt, tehsil) {
-      $('#ddTehsil').children('option:not(:first)').remove();
-
-      teh(tehsil);
-    })
-  })
-  $('#ddTehsil').on('change', function () {
-    var tehs = $(this).val();
-    ipc.send('getUC', tehs)
-    ipc.on('uc', function (evt, uc) {
-      $('#ddUC').children('option:not(:first)').remove();
-
-      ucListener(uc);
-    })
-  })
-  var ucForHH;
-  $('#ddUC').on('change', function () {
-    var ucs = $(this).val();
-    ucForHH = ucs
-    ipc.send('getHealthHouse', ucs)
-    ipc.on('hh', function (evt, hh) {
-      $('#ddHealthHouse').children('option:not(:first)').remove();
-      hhListener(hh);
-    })
-  })
-
-
+  await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse' )
+  await appendItems('ddProvince','provinceList',false,'id','provinceName');
+  await updatGeoElonChange('filterProvince','filterDistrict','filterTehsil', 'filterUC' )
   // $(() => {
   function _staffList(cb) {
     // return new Promise((resolve, reject) => {
@@ -82,9 +60,14 @@ module.exports.StaffList = function () {
       // console.log(result)
       var _staffData = {
         loadData: function (filter) {
+          createExternalFilterValue(filter);
+          filter.district = filter.district_name
+          filter.tehsil = filter.tehsil_name
+          filter.uc = filter.uc_name
+          console.log({filter})
           return $.grep(result._staff, function (client) {
             return (!filter.staff_code || client.staff_code.indexOf(filter.staff_code) > -1) &&
-              (!filter.staff_name || client.staff_name.indexOf(filter.staff_name) > -1) && (!filter.province || client.province == filter.province) && (!filter.district || client.district === filter.district) && (!filter.tehsil || client.tehsil === filter.tehsil) && (!filter.uc || client.uc === filter.uc);
+              (!filter.staff_name || client.staff_name.indexOf(filter.staff_name) > -1) && (!filter.province || client.province == filter.province) && (!filter.district || client.district == filter.district) && (!filter.tehsil || client.tehsil == filter.tehsil) && (!filter.uc || client.uc == filter.uc);
             // && (filter.Married === undefined || client.Married === filter.Married);
           });
         },
@@ -144,7 +127,8 @@ module.exports.StaffList = function () {
             items: result.province,
             valueField: "id",
             textField: "provinceName",
-            width: 50
+            width: 50,
+            filtering:false
           },
           {
             title: "District",
@@ -153,7 +137,8 @@ module.exports.StaffList = function () {
             items: result.district,
             valueField: "id",
             textField: "districtName",
-            width: 50
+            width: 50,
+            filtering:false
 
           },
           {
@@ -163,7 +148,8 @@ module.exports.StaffList = function () {
             items: result.tehsil,
             valueField: "id",
             textField: "tehsilName",
-            width: 50
+            width: 50,
+            filtering:false
 
           },
           {
@@ -173,7 +159,8 @@ module.exports.StaffList = function () {
             items: result.uc,
             valueField: "id",
             textField: "ucName",
-            width: 50
+            width: 50,
+            filtering:false
 
           },
           // {

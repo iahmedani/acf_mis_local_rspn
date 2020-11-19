@@ -1,110 +1,18 @@
 var knex = require('../../mainfunc/db')
 module.exports.sessionsReport = () => {
+  var defProg = JSON.parse(window.localStorage.getItem('defaults'))['defProg']
   $('#ddProgramType').change(() => {
     $('.prgChange').val("")
   })
-  $(function () {
+  $( async function () {
     // $("#tblSessionReport").DataTable({
     //   paging: false,
     //   searching:false
     // })
 
-    ipc.send('getProvince');
-    ipc.on('province', function (evt, province) {
-      $('#ddProvince').children('option:not(:first)').remove();
-
-      // province.province.forEach(el=>{
-      // $('#ddProvince').append(`<option value="${el.id}">${el.provinceName}</option>`);
-
-      // })
-      prov(province);
-    })
-    $('#ddProvince').on('change', function () {
-      var prov = $(this).val();
-      ipc.send('getDistrict', prov)
-      ipc.on('district', function (evt, district) {
-        $('#ddDistrict').children('option:not(:first)').remove();
-
-        //   district.district.forEach(el=>{
-        // $('#ddDistrict').append(`<option value="${el.id}">${el.districtName}</option>`);              
-        //   })
-        dist(district);
-      })
-    })
-    $('#ddDistrict').on('change', function () {
-      var dist = $(this).val();
-      ipc.send('getTehsil', dist)
-      ipc.on('tehsil', function (evt, tehsil) {
-        $('#ddTehsil').children('option:not(:first)').remove();
-
-        //   tehsil.tehsil.forEach(el=>{
-        // $('#ddTehsil').append(`<option value="${el.id}">${el.tehsilName}</option>`);              
-        //   })
-        teh(tehsil);
-      })
-    })
-    $('#ddTehsil').on('change', async function () {
-      var tehs = $(this).val();
-      ipc.send('getUC', tehs)
-      ipc.on('uc', function (evt, uc) {
-        $('#ddUC').children('option:not(:first)').remove();
-
-        //   uc.uc.forEach(el=>{
-        // $('#ddUC').append(`<option value="${el.id}">${el.ucName}</option>`);              
-        //   })
-        ucListener(uc);
-      })
-      if ($('#ddProgramType').val() == 'sc') {
-        try {
-          var _listNsc = await knex('v_geo_active').where({
-            tehsil_id: tehs,
-            SC: 1
-          })
-          // $('#nsc_old_otp_id').attr('data-inputmask', "'mask':'NSC-999999'")
-          nscList(_listNsc, 'ddHealthHouse');
-        } catch (error) {
-          console.log(error)
-        }
-      }
-    })
-    var ucForHH;
-    $('#ddUC').on('change', function () {
-      var ucs = $(this).val();
-      ucForHH = ucs
-      ipc.send('getHealthHouse', ucs)
-      ipc.on('hh', async function (evt, hh) {
-        // console.log(hh)
-        $('#site_one').children('option:not(:first)').remove();
-        if (hh.hh.length > 1) {
-          $('.secondSite').css('display', '')
-          $('#site_two').children('option:not(:first)').remove();
-          await asyncForEach(hh.hh, async (el) => {
-            $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);
-          })
-        } else {
-          $('.secondSite').css('display', 'none')
-
-        }
-        hhListener_siteOne(hh);
-
-      });
-      ipc.send("getStaffuc", ucs);
-      ipc.send("getSupsuc", ucs);
-
-      ipc.on("haveStaffuc", function (evt, staffs) {
-        $("#ddStaff_code")
-          .children("option:not(:first)")
-          .remove();
-        staffListeneruc(staffs);
-      });
-      ipc.on("haveSupsuc", function (evt, _sups) {
-        $("#ddSup_code")
-          .children("option:not(:first)")
-          .remove();
-        supListeneruc(_sups);
-      });
-    })
-    $("#ddUC").on("change", function () {
+    await setFormDefualts('ddProgramType','ddProvince','ddDistrict','ddTehsil')
+    await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse',defProg )
+$("#ddUC").on("change", function () {
       var ucs = $(this).val();
       ucForHH = ucs;
       if ($('#ddProgramType').val() == 'otp') {
@@ -473,10 +381,34 @@ module.exports.sessionsReport = () => {
   });
 
 
-  $(() => {
+  $(async () => {
     // $('.outreach').hide();
-    $('#ddProgramType').on('change', function () {
+    var defProg = JSON.parse(window.localStorage.getItem('defaults'))['defProg']
+    if (defProg == 'outreach') {
+      $('.outreach').show();
+      $('.outreach input').attr('required', true);
+      $('.nsc').show();
+      $('.nsc input').attr('required', true);
+      $('#ddUC').attr('disabled', false)
+
+      $('.noOutreach').hide();
+    } else if (defProg == 'otp') {
+      $('.outreach').hide();
+      $('.nsc').show();
+      $('.nsc input').attr('required', true);
+      $('.outreach input').attr('required', false);
+      $('#ddUC').attr('disabled', false)
+
+
+    } else if (defProg == 'sc') {
+      $('#ddUC').attr('disabled', true)
+      $('.outreach').hide();
+      $('.outreach input').attr('required', false);
+    }
+    $('#ddProgramType').on('change', async function () {
       var val = $(this).val();
+     
+    await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse',val )
       // if (data.length > 0) {
       //   data = [];
       // }

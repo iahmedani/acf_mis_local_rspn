@@ -1,59 +1,31 @@
 var uuid = require('uuid/v4');
 var knex = require('../../mainfunc/db');
-module.exports.VillageList = function () {
-  ipc.send("getProvince");
-  ipc.on("province", function (evt, province) {
-    $("#ddProvince")
-      .children("option:not(:first)")
-      .remove();
-    prov(province);
-  });
-  $("#ddProvince").on("change", function () {
-    var prov = $(this).val();
-    ipc.send("getDistrict", prov);
-    ipc.on("district", function (evt, district) {
-      $("#ddDistrict")
-        .children("option:not(:first)")
-        .remove();
-
-      dist(district);
+module.exports.VillageList = async function () {
+  await setFormDefualts(false,'filterProvince','filterDistrict','filterTehsil')
+  $('.filter').on('change', async function(){
+    // programe type change in uc selections
+    if($('#filterProgramType').val() == 'sc'){
+      $("#filterUC").attr("disabled", true);
+    }else{
+      $("#filterUC").attr("disabled", false);
+    }
+    var filter = {};
+    createExternalFilterValue(filter);
+   filter.district = filter.district_name
+          filter.tehsil = filter.tehsil_name
+          filter.uc = filter.uc_name
+          filter.site = filter.site_name
+   
+    // $('#AddUpdate-jsGrid').jsGrid("loadData");
+    $("#tblVillageList").jsGrid("loadData", filter).done(function() {
+      console.log("data loaded");
     });
-  });
-  $("#ddDistrict").on("change", function () {
-    var dist = $(this).val();
-    ipc.send("getTehsil", dist);
-    ipc.on("tehsil", function (evt, tehsil) {
-      $("#ddTehsil")
-        .children("option:not(:first)")
-        .remove();
 
-      teh(tehsil);
-    });
-  });
-  $("#ddTehsil").on("change", function () {
-    var tehs = $(this).val();
-    ipc.send("getUC", tehs);
-    ipc.on("uc", function (evt, uc) {
-      $("#ddUC")
-        .children("option:not(:first)")
-        .remove();
-
-      ucListener(uc);
-    });
-  });
-  var ucForHH;
-  $("#ddUC").on("change", function () {
-    var ucs = $(this).val();
-    ucForHH = ucs;
-    ipc.send("getHealthHouse", ucs);
-    ipc.on("hh", function (evt, hh) {
-      $("#ddHealthHouse")
-        .children("option:not(:first)")
-        .remove();
-      hhListener(hh);
-    });
-  });
-
+  })
+  await appendItems('ddProvince','provinceList',false,'id','provinceName');
+    //   }
+  await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse' )
+  await updatGeoElonChange('filterProvince','filterDistrict','filterTehsil', 'filterUC','filterHealthHouse' )
   // $(() => {
   function _villageList(cb) {
     // return new Promise((resolve, reject) => {
@@ -92,8 +64,14 @@ module.exports.VillageList = function () {
       // console.log(result);
       var _supData = {
         loadData: function (filter) {
+          createExternalFilterValue(filter);
+          filter.district = filter.district_name
+          filter.tehsil = filter.tehsil_name
+          filter.uc = filter.uc_name
+          filter.site = filter.site_name
+          console.log({filter})
           return $.grep(result._village, function (client) {
-            return (!filter.villageName || client.villageName.indexOf(filter.villageName) > -1) && (!filter.province || client.province == filter.province) && (!filter.district || client.district === filter.district) && (!filter.tehsil || client.tehsil === filter.tehsil) && (!filter.uc || client.uc === filter.uc) && (!filter.site || client.site === filter.site);
+            return (!filter.villageName || client.villageName.indexOf(filter.villageName) > -1) && (!filter.province || client.province == filter.province) && (!filter.district || client.district == filter.district) && (!filter.tehsil || client.tehsil == filter.tehsil) && (!filter.uc || client.uc == filter.uc) && (!filter.site || client.site == filter.site);
             // && (filter.Married === undefined || client.Married === filter.Married);
           });
         },
@@ -155,7 +133,8 @@ module.exports.VillageList = function () {
             items: result.province,
             valueField: "id",
             textField: "provinceName",
-            width: 50
+            width: 50,
+            filtering:false
           },
           {
             title: "District",
@@ -164,7 +143,8 @@ module.exports.VillageList = function () {
             items: result.district,
             valueField: "id",
             textField: "districtName",
-            width: 50
+            width: 50,
+            filtering:false
           },
           {
             title: "Tehsil",
@@ -173,7 +153,8 @@ module.exports.VillageList = function () {
             items: result.tehsil,
             valueField: "id",
             textField: "tehsilName",
-            width: 50
+            width: 50,
+            filtering:false
           },
           {
             title: "UC",
@@ -182,7 +163,8 @@ module.exports.VillageList = function () {
             items: result.uc,
             valueField: "id",
             textField: "ucName",
-            width: 50
+            width: 50,
+            filtering:false
           },
           {
             title: "Site",
@@ -190,7 +172,9 @@ module.exports.VillageList = function () {
             type: "select",
             items: result.site,
             valueField: "id",
-            textField: "siteName"
+            textField: "siteName",
+            width: 50,
+            filtering:false
           },
           {
             title: "Village Name",
