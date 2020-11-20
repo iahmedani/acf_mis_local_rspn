@@ -13,7 +13,7 @@ module.exports.initOtpAdd = function () {
     datePickerId.max = new Date().toISOString().split("T")[0];
     datePickerId.min = new Date('2018-01-01').toISOString().split("T")[0];
     await setFormDefualts('ddProgramType','ddProvince','ddDistrict','ddTehsil')
-    await appendItems('ddProvince','provinceList',false,'id','provinceName');
+    // await appendItems('ddProvince','provinceList',false,'id','provinceName');
     await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse' )
   });
 

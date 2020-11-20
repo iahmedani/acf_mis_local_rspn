@@ -7,6 +7,7 @@ const {
   dialog,
   globalShortcut
 } = electron;
+require('electron-reload')(__dirname,{electron});
 
 var _uuid = require('uuid/v4')
 

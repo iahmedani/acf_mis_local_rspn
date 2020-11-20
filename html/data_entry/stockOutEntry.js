@@ -7,7 +7,7 @@ module.exports.stockOutEntry = function () {
   })
   $(async function () {
     await setFormDefualts('ddProgramType','ddProvince','ddDistrict','ddTehsil')
-    await appendItems('ddProvince','provinceList',false,'id','provinceName');
+    // await appendItems('ddProvince','provinceList',false,'id','provinceName');
     await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse' )
     $('#ddUC').on('change', function () {
       var ucs = $(this).val();

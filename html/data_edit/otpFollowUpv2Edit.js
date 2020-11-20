@@ -36,7 +36,7 @@ module.exports.initOtpFollowUpEdit = function () {
 
   $( async function () {
     await setFormDefualts(false,'ddProvince','ddDistrict','ddTehsil')
-    await appendItems('ddProvince','provinceList',false,'id','provinceName');
+    // await appendItems('ddProvince','provinceList',false,'id','provinceName');
     await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse' )
   $('#ddHealthHouse').on('change', function () {
       // var ucs = $('#ddUC').val();

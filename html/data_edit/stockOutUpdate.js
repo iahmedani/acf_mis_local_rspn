@@ -5,7 +5,7 @@ module.exports.stockOutUpdate = function () {
   })
   $(async function () {
     var defProg = JSON.parse(window.localStorage.getItem('defaults'))['defProg']
-    await setFormDefualts(false,'ddProvince','ddDistrict','ddTehsil')
+    await setFormDefualts('ddProgramType','ddProvince','ddDistrict','ddTehsil')
     await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse',defProg )
 $("#ddHealthHouse").on("change", function () {
       var siteId = $(this).val();

@@ -260,7 +260,7 @@ module.exports.stockDistUpd = function () {
 
     await setFormDefualts('ddProgramType','ddProvince','ddDistrict','ddTehsil')
     var defProg = JSON.parse(window.localStorage.getItem('defaults'))['defProg']
-    await appendItems('ddProvince','provinceList',false,'id','provinceName');
+    // await appendItems('ddProvince','provinceList',false,'id','provinceName');
     await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse' ,defProg)
     $('#ddUC').on('change', function () {
       var ucs = $(this).val();
