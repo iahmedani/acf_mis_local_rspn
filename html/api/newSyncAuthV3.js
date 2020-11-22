@@ -5,7 +5,7 @@ const fs = require('fs');
 module.exports.newSyncAuthV3 = function () {
     axios.defaults.timeout = 200000;
     var _Errors = {
-        register: true,
+        register: false,
         requestError: false
     }
 
@@ -59,6 +59,7 @@ module.exports.newSyncAuthV3 = function () {
     }
 
     async function uploadData(table, id_column, server_id_col, url, instance, title) {
+        console.log(`${table} running uploading`)
         elInfo.text(`Preparing Data - ${title}`)
         var _tData = await knex(table).where({
             upload_status: 0
@@ -76,7 +77,10 @@ module.exports.newSyncAuthV3 = function () {
             for (_data of _sendData) {
                 try {
                     var _x = await instance.post(url, _data)
-                    console.log(_x)
+                    // console.log(_x)
+                    if(_x.data.msg && _x.data.msg == 'unregistered app'){
+                        _Errors.register = true
+                    }else
                     if (!Array.isArray(_x.data.insert) || !Array.isArray(_x.data.available) && _x.data.msg) {
                         _Errors.register = false;
                     } else if (Array.isArray(_x.data.insert) || Array.isArray(_x.data.available) && _x.data.length > 0) {
@@ -85,7 +89,7 @@ module.exports.newSyncAuthV3 = function () {
                         elInfo.text(`NMIS updated - ${title}`)
                     }
                 } catch (error) {
-                    console.log(error)
+                    console.log({error})
                     _Errors.requestError = true;
                 }
             }
@@ -127,6 +131,9 @@ module.exports.newSyncAuthV3 = function () {
             for (_data of _sendData) {
                 try {
                     var _x = await instance.put(url, _data)
+                    if(_x.data.msg && _x.data.msg == 'unregistered app'){
+                        _Errors.register = true
+                    }else
                     if (!Array.isArray(_x.data) && _x.data.msg) {
                         _Errors.register = false;
                     } else if (Array.isArray(_x.data) && _x.data.length > 0) {
@@ -146,6 +153,7 @@ module.exports.newSyncAuthV3 = function () {
     }
 
     async function uploadDataMultiple(table, id_column1, server_id_col1, id_column2, server_id_col2, url, instance, title) {
+        console.log(`${table} running uploading`)
         elInfo.text(`Preparing data - ${title}`)
         var _tData = await knex(table).where({
             upload_status: 0
@@ -166,6 +174,9 @@ module.exports.newSyncAuthV3 = function () {
             for (_data of _sendData) {
                 try {
                     var _x = await instance.post(url, _data)
+                    if(_x.data.msg && _x.data.msg == 'unregistered app'){
+                        _Errors.register = true
+                    }else
                     if (!Array.isArray(_x.data.insert) || !Array.isArray(_x.data.available) && _x.data.msg) {
                         _Errors.register = false;
                     } else if (Array.isArray(_x.data.insert) || Array.isArray(_x.data.available) && _x.data.length > 0) {
@@ -174,7 +185,7 @@ module.exports.newSyncAuthV3 = function () {
                         elInfo.text(`NMIS Updated - ${title}`)
                     }
                 } catch (error) {
-                    console.log(error)
+                    console.log({error})
                     _Errors.requestError = true;
                 }
             }
@@ -203,6 +214,9 @@ module.exports.newSyncAuthV3 = function () {
             for (_data of _sendData) {
                 try {
                     var _x = await instance.put(url, _data)
+                    if(_x.data.msg && _x.data.msg == 'unregistered app'){
+                        _Errors.register = true
+                    }else
                     if (!Array.isArray(_x.data) && _x.data.msg) {
                         _Errors.register = false;
                     } else if (Array.isArray(_x.data) && _x.data.length > 0) {
@@ -225,10 +239,11 @@ module.exports.newSyncAuthV3 = function () {
         console.log(url)
         try {
             var _data = await instance.get(url);
-            if (!Array.isArray(_data.data) && _data.data.msg) {
-                _Errors.register = false
-            } else if (Array.isArray(_data.data) && _data.data.length > 0) {
+            if( _data.data.msg &&  _data.data.msg == 'unregistered app'){
                 _Errors.register = true
+            }else
+             if (Array.isArray(_data.data) && _data.data.length > 0) {
+                _Errors.register = false
 
                 console.log(_data)
                 elInfo.text(`Updating NMIS - ${title}`)
@@ -249,7 +264,7 @@ module.exports.newSyncAuthV3 = function () {
                 }
             }
         } catch (error) {
-            console.log(error)
+            console.log({error})
             _Errors.requestError = true;
         }
 
@@ -260,6 +275,9 @@ module.exports.newSyncAuthV3 = function () {
         console.log(url)
         try {
             var _data = await instance.get(url);
+            if( _data.data.msg &&  _data.data.msg == 'unregistered app'){
+                _Errors.register = true
+            }else
             if (!Array.isArray(_data.data) && _data.data.msg) {
                 _Errors.register = false
             } else if (Array.isArray(_data.data) && _data.data.length > 0) {
@@ -298,16 +316,17 @@ module.exports.newSyncAuthV3 = function () {
 
     }
     async function getAndUpdateBasicData2(table, id_column, colName, url, instance, title) {
+        console.log(`${table} table update request Initiated`)
         elInfo.text(`Requesting server for data - ${title}`)
-        console.log(url)
+        // console.log(url)
         try {
             var _data = await instance.get(url);
-            if (!Array.isArray(_data.data) && _data.data.msg) {
-                _Errors.register = false
-            } else if (Array.isArray(_data.data) && _data.data.length > 0) {
+            // console.log({_data})
+            if( _data.data.msg &&  _data.data.msg == 'unregistered app'){
                 _Errors.register = true
-
-                console.log(_data)
+            } else if (Array.isArray(_data.data) && _data.data.length > 0) {
+                _Errors.register = false 
+                // console.log(_data)
                 elInfo.text(`Updating NMIS - ${title}`)
                 for (datum of _data.data) {
                     // console.log(datum)
@@ -336,12 +355,13 @@ module.exports.newSyncAuthV3 = function () {
                             elInfo.text(`NMIS updated - ${title}`)
                         }
                     } catch (error) {
-                        console.log(error)
+                        console.log({error})
+                        _Errors.requestError = true
                     }
                 }
             }
         } catch (error) {
-            console.log(error)
+            console.log({error})
             _Errors.requestError = true;
         }
 
@@ -403,23 +423,36 @@ module.exports.newSyncAuthV3 = function () {
             await uploadData('tblStock', 'id', 'client_stockIn_id', `${surl}/stockInBulk`, instance, 'Stock In');
             await uploadUpdatedData('tblStock', 'id', 'client_stockIn_id', `${surl}/stockInBulk`, instance, 'Stock In');
 
-            // elProgress.hide();
+
             elProgress.hide();
-            Swal.fire({
-                type: 'success',
-                title: 'NMIS Syncronization',
-                text: 'Successfully uploaded'
-            })
+            if(_Errors.register || _Errors.requestError){
+
+
+                Swal.fire({
+                    type: 'error',
+                    title: 'NMIS Syncronization',
+                    text: _Errors.register ? 'NMIS is not registred' : 'Unable to contact with Server'
+                })
+
+            }else{
+                
+                Swal.fire({
+                    type: 'success',
+                    title: 'NMIS Syncronization',
+                    text: 'Successfully uploaded'
+                })
+            }
+            // elProgress.hide();
             updateBtn.attr('disabled', false)
             uploadBtn.attr('disabled', false)
 
         } catch (error) {
-            console.log(error)
+            console.log({error})
             elProgress.hide();
             Swal.fire({
                 type: 'error',
                 title: 'NMIS Syncronization',
-                text: !_Errors.register ? 'NMIS is not registred' : 'Unable to contact with Server'
+                text: _Errors.register ? 'NMIS is not registred' : 'Unable to contact with Server'
             })
             updateBtn.attr('disabled', false)
             uploadBtn.attr('disabled', false)
@@ -436,32 +469,42 @@ module.exports.newSyncAuthV3 = function () {
         uploadBtn.attr('disabled', true)
 
         try {
-            await getAndUpdateBasicData2('tblGeoProvince', 'id', 'provinceName', `${surl}/getProvince`, instance, 'Province(s)')
+            await getAndUpdateBasicData2('tblGeoProvince', 'id', 'provinceName', `${surl}/getProvince`, instance, 'Province(s)')            
             await getAndUpdateBasicData2('tblGeoDistrict', 'id', 'districtName', `${surl}/getDistrict`, instance, 'District(s)')
             await getAndUpdateBasicData2('tblGeoTehsil', 'id', 'tehsilName', `${surl}/getTehsil`, instance, 'Tehsil(s)')
             await getAndUpdateBasicData2('tblGeoUC', 'id', 'ucName', `${surl}/getUC`, instance, 'Union Council(s)')
             await getAndUpdateBasicData2('tblGeoNutSite', 'id', 'siteName', `${surl}/getSite`, instance, 'Health House(s)')
             await getAndUpdateBasicData('tblCommodity', 'id', `${surl}/getItems`, instance, 'Commodities')
             var _config = await instance.post(`${surl}/getConfig`);
-            console.log(_config)
+            // console.log(_config)
             await knex('tblConfig').update({
                 value: _config.data[0].value
             }).whereNot('value', _config.data[0].value)
             elProgress.hide();
-            Swal.fire({
-                type: 'success',
-                title: 'NMIS Syncronization',
-                text: 'Successfully downloaded'
-            })
+            console.log({_Errors})
+            if(_Errors.register || _Errors.requestError){
+                Swal.fire({
+                    type: 'error',
+                    title: 'NMIS Syncronization error',
+                    text: _Errors.register ? 'NMIS is not registred' : 'Unable to contact with Server'
+                })
+            }else{
+
+                Swal.fire({
+                    type: 'success',
+                    title: 'NMIS Syncronization',
+                    text: 'Successfully downloaded'
+                })
+            }
             updateBtn.attr('disabled', false)
             uploadBtn.attr('disabled', false)
         } catch (error) {
-            console.log(error)
+            console.log({error})
             elProgress.hide();
             Swal.fire({
                 type: 'error',
                 title: 'NMIS Syncronization error',
-                text: !_Errors.register ? 'NMIS is not registred' : 'Unable to contact with Server'
+                text: _Errors.register ? 'NMIS is not registred' : 'Unable to contact with Server'
             })
             updateBtn.attr('disabled', false)
             uploadBtn.attr('disabled', false)
