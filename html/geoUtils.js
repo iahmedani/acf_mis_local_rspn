@@ -134,11 +134,7 @@ $('#defProvince').on('change', async function(){
 })
 // $('._def').on('change', async()=>{
 // })
-var _defaultOptions = window.localStorage.getItem('defaults');
-  if(!_defaultOptions){
-    $('#defaults').modal('show')
 
-  }
 
   const chooseDefault = function(elID, type){
     var _defaults = JSON.parse(window.localStorage.getItem('defaults'))[type];
@@ -239,6 +235,38 @@ var _defaultOptions = window.localStorage.getItem('defaults');
     }
   }
 
+ var changeLogMsg = `<h3>Added Features</h3>
+ <ul class="list-group">
+   <li class="list-group-item">Added Support for default Program, Province and District</li>
+   <li class="list-group-item">Added Filters for CHS/LHS, CHW/LHS and Village List</li>
+   <li class="list-group-item">Improved overall performance by 40%</li>
+   <li class="list-group-item">Added new fields in OTP exit single entry (Exit MUAC, Exit Weight, Length of Stay)</li>
+   <li class="list-group-item"><strong>Application Changelog Message :</strong> Now! each update will provide user a feedback (like this window)</li>
+ </ul>
+ <h3>Bug Fixes</h3>
+ <ul class="list-group">
+   <li class="list-group-item">Duplication issue in OTP report removed</li>
+   <li class="list-group-item">Duplicate Exit Issue in Exit Update view removed</li>
+   <li class="list-group-item">Fixed issues in outreach report (Children and PLW Screening)</li>
+   <li class="list-group-item">Synchronization feedback Fixed</li>
+ </ul>
+ <h3>Know Issues</h3>
+ <ul class="list-group" >
+   <li class="list-group-item">Stock In report - Fix will be launched next week (30th Nov 2020)</li>
+ </ul>`;
+ var changelogCheck = window.localStorage.getItem('changeLog');
+ if(!changelogCheck){
+     $('#log_details').html(changeLogMsg);
+     $('#ImranAliAhmedani').modal('show');
+     changelogCheck = [{version:400}]
+     window.localStorage.setItem('changeLog', JSON.stringify(changelogCheck));
+     
+ }
+ var _defaultOptions = window.localStorage.getItem('defaults');
+  if(!_defaultOptions && changeLogMsg){
+    $('#defaults').modal('show')
+
+  }
 
   module.exports = {
     chooseDefault,
