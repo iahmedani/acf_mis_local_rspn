@@ -1,11 +1,49 @@
+const { dialog } = require('electron');
 var knex = require('../db')
-var fs = require('fs')
-// const { app } = require('electron');
-var appConfig = JSON.parse(fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, 'utf8'))
-module.exports = async function (app) {
+const updateDatabase = require('./updUtils')
+/**
+ * 
+ * @param {app} app is an application parameter;
+ * 
+ * This function helps to make new updates in database;
+ * updateDatabase requires string of sql quries, it must have ';' to separete quries outherwise only one qury will run;
+ * this function gets app element which is an electron mehtod, requires to get version of the application;
+ * any update would require to have _checkVer define earlier than executing update;
+ * than to run followin query
+ *  var _check = await knex('tblUpdates').where({version:310});
+ */
+
+ async function chekAndExecuteUpdate (_checkVer, currentVersion, dbUpdateSqlString, dbUpdateMsg){
+       var _check = await knex('tblUpdates').where({version:_checkVer});
+       var _err = false;
+       if(!_check.length && currentVersion < _checkVer){
+             try {
+                     await updateDatabase(knex, dbUpdateSqlString);
+                     
+             } catch (error) {
+                    
+                    _err = true
+                    var errLocationFunction = 'updateDatabase query for version :' +_checkVer;
+                    error.customMsg = errLocationFunction
+                    dialog.showErrorBox(`Database update`, `${error.customMsg} \n Please contact ACF team \n ${error}`)
+             }
+             if(!_err){
+              await knex('tblUpdates').insert({version: _checkVer, description: dbUpdateMsg})
+              console.log('Success Message '+dbUpdateMsg)
+             }
+
+        }
+ }
+
+module.exports = async function (app, dialog) {
+       var currentVersion = app.getVersion();
+       currentVersion = parseInt(currentVersion.replace(/[.]/g, ''));
+       console.log({currentVersion})
+      
     try {
+       var _checkVer = 310;
         var _check = await knex('tblUpdates').where({version:310});
-        if(!_check.length){
+        if(!_check.length && currentVersion < _checkVer){
             await knex.raw(`PRAGMA [main].legacy_alter_table = 'on';`)
             await knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
             await knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
@@ -161,8 +199,9 @@ module.exports = async function (app) {
             await knex('tblUpdates').insert({version:310, description:'Updated scrChilren to support v2 IM tools'})
             console.log('updated v310')
         }
+        _checkVer = 313
         var _check = await knex('tblUpdates').where({version:313});
-        if(!_check.length){
+        if(!_check.length && currentVersion < _checkVer){
             await knex.raw(`PRAGMA [main].legacy_alter_table = 'on';`)
             await knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
             await knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
@@ -213,8 +252,144 @@ module.exports = async function (app) {
             await knex('tblUpdates').insert({version:313, description:'Updated tblSessions to support v2 IM tools'})
             console.log('updated v313')
         }
+        _checkVer = 400
+        var v400Update = `CREATE VIEW allExitsNotDel as 
+            select * from tblOtpExit where is_deleted = 0;
+            CREATE VIEW allNSCAdmisions as
+SELECT 
+       [main].[v_geo_active].[province_id], 
+       [main].[v_geo_active].[province], 
+       [main].[v_geo_active].[district_id], 
+       [main].[v_geo_active].[district_name], 
+       [main].[v_geo_active].[tehsil_id], 
+       [main].[v_geo_active].[tehsil_name], 
+       [main].[v_geo_active].[uc_id], 
+       [main].[v_geo_active].[uc_name], 
+       [main].[v_geo_active].[site_name], 
+       [tblOtpAdd].*
+FROM   [main].[v_geo_active]
+       INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo_active].[site_id] = [main].[tblOtpAdd].[site_id]
+WHERE  [main].[tblOtpAdd].[is_deleted] = 0 and [tblOtpAdd].[prog_type] = 'sc'
+UNION ALL
+SELECT 
+       [main].[v_geo_active].[province_id], 
+       [main].[v_geo_active].[province], 
+       [main].[v_geo_active].[district_id], 
+       [main].[v_geo_active].[district_name], 
+       [main].[v_geo_active].[tehsil_id], 
+       [main].[v_geo_active].[tehsil_name], 
+       [main].[v_geo_active].[uc_id], 
+       [main].[v_geo_active].[uc_name], 
+       [main].[v_geo_active].[site_name], 
+       [tblOtpAdd].*
+FROM   [main].[v_geo_active]
+       INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo_active].[tehsil_id] = [main].[tblOtpAdd].[tehsil_id]
+WHERE  [main].[tblOtpAdd].[is_deleted] = 0 and [tblOtpAdd].[prog_type] = 'sc' and ([tblOtpAdd].[site_id] = '' or [tblOtpAdd].[site_id] is null);
+CREATE VIEW allNSCExits as
+SELECT 
+       [main].[tblOtpAdd].[site_id], 
+       [main].[tblOtpAdd].[p_name], 
+       [main].[tblOtpAdd].[reg_id], 
+       [main].[tblOtpAdd].[site_village], 
+       [main].[tblOtpAdd].[prog_type], 
+       [main].[v_geo].[province_id], 
+       [main].[v_geo].[province], 
+       [main].[v_geo].[district_id], 
+       [main].[v_geo].[district_name], 
+       [main].[v_geo].[tehsil_id], 
+       [main].[v_geo].[tehsil_name], 
+       [main].[v_geo].[uc_id], 
+       [main].[v_geo].[uc_name], 
+       [main].[v_geo].[site_name], 
+       [tblOtpExit].*
+FROM   [main].[tblOtpAdd]
+       INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+       INNER JOIN [main].[v_geo] ON [main].[tblOtpAdd].[site_id] = [main].[v_geo].[site_id]
+WHERE  [tblOtpExit].[is_deleted] = 0 and [main].[tblOtpAdd].[prog_type] = 'sc'
+UNION ALL
+SELECT 
+       [main].[tblOtpAdd].[site_id], 
+       [main].[tblOtpAdd].[p_name], 
+       [main].[tblOtpAdd].[reg_id], 
+       [main].[tblOtpAdd].[site_village], 
+       [main].[tblOtpAdd].[prog_type], 
+       [main].[v_geo_tehsil].[province_id], 
+       [main].[v_geo_tehsil].[province_name] AS [province], 
+       [main].[v_geo_tehsil].[district_id], 
+       [main].[v_geo_tehsil].[district_name], 
+       [main].[v_geo_tehsil].[tehsil_id], 
+       [main].[v_geo_tehsil].[tehsil_name], 
+       '' AS [uc_id], 
+       '' AS [uc_name], 
+       '' AS [site_name], 
+       [tblOtpExit].*
+FROM   [main].[tblOtpAdd]
+       INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+       INNER JOIN [main].[v_geo_tehsil] ON [main].[tblOtpAdd].[tehsil_id] = [main].[v_geo_tehsil].[tehsil_id]
+WHERE  [tblOtpExit].[is_deleted] = 0 AND [tblOtpAdd].[prog_type] = 'sc' and ([main].[tblOtpAdd].[site_id] is null or [main].[tblOtpAdd].[site_id] = '');
+CREATE VIEW allOtpAdmisions as
+SELECT 
+       [main].[v_geo_active].[province_id], 
+       [main].[v_geo_active].[province], 
+       [main].[v_geo_active].[district_id], 
+       [main].[v_geo_active].[district_name], 
+       [main].[v_geo_active].[tehsil_id], 
+       [main].[v_geo_active].[tehsil_name], 
+       [main].[v_geo_active].[uc_id], 
+       [main].[v_geo_active].[uc_name], 
+       [main].[v_geo_active].[site_name], 
+       [tblOtpAdd].*
+FROM   [main].[v_geo_active]
+       INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo_active].[site_id] = [main].[tblOtpAdd].[site_id]
+WHERE  [main].[tblOtpAdd].[is_deleted] = 0 and [tblOtpAdd].[prog_type] = 'otp';
+CREATE VIEW allOtpExits as
+SELECT 
+       [main].[tblOtpAdd].[site_id], 
+       [main].[tblOtpAdd].[p_name], 
+       [main].[tblOtpAdd].[reg_id], 
+       [main].[tblOtpAdd].[site_village], 
+       [main].[tblOtpAdd].[prog_type], 
+       [main].[v_geo].[province_id], 
+       [main].[v_geo].[province], 
+       [main].[v_geo].[district_id], 
+       [main].[v_geo].[district_name], 
+       [main].[v_geo].[tehsil_id], 
+       [main].[v_geo].[tehsil_name], 
+       [main].[v_geo].[uc_id], 
+       [main].[v_geo].[uc_name], 
+       [main].[v_geo].[site_name], 
+       [tblOtpExit].*
+FROM   [main].[tblOtpAdd]
+       INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+       INNER JOIN [main].[v_geo] ON [main].[tblOtpAdd].[site_id] = [main].[v_geo].[site_id]
+WHERE  [tblOtpExit].[is_deleted] = 0 and [main].[tblOtpAdd].[prog_type] = 'otp';
+SAVEPOINT [sqlite_expert_apply_design_transaction];
+
+DROP VIEW IF EXISTS [main].[oneTable];
+
+CREATE VIEW [main].[oneTable]
+AS
+SELECT 
+       [tblOtpAdd].*, 
+       [allExitsNotDel].[exit_muac], 
+       [allExitsNotDel].[exit_weight], 
+       [allExitsNotDel].[exit_height], 
+       [allExitsNotDel].[exit_reason], 
+       [allExitsNotDel].[days_in_program], 
+       [allExitsNotDel].[weight_gain], 
+       [allExitsNotDel].[exit_date]
+FROM   [tblOtpAdd]
+       LEFT JOIN [allExitsNotDel] ON [tblOtpAdd].[otp_id] = [allExitsNotDel].[otp_id]
+WHERE  [tblOtpAdd].[is_deleted] = 0;
+
+RELEASE [sqlite_expert_apply_design_transaction];
+
+`
+        var v400Msg = `Update Made to make changes for newly added features`
+       //  var errUpdateMsg = 'Database update to version 4.0.0 failed, Please contact ACF team for further assistance'
+       await chekAndExecuteUpdate(_checkVer, currentVersion, v400Update,v400Msg); 
     } catch (error) {
 
         console.log(error)
     }
-}();
+}
