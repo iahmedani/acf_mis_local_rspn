@@ -9,8 +9,75 @@ module.exports.initScrChildrenUpd = function () {
   });
   $( async function () {
     await setFormDefualts(false,'ddProvince','ddDistrict','ddTehsil')
+    var defDist = JSON.parse(window.localStorage.getItem('defaults'))['defDist'];
+    ipc.send('getAddSitesByDistrict', defDist['value']);
+        ipc.on('getAddSitesByDistrict', (e, r) => {
+          console.log({r})
+          for (site of r.r) {
+            $('#site_two').append(`<option value="${site.site_name}">${site.site_name}</option>`);
+          }
+        })
     // await appendItems('ddProvince','provinceList',false,'id','provinceName');
-    await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse' )
+    // ipc.send('getProvince');
+    // ipc.on('province', function (evt, province) {
+    //   $('#ddProvince').children('option:not(:first)').remove();
+    //   prov(province);
+    // })
+    $('#ddProvince').on('change', function () {
+      var prov = $(this).val();
+      ipc.send('getDistrict', prov)
+      ipc.on('district', function (evt, district) {
+        $('#ddDistrict').children('option:not(:first)').remove();
+        dist(district);
+      })
+    })
+    $('#ddDistrict').on('change', function () {
+      var dist = $(this).val();
+      ipc.send('getTehsil', dist)
+      ipc.on('tehsil', function (evt, tehsil) {
+        $('#ddTehsil').children('option:not(:first)').remove();
+        teh(tehsil);
+        $('#site_two').children('option:not(:first)').remove();
+        ipc.send('getAddSitesByDistrict', dist);
+        ipc.on('getAddSitesByDistrict', (e, r) => {
+          console.log({r})
+          for (site of r.r) {
+            $('#site_two').append(`<option value="${site.site_name}">${site.site_name}</option>`);
+          }
+        })
+
+        // knex('v_geo_active')
+        // .columns('site_name')
+        // .where({district_id: dist})
+        // .then(result=>{
+        //   // $('#other_site').children('option:not(:first)').remove();
+        //   // console.log(result)
+        //   var xlist = []
+        //   for (__site of result){
+        //     // console.log(__site)
+        //     // $('#other_site').append(`<option value="${__site.site_name}" data-subtext="${__site.site_name}">UC:${__site.uc_name}, Site:${__site.site_name}</option>`); 
+        //     xlist.push(__site.site_name)
+        //     // $('#other_site').append(`<option `)
+        //   }
+        //   $('#other_site').select2({
+        //     data:xlist
+        //   });
+        //   })
+        //   .catch(e=>{
+        //     console.log(e)
+        //   })
+      })
+    })
+    $('#ddTehsil').on('change', function () {
+      var tehs = $(this).val();
+      ipc.send('getUC', tehs)
+      ipc.on('uc', function (evt, uc) {
+        $('#ddUC').children('option:not(:first)').remove();
+
+        ucListener(uc);
+      })
+    })
+    var ucForHH;
     $('#ddUC').on('change', function () {
       var ucs = $(this).val();
       ucForHH = ucs
@@ -46,30 +113,11 @@ module.exports.initScrChildrenUpd = function () {
           .remove();
         supListeneruc(_sups);
       });
-      // ipc.send('getHealthHouse', ucs)
-      // ipc.on('hh', function (evt, hh) {
-      //   $('#ddHealthHouse').children('option:not(:first)').remove();
-      //   hhListener(hh);
-      // })
     })
-    // $("#ddHealthHouse").on("change", function () {
+    // $("#ddHealthHouse").on("change", function() {
     //   var siteId = $(this).val();
     //   // ucForHH = ucs;
-    //   ipc.send("getStaff", siteId);
-    //   ipc.send("getSups", siteId);
 
-    //   ipc.on("haveStaff", function (evt, staffs) {
-    //     $("#ddStaff_code")
-    //       .children("option:not(:first)")
-    //       .remove();
-    //     staffListener(staffs);
-    //   });
-    //   ipc.on("haveSups", function (evt, _sups) {
-    //     $("#ddSup_code")
-    //       .children("option:not(:first)")
-    //       .remove();
-    //     supListener(_sups);
-    //   });
     // });
     $("#ddStaff_code").on("change", function () {
       var staff_code = $(this).val();
@@ -450,6 +498,7 @@ module.exports.initScrChildrenUpd = function () {
             data.site_one
             }</option>`
           );
+          console.log(data.site_two)
           if (data.site_two) {
             // $('.secondSite').css('display', '')
             // $("#site_two")
@@ -460,7 +509,9 @@ module.exports.initScrChildrenUpd = function () {
             //   data.site_two
             //   }</option>`
             // );
-            $(`#site_two option[value="${data.site_two}"]`).attr("selected", "selected");
+
+            console.log(data.site_two)
+            $(`#site_two option[value="${data.site_two}"]`).attr("selected", true);
 
           } else {
             // $('.secondSite').css('display', 'none')
