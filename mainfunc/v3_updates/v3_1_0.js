@@ -16,16 +16,20 @@ const updateDatabase = require('./updUtils')
  async function chekAndExecuteUpdate (_checkVer, currentVersion, dbUpdateSqlString, dbUpdateMsg){
        var _check = await knex('tblUpdates').where({version:_checkVer});
        var _err = false;
-       if(!_check.length && currentVersion < _checkVer){
+       // && currentVersion < _checkVer
+       if(!_check.length){
              try {
                      await updateDatabase(knex, dbUpdateSqlString);
-                     
              } catch (error) {
-                    
-                    _err = true
-                    var errLocationFunction = 'updateDatabase query for version :' +_checkVer;
-                    error.customMsg = errLocationFunction
-                    dialog.showErrorBox(`Database update`, `${error.customMsg} \n Please contact ACF team \n ${error}`)
+                    if(error.errno == 21){
+                           _err = false
+                    }else{
+                           _err = true
+                           var errLocationFunction = 'updateDatabase query for version :' +_checkVer;
+                           error.customMsg = errLocationFunction
+                           console.log(error.errno)
+                           dialog.showErrorBox(`Database update`, `${error.customMsg} \n Please contact ACF team \n ${error}`)
+                    }
              }
              if(!_err){
               await knex('tblUpdates').insert({version: _checkVer, description: dbUpdateMsg})
@@ -41,9 +45,28 @@ module.exports = async function (app, dialog) {
        console.log({currentVersion})
       
     try {
+           await knex.raw(`CREATE TABLE IF NOT EXISTS tblUpdates (id integer not null primary key autoincrement, version integer, description varchar(255));`)
+       var _checkVer = 308;
+       var v308Sql = `SAVEPOINT [sqlite_expert_apply_design_transaction];
+       DROP VIEW IF EXISTS [main].[oneTable];
+       CREATE VIEW [main].[oneTable]
+            AS
+            SELECT 
+                   [tblOtpAdd].*, 
+                   [tblOtpExit].[exit_muac], 
+                   [tblOtpExit].[exit_weight], 
+                   [tblOtpExit].[exit_height], 
+                   [tblOtpExit].[exit_reason], 
+                   [tblOtpExit].[exit_date]
+            FROM   [tblOtpAdd]
+                   LEFT JOIN [tblOtpExit] ON [tblOtpAdd].[otp_id] = [tblOtpExit].[otp_id]
+            WHERE  [tblOtpAdd].[is_deleted] = 0;
+            RELEASE [sqlite_expert_apply_design_transaction];
+       `
+       await chekAndExecuteUpdate(_checkVer,currentVersion,v308Sql,'Version 308 updates were made')
        var _checkVer = 310;
         var _check = await knex('tblUpdates').where({version:310});
-        if(!_check.length && currentVersion < _checkVer){
+        if(!_check.length ){
             await knex.raw(`PRAGMA [main].legacy_alter_table = 'on';`)
             await knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
             await knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
@@ -201,7 +224,7 @@ module.exports = async function (app, dialog) {
         }
         _checkVer = 313
         var _check = await knex('tblUpdates').where({version:313});
-        if(!_check.length && currentVersion < _checkVer){
+        if(!_check.length ){
             await knex.raw(`PRAGMA [main].legacy_alter_table = 'on';`)
             await knex.raw(`PRAGMA [main].foreign_keys = 'off';`)
             await knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
