@@ -16,7 +16,33 @@ module.exports.initOtpAdd = function () {
     // await appendItems('ddProvince','provinceList',false,'id','provinceName');
     await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse' )
   });
+  var ucForHH;
+  $('#ddUC').on('change', function () {
+    var ucs = $(this).val();
+    ucForHH = ucs
+    ipc.send('getHealthHouse', ucs)
+    ipc.on('hh', function (evt, hh) {
+      $('#ddHealthHouse').children('option:not(:first)').remove();
+      hhListener(hh);
+    })
+  })
+  $('#ddHealthHouse').on('change', function () {
 
+    var h_id = $(this).val();
+    ipc.send("getVillage", h_id);
+    ipc.on("haveVillage", (evt, _villages) => {
+      $("#ddVillageName")
+        .children("option:not(:first)")
+        .remove();
+      villListener(_villages);
+
+    });
+    ipc.send('getHealthHouseType', h_id)
+    ipc.on('hhType', function (evt, hh) {
+      hhTypeListener(h_id, hh);
+
+    })
+  })
   // Conditionals 
   /**
     NSC Conditions
