@@ -11,46 +11,57 @@ module.exports.stockDist = function () {
     await setFormDefualts('ddProgramType','ddProvince','ddDistrict','ddTehsil')
     // await appendItems('ddProvince','provinceList',false,'id','provinceName');
     await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse' )
+    $('#ddTehsil').on('change', function () {
+      var tehs = $(this).val();
+      ipc.send('getUC', tehs)
+      ipc.on('uc', function (evt, uc) {
+        $('#ddUC').children('option:not(:first)').remove();
+
+        ucListener(uc);
+      })
+    })
+    var ucForHH;
     $('#ddUC').on('change', function () {
       var ucs = $(this).val();
       ucForHH = ucs
-      if ($('#ddProgramType').val() == 'otp') {
-        ipc.send('getHealthHouse', ucs)
-        ipc.on('hh', function (evt, hh) {
-          $('#ddHealthHouse').children('option:not(:first)').remove();
-          hhListener(hh);
-        })
+      ipc.send('getHealthHouse', ucs)
+      ipc.on('hh', async function (evt, hh) {
+        // console.log(hh)
+        $('#site_one').children('option:not(:first)').remove();
+        // if (hh.hh.length > 1) {
+        //   $('.secondSite').css('display', '')
+        //   $('#site_two').children('option:not(:first)').remove();
+        //   await asyncForEach(hh.hh, async (el) => {
+        //     $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);
+        //   })
+        // } else {
+        //   $('.secondSite').css('display', 'none')
 
-      }
-    })
-    // $('#ddUC').on('change', function () {
-    //   var ucs = $(this).val();
-    //   ucForHH = ucs
-    //   ipc.send('getHealthHouse', ucs)
-    //   ipc.on('hh', function (evt, hh) {
-    //     $('#ddHealthHouse').children('option:not(:first)').remove();
-    //     hhListener(hh);
-    //   })
-    // })
-    $("#ddHealthHouse").on("change", function () {
-      var siteId = $(this).val();
-      // ucForHH = ucs;
-      ipc.send("getStaff", siteId);
-      ipc.send("getSups", siteId);
+        // }
+        hhListener_siteOne(hh);
 
-      ipc.on("haveStaff", function (evt, staffs) {
+      });
+      ipc.send("getStaffuc", ucs);
+      ipc.send("getSupsuc", ucs);
+
+      ipc.on("haveStaffuc", function (evt, staffs) {
         $("#ddStaff_code")
           .children("option:not(:first)")
           .remove();
-        staffListener(staffs);
+        staffListeneruc(staffs);
       });
-      ipc.on("haveSups", function (evt, _sups) {
+      ipc.on("haveSupsuc", function (evt, _sups) {
         $("#ddSup_code")
           .children("option:not(:first)")
           .remove();
-        supListener(_sups);
+        supListeneruc(_sups);
       });
-    });
+    })
+    // $("#ddHealthHouse").on("change", function() {
+    //   var siteId = $(this).val();
+    //   // ucForHH = ucs;
+
+    // });
     $("#ddStaff_code").on("change", function () {
       var staff_code = $(this).val();
       $("#ddStaff_name").val(staff_code);

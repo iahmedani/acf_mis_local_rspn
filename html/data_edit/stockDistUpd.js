@@ -255,6 +255,9 @@ module.exports.stockDistUpd = function () {
     }
   });
 
+
+
+  // Geo Refference for filter
   // Geo Refference for filter
   $(async function () {
 
@@ -262,6 +265,28 @@ module.exports.stockDistUpd = function () {
     var defProg = JSON.parse(window.localStorage.getItem('defaults'))['defProg']
     // await appendItems('ddProvince','provinceList',false,'id','provinceName');
     await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse' ,defProg)
+    
+    $('#ddTehsil').on('change', async function () {
+      var tehs = $(this).val();
+      ipc.send('getUC', tehs)
+      ipc.on('uc', function (evt, uc) {
+        $('#ddUC').children('option:not(:first)').remove();
+        ucListener(uc);
+      })
+      if ($('#ddProgramType').val() == 'sc') {
+        try {
+          var _listNsc = await knex('v_geo_active').where({
+            tehsil_id: tehs,
+            SC: 1
+          })
+          // $('#nsc_old_otp_id').attr('data-inputmask', "'mask':'NSC-999999'")
+          nscList(_listNsc, 'ddHealthHouse');
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    })
+    var ucForHH;
     $('#ddUC').on('change', function () {
       var ucs = $(this).val();
       ucForHH = ucs
@@ -346,7 +371,7 @@ module.exports.stockDistUpd = function () {
       $("#ddSup_code").val(sup_code);
     });
   })
-  // Geo Refference for Updte
+ // Geo Refference for Updte
   $(function () {
     ipc.send("getProvince");
     ipc.on("province", function (evt, province) {

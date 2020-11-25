@@ -4,6 +4,8 @@ module.exports.sessionsReport = () => {
   $('#ddProgramType').change(() => {
     $('.prgChange').val("")
   })
+
+  
   $( async function () {
     // $("#tblSessionReport").DataTable({
     //   paging: false,
@@ -12,7 +14,77 @@ module.exports.sessionsReport = () => {
 
     await setFormDefualts('ddProgramType','ddProvince','ddDistrict','ddTehsil')
     await updatGeoElonChange('ddProvince','ddDistrict','ddTehsil', 'ddUC','ddHealthHouse',defProg )
-$("#ddUC").on("change", function () {
+    $("#ddDistrict").on("change", function () {
+      var dist = $(this).val();
+      ipc.send("getTehsil", dist);
+      ipc.on("tehsil", function (evt, tehsil) {
+        $("#ddTehsil")
+          .children("option:not(:first)")
+          .remove();
+
+        teh(tehsil);
+      });
+    });
+    $("#ddTehsil").on("change", async function () {
+      var tehs = $(this).val();
+      ipc.send("getUC", tehs);
+      ipc.on("uc", function (evt, uc) {
+        $("#ddUC")
+          .children("option:not(:first)")
+          .remove();
+        ucListener(uc);
+      });
+      if ($('#ddProgramType').val() == 'sc') {
+        try {
+          var _listNsc = await knex('v_geo_active').where({
+            tehsil_id: tehs,
+            SC: 1
+          })
+          // $('#nsc_old_otp_id').attr('data-inputmask', "'mask':'NSC-999999'")
+          nscList(_listNsc, 'ddHealthHouse');
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    });
+    var ucForHH;
+    $('#ddUC').on('change', function () {
+      var ucs = $(this).val();
+      ucForHH = ucs
+      ipc.send('getHealthHouse', ucs)
+      ipc.on('hh', async function (evt, hh) {
+        // console.log(hh)
+        $('#site_one').children('option:not(:first)').remove();
+        if (hh.hh.length > 1) {
+          $('.secondSite').css('display', '')
+          $('#site_two').children('option:not(:first)').remove();
+          await asyncForEach(hh.hh, async (el) => {
+            $('#site_two').append(`<option value="${el.siteName}">${el.siteName}</option>`);
+          })
+        } else {
+          $('.secondSite').css('display', 'none')
+
+        }
+        hhListener_siteOne(hh);
+
+      });
+      ipc.send("getStaffuc", ucs);
+      ipc.send("getSupsuc", ucs);
+
+      ipc.on("haveStaffuc", function (evt, staffs) {
+        $("#ddStaff_code")
+          .children("option:not(:first)")
+          .remove();
+        staffListeneruc(staffs);
+      });
+      ipc.on("haveSupsuc", function (evt, _sups) {
+        $("#ddSup_code")
+          .children("option:not(:first)")
+          .remove();
+        supListeneruc(_sups);
+      });
+    })
+    $("#ddUC").on("change", function () {
       var ucs = $(this).val();
       ucForHH = ucs;
       if ($('#ddProgramType').val() == 'otp') {
@@ -26,7 +98,25 @@ $("#ddUC").on("change", function () {
         });
       }
     });
+    $("#ddHealthHouse").on("change", function () {
+      var siteId = $(this).val();
+      // ucForHH = ucs;
+      ipc.send("getStaff", siteId);
+      ipc.send("getSups", siteId);
 
+      ipc.on("haveStaff", function (evt, staffs) {
+        $("#ddStaff_code")
+          .children("option:not(:first)")
+          .remove();
+        staffListener(staffs);
+      });
+      ipc.on("haveSups", function (evt, _sups) {
+        $("#ddSup_code")
+          .children("option:not(:first)")
+          .remove();
+        supListener(_sups);
+      });
+    });
     $("#ddStaff_code").on("change", function () {
       var staff_code = $(this).val();
       $("#ddStaff_name").val(staff_code);
@@ -43,18 +133,6 @@ $("#ddUC").on("change", function () {
       var sup_code = $(this).val();
       $("#ddSup_code").val(sup_code);
     });
-    // $('#ddUC').on('change', function () {
-    //   var ucs = $(this).val();
-    //   ucForHH = ucs
-    //   ipc.send('getHealthHouse', ucs)
-    //   ipc.on('hh', function (evt, hh) {
-    //     $('#ddHealthHouse').children('option:not(:first)').remove();
-    //     //   hh.hh.forEach(el=>{
-    //     // $('#ddHealthHouse').append(`<option value="${el.id}">${el.siteName}</option>`);              
-    //     //   })
-    //     hhListener(hh);
-    //   })
-    // })
     $(".sReportFilter").on('change', function () {
       console.log($(this).val())
       // if ($.fn.DataTable.isDataTable("#tblSessionReport")) {
