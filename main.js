@@ -1778,7 +1778,7 @@ function creatWindow() {
         errMsg(e, '', 'Report db query error, plz try again or contact admin')
         console.log(err);
       } else {
-        console.log(results);
+        // console.log(results);
 
         e.sender.send('scrPlwNewReport', ({
           result: results
