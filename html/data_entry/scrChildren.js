@@ -6,7 +6,7 @@ module.exports.initGrid = function () {
     client,
     mac
   } = JSON.parse(
-    fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, "utf8")
+    fs.readFileSync(`${process.env.APPDATA}/acf_mis_local_rspn/config.json`, "utf8")
   );
   
   let _sumVals = function(el1, el2, tel1, tel2) {

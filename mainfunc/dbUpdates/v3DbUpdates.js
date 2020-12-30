@@ -1,7 +1,7 @@
 const knex = require('knex')({
     client: 'sqlite3',
     connection: {
-        filename: `${process.env.APPDATA}/ACF MIS Local app/devs/acf_mis_local.sqlite3`
+        filename: `${process.env.APPDATA}/acf_mis_local_rspn/devs/acf_mis_local.sqlite3`
     },
     useNullAsDefault: true
 })

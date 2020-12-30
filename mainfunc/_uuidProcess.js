@@ -254,10 +254,10 @@ async function updateUpdateTracker(tN, _old, _new) {
     }
 }
 
-fs.stat(`${process.env.APPDATA}/ACF MIS Local app/nims_maj_update`, async (err, stat) => {
+fs.stat(`${process.env.APPDATA}/acf_mis_local_rspn/nims_maj_update`, async (err, stat) => {
     if (err) {
         try {
-            fs.copyFileSync(`${process.env.APPDATA}/ACF MIS Local app/acf_mis_local.sqlite3`, `${process.env.APPDATA}/ACF MIS Local app/nims_maj_update`);
+            fs.copyFileSync(`${process.env.APPDATA}/acf_mis_local_rspn/acf_mis_local.sqlite3`, `${process.env.APPDATA}/acf_mis_local_rspn/nims_maj_update`);
             await runUpdateOTP();
             console.log('update complete')
 

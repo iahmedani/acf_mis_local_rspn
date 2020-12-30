@@ -13,7 +13,7 @@ module.exports.newSyncAuthV3 = function () {
         client,
         mac
     } = JSON.parse(
-        fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, "utf8")
+        fs.readFileSync(`${process.env.APPDATA}/acf_mis_local_rspn/config.json`, "utf8")
     );
     var headers = {
         Authorization: `Bearer ${client} ${mac}`,

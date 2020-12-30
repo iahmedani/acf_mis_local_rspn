@@ -1,12 +1,10 @@
 {
-  "name": "acf_mis_local",
-  "productName": "ACF MIS Local app",
+  "name": "acf_mis_local_rspn",
   "version": "4.0.5",
-  "description": "ACF MIS FOR PINS",
+  "description": "ACF MIS FOR PINS FOR RSPN",
   "main": "main.js",
   "scripts": {
     "start": "electron . ",
-    "winbuild": "npm run clean && electron-packager . acf-local-app --out=release-builds-beta2.3 --version-string.CompanyName=ACF --version-string.FileDescription=ACF --version-string.ProductName='ACF Local App' --version-string.FileDescription='Build v1.07 15July18'",
     "publish": "npm run clean && build --win -p always ",
     "clean": "rm -rf ./dist",
     "postinstall": "electron-builder install-app-deps",
@@ -23,10 +21,10 @@
       {
         "provider": "github",
         "owner": "iahmedani",
-        "repo": "acf_mis_local"
+        "repo": "acf_mis_local_rspn"
       }
     ],
-    "appId": "com.github.iahmedani.aahmislocalapp",
+    "appId": "com.github.iahmedani.aahmislocalapprspn",
     "win": {
       "icon": "build/win/logo.ico",
       "target": [

@@ -16,7 +16,7 @@ var fs = require('fs');
 // const _launch = require('./mainfunc/launch');
 
 // if(app.getVersion() === "1.4.17"){
-//   fs.stat(`${process.env.APPDATA}/ACF MIS Local app/updated.txt`, (err, stat)=>{
+//   fs.stat(`${process.env.APPDATA}/acf_mis_local_rspn/updated.txt`, (err, stat)=>{
 //     if(err){
 //       console.log(err)
 //       _launch.updateVersion().then(()=>{
@@ -938,7 +938,7 @@ function stockSave(event, data) {
   const {
     client,
     mac
-  } = JSON.parse(fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, 'utf8'));
+  } = JSON.parse(fs.readFileSync(`${process.env.APPDATA}/acf_mis_local_rspn/config.json`, 'utf8'));
   const newData = [];
   data.forEach((el, i) => {
     el.client_id = client;
@@ -1263,7 +1263,7 @@ async function _firstRunDb(knex, Promise) {
     // await  require('./migrations/20190128163134_Screening').down(knex, Promise);
     // await require('./migrations/20190128163134_Screening').up(knex, Promise);
     // await require('./migrations/v3').up(knex, Promise);
-    await require('./migrations/v4')(knex);
+    await require('./migrations/rspn')(knex);
   } catch (error) {
     console.log(error)
     // await  require('./migrations/20190128163134_Screening').up(knex, Promise);    
@@ -1455,11 +1455,11 @@ function creatWindow() {
   })
 
   // mainWindow.fullscreen = true;
-  fs.stat(`${process.env.APPDATA}/ACF MIS Local app/config.json`, function (err, stat) {
+  fs.stat(`${process.env.APPDATA}/acf_mis_local_rspn/config.json`, function (err, stat) {
     if (err == null) {
       console.log('File exists');
       mainWindow.once('ready-to-show', () => {
-        imran = config = JSON.parse(fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, 'utf8'));
+        imran = config = JSON.parse(fs.readFileSync(`${process.env.APPDATA}/acf_mis_local_rspn/config.json`, 'utf8'));
 
         majorDbUpdate.loadURL(url.format({
           pathname: path.join(__dirname, '/html/majorDbUpdate.html'),
@@ -1486,7 +1486,7 @@ function creatWindow() {
 
 
         // mainWindow.maximize();
-        // fs.stat(`${process.env.APPDATA}/ACF MIS Local app/majorUpd.json`, function (e, stat) {
+        // fs.stat(`${process.env.APPDATA}/acf_mis_local_rspn/majorUpd.json`, function (e, stat) {
         //   if (e) {
         //   } else {
         //     mainWindow.maximize();
@@ -1505,7 +1505,7 @@ function creatWindow() {
       var version = app.getVersion();
       var regex = /([/./])/g;
       version.replace(regex, '');
-      fs.writeFileSync(`${process.env.APPDATA}/ACF MIS Local app/.nv`, version, 'utf8')
+      fs.writeFileSync(`${process.env.APPDATA}/acf_mis_local_rspn/.nv`, version, 'utf8')
 
     } else {
       console.log('Some other error: ', err.code);
@@ -2284,9 +2284,9 @@ const mainMenuTemplate = [
             if (file) {
               var _filedate = new Date();
               // _filedate.toISOString().split('T')[0]
-              fs.copyFile(`${process.env.APPDATA}/ACF MIS Local app/acf_mis_local.sqlite3`, `${file[0]}\\acf_backup_${_filedate.toISOString().split('T')[0]}`, (err) => {
+              fs.copyFile(`${process.env.APPDATA}/acf_mis_local_rspn/acf_mis_local.sqlite3`, `${file[0]}\\acf_backup_${_filedate.toISOString().split('T')[0]}`, (err) => {
                 if (err) throw err;
-                fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/__backupPath`, `${file[0]}\\acf_backup_${_filedate.toISOString().split('T')[0]}`, (err) => {
+                fs.writeFile(`${process.env.APPDATA}/acf_mis_local_rspn/__backupPath`, `${file[0]}\\acf_backup_${_filedate.toISOString().split('T')[0]}`, (err) => {
                   if (err) throw err;
                   console.log('File coppied and path is saved')
                 })
@@ -2311,9 +2311,9 @@ const mainMenuTemplate = [
             if (file) {
               console.log(file)
               app.quit();
-              fs.copyFile(`${process.env.APPDATA}/ACF MIS Local app/acf_mis_local.sqlite3`, `${file[0]}_old`, (err) => {
+              fs.copyFile(`${process.env.APPDATA}/acf_mis_local_rspn/acf_mis_local.sqlite3`, `${file[0]}_old`, (err) => {
                 if (err) throw err;
-                fs.copyFile(file[0], `${process.env.APPDATA}/ACF MIS Local app/acf_mis_local.sqlite3`, (err) => {
+                fs.copyFile(file[0], `${process.env.APPDATA}/acf_mis_local_rspn/acf_mis_local.sqlite3`, (err) => {
                   if (err) throw err;
                   console.log('System restoted')
                 })
@@ -2438,4 +2438,5 @@ require("./mainfunc/stockInUpdate")(ipcMain, knex, fs, clientMessages, async);
 // require('./mainfunc/v3_updates/v3_0_3');
 // require('./mainfunc/v3_updates/v3_0_8');
 // require('./mainfunc/v3_updates/v3_0_9');
-require('./mainfunc/v3_updates/v3_1_0')(app, dialog);
+// require('./mainfunc/v3_updates/v3_1_0')(app, dialog);
+require('./mainfunc/v3_updates/rspn')(app, dialog);

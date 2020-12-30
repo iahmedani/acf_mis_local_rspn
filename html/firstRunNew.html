@@ -193,7 +193,7 @@
           formData.project_nameL = formData.project_name;
           formData.passwordL = formData.password;
           formData.mac= mac;
-          fs.writeFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`,JSON.stringify(formData));
+          fs.writeFileSync(`${process.env.APPDATA}/acf_mis_local_rspn/config.json`,JSON.stringify(formData));
           await knex('tblConfig').insert({description:'url', value: formData._url})
           $('body').append(
           `<div class="alert alert-success alert-dismissible fade show" role="alert">App Registered Successfully </div>`)

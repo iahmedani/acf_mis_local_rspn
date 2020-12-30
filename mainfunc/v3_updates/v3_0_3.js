@@ -1,6 +1,6 @@
 var knex = require('../db');
 var fs = require('fs');
-var appConfig = JSON.parse(fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, 'utf8'))
+var appConfig = JSON.parse(fs.readFileSync(`${process.env.APPDATA}/acf_mis_local_rspn/config.json`, 'utf8'))
 module.exports = function () {
     knex('tblStock').whereNull('org_name')
         .then(result => {

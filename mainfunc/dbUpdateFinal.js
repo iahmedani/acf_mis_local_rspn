@@ -8,11 +8,11 @@ var regex = /([/./])/g;
 module.exports = (knex) => {
     var _version = app.getVersion();
     _version = parseInt(_version.replace(regex, ''));
-    fs.stat(`${process.env.APPDATA}/ACF MIS Local app/.nv`, (err, stat) => {
+    fs.stat(`${process.env.APPDATA}/acf_mis_local_rspn/.nv`, (err, stat) => {
         if (err) {
-            fs.writeFileSync(`${process.env.APPDATA}/ACF MIS Local app/.nv`, _version, 'utf8')
+            fs.writeFileSync(`${process.env.APPDATA}/acf_mis_local_rspn/.nv`, _version, 'utf8')
         } else if (stat) {
-            var oldV = fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/.nv`, {
+            var oldV = fs.readFileSync(`${process.env.APPDATA}/acf_mis_local_rspn/.nv`, {
                 encoding: 'utf8'
             });
             oldV = parseInt(oldV.replace(regex, ''));
@@ -1420,7 +1420,7 @@ module.exports = (knex) => {
                 }
 
                 if (_vold == _version) {
-                    fs.writeFileSync(`${process.env.APPDATA}/ACF MIS Local app/.nv`, _version, 'utf8')
+                    fs.writeFileSync(`${process.env.APPDATA}/acf_mis_local_rspn/.nv`, _version, 'utf8')
                 }
             }
         }

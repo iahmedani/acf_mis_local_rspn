@@ -1,6 +1,6 @@
 var knex = require('./db');
 var fs = require('fs');
-var upd_config = JSON.parse(fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, {
+var upd_config = JSON.parse(fs.readFileSync(`${process.env.APPDATA}/acf_mis_local_rspn/config.json`, {
     encoding: 'utf8'
 }))
 

@@ -9,7 +9,7 @@ module.exports = (knex) => {
     //     'Version From Update': _version
     // })
 
-    fs.stat(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, (err, stat) => {
+    fs.stat(`${process.env.APPDATA}/acf_mis_local_rspn/updateHist.txt`, (err, stat) => {
         if (err) {
             knex.raw(`PRAGMA [main].legacy_alter_table = 'on'`)
                 .then(r => {
@@ -105,7 +105,7 @@ module.exports = (knex) => {
                     var updateDetails = [{
                         update: 'Table OtpAdd remove reg_id unique contraint'
                     }]
-                    fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '1', (err) => {
+                    fs.writeFile(`${process.env.APPDATA}/acf_mis_local_rspn/updateHist.txt`, '1', (err) => {
                         if (err) throw err;
                         console.log('Table OtpAdd remove reg_id unique contraint')
                         // app.relaunch();
@@ -114,7 +114,7 @@ module.exports = (knex) => {
                     console.log(e)
                 })
         } else if (stat) {
-            var updateCheck = fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`)
+            var updateCheck = fs.readFileSync(`${process.env.APPDATA}/acf_mis_local_rspn/updateHist.txt`)
 
             if (updateCheck == '1') {
                 knex.raw(`SAVEPOINT [sqlite_expert_apply_design_transaction];`)
@@ -142,7 +142,7 @@ module.exports = (knex) => {
                     }).then(r => {
                         return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
                     }).then(r => {
-                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '2', (err) => {
+                        fs.writeFile(`${process.env.APPDATA}/acf_mis_local_rspn/updateHist.txt`, '2', (err) => {
                             if (err) throw err;
                             console.log('v_otpNotExitUpdated')
                         })
@@ -299,7 +299,7 @@ module.exports = (knex) => {
                     }).then(r => {
                         return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
                     }).then(r => {
-                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '3', (err) => {
+                        fs.writeFile(`${process.env.APPDATA}/acf_mis_local_rspn/updateHist.txt`, '3', (err) => {
                             if (err) throw err;
                             console.log('updated geo tables')
                         })
@@ -335,7 +335,7 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                         return knex.raw('RELEASE [sqlite_expert_apply_design_transaction];')
                     })
                     .then(r => {
-                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '4', (err) => {
+                        fs.writeFile(`${process.env.APPDATA}/acf_mis_local_rspn/updateHist.txt`, '4', (err) => {
                             if (err) throw err;
                             console.log('updated vSessionsFullForUpdate view')
                         })
@@ -437,7 +437,7 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                         return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
                     })
                     .then(r => {
-                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '5', (err) => {
+                        fs.writeFile(`${process.env.APPDATA}/acf_mis_local_rspn/updateHist.txt`, '5', (err) => {
                             if (err) throw err;
                             console.log('updated views to remove data eerros')
                         })
@@ -581,7 +581,7 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                         return knex.raw(`PRAGMA [main].legacy_alter_table = 'off';`)
                     })
                     .then(r => {
-                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '6', (err) => {
+                        fs.writeFile(`${process.env.APPDATA}/acf_mis_local_rspn/updateHist.txt`, '6', (err) => {
                             if (err) throw err;
                             console.log('updated tblSupervisors tblLHW tblvillages')
                         })
@@ -693,7 +693,7 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                     }).then(r => {
                         return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
                     }).then(r => {
-                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '7', (err) => {
+                        fs.writeFile(`${process.env.APPDATA}/acf_mis_local_rspn/updateHist.txt`, '7', (err) => {
                             if (err) throw err;
                             console.log('created two views to support new report')
                         })
@@ -737,7 +737,7 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                     `)
                     })
                     .then(r => {
-                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '8', (err) => {
+                        fs.writeFile(`${process.env.APPDATA}/acf_mis_local_rspn/updateHist.txt`, '8', (err) => {
                             if (err) throw err;
                             console.log('created new view v_geo_active')
                         })
@@ -827,7 +827,7 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                     }).then(r => {
                         return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
                     }).then(r => {
-                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '9', (err) => {
+                        fs.writeFile(`${process.env.APPDATA}/acf_mis_local_rspn/updateHist.txt`, '9', (err) => {
                             if (err) throw err;
                             console.log('created new view for new  report issues')
                         })
@@ -851,7 +851,7 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                     }).then(r => {
                         return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
                     }).then(r => {
-                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '10', (err) => {
+                        fs.writeFile(`${process.env.APPDATA}/acf_mis_local_rspn/updateHist.txt`, '10', (err) => {
                             if (err) throw err;
                             console.log('created new view for vSessionForReportNew')
                         })
@@ -913,7 +913,7 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                     }).then(r => {
                         return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
                     }).then(r => {
-                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '11', (err) => {
+                        fs.writeFile(`${process.env.APPDATA}/acf_mis_local_rspn/updateHist.txt`, '11', (err) => {
                             if (err) throw err;
                             console.log('created new view for sessions to correct report and entry')
                         })
@@ -975,7 +975,7 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                     }).then(r => {
                         return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
                     }).then(r => {
-                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '12', (err) => {
+                        fs.writeFile(`${process.env.APPDATA}/acf_mis_local_rspn/updateHist.txt`, '12', (err) => {
                             if (err) throw err;
                             console.log('created new view for sessions to correct report and entry')
                         })
@@ -1266,7 +1266,7 @@ WHERE  [tblsessions].[is_deleted] = 0`)
                     }).then(r => {
                         return knex.raw(`RELEASE [sqlite_expert_apply_design_transaction];`)
                     }).then(r => {
-                        fs.writeFile(`${process.env.APPDATA}/ACF MIS Local app/updateHist.txt`, '13', (err) => {
+                        fs.writeFile(`${process.env.APPDATA}/acf_mis_local_rspn/updateHist.txt`, '13', (err) => {
                             if (err) throw err;
                             console.log('NSC DB Updates')
                         })

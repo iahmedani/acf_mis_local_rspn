@@ -1,9 +1,9 @@
 var _uuid = require('uuid/v4')
 module.exports = (ipcMain, knex, fs, sndMsg, async) => {
-  // if(fs.existsSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`)){
+  // if(fs.existsSync(`${process.env.APPDATA}/acf_mis_local_rspn/config.json`)){
 
   //   const { client, mac } = JSON.parse(
-  //     fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, "utf8")
+  //     fs.readFileSync(`${process.env.APPDATA}/acf_mis_local_rspn/config.json`, "utf8")
 
   //   );
   // }
@@ -32,7 +32,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
       client,
       mac
     } = JSON.parse(
-      fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, "utf8")
+      fs.readFileSync(`${process.env.APPDATA}/acf_mis_local_rspn/config.json`, "utf8")
 
     );
     async.waterfall([
@@ -201,7 +201,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
       client,
       mac
     } = JSON.parse(
-      fs.readFileSync(`${process.env.APPDATA}/ACF MIS Local app/config.json`, "utf8")
+      fs.readFileSync(`${process.env.APPDATA}/acf_mis_local_rspn/config.json`, "utf8")
 
     );
     delete item.disp_sub_unit;
