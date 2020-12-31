@@ -1,6 +1,6 @@
 {
   "name": "acf_mis_local_rspn",
-  "version": "4.0.6",
+  "version": "4.0.7",
   "description": "ACF MIS FOR PINS FOR RSPN",
   "main": "main.js",
   "scripts": {

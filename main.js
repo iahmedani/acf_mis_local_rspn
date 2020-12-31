@@ -31,7 +31,7 @@ var fs = require('fs');
 // }
 
 // require('electron-reload')(__dirname);
-const firstRunDB = require('./firstRunCreateDb').firstCreateDb;
+// const firstRunDB = require('./firstRunCreateDb').firstCreateDb;
 const url = require('url');
 const path = require('path');
 var geo = require('./geoData');
@@ -2439,4 +2439,5 @@ require("./mainfunc/stockInUpdate")(ipcMain, knex, fs, clientMessages, async);
 // require('./mainfunc/v3_updates/v3_0_8');
 // require('./mainfunc/v3_updates/v3_0_9');
 // require('./mainfunc/v3_updates/v3_1_0')(app, dialog);
+
 require('./mainfunc/dbUpdates/rspn')(app, dialog);
