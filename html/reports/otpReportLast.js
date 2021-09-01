@@ -587,10 +587,10 @@ const singleTables = (addTableEl, exitTableEl, add, exit) => {
                 title: 'Total Followups',
                 data: 'total_followups'
             },
-            {
-                title: 'Total Days',
-                data: 'days_in_program'
-            }
+            // {
+            //     title: 'Total Days',
+            //     data: 'days_in_program'
+            // }
         ]
     })
 }

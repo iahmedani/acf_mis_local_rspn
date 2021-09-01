@@ -117,7 +117,7 @@ module.exports.newSyncAuthV3 = function () {
         elInfo.text(`Preparing updating data - ${title}`)
         var _tData = await knex(table).where({
             upload_status: 2
-        }).whereNotNull('upload_date');
+        })
         if (_tData.length) {
             var newData = [];
             for (data of _tData) {

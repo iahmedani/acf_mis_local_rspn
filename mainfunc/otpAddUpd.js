@@ -93,10 +93,13 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
   ipcMain.on('deleteOtpAdd', (event, otp_id) => {
     knex('tblOtpExit')
       .where({
-        otp_id
+        otp_id,
+        is_deleted:0
       })
       .then(result => {
+        console.log(result)
         if (result.length > 0) {
+          
           sndMsg.errMsg(event, "", `Patient with id: ${otp_id} couldn't be delted as patient is exited. To delete first delete it from exit `);
         } else {
           async.series({
@@ -135,6 +138,7 @@ module.exports = (ipcMain, knex, fs, sndMsg, async) => {
             }
           }, (err, result) => {
             if (err) {
+              console.log(err)
               // console.log(err);
               sndMsg.errMsg(event, "", "Unable to delte record");
               event.sender.send("deleteOtpAdd", {

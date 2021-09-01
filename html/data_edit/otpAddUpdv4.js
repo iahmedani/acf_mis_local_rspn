@@ -197,6 +197,7 @@ module.exports.initOtpAddUpdV2 = function () {
         ipc.send("deleteOtpAdd", item.otp_id);
         ipc.on("deleteOtpAdd", (e, result) => {
           if (result.err) {
+            console.log(result.err)
             reject(result.err);
             ipc.removeAllListeners("deleteOtpAdd");
           } else {

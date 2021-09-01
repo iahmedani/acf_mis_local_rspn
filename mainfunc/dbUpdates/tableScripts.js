@@ -630,3 +630,43 @@ WHERE  [main].[tblOtpAdd].[is_deleted] = 0
          AND [main].[v_geo_active].[SC] = 1
          AND ([main].[tblOtpAdd].[site_id] IS NULL
          OR [main].[tblOtpAdd].[site_id] = 'null')`
+
+strings.v_otpExit_full = `SAVEPOINT [sqlite_expert_apply_design_transaction];
+
+DROP VIEW IF EXISTS [main].[v_otpExit_full];
+
+CREATE VIEW [main].[v_otpExit_full]
+AS
+SELECT 
+       [main].[v_geo].[province_id], 
+       [main].[v_geo].[province], 
+       [main].[v_geo].[district_id], 
+       [main].[v_geo].[district_name], 
+       [main].[v_geo].[tehsil_id], 
+       [main].[v_geo].[tehsil_name], 
+       [main].[v_geo].[uc_id], 
+       [main].[v_geo].[uc_name], 
+       [main].[v_geo].[site_name], 
+       [main].[v_geo].[site_id], 
+       [main].[tblOtpAdd].[site_village], 
+       [main].[tblOtpExit].[exit_date], 
+       [main].[tblOtpExit].[exit_reason], 
+       [main].[tblOtpExit].[exit_muac], 
+       [main].[tblOtpExit].[exit_weight], 
+       [main].[tblOtpExit].[is_deleted],
+       [main].[tblOtpExit].[days_in_program], 
+       [main].[tblOtpAdd].[p_name], 
+       [main].[tblOtpAdd].[f_or_h_name], 
+       [main].[tblOtpAdd].[gender], 
+       [main].[tblOtpAdd].[reg_id], 
+       [main].[tblOtpAdd].[reg_date], 
+       [main].[tblOtpAdd].[plw_type]
+FROM   [main].[v_geo]
+       INNER JOIN [main].[tblOtpAdd] ON [main].[v_geo].[site_id] = [main].[tblOtpAdd].[site_id]
+       INNER JOIN [main].[tblOtpExit] ON [main].[tblOtpAdd].[otp_id] = [main].[tblOtpExit].[otp_id]
+WHERE  [main].[tblOtpExit].[is_deleted] = 0
+         AND [main].[tblOtpAdd].[is_deleted] = 0;
+
+RELEASE [sqlite_expert_apply_design_transaction];
+
+`
